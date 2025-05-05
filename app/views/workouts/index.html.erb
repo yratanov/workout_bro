@@ -1,0 +1,83 @@
+<% content_for :title, "Workouts" %>
+
+<div class="w-full">
+  <% if notice.present? %>
+    <p
+      class="
+        py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block
+      "
+      id="notice"
+    ><%= notice %></p>
+  <% end %>
+
+  <div class="flex justify-between items-center mb-5">
+    <h1 class="font-bold text-4xl">Workouts</h1>
+    <%= link_to "Start workout",
+    workouts_path,
+    data: {
+      turbo_method: :post,
+    },
+    class:
+      "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+  </div>
+
+  <div id="workouts" class="min-w-full divide-y divide-gray-200 space-y-5">
+    <% if @workouts.any? %>
+      <% @workouts.each do |workout| %>
+        <div
+          class="
+            flex flex-col sm:flex-row justify-between items-center p-4 border
+            border-slate-200 rounded mb-4
+          "
+        >
+          <div class="flex gap-8 mb-2">
+            <div>
+              <%= workout.started_at.strftime("%d %B %Y") %>
+            </div>
+            <div class="font-bold">
+              <%= workout.ended_at ? "Finished" : "Started" %>
+            </div>
+
+            <div>
+              <%= workout.workout_sets.size %>
+              sets
+            </div>
+            
+            <%= render(
+              TimerComponent.new(
+                started_at: workout.started_at,
+                ended_at: workout.ended_at,
+              ),
+            ) %>
+          </div>
+          <div class="flex gap-2 items-center">
+            <%= button "Show",
+            style: "link",
+            type: "link",
+            route: workout_path(workout),
+            data: {
+              turbo_prefetch: false,
+            } %>
+            <%= button style: "link_danger",
+          type: "link",
+          route: workout_path(workout),
+          data: {
+            turbo_prefetch: false,
+          } do %>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                class="h-5 w-5 text-current"
+                fill="currentColor"
+              ><path
+                  d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
+                /></svg>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-center my-10">No workouts found.</p>
+    <% end %>
+  </div>
+</div>

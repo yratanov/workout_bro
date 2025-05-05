@@ -1,0 +1,64 @@
+<% content_for :title, "Workout" %>
+
+<div class="md:w-2/3 w-full">
+  <% if notice.present? %>
+    <p
+      class="
+        py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block
+      "
+      id="notice"
+    ><%= notice %></p>
+  <% end %>
+
+  <div class="flex gap-4 items-center mb-5 text-4xl">
+    <h1 class="font-bold">
+      Workout
+      <%= @workout.ended_at ? "finished" : "started" %>!
+    </h1>
+    <div>
+      -
+    </div>
+    <%= render(
+      TimerComponent.new(
+        started_at: @workout.started_at,
+        ended_at: @workout.ended_at,
+      ),
+    ) %>
+  </div>
+
+  <%= turbo_frame_tag ["workout_sets"] do %>
+    <% @workout.workout_sets.each do |set| %>
+      <div class="mb-5">
+        <%= render set %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="mb-8 pb-8 border-b border-slate-300">
+    <%= turbo_frame_tag ["new_workout_set"] do %>
+      <%= render "new_set_link", workout: @workout %>
+    <% end %>
+  </div>
+
+  <div class="flex gap-4">
+    <% if @workout.ended? %>
+      <%= button "Back", type: "link", style: "outlined", route: workouts_path %>
+      <%= button "Destroy",
+      style: "danger",
+      method: :delete,
+      route: workout_path(@workout),
+      data: {
+        turbo_confirm: "Are you sure?",
+      } %>
+    <% else %>
+      <%= button "Finish workout",
+      style: "danger",
+      route: stop_workout_path(@workout),
+      method: :post,
+      data: {
+        turbo_method: :post,
+        turbo_confirm: "Are you sure?",
+      } %>
+    <% end %>
+  </div>
+</div>

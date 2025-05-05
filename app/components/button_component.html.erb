@@ -1,0 +1,16 @@
+<% if @type == 'link' %>
+  <%= link_to @route, data: @data, class: classes do %>
+    <%= content %>
+  <% end %>
+<% elsif @options[:method] %>
+  <%= button_to @route, method: @options[:method], type: @type, data: @data, class: classes do %>
+    <%= content %>
+  <% end %>
+<% elsif @type == 'submit' %>
+  <%= submit_tag @text, data: @data, class: classes, **@options %>
+<% else %>
+  <%= button_tag type: @type, data: @data, class: classes do %>
+    <%= content %>
+  <% end %>
+<% end %>
+
