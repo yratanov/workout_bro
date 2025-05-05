@@ -1,0 +1,15 @@
+<%= turbo_stream.update(
+  "new_workout_set",
+  partial: "workouts/new_set_link",
+  locals: {
+    workout: @workout.reload,
+  },
+) %>
+
+<%= turbo_stream.update(
+  "workout_sets",
+  partial: "workout_sets/list",
+  locals: {
+    workout: @workout,
+  },
+) %>

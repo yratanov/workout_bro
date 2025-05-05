@@ -1,0 +1,8 @@
+<div class="<%= @ended_at ? "" : "text-green-600" %>">
+  <% if @ended_at %>
+    <%= Time.at(@ended_at - @started_at).utc.strftime("%H:%M:%S") %>
+  <% else %>
+    <div data-controller="timer" data-timer-date-value="<%= @started_at %>">
+    </div>
+  <% end %>
+</div>

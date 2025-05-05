@@ -1,4 +1,18 @@
 Rails.application.routes.draw do
+  resources :workouts, only: %i[index show new create edit update destroy] do
+    member do
+      post :stop
+    end
+  end
+  
+  resources :exercises
+  resources :workout_sets, only: %i[new create show edit update destroy] do 
+    member do
+      post :stop
+    end
+  end
+  resources :workout_reps, only: %i[new create show edit update destroy]
+  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

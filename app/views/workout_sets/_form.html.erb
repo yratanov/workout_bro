@@ -1,0 +1,35 @@
+<%= form_with(model: workout_set, class: "contents") do |form| %>
+  <% if workout_set.errors.any? %>
+    <div
+      id="error_explanation"
+      class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3"
+    >
+      <h2><%= pluralize(workout_set.errors.count, "error") %>
+        prohibited this workout_set from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% workout_set.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="flex items-center gap-4">
+    <div>
+      <%= form.hidden_field :workout_id %>
+      <%= form.collection_select(
+        :exercise_id,
+        Exercise.all,
+        :id,
+        :name,
+        {},
+        { class: "border w-[300px] border-slate-300 px-3.5 py-2 rounded" },
+      ) %>
+    </div>
+
+    <%= form.submit "Start!",
+                class:
+                  "rounded px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
+  </div>
+<% end %>
