@@ -1,5 +1,5 @@
 services:
-  web:
+  workout_bro_web:
     build: .
     volumes:
       - ./storage:/rails/storage
