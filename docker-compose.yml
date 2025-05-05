@@ -3,7 +3,6 @@ services:
     build: .
     volumes:
       - ./storage:/rails/storage
-      - /var/log/openvpn/status.log:/rails/status.log 
     environment:
       - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
     ports:
