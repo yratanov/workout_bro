@@ -10,10 +10,14 @@
     ><%= notice %></p>
   <% end %>
 
-  <div class="min-w-[600px] justify-center flex gap-4 items-center mb-5 text-4xl">
-    <h1 class="font-bold">
-      Workout
-      <%= @workout.ended_at ? "finished" : "started" %>!
+  <div class="min-w-[600px] flex gap-4 items-center mb-5 text-2xl">
+    <h1 class="font-bold flex">
+      <% if @workout.workout_routine_day %>
+        <%= @workout.workout_routine_day.workout_routine.name %> -
+        <%= @workout.workout_routine_day.name %>
+      <% else %>
+        Workout
+      <% end %>
     </h1>
     <div>
       -
@@ -37,7 +41,7 @@
   <% unless @workout.ended? %>
     <div class="mb-8 pb-8 border-b border-slate-300">
       <%= turbo_frame_tag ["new_workout_set"] do %>
-        <%= render "new_set_link", workout: @workout %>
+        <%= render "workout_sets/form", workout_set: WorkoutSet.new(workout: @workout) %>
       <% end %>
     </div>
   <% end %>

@@ -28,13 +28,14 @@ class WorkoutsController < ApplicationController
       return
     end
     
-    @workout = Workout.new(started_at: Time.current)
+    @workout = Workout.new(workout_params.merge(started_at: Time.current))
 
     respond_to do |format|
       if @workout.save
         format.html { redirect_to @workout, notice: "Workout was successfully created." }
         format.json { render :show, status: :created, location: @workout }
       else
+        pp @workout.errors
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @workout.errors, status: :unprocessable_entity }
       end
@@ -85,6 +86,6 @@ class WorkoutsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def workout_params
-      params.fetch(:workout, {})
+      params.permit(:workout).permit(:workout_routine_day_id)
     end
 end
