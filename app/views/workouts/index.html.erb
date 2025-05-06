@@ -12,13 +12,7 @@
 
   <div class="flex justify-between items-center mb-5">
     <h1 class="font-bold text-4xl">Workouts</h1>
-    <%= button "Start workout",
-    style: "primary",
-    type: "link",
-    route: workouts_path,
-    data: {
-      turbo_method: :post,
-    } %>
+    <%= button "Start workout", style: "primary", type: "link", route: new_workout_path %>
   </div>
 
   <div id="workouts" class="divide-y divide-gray-200 space-y-5 min-w-[600px]">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_05_064753) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_06_174721) do
   create_table "exercises", force: :cascade do |t|
     t.string "name"
     t.string "muscles"
@@ -25,6 +25,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_064753) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["workout_set_id"], name: "index_workout_reps_on_workout_set_id"
+  end
+
+  create_table "workout_routine_day_exercises", force: :cascade do |t|
+    t.integer "workout_routine_day_id", null: false
+    t.integer "exercise_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_workout_routine_day_exercises_on_exercise_id"
+    t.index ["workout_routine_day_id"], name: "index_workout_routine_day_exercises_on_workout_routine_day_id"
+  end
+
+  create_table "workout_routine_days", force: :cascade do |t|
+    t.string "name"
+    t.integer "workout_routine_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["workout_routine_id"], name: "index_workout_routine_days_on_workout_routine_id"
+  end
+
+  create_table "workout_routines", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "workout_sets", force: :cascade do |t|
@@ -44,9 +67,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_064753) do
     t.datetime "ended_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "workout_routine_day_id"
+    t.index ["workout_routine_day_id"], name: "index_workouts_on_workout_routine_day_id"
   end
 
   add_foreign_key "workout_reps", "workout_sets"
+  add_foreign_key "workout_routine_day_exercises", "exercises"
+  add_foreign_key "workout_routine_day_exercises", "workout_routine_days"
+  add_foreign_key "workout_routine_days", "workout_routines"
   add_foreign_key "workout_sets", "exercises"
   add_foreign_key "workout_sets", "workouts"
+  add_foreign_key "workouts", "workout_routine_days"
 end

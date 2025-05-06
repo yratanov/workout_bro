@@ -20,7 +20,13 @@
       <%= form.hidden_field :workout_id %>
       <%= form.collection_select(
         :exercise_id,
-        Exercise.all.order(:name),
+        (
+          if workout_set.workout.workout_routine_day
+            workout_set.workout.workout_routine_day.exercises
+          else
+            Exercise.all.order(:name)
+          end
+        ),
         :id,
         :name,
         {},
