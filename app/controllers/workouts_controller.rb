@@ -35,7 +35,6 @@ class WorkoutsController < ApplicationController
         format.html { redirect_to @workout, notice: "Workout was successfully created." }
         format.json { render :show, status: :created, location: @workout }
       else
-        pp @workout.errors
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @workout.errors, status: :unprocessable_entity }
       end
@@ -45,6 +44,9 @@ class WorkoutsController < ApplicationController
   # POST /workouts/1/stop
   def stop
     respond_to do |format|
+      @workout.workout_sets.where(ended_at: nil).each do |workout_set|
+        workout_set.update(ended_at: Time.current)
+      end
       if @workout.update(ended_at: Time.current)
         format.html { redirect_to workouts_path, notice: "Workout was successfully ended." }
         format.json { render :show, status: :created, location: @workout }
