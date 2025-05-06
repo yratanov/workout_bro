@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="w-full">
   <head>
     <title><%= content_for(:title) || "Workout Bro" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -22,8 +22,8 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="w-full">
+    <main class="w-full mt-10 px-5 flex justify-center">
       <%= yield %>
     </main>
   </body>

@@ -1,6 +1,6 @@
 <% content_for :title, "Workout" %>
 
-<div class="md:w-2/3 w-full">
+<div>
   <% if notice.present? %>
     <p
       class="
@@ -34,11 +34,13 @@
     <% end %>
   <% end %>
 
-  <div class="mb-8 pb-8 border-b border-slate-300">
-    <%= turbo_frame_tag ["new_workout_set"] do %>
-      <%= render "new_set_link", workout: @workout %>
-    <% end %>
-  </div>
+  <% unless @workout.ended? %>
+    <div class="mb-8 pb-8 border-b border-slate-300">
+      <%= turbo_frame_tag ["new_workout_set"] do %>
+        <%= render "new_set_link", workout: @workout %>
+      <% end %>
+    </div>
+  <% end %>
 
   <div class="flex gap-4">
     <% if @workout.ended? %>
@@ -52,7 +54,7 @@
       } %>
     <% else %>
       <%= button "Finish workout",
-      style: "danger",
+      style: "primary",
       route: stop_workout_path(@workout),
       method: :post,
       data: {
