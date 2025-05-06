@@ -28,9 +28,11 @@ class SeedExercises < ActiveRecord::Migration[8.0]
       ["Dumbbell Hip Thrust", "Glutes"],
       ["Dumbbell Split Squat", "Quads"],
       ["Seated Dumbbell Calf Raise", "Calves"],
-      ["Planks", "Core"]
+      ["Planks", "Core"],
+      ["Dumbbell Squat", "Quads"],
+      ["Lying Dumbbell Extension", "Triceps"],
     ].each do |name, muscles|
-      Exercise.create(name: name, muscles: muscles)
+      Exercise.find_or_create_by(name: name, muscles: muscles)
     end
   end
 end
