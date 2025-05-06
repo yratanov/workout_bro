@@ -2,12 +2,12 @@
 
 class ButtonComponent < ViewComponent::Base
   STYLES = {
-    primary: "bg-sky-600 border-sky-600 hover:bg-sky-500 text-slate-100 hover:text-slate-100",
-    success: "bg-teal-600 border-teal-600 hover:bg-teal-500 hover:border-teal-500 text-slate-100 hover:text-slate-100",
-    danger: "bg-red-400 border-red-400 hover:bg-red-300 hover:border-red-300 text-slate-700",
+    primary: "text-sky-500 border-sky-500 hover:bg-sky-500 hover:text-slate-100",
+    success: "text-teal-500 border-teal-500 hover:bg-teal-500 hover:border-teal-500 hover:text-slate-100",
+    danger: " border-red-400 hover:bg-red-400 hover:border-red-400 hover:text-slate-200 text-red-400",
     warning: "bg-yellow-500 hover:bg-yellow-400 text-slate-100 hover:text-slate-100",
     default: "bg-gray-500 hover:bg-gray-400",
-    outlined: "bg-slate-400 border-slate-400 hover:bg-slate-300 text-slate-700",
+    outlined: "border-slate-400 hover:bg-slate-400 text-slate-200",
     link: "text-blue-400 hover:text-blue-300",
     link_danger: "text-red-400 hover:text-red-300",
   }.freeze
@@ -34,7 +34,7 @@ class ButtonComponent < ViewComponent::Base
 
   def classes
     common_classes =
-      "leading-none disabled:opacity-75 border-gray-650 block text-center whitespace-nowrap select-none focus:border-gray focus:outline-none focus:ring border leading-normal hover:no-underline rounded" unless inline?
+      "leading-none disabled:opacity-75 border-gray-650 inline-block text-center whitespace-nowrap select-none focus:border-gray focus:outline-none focus:ring border leading-normal hover:no-underline rounded" unless inline?
 
     specific_classes = STYLES[@style.to_sym]
     size = SIZE[@size.to_sym] unless inline?
