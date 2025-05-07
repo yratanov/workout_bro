@@ -25,10 +25,15 @@
   <body class="w-full">
     <div class="flex w-full bg-slate-700 justify-center">
       <%= link_to "Workouts", workouts_path, class: "px-5 py-2 block hover:bg-slate-500" %>
+      <%= link_to "Workout routines",
+      workout_routines_path,
+      class: "px-5 py-2 block hover:bg-slate-500" %>
       <%= link_to "Exercises", exercises_path, class: "px-5 py-2 block hover:bg-slate-500" %>
     </div>
     <main class="w-full mt-10 px-5 flex justify-center">
-      <%= yield %>
+      <div class="w-[600px]">
+        <%= yield %>
+      </div>
     </main>
   </body>
 </html>

@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     end
   end
   resources :workout_reps, only: %i[new create show edit update destroy]
+  resources :workout_routines, only: %i[index new create show edit update destroy] do
+    resources :workout_routine_days, only: %i[new create show edit update destroy]
+  end
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

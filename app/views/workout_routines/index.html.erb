@@ -11,13 +11,19 @@
   <% end %>
 
   <div class="flex justify-between items-center mb-5">
-    <h1 class="font-bold text-4xl">Workouts</h1>
-    <%= button "Start workout", style: "primary", type: "link", route: new_workout_path %>
+    <h1 class="font-bold text-4xl">Workout Routines</h1>
+    <%= button "New workout routine",
+    style: "primary",
+    type: "link",
+    route: new_workout_routine_path %>
   </div>
 
-  <div id="workouts" class="divide-y divide-gray-200 space-y-5">
-    <% if @workouts.any? %>
-      <% @workouts.each do |workout| %>
+  <div
+    id="workout_routines"
+    class="divide-y divide-gray-200 space-y-5 min-w-[600px]"
+  >
+    <% if @workout_routines.any? %>
+      <% @workout_routines.each do |workout_routine| %>
         <div
           class="
             flex justify-between items-center p-4 border gap-4 border-slate-400 rounded mb-4
@@ -25,30 +31,23 @@
         >
           <div class="flex gap-8 items-center">
             <div>
-              <%= button workout.started_at.strftime("%d %B %Y"),
+              <%= button workout_routine.name,
               style: "link",
               type: "link",
-              route: workout_path(workout),
+              route: workout_routine,
               data: {
                 turbo_prefetch: false,
               } %>
             </div>
             <div>
-              <%= workout.workout_sets.size %>
-              sets
+              <%= workout_routine.workout_routine_days.size %>
+              days
             </div>
-
-            <%= render(
-              TimerComponent.new(
-                started_at: workout.started_at,
-                ended_at: workout.ended_at,
-              ),
-            ) %>
           </div>
           <div class="flex gap-2 items-center">
             <%= button style: "link_danger",
           type: "link",
-          route: workout_path(workout),
+          route: workout_routine_path(workout_routine),
           method: :delete,
           data: {
             turbo_prefetch: false,
@@ -68,7 +67,7 @@
         </div>
       <% end %>
     <% else %>
-      <p class="text-center my-10">No workouts found.</p>
+      <p class="text-center my-10">No workout_routines found.</p>
     <% end %>
   </div>
 </div>
