@@ -2,7 +2,7 @@
   "new_workout_set",
   partial: "form",
   locals: {
-    workout_set: @workout_set,
+    workout_set: ::WorkoutSet.new(workout: @workout),
   },
 ) %>
 
