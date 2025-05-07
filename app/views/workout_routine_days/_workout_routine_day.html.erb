@@ -1,0 +1,18 @@
+<div>
+  <div class="flex items-center gap-4 mb-2">
+    <div class="font-bold">
+      <%= workout_routine_day.name %>
+    </div>
+
+    <%= button "Edit",
+    route: edit_workout_routine_workout_routine_day_path(workout_routine_day),
+    style: "link",
+    type: "link" %>
+  </div>
+
+  <% workout_routine_day.exercises.each do |exercise| %>
+    <div>
+      <%= exercise.name %>
+    </div>
+  <% end %>
+</div>
