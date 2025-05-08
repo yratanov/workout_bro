@@ -24,9 +24,9 @@
           if workout_set.workout.workout_routine_day
             workout_set.workout.workout_routine_day.exercises
           else
-            Exercise.all.order(:name)
+            Exercise.order(:name)
           end
-        ),
+        ).where.not(id: workout_set.workout.exercise_ids),
         :id,
         :name,
         {},
@@ -34,6 +34,9 @@
       ) %>
     </div>
 
-    <%= button text: "Start!", type: "submit", style: "primary" %>
+    <%= button text: "Start!",
+    type: "submit",
+    style: "primary",
+    disabled: workout_set.workout.workout_sets.any?(&:running?) %>
   </div>
 <% end %>

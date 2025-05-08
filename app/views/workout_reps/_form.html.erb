@@ -15,36 +15,9 @@
     </div>
   <% end %>
 
-  <div class="flex items-center gap-4">
+  <div class="flex items-center flex-wrap lg:flex-no-wrap gap-4">
     <div>
       <%= form.hidden_field :workout_set_id %>
-      <%= form.select(
-        :weight,
-        [
-          0,
-          2.5,
-          5.0,
-          7.5,
-          10.0,
-          12.5,
-          15.0,
-          17.5,
-          20.0,
-          22.5,
-          25.0,
-          27.5,
-          30.0,
-          32.5,
-          35.0,
-          37.5,
-          40.0,
-        ].map { |w| ["#{w}KG", w] },
-        {},
-        { class: "border w-[100px] border-slate-300 px-2 py-2 rounded" },
-      ) %>
-    </div>
-
-    <div>
       <%= form.select(
         :reps,
         [
@@ -74,6 +47,33 @@
       ) %>
     </div>
 
-    <%= button text: "Add rep", type: 'submit', style: 'primary' %>
+    <div>
+      <%= form.select(
+        :weight,
+        [
+          0,
+          2.5,
+          5.0,
+          7.5,
+          10.0,
+          12.5,
+          15.0,
+          17.5,
+          20.0,
+          22.5,
+          25.0,
+          27.5,
+          30.0,
+          32.5,
+          35.0,
+          37.5,
+          40.0,
+        ].map { |w| ["#{w}KG", w] },
+        {},
+        { class: "border w-[100px] border-slate-300 px-2 py-2 rounded" },
+      ) %>
+    </div>
+
+    <%= button text: "Add rep", type: "submit", style: "primary" %>
   </div>
 <% end %>
