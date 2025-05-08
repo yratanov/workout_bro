@@ -3,7 +3,7 @@ class WorkoutsController < ApplicationController
 
   # GET /workouts or /workouts.json
   def index
-    @workouts = Workout.all.order(started_at: :desc)
+    @workouts = current_user.workouts.all.order(started_at: :desc)
   end
 
   # GET /workouts/1 or /workouts/1.json
@@ -21,14 +21,14 @@ class WorkoutsController < ApplicationController
 
   # POST /workouts or /workouts.json
   def create
-    if Workout.exists?(ended_at: nil)
+    if Workout.exists?(user: current_user, ended_at: nil)
       flash[:alert] = "You already have an active workout. Please stop it before starting a new one."
       @workouts = Workout.all
       render 'index'
       return
     end
     
-    @workout = Workout.new(workout_params.merge(started_at: Time.current))
+    @workout = Workout.new(workout_params.merge(user: current_user, started_at: Time.current))
 
     respond_to do |format|
       if @workout.save
@@ -83,7 +83,7 @@ class WorkoutsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_workout
-      @workout = Workout.find(params.expect(:id))
+      @workout = current_user.workouts.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
