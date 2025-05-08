@@ -34,7 +34,7 @@ class ButtonComponent < ViewComponent::Base
 
   def classes
     common_classes =
-      "leading-none disabled:opacity-75 border-gray-650 inline-block text-center whitespace-nowrap select-none focus:border-gray focus:outline-none focus:ring border leading-normal hover:no-underline rounded" unless inline?
+      "leading-none disabled:cursor-not-allowed disabled:opacity-75 border-gray-650 inline-block text-center whitespace-nowrap select-none focus:border-gray focus:outline-none focus:ring border leading-normal hover:no-underline rounded" unless inline?
 
     specific_classes = STYLES[@style.to_sym]
     size = SIZE[@size.to_sym] unless inline?

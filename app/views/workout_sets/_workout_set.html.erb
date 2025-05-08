@@ -1,5 +1,5 @@
-<div class="p-3 border border-slate-400 rounded">
-  <div class="flex justify-between">
+<div class="border border-slate-400 rounded relative">
+  <div class="flex justify-between pt-4 px-4 border-b mb-2 border-slate-400">
     <div class="flex gap-2 mb-2">
       <div class="font-bold">
         <%= workout_set.exercise.name %>
@@ -29,26 +29,46 @@
     <% end %>
   </div>
 
-  <div class="mb-4">
-    <%= turbo_frame_tag ["reps"] do %>
-      <div class="mb-2">
-        <%= render workout_set.workout_reps %>
+  <% prev_workout_set =
+    Current
+      .user
+      .workout_sets
+      .where(exercise: workout_set.exercise)
+      .where.not(id: workout_set.id)
+      .last %>
+
+  <div class="flex gap-6 pb-4 px-4">
+    <% if prev_workout_set %>
+      <div class="mb-2 border-r border-slate-400 pr-6 text-slate-300">
+        <%= prev_workout_set.created_at.strftime("%m %b") %>
+        <%= render prev_workout_set.workout_reps %>
       </div>
-      <% unless workout_set.ended? %>
-        <%= render "workout_reps/form",
-        workout_rep: workout_set.workout_reps.new(weight: 10, reps: 10) %>
-      <% end %>
     <% end %>
+
+    <div>
+      Today
+      <%= turbo_frame_tag ["reps"] do %>
+        <div class="mb-2">
+          <%= render workout_set.workout_reps %>
+        </div>
+        <% unless workout_set.ended? %>
+          <%= render "workout_reps/form",
+          workout_rep: workout_set.workout_reps.new(weight: 10, reps: 10) %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 
   <% unless workout_set.ended? %>
-    <%= button "Complete this set",
-    type: "button",
-    style: "success",
-    method: :post,
-    route: stop_workout_set_path(workout_set),
-    data: {
-      turbo_method: :post,
-    } %>
+    <div class="p-4 flex border-t border-slate-400 justify-center">
+      <%= button "Complete this set",
+      type: "button",
+      style: "success",
+      method: :post,
+      route: stop_workout_set_path(workout_set),
+      data: {
+        turbo_method: :post,
+      } %>
+    </div>
   <% end %>
 </div>

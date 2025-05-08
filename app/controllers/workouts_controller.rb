@@ -1,5 +1,5 @@
 class WorkoutsController < ApplicationController
-  before_action :set_workout, only: %i[ show edit update destroy stop]
+  before_action :set_workout, only: %i[ edit update destroy stop]
 
   # GET /workouts or /workouts.json
   def index
@@ -8,6 +8,7 @@ class WorkoutsController < ApplicationController
 
   # GET /workouts/1 or /workouts/1.json
   def show
+    @workout = current_user.workouts.includes(workout_sets: :exercise).find(params[:id])
   end
 
   # GET /workouts/new
@@ -88,6 +89,6 @@ class WorkoutsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def workout_params
-      params.permit(:workout).permit(:workout_routine_day_id)
+      params.require(:workout).permit(:workout_routine_day_id)
     end
 end
