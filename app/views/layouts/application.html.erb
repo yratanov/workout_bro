@@ -14,7 +14,6 @@
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
@@ -25,6 +24,7 @@
   <body class="w-full">
     <% if authenticated? %>
       <div class="flex w-full bg-slate-700 justify-center">
+        <%= image_tag "icon.png", class: 'w-10 h-10' %>
         <%= link_to "Workouts", workouts_path, class: "px-5 py-2 block hover:bg-slate-500" %>
         <%= link_to "Workout routines",
         workout_routines_path,
