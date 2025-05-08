@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
   resources :workouts, only: %i[index show new create edit update destroy] do
     member do
       post :stop
