@@ -25,6 +25,15 @@
         >
           <div class="flex gap-8 items-center">
             <div>
+              <%= button workout.workout_routine_day&.name,
+              style: "link",
+              type: "link",
+              route: workout_path(workout),
+              data: {
+                turbo_prefetch: false,
+              } %>
+            </div>
+            <div>
               <%= button workout.started_at.strftime("%d %B %Y"),
               style: "link",
               type: "link",

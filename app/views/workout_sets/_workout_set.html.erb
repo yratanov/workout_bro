@@ -47,14 +47,12 @@
 
     <div>
       Today
-      <%= turbo_frame_tag ["reps"] do %>
-        <div class="mb-2">
-          <%= render workout_set.workout_reps %>
-        </div>
-        <% unless workout_set.ended? %>
-          <%= render "workout_reps/form",
-          workout_rep: workout_set.workout_reps.new(weight: 10, reps: 10) %>
-        <% end %>
+      <%= turbo_frame_tag workout_set, "reps" do %>
+        <%= render partial: "workout_reps/list_with_form",
+        locals: {
+          workout_set:,
+          workout_rep: workout_set.workout_reps.new(weight: 10, reps: 10),
+        } %>
       <% end %>
     </div>
   </div>
