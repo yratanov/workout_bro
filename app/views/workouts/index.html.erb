@@ -31,9 +31,9 @@
               flex justify-between items-center p-2 border-b gap-4 border-slate-400
             "
           >
-            <div class="flex gap-8 items-center">
-              <div>
-                <%= button workout.started_at.strftime("%A %d %B %Y"),
+            <div class="flex flex-wrap lg:flex-nowrap gap-8 items-center">
+              <div class="w-35">
+                <%= button workout.started_at.strftime("%A %d %B"),
                 style: "link",
                 type: "link",
                 route: workout_path(workout),
@@ -41,7 +41,7 @@
                   turbo_prefetch: false,
                 } %>
               </div>
-              <div>
+              <div class="w-50 truncate">
                 <%= button workout.workout_routine_day&.name,
                 style: "link",
                 type: "link",
