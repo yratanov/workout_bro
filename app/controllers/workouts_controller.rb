@@ -4,6 +4,7 @@ class WorkoutsController < ApplicationController
   # GET /workouts or /workouts.json
   def index
     @workouts = current_user.workouts.all.order(started_at: :desc)
+    @grouped_by_week = @workouts.group_by { |workout| workout.started_at.beginning_of_week }
   end
 
   # GET /workouts/1 or /workouts/1.json

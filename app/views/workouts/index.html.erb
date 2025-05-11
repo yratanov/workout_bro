@@ -15,66 +15,55 @@
     <%= button "Start workout", style: "primary", type: "link", route: new_workout_path %>
   </div>
 
-  <div id="workouts" class="divide-y divide-gray-200 space-y-5">
+  <div id="workouts" class="space-y-2">
     <% if @workouts.any? %>
-      <% @workouts.each do |workout| %>
-        <div
-          class="
-            flex justify-between items-center p-4 border gap-4 border-slate-400 rounded mb-4
-          "
-        >
-          <div class="flex gap-8 items-center">
-            <div>
-              <%= button workout.workout_routine_day&.name,
-              style: "link",
-              type: "link",
-              route: workout_path(workout),
-              data: {
-                turbo_prefetch: false,
-              } %>
-            </div>
-            <div>
-              <%= button workout.started_at.strftime("%d %B %Y"),
-              style: "link",
-              type: "link",
-              route: workout_path(workout),
-              data: {
-                turbo_prefetch: false,
-              } %>
-            </div>
-            <div>
-              <%= workout.workout_sets.size %>
-              sets
-            </div>
-
-            <%= render(
-              TimerComponent.new(
-                started_at: workout.started_at,
-                ended_at: workout.ended_at,
-              ),
-            ) %>
-          </div>
-          <div class="flex gap-2 items-center">
-            <%= button style: "link_danger",
-          type: "link",
-          route: workout_path(workout),
-          method: :delete,
-          data: {
-            turbo_prefetch: false,
-            turbo_confirm: "Are you sure?",
-            turbo_method: :delete,
-          } do %>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                class="h-5 w-5 text-current"
-                fill="currentColor"
-              ><path
-                  d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
-                /></svg>
-            <% end %>
-          </div>
+      <% @grouped_by_week.each_with_index do |(day, workouts), i| %>
+        <div class="mb-2 font-bold <%= i > 0 ? "mt-10" : "" %>">
+          Week
+          <%= @grouped_by_week.size - i %>
+          (<%= day.strftime("%d %B") %>
+          -
+          <%= day.end_of_week.strftime("%d %B") %>)
         </div>
+        <% workouts.each do |workout| %>
+          <div
+            class="
+              flex justify-between items-center p-2 border-b gap-4 border-slate-400
+            "
+          >
+            <div class="flex gap-8 items-center">
+              <div>
+                <%= button workout.started_at.strftime("%A %d %B %Y"),
+                style: "link",
+                type: "link",
+                route: workout_path(workout),
+                data: {
+                  turbo_prefetch: false,
+                } %>
+              </div>
+              <div>
+                <%= button workout.workout_routine_day&.name,
+                style: "link",
+                type: "link",
+                route: workout_path(workout),
+                data: {
+                  turbo_prefetch: false,
+                } %>
+              </div>
+              <div>
+                <%= workout.workout_sets.size %>
+                sets
+              </div>
+
+              <%= render(
+                TimerComponent.new(
+                  started_at: workout.started_at,
+                  ended_at: workout.ended_at,
+                ),
+              ) %>
+            </div>
+          </div>
+        <% end %>
       <% end %>
     <% else %>
       <p class="text-center my-10">No workouts found.</p>
