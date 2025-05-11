@@ -14,7 +14,10 @@ class WorkoutsController < ApplicationController
 
   # GET /workouts/new
   def new
-    @workout = Workout.new
+    @default_workout_routine = WorkoutRoutine.last
+    @workout = Workout.new(
+      workout_routine_day: @default_workout_routine.workout_routine_days.first
+    )
   end
 
   # GET /workouts/1/edit

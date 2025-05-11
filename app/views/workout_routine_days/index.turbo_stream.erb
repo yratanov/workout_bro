@@ -1,0 +1,7 @@
+<%= turbo_stream.update(
+  "workout_routine_day_id",
+  partial: "select",
+  locals: {
+    workout_routine_days: @workout_routine_days,
+  },
+) %>

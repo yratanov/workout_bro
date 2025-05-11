@@ -19,23 +19,25 @@
     <div
       class="mb-2 flex justify-center gap-4"
       data-element-destroyer-target="destroyable"
+      data-controller="routine-switcher"
     >
-      <%= form.collection_select(
-        :workout_routine,
-        WorkoutRoutine.all.order(:name),
-        :id,
-        :name,
-        {},
-        { class: "border w-[300px] border-slate-300 px-3.5 py-2 rounded" },
-      ) %>
-      <%= form.collection_select(
-        :workout_routine_day_id,
-        WorkoutRoutineDay.all.order(:name),
-        :id,
-        :name,
-        {},
-        { class: "border w-[300px] border-slate-300 px-3.5 py-2 rounded" },
-      ) %>
+      <%= select_tag "workout[workout_routine_day]",
+      options_from_collection_for_select(
+        WorkoutRoutine.order(:name).to_a,
+        "id",
+        "name",
+        workout.workout_routine&.id,
+      ),
+      data: {
+        action: "change->routine-switcher#switch",
+      },
+      class: "border w-[300px] border-slate-300 px-3.5 py-2 rounded" %>
+      <%= turbo_frame_tag 'workout_routine_day_id' do %>
+        <%= render partial: "workout_routine_days/select",
+        locals: {
+          workout_routine_days: workout.workout_routine&.workout_routine_days,
+        } %>
+      <% end %>
     </div>
     <div data-element-destroyer-target="destroyable">
       or
