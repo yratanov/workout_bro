@@ -16,7 +16,9 @@ class WorkoutsController < ApplicationController
   def new
     @default_workout_routine = WorkoutRoutine.last
     @workout = Workout.new(
-      workout_routine_day: @default_workout_routine.workout_routine_days.first
+      workout_routine_day: @default_workout_routine.workout_routine_days.first,
+      workout_type: :strength,
+      started_at: Time.current,
     )
   end
 
@@ -33,11 +35,30 @@ class WorkoutsController < ApplicationController
       return
     end
     
-    @workout = Workout.new(workout_params.merge(user: current_user, started_at: Time.current))
+    @workout = Workout.new(workout_params.merge(user: current_user))
+
+    if @workout.cardio?
+      @workout.workout_routine_day = nil
+      if params[:workout][:time_in_seconds]
+        (minutes, seconds) = params[:workout][:time_in_seconds].split(":")
+        @workout.time_in_seconds = minutes.to_i * 60 + seconds.to_i
+        @workout.ended_at = @workout.started_at + @workout.time_in_seconds.seconds
+      end
+    else
+      @workout.started_at = Time.current
+      @workout.distance = nil
+      @workout.time_in_seconds = nil
+    end
 
     respond_to do |format|
       if @workout.save
-        format.html { redirect_to @workout, notice: "Workout was successfully created." }
+        format.html do
+          if @workout.cardio?
+            redirect_to workouts_path, notice: "Workout was successfully created."
+          else
+            redirect_to @workout, notice: "Workout was successfully created."
+          end
+        end
         format.json { render :show, status: :created, location: @workout }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -93,6 +114,6 @@ class WorkoutsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def workout_params
-      params.require(:workout).permit(:workout_routine_day_id)
+      params.require(:workout).permit(:workout_routine_day_id, :workout_type, :distance, :started_at)
     end
 end

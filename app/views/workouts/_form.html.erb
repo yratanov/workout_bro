@@ -1,5 +1,5 @@
 <%= form_with(model: workout, class: "contents") do |form| %>
-  <div class="mb-4" data-controller="element-destroyer">
+  <div class="mb-4" data-controller="element-destroyer workout-type-switcher">
     <% if workout.errors.any? %>
       <div
         id="error_explanation"
@@ -16,9 +16,67 @@
       </div>
     <% end %>
 
+    <div class="mb-4">
+      <%= form.label :workout_type, class: "font-medium" %>
+      <%= form.select :workout_type,
+                  Workout.workout_types.keys.map { |type| [type.humanize, type] },
+                  {},
+                  {
+                    data: {
+                      action: "change->workout-type-switcher#switch",
+                    },
+                    class: "border w-[300px] border-slate-300 px-3.5 py-2 rounded",
+                  } %>
+
+    </div>
+
+    <div class="mb-4 hidden" data-workout-type-switcher-target="cardioToggle">
+      <%= form.label :started_at, class: "font-medium" %>
+      <%= form.text_field :started_at,
+                      type: "date",
+                      class: [
+                        "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full",
+                        {
+                          "border-gray-400 focus:outline-blue-600":
+                            workout.errors[:started_at].none?,
+                          "border-red-400 focus:outline-red-600":
+                            workout.errors[:started_at].any?,
+                        },
+                      ] %>
+
+    </div>
+    <div class="mb-4 hidden" data-workout-type-switcher-target="cardioToggle">
+      <%= form.label :distance, class: "font-medium" %>
+      <%= form.text_field :distance,
+                      class: [
+                        "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full",
+                        {
+                          "border-gray-400 focus:outline-blue-600":
+                            workout.errors[:distance].none?,
+                          "border-red-400 focus:outline-red-600":
+                            workout.errors[:distance].any?,
+                        },
+                      ] %>
+
+    </div>
+    <div class="mb-4 hidden" data-workout-type-switcher-target="cardioToggle">
+      <%= form.label :time_in_seconds, class: "font-medium" %>
+      <%= form.text_field :time_in_seconds,
+                      class: [
+                        "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full",
+                        {
+                          "border-gray-400 focus:outline-blue-600":
+                            workout.errors[:time_in_seconds].none?,
+                          "border-red-400 focus:outline-red-600":
+                            workout.errors[:time_in_seconds].any?,
+                        },
+                      ] %>
+
+    </div>
     <div
       class="mb-2 flex justify-center gap-4"
       data-element-destroyer-target="destroyable"
+      data-workout-type-switcher-target="strengthToggle"
       data-controller="routine-switcher"
     >
       <%= select_tag "workout[workout_routine_day]",
@@ -39,10 +97,13 @@
         } %>
       <% end %>
     </div>
-    <div data-element-destroyer-target="destroyable">
+    <div
+      data-element-destroyer-target="destroyable"
+      data-workout-type-switcher-target="strengthToggle"
+    >
       or
     </div>
-    <div>
+    <div data-workout-type-switcher-target="strengthToggle">
       <%= button "switch to custom routine",
       type: "button",
       style: "link",
