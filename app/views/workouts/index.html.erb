@@ -41,11 +41,19 @@
                 <%= workout.started_at.strftime("%d %B") %>
               </div>
               <div class="flex-grow">
-                <%= workout.workout_routine_day&.name %>
+                <% if workout.cardio? %>
+                  <%= workout.workout_type.humanize %>
+                <% else %>
+                  <%= workout.workout_routine_day&.name %>
+                <% end %>
               </div>
               <div class="text-center">
-                <%= workout.workout_sets.size %>
-                sets
+                <% if workout.cardio? %>
+                  <%= workout.distance / 1000 %>km
+                <% else %>
+                  <%= workout.workout_sets.size %>
+                  sets
+                <% end %>
               </div>
 
               <%= render(
