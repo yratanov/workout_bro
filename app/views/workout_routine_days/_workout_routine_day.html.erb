@@ -5,7 +5,11 @@
     </div>
 
     <%= button "Edit",
-    route: edit_workout_routine_workout_routine_day_path(workout_routine_day),
+    route:
+      edit_workout_routine_workout_routine_day_path(
+        workout_routine_day.workout_routine,
+        workout_routine_day,
+      ),
     style: "link",
     type: "link" %>
   </div>
