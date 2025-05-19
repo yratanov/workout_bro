@@ -4,6 +4,12 @@ class WorkoutRepsController < ApplicationController
     @workout_set = @workout_rep.workout_set
     @workout_rep.save!
   end
+
+  def destroy
+    @workout_rep = WorkoutRep.find(params[:id])
+    @workout_set = @workout_rep.workout_set
+    @workout_rep.destroy
+  end
   
   private
 

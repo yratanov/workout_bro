@@ -1,0 +1,8 @@
+<%= turbo_stream.update(
+  "reps_#{dom_id(@workout_set)}",
+  partial: "list_with_form",
+  locals: {
+    workout_set: @workout_set,
+    workout_rep: @workout_rep,
+  },
+) %>
