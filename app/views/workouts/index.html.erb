@@ -28,7 +28,7 @@
         <% workouts.group_by {|w| w.started_at.strftime('%A') }.each do |week_day, day_workouts| %>
           <% day_workouts.each_with_index do |workout, i| %>
             <div
-              class="p-2 border-b <%= workout.cardio? ? "border-teal-400" : "border-amber-400" %>"
+              class="px-2 <%= i == day_workouts.size - 1 ? "border-b border-slate-500 pb-4 mb-4" : "" %>"
             >
               <div class="flex flex-wrap lg:flex-nowrap gap-8 items-center">
                 <div class="w-20">
