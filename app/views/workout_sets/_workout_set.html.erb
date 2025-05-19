@@ -29,20 +29,19 @@
     <% end %>
   </div>
 
-  <% prev_workout_set =
-    Current
+  <div class="flex gap-6 pb-4 px-4">
+    <% Current
       .user
       .workout_sets
       .where(exercise: workout_set.exercise)
       .where(created_at: ..workout_set.created_at - 1.minute)
-      .last %>
-
-  <div class="flex gap-6 pb-4 px-4">
-    <% if prev_workout_set %>
-      <div class="mb-2 border-r border-slate-400 pr-6 text-slate-300">
-        <%= prev_workout_set.created_at.strftime("%d %b") %>
-        <%= render prev_workout_set.workout_reps %>
-      </div>
+      .last(2).each do |prev_workout_set| %>
+      <% if prev_workout_set %>
+        <div class="mb-2 border-r border-slate-400 pr-6 text-slate-300">
+          <%= prev_workout_set.created_at.strftime("%d %b") %>
+          <%= render prev_workout_set.workout_reps %>
+        </div>
+      <% end %>
     <% end %>
 
     <div>

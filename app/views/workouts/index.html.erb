@@ -25,45 +25,55 @@
           -
           <%= day.end_of_week.strftime("%d %B") %>)
         </div>
-        <% workouts.each do |workout| %>
-          <div class="p-2 border-b <%= workout.cardio? ? "border-teal-400" : "border-amber-400" %>">
-            <div class="flex flex-wrap lg:flex-nowrap gap-8 items-center">
-              <div class="w-20">
-                <%= button workout.started_at.strftime("%A"),
-                style: "link",
-                type: "link",
-                route: workout_path(workout),
-                data: {
-                  turbo_prefetch: false,
-                } %>
-              </div>
-              <div class="w-20">
-                <%= workout.started_at.strftime("%d %B") %>
-              </div>
-              <div class="flex-grow">
-                <% if workout.cardio? %>
-                  <%= workout.workout_type.humanize %>
-                <% else %>
-                  <%= workout.workout_routine_day&.name %>
-                <% end %>
-              </div>
-              <div class="text-center">
-                <% if workout.cardio? %>
-                  <%= workout.distance.to_f / 1000 %>km
-                <% else %>
-                  <%= workout.workout_sets.size %>
-                  sets
-                <% end %>
-              </div>
+        <% workouts.group_by {|w| w.started_at.strftime('%A') }.each do |week_day, day_workouts| %>
+          <% day_workouts.each_with_index do |workout, i| %>
+            <div
+              class="p-2 border-b <%= workout.cardio? ? "border-teal-400" : "border-amber-400" %>"
+            >
+              <div class="flex flex-wrap lg:flex-nowrap gap-8 items-center">
+                <div class="w-20">
+                  <% if i == 0 %>
+                    <%= workout.started_at.strftime("%A") %>
+                  <% end %>
+                </div>
+                <div class="w-20">
+                  <% if i == 0 %>
+                    <%= workout.started_at.strftime("%d %B") %>
+                  <% end %>
+                </div>
+                <div class="flex-grow">
+                  <%= button (
+                    if workout.cardio?
+                      workout.workout_type.humanize
+                    else
+                      workout.workout_routine_day&.name
+                    end
+                  ),
+                  style: "link",
+                  type: "link",
+                  route: workout_path(workout),
+                  data: {
+                    turbo_prefetch: false,
+                  } %>
+                </div>
+                <div class="text-center">
+                  <% if workout.cardio? %>
+                    <%= workout.distance.to_f / 1000 %>km
+                  <% else %>
+                    <%= workout.workout_sets.size %>
+                    sets
+                  <% end %>
+                </div>
 
-              <%= render(
-                TimerComponent.new(
-                  started_at: workout.started_at,
-                  ended_at: workout.ended_at,
-                ),
-              ) %>
+                <%= render(
+                  TimerComponent.new(
+                    started_at: workout.started_at,
+                    ended_at: workout.ended_at,
+                  ),
+                ) %>
+              </div>
             </div>
-          </div>
+          <% end %>
         <% end %>
       <% end %>
     <% else %>
