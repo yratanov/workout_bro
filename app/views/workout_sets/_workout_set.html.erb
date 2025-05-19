@@ -39,7 +39,11 @@
       <% if prev_workout_set %>
         <div class="mb-2 border-r border-slate-400 pr-6 text-slate-300">
           <%= prev_workout_set.created_at.strftime("%d %b") %>
-          <%= render prev_workout_set.workout_reps %>
+          <%= render collection: prev_workout_set.workout_reps,
+          partial: "workout_reps/workout_rep",
+          locals: {
+            delete_visible: false,
+          } %>
         </div>
       <% end %>
     <% end %>

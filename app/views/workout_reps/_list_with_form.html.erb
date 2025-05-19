@@ -1,9 +1,13 @@
 <div class="mb-2">
-  <%= render workout_set.workout_reps.filter(&:persisted?) %>
+  <%= render collection: workout_set.workout_reps.filter(&:persisted?),
+  partial: "workout_reps/workout_rep",
+  locals: {
+    delete_visible: true,
+  } %>
 </div>
 <% unless workout_set.ended? %>
-  <div class="flex mb-1 gap-2">
-    <div>
+  <div class="flex mb-1 gap-2 border-t border-slate-400 pt-2">
+    <div class="mb-2">
       Rest:
     </div>
     <div
