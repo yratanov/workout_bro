@@ -18,7 +18,7 @@
   <div id="workouts" class="space-y-2">
     <% if @workouts.any? %>
       <% @grouped_by_week.each_with_index do |(day, workouts), i| %>
-        <div class="mb-2 font-bold <%= i > 0 ? "mt-10" : "" %>">
+        <div class="mb-4 pb-2 px-2 border-b text-indigo-200 border-slate-400 font-bold <%= i > 0 ? "mt-15" : "" %>">
           Week
           <%= @grouped_by_week.size - i %>
           (<%= day.strftime("%d %B") %>
