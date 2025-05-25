@@ -42,7 +42,7 @@ class WorkoutsController < ApplicationController
       if params[:workout][:time_in_seconds]
         (minutes, seconds) = params[:workout][:time_in_seconds].split(":")
         @workout.time_in_seconds = minutes.to_i * 60 + seconds.to_i
-        @workout.ended_at = @workout.started_at + @workout.time_in_seconds.seconds
+        @workout.ended_at = @workout.started_at ? @workout.started_at + @workout.time_in_seconds.seconds : nil
       end
     else
       @workout.started_at = Time.current

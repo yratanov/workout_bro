@@ -32,8 +32,7 @@
 
     <div class="mb-4 hidden" data-workout-type-switcher-target="cardioToggle">
       <%= form.label :started_at, class: "font-medium" %>
-      <%= form.text_field :started_at,
-                      type: "date",
+      <%= form.date_field :started_at,
                       class: [
                         "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full",
                         {
