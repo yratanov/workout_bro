@@ -22,11 +22,14 @@
         :exercise_id,
         (
           if workout_set.workout.workout_routine_day
-            workout_set.workout.workout_routine_day.exercises
+            (
+              workout_set.workout.workout_routine_day.exercises +
+                ::Exercise.order(:name)
+            ).uniq.without(workout_set.workout.exercises)
           else
-            Exercise.order(:name)
+            Exercise.order(:name).where.not(id: workout_set.workout.exercise_ids)
           end
-        ).where.not(id: workout_set.workout.exercise_ids),
+        ),
         :id,
         :name,
         {},
