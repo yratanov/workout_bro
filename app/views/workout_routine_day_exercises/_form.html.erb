@@ -1,0 +1,22 @@
+<%= form_with(model: workout_routine_day_exercise, url: workout_routine_workout_routine_day_workout_routine_day_exercises_path(workout_routine_day_exercise.workout_routine_day.workout_routine, workout_routine_day_exercise.workout_routine_day), class: "contents") do |form| %>
+  <div class="flex gap-5">
+    <div>
+      <%= form.hidden_field :workout_routine_day_id %>
+      <%= form.collection_select(
+        :exercise_id,
+        ::Exercise
+          .order(:name)
+          .uniq
+          .without(workout_routine_day_exercise.workout_routine_day.exercises),
+        :id,
+        :name,
+        {},
+        { class: "border w-[300px] border-slate-300 px-3.5 py-2 rounded" },
+      ) %>
+    </div>
+
+    <div>
+      <%= button text: "Save", type: "submit", style: "primary" %>
+    </div>
+  </div>
+<% end %>

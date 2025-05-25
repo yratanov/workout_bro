@@ -1,4 +1,4 @@
-<%= form_with(model: workout_routine_day, url: workout_routine_workout_routine_day_path(workout_routine_day), class: "contents") do |form| %>
+<%= form_with(model: workout_routine_day, url: workout_routine_day.new_record? ? workout_routine_workout_routine_days_path : workout_routine_workout_routine_day_path(workout_routine_day), class: "contents") do |form| %>
   <% if workout_routine_day.errors.any? %>
     <div
       id="error_explanation"
@@ -29,16 +29,35 @@
                     ] %>
   </div>
 
+  <div>
+    <%= button text: "Save", type: "submit", style: "primary" %>
+  </div>
+<% end %>
+
+<% unless workout_routine_day.new_record? %>
   <div class="my-5">
-    <% workout_routine_day.exercises.each do |exercise| %>
-      <div>
-        <%= hidden_field_tag "workout_routine_day[exercises][]", exercise.id %>
-        <%= exercise.name %>
-      </div>
+    <%= turbo_frame_tag 'exercises' do %>
+      <%= render "exercises", workout_routine_day: %>
     <% end %>
   </div>
 
-  <div class="inline">
-    <%= button text: "Save", type: "submit", style: "primary" %>
+  <div class="mb-5">
+    <%= button "Add new exercise",
+    type: "link",
+    style: "success",
+    method: :get,
+    route:
+      new_workout_routine_workout_routine_day_workout_routine_day_exercise_path(
+        workout_routine_day.workout_routine,
+        workout_routine_day,
+      ),
+    data: {
+      turbo_method: :get,
+      turbo_prefetch: false,
+      turbo_frame: "new_exercise_form",
+    } %>
   </div>
+
+  <%= turbo_frame_tag 'new_exercise_form' do %>
+  <% end %>
 <% end %>

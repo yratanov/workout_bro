@@ -11,7 +11,7 @@
   <% end %>
 
   <div class="min-w-[600px] flex gap-4 items-center mb-5 text-2xl">
-    <h1 class="font-bold flex">
+    <h1 class="font-bold">
       <%= @workout_routine.name %>
     </h1>
   </div>
@@ -24,6 +24,10 @@
 
   <div class="flex gap-4">
     <%= button "Back", type: "link", style: "outlined", route: workout_routines_path %>
+    <%= button "Add day",
+    style: "primary",
+    type: "link",
+    route: new_workout_routine_workout_routine_day_path(@workout_routine) %>
     <%= button "Destroy",
     style: "danger",
     method: :delete,

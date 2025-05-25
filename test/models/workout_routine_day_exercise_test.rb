@@ -3,6 +3,7 @@
 # Table name: workout_routine_day_exercises
 #
 #  id                     :integer          not null, primary key
+#  position               :integer
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  exercise_id            :integer          not null
