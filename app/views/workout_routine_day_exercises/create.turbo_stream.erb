@@ -1,0 +1,8 @@
+<%= turbo_stream.update(
+  "exercises",
+  partial: "workout_routine_days/exercises",
+  locals: {
+    workout_routine_day: @workout_routine_day,
+  },
+) %>
+<%= turbo_stream.update("new_exercise_form", "") %>
