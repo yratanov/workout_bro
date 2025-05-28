@@ -39,6 +39,10 @@
       <% if prev_workout_set %>
         <div class="mb-2 border-r border-slate-400 pr-6 text-slate-300">
           <%= prev_workout_set.created_at.strftime("%d %b") %>
+          <%= Time
+            .at(prev_workout_set.ended_at - prev_workout_set.started_at)
+            .utc
+            .strftime("%M:%S") %>
           <%= render collection: prev_workout_set.workout_reps,
           partial: "workout_reps/workout_rep",
           locals: {
@@ -49,7 +53,11 @@
     <% end %>
 
     <div>
-      Today
+      <% if workout_set.workout.running? %>
+        Today
+      <% else %>
+        <%= workout_set.created_at.strftime("%d %b") %>
+      <% end %>
       <%= turbo_frame_tag workout_set, "reps" do %>
         <%= render partial: "workout_reps/list_with_form",
         locals: {

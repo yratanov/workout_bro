@@ -19,7 +19,7 @@ class WorkoutRoutineDaysController < ApplicationController
     @workout_routine_day.workout_routine = @workout_routine
 
     if @workout_routine_day.save
-      redirect_to workout_routine_path(@workout_routine), notice: "Workout routine day was successfully created."
+      redirect_to edit_workout_routine_workout_routine_day_path(@workout_routine, @workout_routine_day), notice: "Workout routine day was successfully created."
     else
       render :new
     end
