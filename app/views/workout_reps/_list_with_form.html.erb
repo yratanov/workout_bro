@@ -6,14 +6,19 @@
   } %>
 </div>
 <% unless workout_set.ended? %>
-  <div class="flex mb-1 gap-2 border-t border-slate-400 pt-2">
-    <div class="mb-2">
-      Rest:
-    </div>
-    <div
-      data-controller="timer"
-      data-timer-date-value="<%= workout_set.workout_reps.filter(&:persisted?).last&.updated_at || DateTime.now %>"
-    ></div>
+  <div class="mb-2 flex">
+    <%= badge do %>
+      <div class="flex gap-2">
+        <div>
+          <%= icon_stopwatch %>
+        </div>
+        <div
+          data-controller="timer"
+          data-timer-show-hours-value="false"
+          data-timer-date-value="<%= workout_set.workout_reps.filter(&:persisted?).last&.updated_at || DateTime.now %>"
+          ></div>
+      </div>
+    <% end %>
   </div>
   <%= render "workout_reps/form",
   workout_rep:

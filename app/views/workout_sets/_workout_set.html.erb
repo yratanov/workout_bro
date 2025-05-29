@@ -1,6 +1,10 @@
-<div class="border border-slate-400 rounded relative">
-  <div class="flex justify-between pt-4 px-4 border-b mb-2 border-slate-400">
-    <div class="flex gap-2 mb-2">
+<div class="bg-slate-700 rounded relative">
+  <div
+    class="
+      flex bg-slate-800 items-center rounded-t justify-between px-4 py-3 mb-2
+    "
+  >
+    <div class="flex gap-2">
       <div class="font-bold">
         <%= workout_set.exercise.name %>
       </div>
@@ -18,14 +22,7 @@
     data: {
       turbo_confirm: "Are you sure?",
     } do %>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 448 512"
-        class="h-5 w-5 text-current"
-        fill="currentColor"
-      ><path
-          d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
-        /></svg>
+      <%= icon_bin %>
     <% end %>
   </div>
 
@@ -35,14 +32,20 @@
       .workout_sets
       .where(exercise: workout_set.exercise)
       .where(created_at: ..workout_set.created_at - 1.minute)
-      .last(2).each do |prev_workout_set| %>
+      .last(1).each do |prev_workout_set| %>
       <% if prev_workout_set %>
-        <div class="mb-2 border-r border-slate-400 pr-6 text-slate-300">
-          <%= prev_workout_set.created_at.strftime("%d %b") %>
-          <%= Time
-            .at(prev_workout_set.ended_at - prev_workout_set.started_at)
-            .utc
-            .strftime("%M:%S") %>
+        <div class="mb-2 border-r border-slate-600 pr-6 text-slate-300">
+          <div class="flex gap-2 mb-2 border-b border-slate-600 pb-2">
+            <%= badge do %>
+              <%= prev_workout_set.created_at.strftime("%d %b") %>
+            <% end %>
+            <%= badge do %>
+              <%= Time
+                .at(prev_workout_set.ended_at - prev_workout_set.started_at)
+                .utc
+                .strftime("%M:%S") %>
+            <% end %>
+          </div>
           <%= render collection: prev_workout_set.workout_reps,
           partial: "workout_reps/workout_rep",
           locals: {
@@ -52,12 +55,16 @@
       <% end %>
     <% end %>
 
-    <div>
-      <% if workout_set.workout.running? %>
-        Today
-      <% else %>
-        <%= workout_set.created_at.strftime("%d %b") %>
-      <% end %>
+    <div class="flex-grow">
+      <div class="flex mb-2 border-b border-slate-600 pb-2">
+        <%= badge do %>
+          <% if workout_set.workout.running? %>
+            Today
+          <% else %>
+            <%= workout_set.created_at.strftime("%d %b") %>
+          <% end %>
+        <% end %>
+      </div>
       <%= turbo_frame_tag workout_set, "reps" do %>
         <%= render partial: "workout_reps/list_with_form",
         locals: {
@@ -69,7 +76,7 @@
   </div>
 
   <% unless workout_set.ended? %>
-    <div class="p-4 flex border-t border-slate-400 justify-center">
+    <div class="p-4 flex rounded-b justify-center bg-slate-800">
       <%= button "Complete this set",
       type: "button",
       style: "success",
