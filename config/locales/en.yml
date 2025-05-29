@@ -29,3 +29,9 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    attributes:
+      workout:
+        distance: "Distance(m)"
+        time_in_seconds: "Time (mm:ss)"
+        
