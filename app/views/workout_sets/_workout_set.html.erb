@@ -4,25 +4,30 @@
       flex bg-slate-800 items-center rounded-t justify-between px-4 py-3 mb-2
     "
   >
-    <div class="flex gap-2">
+    <div class="flex gap-2 items-center">
       <div class="font-bold">
         <%= workout_set.exercise.name %>
       </div>
-      <%= render(
-        TimerComponent.new(
-          started_at: workout_set.started_at,
-          ended_at: workout_set.ended_at,
-        ),
-      ) %>
+      <%= badge do %>
+        <div class="flex gap-2 items-center">
+          <%= icon_stopwatch %>
+          <%= render(
+            TimerComponent.new(
+              started_at: workout_set.started_at,
+              ended_at: workout_set.ended_at,
+            ),
+          ) %>
+        </div>
+      <% end %>
     </div>
     <%= button route: workout_set_path(workout_set),
     method: :delete,
     type: 'button',
-    style: "link_danger",
+    style: "link_hover_danger",
     data: {
       turbo_confirm: "Are you sure?",
     } do %>
-      <%= icon_bin %>
+      <%= icon_xmark %>
     <% end %>
   </div>
 
