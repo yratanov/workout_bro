@@ -11,23 +11,29 @@
   <% end %>
 
   <div class="min-w-[600px] flex gap-4 items-center mb-5 text-xl">
-    <h1 class="font-bold flex">
-      <% if @workout.workout_routine_day %>
+    <% if @workout.workout_routine_day %>
+      <div>
         <%= @workout.workout_routine_day.workout_routine.name %>
-        -
+      </div>
+      <div>
+        ·
+      </div>
+      <div>
         <%= @workout.workout_routine_day.name %>
-      <% else %>
+      </div>
+    <% else %>
+      <div>
         Workout
-      <% end %>
-    </h1>
+      </div>
+    <% end %>
     <div>
-      -
+      ·
     </div>
     <div>
       <%= @workout.created_at.strftime("%d %b") %>
     </div>
     <div>
-      -
+      ·
     </div>
     <%= render(
       TimerComponent.new(
