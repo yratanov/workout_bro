@@ -1,4 +1,4 @@
-<div class="flex gap-1 mb-1 items-center">
+<div class="flex gap-1 mb-2 items-center">
   <%= badge do %>
     <%= workout_rep.reps %>
   <% end %>
@@ -13,8 +13,8 @@
       <%= button route: workout_rep_path(workout_rep),
       method: :delete,
       type: 'button',
-      style: "link_danger" do %>
-        <%= icon_bin %>
+      style: "link_hover_danger" do %>
+        <%= icon_xmark %>
       <% end %>
     </div>
   <% end %>

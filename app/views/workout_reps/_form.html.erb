@@ -20,21 +20,21 @@
       <%= form.hidden_field :workout_set_id %>
       <%= form.select(
         :reps,
-        (1..30).map { |r| ["#{r} reps", r] },
+        (1..40).map { |r| ["#{r} x", r] },
         {},
-        { class: "border w-[100px] border-slate-300 px-2 py-2 rounded" },
+        { class: "border w-[70px] border-slate-300 px-2 py-2 rounded" },
       ) %>
     </div>
 
     <div>
       <%= form.select(
         :weight,
-        (0..30).step(2.5).map { |w| ["#{w}KG", w] },
+        (0..40).step(2.5).map { |w| ["#{w}KG", w] },
         {},
-        { class: "border w-[100px] border-slate-300 px-2 py-2 rounded" },
+        { class: "border w-[90px] border-slate-300 px-2 py-2 rounded" },
       ) %>
     </div>
 
-    <%= button text: "Add rep", type: "submit", style: "primary" %>
+    <%= button text: "Add", type: "submit", style: "primary" %>
   </div>
 <% end %>

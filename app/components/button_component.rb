@@ -10,6 +10,7 @@ class ButtonComponent < ViewComponent::Base
     outlined: "border-slate-400 hover:bg-slate-400 text-slate-200",
     link: "text-blue-400 hover:text-blue-300",
     link_danger: "text-red-400 hover:text-red-300",
+    link_hover_danger: "text-slate-400 hover:text-red-300",
   }.freeze
 
   SIZE = { default: "px-8 py-2", lg: "!text-base py-3 px-6" }.freeze
@@ -43,7 +44,7 @@ class ButtonComponent < ViewComponent::Base
   end
 
   def inline?
-    %w[none link link_danger].include?(@style)
+    %w[none link link_hover_danger link_danger].include?(@style)
   end
 end
 
