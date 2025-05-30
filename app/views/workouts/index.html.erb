@@ -1,6 +1,6 @@
 <% content_for :title, "Workouts" %>
 
-<div class="max-w-[400px] self-center">
+<div class="w-[400px] self-center">
   <% if notice.present? %>
     <p
       class="
@@ -15,7 +15,7 @@
     <%= button "Start workout", style: "primary", type: "link", route: new_workout_path %>
   </div>
 
-  <div id="workouts" class="space-y-2 max-w-[500px]">
+  <div id="workouts" class="space-y-2">
     <% if @workouts.any? %>
       <% @grouped_by_week.each_with_index do |(day, workouts), i| %>
         <div class=" bg-slate-700 rounded-lg <%= i > 0 ? "mt-5" : "" %> ">
