@@ -1,6 +1,6 @@
 <% content_for :title, "Workouts" %>
 
-<div>
+<div class="max-w-[400px] self-center">
   <% if notice.present? %>
     <p
       class="
@@ -15,7 +15,7 @@
     <%= button "Start workout", style: "primary", type: "link", route: new_workout_path %>
   </div>
 
-  <div id="workouts" class="space-y-2">
+  <div id="workouts" class="space-y-2 max-w-[500px]">
     <% if @workouts.any? %>
       <% @grouped_by_week.each_with_index do |(day, workouts), i| %>
         <div class=" bg-slate-700 rounded-lg <%= i > 0 ? "mt-5" : "" %> ">
@@ -28,22 +28,17 @@
           </div>
           <% grouped_by_day = workouts.group_by { |w| w.started_at.strftime("%A") } %>
           <% grouped_by_day.each_with_index do |(week_day, day_workouts), index| %>
-            <div class="py-4  <%= index < grouped_by_day.size - 1 ? "border-b border-slate-600" : "" %>">
+            <div
+              class="py-4 <%= index < grouped_by_day.size - 1 ? "border-b border-slate-600" : "" %>"
+            >
               <% day_workouts.each_with_index do |workout, i| %>
-                <div
-                  class="px-4"
-                >
+                <div class="px-4">
+                  <div class="mb-2 font-bold">
+                    <% if i == 0 %>
+                      <%= workout.started_at.strftime("%A") %>
+                    <% end %>
+                  </div>
                   <div class="flex flex-wrap lg:flex-nowrap gap-8 items-center">
-                    <div class="w-20">
-                      <% if i == 0 %>
-                        <%= workout.started_at.strftime("%A") %>
-                      <% end %>
-                    </div>
-                    <div class="w-20">
-                      <% if i == 0 %>
-                        <%= workout.started_at.strftime("%d %B") %>
-                      <% end %>
-                    </div>
                     <div class="flex-grow">
                       <%= button (
                         if workout.cardio?
@@ -59,21 +54,24 @@
                         turbo_prefetch: false,
                       } %>
                     </div>
-                    <div class="text-center">
+                    <div class="text-right w-20">
                       <% if workout.cardio? %>
-                        <%= workout.distance.to_f / 1000 %>km
+                        <%= (workout.distance.to_f / 1000).round(2) %>
+                        km
                       <% else %>
                         <%= workout.workout_sets.size %>
                         sets
                       <% end %>
                     </div>
 
-                    <%= render(
-                      TimerComponent.new(
-                        started_at: workout.started_at,
-                        ended_at: workout.ended_at,
-                      ),
-                    ) %>
+                    <div class="w-15 text-center">
+                      <%= render(
+                        TimerComponent.new(
+                          started_at: workout.started_at,
+                          ended_at: workout.ended_at,
+                        ),
+                      ) %>
+                    </div>
                   </div>
                 </div>
               <% end %>
