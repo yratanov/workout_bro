@@ -1,10 +1,39 @@
 <div id="<%= dom_id exercise %>" class="w-full sm:w-auto my-5 space-y-5">
   <div>
-    <strong class="block font-medium mb-1">Name:</strong>
-    <%= exercise.name %>
-  </div>
-  <div>
     <strong class="block font-medium mb-1">Muscles:</strong>
     <%= exercise.muscles %>
+  </div>
+</div>
+
+<div class="bg-slate-700 rounded mb-8 p-2">
+  <div class="flex gap-6 pb-4 px-4 max-w-[800px] overflow-x-auto">
+    <% Current
+      .user
+      .workout_sets
+      .where(exercise:)
+      .where.not(ended_at: nil)
+      .order(created_at: :desc)
+      .last(20).each do |prev_workout_set| %>
+      <% if prev_workout_set %>
+        <div class="mb-2 border-r border-slate-600 pr-6 text-slate-300">
+          <div class="flex gap-2 mb-2 border-b border-slate-600 pb-2 no-shrink">
+            <%= badge do %>
+              <%= prev_workout_set.created_at.strftime("%d %b") %>
+            <% end %>
+            <%= badge do %>
+              <%= Time
+                .at(prev_workout_set.ended_at - prev_workout_set.started_at)
+                .utc
+                .strftime("%M:%S") %>
+            <% end %>
+          </div>
+          <%= render collection: prev_workout_set.workout_reps,
+          partial: "workout_reps/workout_rep",
+          locals: {
+            delete_visible: false,
+          } %>
+        </div>
+      <% end %>
+    <% end %>
   </div>
 </div>
