@@ -1,25 +1,37 @@
-<div class="bg-slate-700 rounded relative">
+<div class="bg-slate-700 rounded relative" data-controller="accordion">
   <div
     class="
-      flex bg-slate-800 items-center rounded-t justify-between px-4 py-3 mb-2
+      flex bg-slate-800 items-center rounded-t justify-between px-4 py-3 mb-2 gap-2
     "
   >
-    <div class="flex gap-2 items-center">
-      <div class="font-bold">
-        <%= workout_set.exercise.name %>
+    <button
+      data-action="click->accordion#toggle"
+      data-accordion-target="trigger"
+      class="
+        w-full cursor-pointer transition flex items-center gap-2
+      "
+      aria-expanded="true"
+    >
+      <div data-accordion-target="icon">
+        <%= icon_chevron_down %>
       </div>
-      <%= badge do %>
-        <div class="flex gap-2 items-center">
-          <%= icon_stopwatch %>
-          <%= render(
-            TimerComponent.new(
-              started_at: workout_set.started_at,
-              ended_at: workout_set.ended_at,
-            ),
-          ) %>
+      <div class="flex gap-2 items-center">
+        <div class="font-bold">
+          <%= workout_set.exercise.name %>
         </div>
-      <% end %>
-    </div>
+        <%= badge do %>
+          <div class="flex gap-2 items-center">
+            <%= icon_stopwatch %>
+            <%= render(
+              TimerComponent.new(
+                started_at: workout_set.started_at,
+                ended_at: workout_set.ended_at,
+              ),
+            ) %>
+          </div>
+        <% end %>
+      </div>
+    </button>
     <%= button route: workout_set_path(workout_set),
     method: :delete,
     type: 'button',
@@ -31,65 +43,70 @@
     <% end %>
   </div>
 
-  <div class="flex gap-6 pb-4 px-4">
-    <% Current
+  <div
+    class="overflow-hidden transition-all duration-300 ease-in-out"
+    data-accordion-target="content"
+  >
+    <div class=" flex gap-6 pb-4 px-4 ">
+      <% Current
       .user
       .workout_sets
       .where(exercise: workout_set.exercise)
       .where(created_at: ..workout_set.created_at - 1.minute)
       .last(1).each do |prev_workout_set| %>
-      <% if prev_workout_set %>
-        <div class="mb-2 border-r border-slate-600 pr-6 text-slate-300">
-          <div class="flex gap-2 mb-2 border-b border-slate-600 pb-2">
-            <%= badge do %>
-              <%= prev_workout_set.created_at.strftime("%d %b") %>
-            <% end %>
-            <%= badge do %>
-              <%= Time
-                .at(prev_workout_set.ended_at - prev_workout_set.started_at)
-                .utc
-                .strftime("%M:%S") %>
-            <% end %>
+        <% if prev_workout_set %>
+          <div class="mb-2 border-r border-slate-600 pr-6 text-slate-300">
+            <div class="flex gap-2 mb-2 border-b border-slate-600 pb-2">
+              <%= badge do %>
+                <%= prev_workout_set.created_at.strftime("%d %b") %>
+              <% end %>
+              <%= badge do %>
+                <%= Time
+                  .at(prev_workout_set.ended_at - prev_workout_set.started_at)
+                  .utc
+                  .strftime("%M:%S") %>
+              <% end %>
+            </div>
+            <%= render collection: prev_workout_set.workout_reps,
+            partial: "workout_reps/workout_rep",
+            locals: {
+              delete_visible: false,
+            } %>
           </div>
-          <%= render collection: prev_workout_set.workout_reps,
-          partial: "workout_reps/workout_rep",
-          locals: {
-            delete_visible: false,
-          } %>
-        </div>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <div class="flex-grow">
-      <div class="flex mb-2 border-b border-slate-600 pb-2">
-        <%= badge do %>
-          <% if workout_set.workout.running? %>
-            Today
-          <% else %>
-            <%= workout_set.created_at.strftime("%d %b") %>
+      <div class="flex-grow">
+        <div class="flex mb-2 border-b border-slate-600 pb-2">
+          <%= badge do %>
+            <% if workout_set.workout.running? %>
+              Today
+            <% else %>
+              <%= workout_set.created_at.strftime("%d %b") %>
+            <% end %>
           <% end %>
+        </div>
+        <%= turbo_frame_tag workout_set, "reps" do %>
+          <%= render partial: "workout_reps/list_with_form",
+          locals: {
+            workout_set:,
+            workout_rep: workout_set.workout_reps.new(weight: 10, reps: 10),
+          } %>
         <% end %>
       </div>
-      <%= turbo_frame_tag workout_set, "reps" do %>
-        <%= render partial: "workout_reps/list_with_form",
-        locals: {
-          workout_set:,
-          workout_rep: workout_set.workout_reps.new(weight: 10, reps: 10),
-        } %>
-      <% end %>
     </div>
-  </div>
 
-  <% unless workout_set.ended? %>
-    <div class="p-4 flex rounded-b justify-center bg-slate-800">
-      <%= button "Complete this set",
-      type: "button",
-      style: "success",
-      method: :post,
-      route: stop_workout_set_path(workout_set),
-      data: {
-        turbo_method: :post,
-      } %>
-    </div>
-  <% end %>
+    <% unless workout_set.ended? %>
+      <div class="p-4 flex rounded-b justify-center bg-slate-800">
+        <%= button "Complete this set",
+        type: "button",
+        style: "success",
+        method: :post,
+        route: stop_workout_set_path(workout_set),
+        data: {
+          turbo_method: :post,
+        } %>
+      </div>
+    <% end %>
+  </div>
 </div>
