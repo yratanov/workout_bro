@@ -10,7 +10,7 @@
       class="
         w-full cursor-pointer transition flex items-center gap-2
       "
-      aria-expanded="true"
+      aria-expanded=<%= workout_set.running? || workout_set.workout.ended? ? "true" : "false" %>
     >
       <div data-accordion-target="icon">
         <%= icon_chevron_down %>

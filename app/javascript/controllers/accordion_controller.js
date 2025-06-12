@@ -6,6 +6,8 @@ export default class extends Controller {
   connect() {
     const isExpanded =
       this.triggerTarget.getAttribute("aria-expanded") === "true";
+    
+    const icon = this.iconTarget;
 
     if (!isExpanded) {
       this.contentTarget.style.maxHeight = "0px";
@@ -31,4 +33,4 @@ export default class extends Controller {
       icon.style.transform = "rotate(0deg)";
     }
   }
-}
+} 
