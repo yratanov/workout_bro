@@ -3,6 +3,7 @@
 # Table name: workout_reps
 #
 #  id             :integer          not null, primary key
+#  band           :string
 #  reps           :integer
 #  weight         :float
 #  created_at     :datetime         not null
