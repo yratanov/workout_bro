@@ -2,12 +2,16 @@
   <%= badge do %>
     <%= workout_rep.reps %>
   <% end %>
-  <div>
-    x
-  </div>
-  <%= badge do %>
-    <%= workout_rep.weight %>KG
+  
+  <% if workout_rep.weight %>
+    <div>
+      x
+    </div>
+    <%= badge do %>
+      <%= workout_rep.weight %>KG
+    <% end %>
   <% end %>
+  
   <% if workout_rep.band %>
     <div>
       x
