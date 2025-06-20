@@ -8,6 +8,14 @@
   <%= badge do %>
     <%= workout_rep.weight %>KG
   <% end %>
+  <% if workout_rep.band %>
+    <div>
+      x
+    </div>
+    <%= badge do %>
+      <%= workout_rep.band.humanize %>
+    <% end %>
+  <% end %>
   <% if delete_visible %>
     <div class="ml-2">
       <%= button route: workout_rep_path(workout_rep),

@@ -3,6 +3,7 @@
 # Table name: workout_reps
 #
 #  id             :integer          not null, primary key
+#  band           :string
 #  reps           :integer
 #  weight         :float
 #  created_at     :datetime         not null
@@ -21,7 +22,9 @@
 class WorkoutRep < ApplicationRecord
   belongs_to :workout_set
 
+  BANDS = %w[lightest light medium heavy].freeze
   validates :reps, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :weight, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :band, inclusion: { in: [nil, *BANDS] }
   validates :workout_set_id, presence: true
 end

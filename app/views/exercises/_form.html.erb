@@ -43,6 +43,32 @@
                     ] %>
   </div>
 
+  <div class="my-5 flex gap-4">
+    <%= form.label :with_weights %>
+    <%= form.checkbox :with_weights,
+                  class: [
+                    {
+                      "border-gray-400 focus:outline-blue-600":
+                        exercise.errors[:muscles].none?,
+                      "border-red-400 focus:outline-red-600":
+                        exercise.errors[:muscles].any?,
+                    },
+                  ] %>
+  </div>
+
+  <div class="my-5 flex gap-4">
+    <%= form.label :with_band %>
+    <%= form.checkbox :with_band,
+                  class: [
+                    {
+                      "border-gray-400 focus:outline-blue-600":
+                        exercise.errors[:muscles].none?,
+                      "border-red-400 focus:outline-red-600":
+                        exercise.errors[:muscles].any?,
+                    },
+                  ] %>
+  </div>
+
   <div class="inline">
     <%= button text: "Save", type: "submit", style: "primary" %>
   </div>

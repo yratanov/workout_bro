@@ -26,14 +26,27 @@
       ) %>
     </div>
 
-    <div>
-      <%= form.select(
-        :weight,
-        (0..40).step(2.5).map { |w| ["#{w}KG", w] },
-        {},
-        { class: "border w-[90px] border-slate-300 px-2 py-2 rounded" },
-      ) %>
-    </div>
+    <% if workout_rep.workout_set.exercise.with_weights %>
+      <div>
+        <%= form.select(
+          :weight,
+          (0..40).step(2.5).map { |w| ["#{w}KG", w] },
+          {},
+          { class: "border w-[90px] border-slate-300 px-2 py-2 rounded" },
+        ) %>
+      </div>
+    <% end %>
+
+    <% if workout_rep.workout_set.exercise.with_band %>
+      <div>
+        <%= form.select(
+          :band,
+          [["None", nil]] + WorkoutRep::BANDS.map { |b| [b.humanize, b] },
+          {},
+          { class: "border w-[100px] border-slate-300 px-2 py-2 rounded" },
+        ) %>
+      </div>
+    <% end %>
 
     <%= button text: "Add", type: "submit", style: "primary" %>
   </div>
