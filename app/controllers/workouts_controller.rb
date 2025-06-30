@@ -40,8 +40,12 @@ class WorkoutsController < ApplicationController
     if @workout.cardio?
       @workout.workout_routine_day = nil
       if params[:workout][:time_in_seconds]
-        (minutes, seconds) = params[:workout][:time_in_seconds].split(":")
-        @workout.time_in_seconds = minutes.to_i * 60 + seconds.to_i
+        (hours, minutes, seconds) = params[:workout][:time_in_seconds].split(":")
+        if seconds.nil?
+          minutes, seconds = hours, minutes
+          hours = 0 
+        end
+        @workout.time_in_seconds = hours.to_i * 60 * 60 +  minutes.to_i * 60 + seconds.to_i
         @workout.ended_at = @workout.started_at ? @workout.started_at + @workout.time_in_seconds.seconds : nil
       end
     else

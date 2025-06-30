@@ -33,5 +33,5 @@ en:
     attributes:
       workout:
         distance: "Distance(m)"
-        time_in_seconds: "Time (mm:ss)"
+        time_in_seconds: "Time (hh:mm:ss)"
         
