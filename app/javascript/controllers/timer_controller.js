@@ -20,7 +20,7 @@ export default class extends Controller {
     const now = new Date();
     let diff = Math.abs(now - this.startTime) / 1000; // in seconds
 
-    const hours = String(Math.floor(diff / 3600)).padStart(2, "0");
+    const hours = String(Math.floor(diff / 3600));
     diff %= 3600;
     const minutes = String(Math.floor(diff / 60)).padStart(2, "0");
     const seconds = String(Math.floor(diff % 60)).padStart(2, "0");
