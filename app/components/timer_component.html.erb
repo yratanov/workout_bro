@@ -1,9 +1,9 @@
 <div class="<%= @ended_at ? "" : "text-green-600" %>">
   <% if @ended_at %>
     <% diff = Time.at(@ended_at - @started_at).utc %>
-    <%= diff.hour > 0 ? diff.strftime("%H:%M:%S") : diff.strftime("%M:%S") %>
+    <%= diff.hour > 0 ? diff.strftime("%k:%M:%S") : diff.strftime("%M:%S") %>
   <% else %>
-    <div data-controller="timer" data-timer-date-value="<%= @started_at %>">
+    <div data-controller="timer" data-timer-date-value="<%= @started_at %>" data-timer-show-hours-value="<%= @show_hours %>">
     </div>
   <% end %>
 </div>
