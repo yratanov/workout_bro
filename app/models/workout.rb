@@ -34,7 +34,7 @@ class Workout < ApplicationRecord
 
   enum :workout_type, {
     strength: 0,
-    cardio: 1,
+    run: 1,
   }
 
   validates :workout_type, presence: true
@@ -42,8 +42,8 @@ class Workout < ApplicationRecord
   validates :workout_routine_day, presence: true, if: :strength?
   validates :user, presence: true
 
-  validates :distance, numericality: { greater_than_or_equal_to: 0 }, if: :cardio?
-  validates :time_in_seconds, numericality: { greater_than_or_equal_to: 0 }, if: :cardio?
+  validates :distance, numericality: { greater_than_or_equal_to: 0 }, if: :run?
+  validates :time_in_seconds, numericality: { greater_than_or_equal_to: 0 }, if: :run?
 
   def running?
     !ended?

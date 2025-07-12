@@ -1,9 +1,23 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+user = User.create!(email_address: 'organium@gmail.com', password: 'password', password_confirmation: 'password')
+
+workout_day = WorkoutRoutine.create!(
+  name: 'Workout Day',
+  user:,
+)
+
+# create exercises
+[
+  { name: 'Bench Press', muscles: 'Chest', with_band: false, with_weights: true },
+  { name: 'Squat', muscles: 'Legs', with_band: false, with_weights: true },
+  { name: 'Deadlift', muscles: 'Back', with_band: false, with_weights: true },
+  { name: 'Overhead Press', muscles: 'Shoulders', with_band: false, with_weights: true },
+  { name: 'Pull-up', muscles: 'Back', with_band: true, with_weights: false },
+  { name: 'Push-up', muscles: 'Chest', with_band: true, with_weights: false },
+].each do |exercise_data|
+  Exercise.create!(exercise_data)
+end
+
+day = workout_day.workout_routine_days.create!(
+  name: 'Day 1',
+)
+day.exercises << Exercise.all

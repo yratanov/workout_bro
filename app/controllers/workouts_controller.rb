@@ -37,7 +37,7 @@ class WorkoutsController < ApplicationController
     
     @workout = Workout.new(workout_params.merge(user: current_user))
 
-    if @workout.cardio?
+    if @workout.run?
       @workout.workout_routine_day = nil
       if params[:workout][:time_in_seconds]
         (hours, minutes, seconds) = params[:workout][:time_in_seconds].split(":")
@@ -57,7 +57,7 @@ class WorkoutsController < ApplicationController
     respond_to do |format|
       if @workout.save
         format.html do
-          if @workout.cardio?
+          if @workout.run?
             redirect_to workouts_path, notice: "Workout was successfully created."
           else
             redirect_to @workout, notice: "Workout was successfully created."
