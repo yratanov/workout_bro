@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="workout-type-switcher"
 export default class extends Controller {
-  static targets = ["strengthToggle", "cardioToggle"];
+  static targets = ["strengthToggle", "runToggle"];
   
   switch(event) {
     let value = event.target.value;
@@ -11,14 +11,14 @@ export default class extends Controller {
       this.strengthToggleTargets.forEach((target) => {
         target.classList.remove("hidden");
       });
-      this.cardioToggleTargets.forEach((target) => {
+      this.runToggleTargets.forEach((target) => {
         target.classList.add("hidden");
       });
     } else {
       this.strengthToggleTargets.forEach((target) => {
         target.classList.add("hidden");
       });
-      this.cardioToggleTargets.forEach((target) => {
+      this.runToggleTargets.forEach((target) => {
         target.classList.remove("hidden");
       });
     }
