@@ -55,7 +55,7 @@
       .order(created_at: :asc)
       .last(3).each do |prev_workout_set| %>
         <% if prev_workout_set %>
-          <div class="mb-2 border-r border-slate-600 pr-6 text-slate-300 hidden lg:block">
+          <div class="mb-2 border-r border-slate-600 pr-6 text-slate-400 hidden lg:block">
             <div class="flex gap-2 mb-2 border-b border-slate-600 pb-2">
               <%= badge do %>
                 <%= prev_workout_set.created_at.strftime("%d %b") %>
