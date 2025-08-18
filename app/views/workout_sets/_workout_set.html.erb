@@ -52,7 +52,7 @@
       .where(exercise: workout_set.exercise)
       .where.not(id: workout_set.id)
       .where.not(ended_at: nil)
-      .order(created_at: :desc)
+      .order(created_at: :asc)
       .last(3).each do |prev_workout_set| %>
         <% if prev_workout_set %>
           <div class="mb-2 border-r border-slate-600 pr-6 text-slate-300 hidden lg:block">
