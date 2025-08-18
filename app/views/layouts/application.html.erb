@@ -23,13 +23,21 @@
 
   <body class="w-full">
     <% if authenticated? %>
-      <div class="flex w-full bg-slate-700 items-center justify-center text-sm lg:text-base">
+      <div
+        class="
+          flex w-full bg-slate-700 items-center justify-center text-sm lg:text-base
+        "
+      >
         <%= image_tag "icon.png", class: "w-10 h-10" %>
-        <%= link_to "Workouts", workouts_path, class: "px-2 lg:px-4 py-2 block hover:bg-slate-500" %>
+        <%= link_to "Workouts",
+        workouts_path,
+        class: "px-2 lg:px-4 py-2 block hover:bg-slate-500" %>
         <%= link_to "Routines",
         workout_routines_path,
         class: "px-2 lg:px-4 py-2 block hover:bg-slate-500" %>
-        <%= link_to "Exercises", exercises_path, class: "px-2 lg:px-4 py-2 block hover:bg-slate-500" %>
+        <%= link_to "Exercises",
+        exercises_path,
+        class: "px-2 lg:px-4 py-2 block hover:bg-slate-500" %>
         <%= link_to session_path,
         method: :destroy,
         data: { turbo_method: :delete },
@@ -39,7 +47,7 @@
       </div>
     <% end %>
     <main class="w-full mt-10 px-5 flex justify-center">
-      <div class="flex w-full lg:w-[600px] justify-center">
+      <div class="flex w-full justify-center">
         <%= yield %>
       </div>
     </main>

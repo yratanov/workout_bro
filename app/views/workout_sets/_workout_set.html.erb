@@ -7,10 +7,8 @@
     <button
       data-action="click->accordion#toggle"
       data-accordion-target="trigger"
-      class="
-        w-full cursor-pointer transition flex items-center gap-2
-      "
-      aria-expanded=<%= workout_set.running? || workout_set.workout.ended? ? "true" : "false" %>
+      class="w-full cursor-pointer transition flex items-center gap-2"
+      aria-expanded="<%= workout_set.running? || workout_set.workout.ended? ? "true" : "false" %>"
     >
       <div data-accordion-target="icon">
         <%= icon_chevron_down %>
@@ -52,10 +50,12 @@
       .user
       .workout_sets
       .where(exercise: workout_set.exercise)
-      .where(created_at: ..workout_set.created_at - 1.minute)
-      .last(1).each do |prev_workout_set| %>
+      .where.not(id: workout_set.id)
+      .where.not(ended_at: nil)
+      .order(created_at: :desc)
+      .last(3).each do |prev_workout_set| %>
         <% if prev_workout_set %>
-          <div class="mb-2 border-r border-slate-600 pr-6 text-slate-300">
+          <div class="mb-2 border-r border-slate-600 pr-6 text-slate-300 hidden lg:block">
             <div class="flex gap-2 mb-2 border-b border-slate-600 pb-2">
               <%= badge do %>
                 <%= prev_workout_set.created_at.strftime("%d %b") %>
