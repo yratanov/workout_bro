@@ -11,9 +11,7 @@ module ApplicationHelper
     parts = []
     minutes, seconds = seconds.divmod(60)
     hours, minutes = minutes.divmod(60)
-    days, hours = hours.divmod(24)
 
-    parts << "#{days}d" if days > 0
     parts << "#{hours}h" if hours > 0
     parts << "#{minutes}m" if minutes > 0
     parts << "#{seconds}s" if seconds > 0
