@@ -18,6 +18,7 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :workouts, dependent: :destroy
   has_many :workout_sets, through: :workouts
+  has_many :workout_reps, through: :workout_sets
   has_many :workout_routines, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }

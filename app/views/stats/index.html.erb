@@ -1,0 +1,31 @@
+<% content_for :title, "Stats" %>
+
+<div class="w-full max-w-3xl">
+  <h1 class="text-2xl font-bold mb-4">Stats</h1>
+
+  <div class="mb-6">
+    <p class="text-lg font-semibold mb-2">Total Workouts</p>
+    <p class="text-xl"><%= Current.user.workouts.count %></p>
+  </div>
+
+  <div class="mb-6">
+    <p class="text-lg font-semibold mb-2">Total Workout Sets</p>
+    <p class="text-xl"><%= Current.user.workout_sets.count %></p>
+  </div>
+
+  <div class="mb-6">
+    <p class="text-lg font-semibold mb-2">Total Workout Reps</p>
+    <p class="text-xl"><%= Current.user.workout_reps.count %></p>
+  </div>
+  <div class="mb-6">
+    <p class="text-lg font-semibold mb-2">Time spent workouts</p>
+    <p class="text-xl"><%= distance_of_time_in_words(
+        0,
+        Current.user.workouts.strength.sum(:time_in_seconds),
+      ) %></p>
+  </div>
+  <div class="mb-6">
+    <p class="text-lg font-semibold mb-2">Time spent running</p>
+    <p class="text-xl"><%= distance_of_time_in_words(0, Current.user.workouts.run.sum(:time_in_seconds)) %></p>
+  </div>
+</div>

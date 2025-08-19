@@ -45,11 +45,21 @@ class Workout < ApplicationRecord
   validates :distance, numericality: { greater_than_or_equal_to: 0 }, if: :run?
   validates :time_in_seconds, numericality: { greater_than_or_equal_to: 0 }, if: :run?
 
+  before_save :fill_in_time_in_seconds, if: :ended?
+  
   def running?
     !ended?
   end
   
   def ended?
     ended_at.present?
+  end
+
+  def fill_in_time_in_seconds
+    if started_at.present? && ended_at.present?
+      self.time_in_seconds = (ended_at - started_at).to_i
+    else
+      self.time_in_seconds = nil
+    end
   end
 end
