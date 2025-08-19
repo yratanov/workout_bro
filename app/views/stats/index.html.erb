@@ -3,26 +3,45 @@
 <div class="w-full max-w-3xl">
   <h1 class="text-2xl font-bold mb-4">Stats</h1>
 
-  <div class="mb-6">
-    <p class="text-lg font-semibold mb-2">Total Workouts</p>
-    <p class="text-xl"><%= Current.user.workouts.count %></p>
-  </div>
+  <div class="flex gap-4">
+    <div>
+      <div class="mb-6">
+        <p class="text-lg font-semibold mb-2">Total Workouts</p>
+        <p class="text-xl"><%= Current.user.workouts.strength.count %></p>
+      </div>
 
-  <div class="mb-6">
-    <p class="text-lg font-semibold mb-2">Total Workout Sets</p>
-    <p class="text-xl"><%= Current.user.workout_sets.count %></p>
-  </div>
+      <div class="mb-6">
+        <p class="text-lg font-semibold mb-2">Total Workout Sets</p>
+        <p class="text-xl"><%= Current.user.workout_sets.count %></p>
+      </div>
 
-  <div class="mb-6">
-    <p class="text-lg font-semibold mb-2">Total Workout Reps</p>
-    <p class="text-xl"><%= Current.user.workout_reps.count %></p>
-  </div>
-  <div class="mb-6">
-    <p class="text-lg font-semibold mb-2">Time spent workouts</p>
-    <p class="text-xl"><%= seconds_to_human(Current.user.workouts.strength.sum(:time_in_seconds)) %></p>
-  </div>
-  <div class="mb-6">
-    <p class="text-lg font-semibold mb-2">Time spent running</p>
-    <p class="text-xl"><%= seconds_to_human(Current.user.workouts.run.sum(:time_in_seconds)) %></p>
+      <div class="mb-6">
+        <p class="text-lg font-semibold mb-2">Total Workout Reps</p>
+        <p class="text-xl"><%= Current.user.workout_reps.count %></p>
+      </div>
+      <div class="mb-6">
+        <p class="text-lg font-semibold mb-2">Time spent workouts</p>
+        <p class="text-xl"><%= seconds_to_human(Current.user.workouts.strength.sum(:time_in_seconds)) %></p>
+      </div>
+    </div>
+    <div>
+      <div class="mb-6">
+        <p class="text-lg font-semibold mb-2">Total runs</p>
+        <p class="text-xl"><%= Current.user.workouts.run.count %></p>
+      </div>
+
+      <div class="mb-6">
+        <p class="text-lg font-semibold mb-2">Time spent running</p>
+        <p class="text-xl"><%= seconds_to_human(Current.user.workouts.run.sum(:time_in_seconds)) %></p>
+      </div>
+
+      <div class="mb-6">
+        <p class="text-lg font-semibold mb-2">Total distance run</p>
+        <p class="text-xl">
+          <%= (Current.user.workouts.run.sum(:distance) / 1000.0).round(2) %>
+          km
+        </p>
+      </div>
+    </div>
   </div>
 </div>
