@@ -19,13 +19,10 @@
   </div>
   <div class="mb-6">
     <p class="text-lg font-semibold mb-2">Time spent workouts</p>
-    <p class="text-xl"><%= distance_of_time_in_words(
-        0,
-        Current.user.workouts.strength.sum(:time_in_seconds),
-      ) %></p>
+    <p class="text-xl"><%= seconds_to_human(Current.user.workouts.strength.sum(:time_in_seconds)) %></p>
   </div>
   <div class="mb-6">
     <p class="text-lg font-semibold mb-2">Time spent running</p>
-    <p class="text-xl"><%= distance_of_time_in_words(0, Current.user.workouts.run.sum(:time_in_seconds)) %></p>
+    <p class="text-xl"><%= seconds_to_human(Current.user.workouts.run.sum(:time_in_seconds)) %></p>
   </div>
 </div>
