@@ -23,6 +23,12 @@
         <p class="text-lg font-semibold mb-2">Time spent workouts</p>
         <p class="text-xl"><%= seconds_to_human(Current.user.workouts.strength.sum(:time_in_seconds)) %></p>
       </div>
+      <div class="mb-6">
+        <p class="text-lg font-semibold mb-2">Average workout</p>
+        <p class="text-xl">
+          <%= seconds_to_human(Current.user.workouts.strength.average(:time_in_seconds).to_i) %>
+        </p>
+      </div>
     </div>
     <div>
       <div class="mb-6">
@@ -40,6 +46,13 @@
         <p class="text-xl">
           <%= (Current.user.workouts.run.sum(:distance) / 1000.0).round(2) %>
           km
+        </p>
+      </div>
+
+      <div class="mb-6">
+        <p class="text-lg font-semibold mb-2">Average run</p>
+        <p class="text-xl">
+          <%= seconds_to_human(Current.user.workouts.run.average(:time_in_seconds).to_i) %>
         </p>
       </div>
     </div>
