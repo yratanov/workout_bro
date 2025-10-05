@@ -64,13 +64,16 @@
                       <% end %>
                     </div>
 
-                    <div class="w-15 text-center">
+                    <div class="w-25 text-center">
                       <%= render(
                         TimerComponent.new(
                           started_at: workout.started_at,
                           ended_at: workout.ended_at,
                         ),
                       ) %>
+                      <%= run_pace workout %>
+                        <% if workout.run? %>
+                      <% end %>
                     </div>
                   </div>
                 </div>
