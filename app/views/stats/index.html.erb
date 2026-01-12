@@ -1,9 +1,9 @@
 <% content_for :title, "Stats" %>
 
-<div class="w-full max-w-3xl">
+<div class="w-full max-w-4xl">
   <h1 class="text-2xl font-bold mb-4">Stats</h1>
 
-  <div class="flex gap-4">
+  <div class="flex gap-4 mb-8">
     <div>
       <div class="mb-6">
         <p class="text-lg font-semibold mb-2">Total Workouts</p>
@@ -54,6 +54,124 @@
         <p class="text-xl">
           <%= seconds_to_human(Current.user.workouts.run.average(:time_in_seconds).to_i) %>
         </p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="text-xl font-bold mb-4">Charts</h2>
+
+  <div class="grid gap-8">
+    <div class="bg-slate-800 p-4 rounded-lg">
+      <h3 class="text-lg font-semibold mb-4">Hours per Week</h3>
+      <div class="h-64">
+        <canvas
+          data-controller="chart"
+          data-chart-type-value="bar"
+          data-chart-labels-value="<%= @hours_per_week[:labels].to_json %>"
+          data-chart-datasets-value="<%= [{
+            label: 'Hours',
+            data: @hours_per_week[:data],
+            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+            borderColor: 'rgb(59, 130, 246)',
+            borderWidth: 1
+          }].to_json %>"
+          data-chart-options-value="<%= {
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: { display: true, text: 'Hours', color: '#94a3b8' },
+                ticks: { color: '#94a3b8' },
+                grid: { color: '#334155' }
+              },
+              x: {
+                ticks: { color: '#94a3b8' },
+                grid: { color: '#334155' }
+              }
+            },
+            plugins: {
+              legend: { labels: { color: '#94a3b8' } }
+            }
+          }.to_json %>"
+        ></canvas>
+      </div>
+    </div>
+
+    <div class="bg-slate-800 p-4 rounded-lg">
+      <h3 class="text-lg font-semibold mb-4">Running Distance per Week (km)</h3>
+      <div class="h-64">
+        <canvas
+          data-controller="chart"
+          data-chart-type-value="bar"
+          data-chart-labels-value="<%= @distance_per_week[:labels].to_json %>"
+          data-chart-datasets-value="<%= [{
+            label: 'Distance (km)',
+            data: @distance_per_week[:data],
+            backgroundColor: 'rgba(34, 197, 94, 0.7)',
+            borderColor: 'rgb(34, 197, 94)',
+            borderWidth: 1
+          }].to_json %>"
+          data-chart-options-value="<%= {
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: { display: true, text: 'Kilometers', color: '#94a3b8' },
+                ticks: { color: '#94a3b8' },
+                grid: { color: '#334155' }
+              },
+              x: {
+                ticks: { color: '#94a3b8' },
+                grid: { color: '#334155' }
+              }
+            },
+            plugins: {
+              legend: { labels: { color: '#94a3b8' } }
+            }
+          }.to_json %>"
+        ></canvas>
+      </div>
+    </div>
+
+    <div class="bg-slate-800 p-4 rounded-lg">
+      <h3 class="text-lg font-semibold mb-4">Workouts per Week</h3>
+      <div class="h-64">
+        <canvas
+          data-controller="chart"
+          data-chart-type-value="bar"
+          data-chart-labels-value="<%= @workouts_per_week[:labels].to_json %>"
+          data-chart-datasets-value="<%= [
+            {
+              label: 'Strength',
+              data: @workouts_per_week[:data_strength],
+              backgroundColor: 'rgba(168, 85, 247, 0.7)',
+              borderColor: 'rgb(168, 85, 247)',
+              borderWidth: 1
+            },
+            {
+              label: 'Runs',
+              data: @workouts_per_week[:data_runs],
+              backgroundColor: 'rgba(251, 146, 60, 0.7)',
+              borderColor: 'rgb(251, 146, 60)',
+              borderWidth: 1
+            }
+          ].to_json %>"
+          data-chart-options-value="<%= {
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: { display: true, text: 'Count', color: '#94a3b8' },
+                ticks: { color: '#94a3b8', stepSize: 1 },
+                grid: { color: '#334155' }
+              },
+              x: {
+                ticks: { color: '#94a3b8' },
+                grid: { color: '#334155' }
+              }
+            },
+            plugins: {
+              legend: { labels: { color: '#94a3b8' } }
+            }
+          }.to_json %>"
+        ></canvas>
       </div>
     </div>
   </div>
