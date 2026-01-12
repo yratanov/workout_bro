@@ -6,8 +6,10 @@
 #  date                   :date
 #  distance               :integer
 #  ended_at               :datetime
+#  paused_at              :datetime
 #  started_at             :datetime
 #  time_in_seconds        :integer
+#  total_paused_seconds   :integer          default(0)
 #  workout_type           :integer          default("strength"), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   resources :workouts, only: %i[index show new create edit update destroy] do
     member do
       post :stop
+      post :pause
+      post :resume
     end
   end
   

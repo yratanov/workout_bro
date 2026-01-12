@@ -2,13 +2,15 @@
 #
 # Table name: workout_sets
 #
-#  id          :integer          not null, primary key
-#  ended_at    :datetime
-#  started_at  :datetime
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  exercise_id :integer          not null
-#  workout_id  :integer          not null
+#  id                   :integer          not null, primary key
+#  ended_at             :datetime
+#  paused_at            :datetime
+#  started_at           :datetime
+#  total_paused_seconds :integer          default(0)
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  exercise_id          :integer          not null
+#  workout_id           :integer          not null
 #
 # Indexes
 #

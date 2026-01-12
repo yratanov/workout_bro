@@ -6,8 +6,10 @@
 #  date                   :date
 #  distance               :integer
 #  ended_at               :datetime
+#  paused_at              :datetime
 #  started_at             :datetime
 #  time_in_seconds        :integer
+#  total_paused_seconds   :integer          default(0)
 #  workout_type           :integer          default("strength"), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
@@ -55,9 +57,14 @@ class Workout < ApplicationRecord
     ended_at.present?
   end
 
+  def paused?
+    paused_at.present?
+  end
+
   def fill_in_time_in_seconds
     if started_at.present? && ended_at.present?
-      self.time_in_seconds = (ended_at - started_at).to_i
+      elapsed = (ended_at - started_at).to_i
+      self.time_in_seconds = elapsed - (total_paused_seconds || 0)
     else
       self.time_in_seconds = nil
     end

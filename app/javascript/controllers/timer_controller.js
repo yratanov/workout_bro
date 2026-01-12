@@ -4,6 +4,7 @@ export default class extends Controller {
   static values = {
     date: String,
     showHours: Boolean,
+    pausedSeconds: { type: Number, default: 0 },
   };
 
   connect() {
@@ -19,6 +20,7 @@ export default class extends Controller {
   update() {
     const now = new Date();
     let diff = Math.abs(now - this.startTime) / 1000; // in seconds
+    diff -= this.pausedSecondsValue;
 
     const hours = String(Math.floor(diff / 3600));
     diff %= 3600;

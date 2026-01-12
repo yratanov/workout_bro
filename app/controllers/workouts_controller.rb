@@ -1,5 +1,5 @@
 class WorkoutsController < ApplicationController
-  before_action :set_workout, only: %i[ edit update destroy stop]
+  before_action :set_workout, only: %i[ edit update destroy stop pause resume]
 
   # GET /workouts or /workouts.json
   def index
@@ -97,6 +97,36 @@ class WorkoutsController < ApplicationController
         format.json { render json: @workout.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # POST /workouts/1/pause
+  def pause
+    if @workout.running? && !@workout.paused?
+      now = Time.current
+      @workout.update(paused_at: now)
+      @workout.workout_sets.where(ended_at: nil, paused_at: nil).update_all(paused_at: now)
+    end
+    redirect_to @workout
+  end
+
+  # POST /workouts/1/resume
+  def resume
+    if @workout.paused?
+      now = Time.current
+      pause_duration = (now - @workout.paused_at).to_i
+      @workout.update(
+        paused_at: nil,
+        total_paused_seconds: @workout.total_paused_seconds + pause_duration
+      )
+      @workout.workout_sets.where(ended_at: nil).where.not(paused_at: nil).find_each do |set|
+        set_pause_duration = (now - set.paused_at).to_i
+        set.update(
+          paused_at: nil,
+          total_paused_seconds: set.total_paused_seconds + set_pause_duration
+        )
+      end
+    end
+    redirect_to @workout
   end
 
   # PATCH/PUT /workouts/1 or /workouts/1.json
