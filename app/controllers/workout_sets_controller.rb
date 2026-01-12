@@ -10,8 +10,14 @@ class WorkoutSetsController < ApplicationController
   end
 
   def stop
-    @workout_set = WorkoutSet.find(params[:id]) 
+    @workout_set = WorkoutSet.find(params[:id])
     @workout_set.update(ended_at: Time.current)
+    @workout = @workout_set.workout
+  end
+
+  def reopen
+    @workout_set = WorkoutSet.find(params[:id])
+    @workout_set.update(ended_at: nil)
     @workout = @workout_set.workout
   end
 

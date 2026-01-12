@@ -8,9 +8,10 @@ Rails.application.routes.draw do
   end
   
   resources :exercises
-  resources :workout_sets, only: %i[new create show edit update destroy] do 
+  resources :workout_sets, only: %i[new create show edit update destroy] do
     member do
       post :stop
+      post :reopen
     end
   end
   

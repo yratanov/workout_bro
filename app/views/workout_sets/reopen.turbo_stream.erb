@@ -1,0 +1,9 @@
+<%= turbo_stream.update("new_workout_set", "") %>
+
+<%= turbo_stream.update(
+  "workout_sets",
+  partial: "workout_sets/list",
+  locals: {
+    workout: @workout,
+  },
+) %>
