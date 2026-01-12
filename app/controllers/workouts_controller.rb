@@ -3,8 +3,20 @@ class WorkoutsController < ApplicationController
 
   # GET /workouts or /workouts.json
   def index
-    @workouts = current_user.workouts.all.order(started_at: :desc)
-    @grouped_by_week = @workouts.group_by { |workout| workout.started_at.beginning_of_week }
+    @current_date = params[:month].present? ? Date.parse(params[:month]) : Date.current
+
+    @calendar_start = @current_date.beginning_of_month.beginning_of_week(:monday)
+    @calendar_end = @current_date.end_of_month.end_of_week(:monday)
+
+    @workouts = current_user.workouts
+      .includes(:workout_routine_day)
+      .where(started_at: @calendar_start.beginning_of_day..@calendar_end.end_of_day)
+      .order(:started_at)
+
+    @workouts_by_date = @workouts.group_by { |w| w.started_at.to_date }
+
+    @prev_month = @current_date - 1.month
+    @next_month = @current_date + 1.month
   end
 
   # GET /workouts/1 or /workouts/1.json

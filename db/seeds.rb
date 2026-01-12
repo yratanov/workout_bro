@@ -21,3 +21,32 @@ day = workout_day.workout_routine_days.create!(
   name: 'Day 1',
 )
 day.exercises << Exercise.all
+day_2 = workout_day.workout_routine_days.create!(
+  name: 'Day 2',
+)
+day_2.exercises << Exercise.all
+
+50.times do |i|
+  next unless i.odd?
+  workout = Workout.create!(
+    user:,
+    workout_routine_day: rand(0..1).zero? ? day : day_2,
+    started_at: Time.current - i.days,
+    ended_at: Time.current - i.days + rand(30..90).minutes,
+  )
+
+  day.exercises.each do |exercise|
+    workout_set = workout.workout_sets.create!(
+      exercise:,
+      started_at: workout.started_at + rand(0..15).minutes,
+      ended_at: workout.started_at + rand(16..30).minutes,
+    )
+
+    rand(3..5).times do
+      workout_set.workout_reps.create!(
+        reps: rand(5..12),
+        weight: exercise.with_weights ? rand(5..25) : 0,
+      )
+    end
+  end
+end
