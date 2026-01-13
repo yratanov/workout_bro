@@ -3,7 +3,8 @@
     "allow": [
       "Bash(bin/rails tailwindcss:build:*)",
       "Bash(bin/rails generate:*)",
-      "Bash(bin/rails db:migrate:*)"
+      "Bash(bin/rails db:migrate:*)",
+      "Bash(chmod:*)"
     ]
   }
 }

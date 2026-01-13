@@ -24,19 +24,21 @@
         src: /tmp/master.key
       register: master_key 
         
-    - name: Set RAILS_MASTER_KEY in .env file
+    - name: Set environment variables in .env file
       ansible.builtin.copy:
         dest: "{{ clone_dest }}/.env"
         content: |
           RAILS_MASTER_KEY={{ master_key.content | b64decode }}
           EXPOSED_PORT={{ exposed_port }}
+          GARMIN_USERNAME={{ garmin_username }}
+          GARMIN_PASSWORD={{ garmin_password }}
         owner: "{{ current_user }}"
         group: "{{ current_user }}"
         mode: '0600'
 
     - name: Run Rails container with docker-compose
       ansible.builtin.command:
-        cmd: docker-compose up -d --build
+        cmd: docker-compose up -d --build --force-recreate
         chdir: "{{ clone_dest }}"
       environment:
         DOCKER_BUILDKIT: "1"
@@ -45,4 +47,11 @@
       command: docker-compose exec web bundle exec rails db:migrate
       args:
         chdir: "{{ clone_dest }}"
+
+    - name: Setup cron job for Garmin sync
+      ansible.builtin.cron:
+        name: "Sync Garmin running data"
+        minute: "0"
+        job: "cd {{ clone_dest }} && docker-compose exec -T web /usr/bin/python3 /rails/python/sync_garmin.py >> /var/log/garmin_sync.log 2>&1"
+        user: "{{ current_user }}"
 

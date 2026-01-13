@@ -4,4 +4,6 @@ container_name: "workout_bro"
 exposed_port: 8022
 domain_name: "example.com"
 current_user: "{{ lookup('env', 'USER') }}"
+garmin_username: "{{ lookup('env', 'GARMIN_USERNAME') }}"
+garmin_password: "{{ lookup('env', 'GARMIN_PASSWORD') }}"
 
