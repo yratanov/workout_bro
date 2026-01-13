@@ -87,10 +87,12 @@ def parse_garmin_datetime(dt_str):
 
 def sync_garmin_activities():
     """Main sync function."""
-    # Load environment variables from .env file
+    # Try loading from .env file (for local development)
     env_path = Path(__file__).parent.parent / ".env"
-    load_dotenv(env_path)
+    if env_path.exists():
+        load_dotenv(env_path)
 
+    # Read from environment variables (set directly in container or from .env)
     username = os.getenv("GARMIN_USERNAME")
     password = os.getenv("GARMIN_PASSWORD")
 

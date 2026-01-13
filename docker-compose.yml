@@ -5,6 +5,8 @@ services:
       - ./storage:/rails/storage
     environment:
       - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - GARMIN_USERNAME=${GARMIN_USERNAME}
+      - GARMIN_PASSWORD=${GARMIN_PASSWORD}
     ports:
       - "${EXPOSED_PORT}:80"
 
