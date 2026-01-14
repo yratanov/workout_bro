@@ -89,6 +89,11 @@
       <%= @workout.distance.to_f / 1000 %>
       km
     </div>
+    <div class="mb-5">
+      Average pace:
+      <%= run_pace @workout %>
+      min/km
+    </div>
   <% end %>
 
   <div class="flex gap-4">
