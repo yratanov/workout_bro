@@ -92,7 +92,7 @@
           <%= render partial: "workout_reps/list_with_form",
           locals: {
             workout_set:,
-            workout_rep: workout_set.workout_reps.new(weight: 10, reps: 10),
+            workout_rep: workout_set.workout_reps.new(workout_set.default_rep_values),
           } %>
         <% end %>
       </div>

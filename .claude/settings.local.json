@@ -4,7 +4,8 @@
       "Bash(bin/rails tailwindcss:build:*)",
       "Bash(bin/rails generate:*)",
       "Bash(bin/rails db:migrate:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(bin/rails test:*)"
     ]
   }
 }

@@ -40,4 +40,24 @@ class WorkoutSet < ApplicationRecord
   def paused?
     paused_at.present?
   end
+
+  def previous_workout_set
+    @previous_workout_set ||= workout.user.workout_sets
+      .where(exercise:)
+      .where.not(id:)
+      .where.not(ended_at: nil)
+      .order(created_at: :desc)
+      .first
+  end
+
+  def default_rep_values
+    current_rep_index = workout_reps.count
+    prev_rep = previous_workout_set&.workout_reps&.order(:created_at)&.[](current_rep_index)
+
+    if prev_rep
+      { weight: prev_rep.weight, reps: prev_rep.reps, band: prev_rep.band }
+    else
+      { weight: 10, reps: 10, band: nil }
+    end
+  end
 end

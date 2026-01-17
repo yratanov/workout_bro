@@ -22,8 +22,5 @@
   </div>
   <%= render "workout_reps/form",
   workout_rep:
-    workout_set.workout_reps.new(
-      weight: workout_rep.weight,
-      reps: workout_rep.reps,
-    ) %>
+    workout_set.workout_reps.new(workout_set.default_rep_values) %>
 <% end %>
