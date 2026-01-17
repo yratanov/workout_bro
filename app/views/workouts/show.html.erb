@@ -1,15 +1,6 @@
 <% content_for :title, "Workout" %>
 
 <div>
-  <% if notice.present? %>
-    <p
-      class="
-        py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block
-      "
-      id="notice"
-    ><%= notice %></p>
-  <% end %>
-
   <div class="lg:min-w-[600px] flex gap-4 items-center mb-5 text-xl">
     <% if @workout.workout_routine_day %>
       <div>

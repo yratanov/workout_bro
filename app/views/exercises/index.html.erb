@@ -1,15 +1,6 @@
 <% content_for :title, "Exercises" %>
 
 <div class="lg:min-w-[600px]">
-  <% if notice.present? %>
-    <p
-      class="
-        py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block
-      "
-      id="notice"
-    ><%= notice %></p>
-  <% end %>
-
   <div class="flex justify-between items-center mb-5">
     <h1 class="font-bold text-4xl">Exercises</h1>
     <%= button "New exercise", route: new_exercise_path, style: "primary", type: "link" %>

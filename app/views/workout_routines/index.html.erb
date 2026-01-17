@@ -1,15 +1,6 @@
 <% content_for :title, "Workouts" %>
 
 <div>
-  <% if notice.present? %>
-    <p
-      class="
-        py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block
-      "
-      id="notice"
-    ><%= notice %></p>
-  <% end %>
-
   <div class="flex justify-between items-center mb-5">
     <h1 class="font-bold text-4xl">Workout Routines</h1>
     <%= button "New workout routine",
