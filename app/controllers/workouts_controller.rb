@@ -8,6 +8,8 @@ class WorkoutsController < ApplicationController
     @calendar_start = @current_date.beginning_of_month.beginning_of_week(:monday)
     @calendar_end = @current_date.end_of_month.end_of_week(:monday)
 
+    @active_workout = current_user.workouts.find_by(ended_at: nil)
+
     @workouts = current_user.workouts
       .includes(:workout_routine_day)
       .where(started_at: @calendar_start.beginning_of_day..@calendar_end.end_of_day)

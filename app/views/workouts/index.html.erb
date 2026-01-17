@@ -10,7 +10,21 @@
 
   <div class="flex justify-between items-center mb-5">
     <h1 class="text-2xl">Workouts</h1>
-    <%= button "Start workout", style: "primary", type: "link", route: new_workout_path %>
+    <% if @active_workout %>
+      <%= button style: "primary", type: "link", route: workout_path(@active_workout) do %>
+        <span class="flex items-center gap-2">
+          Continue workout
+          <%= render(TimerComponent.new(
+            started_at: @active_workout.started_at,
+            ended_at: @active_workout.ended_at,
+            paused_at: @active_workout.paused_at,
+            total_paused_seconds: @active_workout.total_paused_seconds,
+          )) %>
+        </span>
+      <% end %>
+    <% else %>
+      <%= button "Start workout", style: "primary", type: "link", route: new_workout_path %>
+    <% end %>
   </div>
 
   <%= turbo_frame_tag "calendar" do %>
