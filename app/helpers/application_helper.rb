@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include FormHelpers
+
   include ComponentsShorthand
   
   components :button, :badge, :modal, :icon_xmark, :icon_stopwatch, :icon_exit, :icon_chevron_down

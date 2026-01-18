@@ -1,35 +1,8 @@
-<%= form_with(model: workout_routine_day, url: workout_routine_day.new_record? ? workout_routine_workout_routine_days_path : workout_routine_workout_routine_day_path(workout_routine_day), class: "contents") do |form| %>
-  <% if workout_routine_day.errors.any? %>
-    <div
-      id="error_explanation"
-      class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3"
-    >
-      <h2><%= t("activerecord.errors.template.header", count: workout_routine_day.errors.count, model: WorkoutRoutineDay.model_name.human.downcase) %></h2>
+<%= app_form_with(model: workout_routine_day, url: workout_routine_day.new_record? ? workout_routine_workout_routine_days_path : workout_routine_workout_routine_day_path(workout_routine_day), class: "contents") do |form| %>
+  <%= form.input :name %>
 
-      <ul class="list-disc ml-6">
-        <% workout_routine_day.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="my-5">
-    <%= form.label :name %>
-    <%= form.text_field :name,
-                    class: [
-                      "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full",
-                      {
-                        "border-gray-400 focus:outline-blue-600":
-                          workout_routine_day.errors[:name].none?,
-                        "border-red-400 focus:outline-red-600":
-                          workout_routine_day.errors[:name].any?,
-                      },
-                    ] %>
-  </div>
-
-  <div>
-    <%= button text: t("shared.buttons.save"), type: "submit", style: "primary" %>
+  <div class="mt-2">
+    <%= form.submit t("shared.buttons.save") %>
   </div>
 <% end %>
 

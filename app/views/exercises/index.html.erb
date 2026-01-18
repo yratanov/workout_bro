@@ -1,31 +1,42 @@
 <% content_for :title, t(".title") %>
 
-<div class="lg:min-w-[600px]">
-  <div class="flex justify-between items-center mb-5">
-    <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
+<div class="w-full max-w-3xl">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="font-bold text-3xl"><%= t(".title") %></h1>
     <%= button t(".new_exercise"), route: new_exercise_path, style: "primary", type: "link" %>
   </div>
 
-  <div id="exercises" class="divide-y divide-gray-400 space-y-2">
-    <% if @exercises.any? %>
+  <% if @exercises.any? %>
+    <div id="exercises" class="space-y-3">
       <% @exercises.each do |exercise| %>
-        <div
-          class="
-            flex justify-between items-center
-          "
-        >
-          <div class="flex gap-4">
+        <%= link_to exercise, class: "block bg-slate-800 rounded-lg p-4 hover:bg-slate-700/80 transition-colors" do %>
+          <div class="flex items-center justify-between">
             <div>
-              <%= button exercise.name, route: exercise, style: "link", type: "link" %>
+              <h2 class="font-medium text-lg"><%= exercise.name %></h2>
+              <% if exercise.muscles.present? %>
+                <p class="text-slate-400 text-sm mt-1"><%= exercise.muscles %></p>
+              <% end %>
             </div>
-            <div>
-              <%= exercise.muscles %>
+            <div class="flex gap-2">
+              <% if exercise.with_weights %>
+                <span class="inline-flex items-center px-2 py-1 bg-blue-600/20 text-blue-400 rounded-full text-xs">
+                  <%= t(".weights") %>
+                </span>
+              <% end %>
+              <% if exercise.with_band %>
+                <span class="inline-flex items-center px-2 py-1 bg-purple-600/20 text-purple-400 rounded-full text-xs">
+                  <%= t(".band") %>
+                </span>
+              <% end %>
             </div>
           </div>
-        </div>
+        <% end %>
       <% end %>
-    <% else %>
-      <p class="text-center my-10"><%= t(".no_exercises") %></p>
-    <% end %>
-  </div>
+    </div>
+  <% else %>
+    <div class="bg-slate-800 rounded-lg p-8 text-center">
+      <div class="text-4xl mb-3">💪</div>
+      <p class="text-slate-400"><%= t(".no_exercises") %></p>
+    </div>
+  <% end %>
 </div>

@@ -1,4 +1,4 @@
-<%= form_with(model: workout_rep, class: "contents") do |form| %>
+<%= app_form_with(model: workout_rep, class: "contents") do |form| %>
   <% if workout_rep.errors.any? %>
     <div class="bg-red-900/50 text-red-200 px-2 py-1 text-xs rounded mb-2">
       <%= workout_rep.errors.full_messages.join(", ") %>

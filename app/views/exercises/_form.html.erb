@@ -1,74 +1,14 @@
-<%= form_with(model: exercise, class: "contents") do |form| %>
-  <% if exercise.errors.any? %>
-    <div
-      id="error_explanation"
-      class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3"
-    >
-      <h2><%= t("activerecord.errors.template.header", count: exercise.errors.count, model: Exercise.model_name.human.downcase) %></h2>
+<%= app_form_with(model: exercise, class: "contents") do |form| %>
+  <%= form.input :name %>
+  <%= form.input :muscles, input_html: { placeholder: t(".muscles_placeholder") } %>
 
-      <ul class="list-disc ml-6">
-        <% exercise.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="my-5">
-    <%= form.label :name %>
-    <%= form.text_field :name,
-                    class: [
-                      "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full",
-                      {
-                        "border-gray-400 focus:outline-blue-600":
-                          exercise.errors[:name].none?,
-                        "border-red-400 focus:outline-red-600":
-                          exercise.errors[:name].any?,
-                      },
-                    ] %>
+  <div class="mb-4 space-y-4">
+    <p class="block text-sm font-medium text-slate-300"><%= t(".equipment") %></p>
+    <%= form.toggle :with_weights, t(".with_weights") %>
+    <%= form.toggle :with_band, t(".with_band"), color: :purple %>
   </div>
 
-  <div class="my-5">
-    <%= form.label :muscles %>
-    <%= form.text_field :muscles,
-                    class: [
-                      "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full",
-                      {
-                        "border-gray-400 focus:outline-blue-600":
-                          exercise.errors[:muscles].none?,
-                        "border-red-400 focus:outline-red-600":
-                          exercise.errors[:muscles].any?,
-                      },
-                    ] %>
-  </div>
-
-  <div class="my-5 flex gap-4">
-    <%= form.label :with_weights %>
-    <%= form.checkbox :with_weights,
-                  class: [
-                    {
-                      "border-gray-400 focus:outline-blue-600":
-                        exercise.errors[:muscles].none?,
-                      "border-red-400 focus:outline-red-600":
-                        exercise.errors[:muscles].any?,
-                    },
-                  ] %>
-  </div>
-
-  <div class="my-5 flex gap-4">
-    <%= form.label :with_band %>
-    <%= form.checkbox :with_band,
-                  class: [
-                    {
-                      "border-gray-400 focus:outline-blue-600":
-                        exercise.errors[:muscles].none?,
-                      "border-red-400 focus:outline-red-600":
-                        exercise.errors[:muscles].any?,
-                    },
-                  ] %>
-  </div>
-
-  <div class="inline">
-    <%= button text: t("shared.buttons.save"), type: "submit", style: "primary" %>
+  <div class="mt-6">
+    <%= form.submit t("shared.buttons.save") %>
   </div>
 <% end %>

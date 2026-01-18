@@ -4,13 +4,16 @@ en:
       title: "Exercises"
       new_exercise: "New exercise"
       no_exercises: "No exercises found."
+      weights: "Weights"
+      band: "Band"
     new:
       title: "New exercise"
-      back_to_exercises: "Back to exercises"
+      back_to_exercises: "Back"
     edit:
-      title: "Editing exercise"
-      back_to_show: "Back to show"
+      title: "Edit exercise"
+      back_to_show: "Back"
       back_to_exercises: "Back to exercises"
+      delete: "Delete"
     show:
       back_to_exercises: "Back to exercises"
       weights: "Weights"
@@ -22,6 +25,11 @@ en:
       no_history_title: "No history yet"
       no_history_description: "Complete a workout with this exercise to see your results here."
       duration: "duration"
+    form:
+      equipment: "Equipment"
+      with_weights: "Uses weights"
+      with_band: "Uses resistance band"
+      muscles_placeholder: "e.g., Chest, Triceps"
     exercise:
       muscles: "Muscles:"
       with_weights: "With weights"
