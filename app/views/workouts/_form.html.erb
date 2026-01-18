@@ -73,8 +73,9 @@
             <div>
               <%= form.label :workout_routine_day, "Day", class: "block text-sm font-medium text-slate-300 mb-2" %>
               <%= turbo_frame_tag 'workout_routine_day_id' do %>
+                <% default_routine = workout.workout_routine || WorkoutRoutine.order(:name).first %>
                 <%= render partial: "workout_routine_days/select",
-                  locals: { workout_routine_days: workout.workout_routine&.workout_routine_days } %>
+                  locals: { workout_routine_days: default_routine&.workout_routine_days } %>
               <% end %>
             </div>
           </div>
