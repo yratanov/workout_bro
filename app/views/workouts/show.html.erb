@@ -78,38 +78,41 @@
     </div>
   <% end %>
 
-  <div class="flex gap-3 mt-4">
-    <% if @workout.ended? %>
-      <%= button "Back", type: "link", style: "outlined", route: workouts_path %>
-      <%= button "Destroy",
-      style: "danger",
-      method: :delete,
-      route: workout_path(@workout),
-      data: {
-        turbo_confirm: "Are you sure?",
-      } %>
-    <% else %>
-      <% if @workout.paused? %>
-        <%= button "Resume",
-        style: "success",
-        route: resume_workout_path(@workout),
-        method: :post,
-        data: { turbo_method: :post } %>
+  <div class="h-20"></div>
+  <div class="fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 p-4">
+    <div class="max-w-xl mx-auto flex gap-3 justify-center">
+      <% if @workout.ended? %>
+        <%= button "Back", type: "link", style: "outlined", route: workouts_path %>
+        <%= button "Delete",
+        style: "danger",
+        method: :delete,
+        route: workout_path(@workout),
+        data: {
+          turbo_confirm: "Are you sure?",
+        } %>
       <% else %>
-        <%= button "Pause",
-        style: "outlined",
-        route: pause_workout_path(@workout),
+        <% if @workout.paused? %>
+          <%= button "Resume",
+          style: "success",
+          route: resume_workout_path(@workout),
+          method: :post,
+          data: { turbo_method: :post } %>
+        <% else %>
+          <%= button "Pause",
+          style: "outlined",
+          route: pause_workout_path(@workout),
+          method: :post,
+          data: { turbo_method: :post } %>
+        <% end %>
+        <%= button "Finish",
+        style: "primary",
+        route: stop_workout_path(@workout),
         method: :post,
-        data: { turbo_method: :post } %>
+        data: {
+          turbo_method: :post,
+          turbo_confirm: "Are you sure?",
+        } %>
       <% end %>
-      <%= button "Finish workout",
-      style: "primary",
-      route: stop_workout_path(@workout),
-      method: :post,
-      data: {
-        turbo_method: :post,
-        turbo_confirm: "Are you sure?",
-      } %>
-    <% end %>
+    </div>
   </div>
 </div>

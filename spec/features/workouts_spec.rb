@@ -26,7 +26,7 @@ RSpec.describe "Workouts", type: :feature do
 
       expect(page).to have_content("Upper Lower")
       expect(page).to have_content("Upper Day")
-      expect(page).to have_button("Finish workout")
+      expect(page).to have_button("Finish")
     end
 
     it "allows selecting a different routine", :js, pending: "Turbo stream fetch not triggering in test environment" do
@@ -45,7 +45,7 @@ RSpec.describe "Workouts", type: :feature do
 
       expect(page).to have_content("Push Pull Legs")
       expect(page).to have_content("Push Day")
-      expect(page).to have_button("Finish workout")
+      expect(page).to have_button("Finish")
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe "Workouts", type: :feature do
       click_button "Start Workout"
 
       accept_confirm do
-        click_button "Finish workout"
+        click_button "Finish"
       end
 
       # After finishing, should redirect to workouts index
@@ -177,33 +177,33 @@ RSpec.describe "Workouts", type: :feature do
     end
 
     it "allows adding a rep with weight" do
-      select "10 x", from: "workout_rep[reps]"
-      select "20.0KG", from: "workout_rep[weight]"
-      click_button "Add"
+      select "10×", from: "workout_rep[reps]"
+      select "20.0kg", from: "workout_rep[weight]"
+      click_button "+"
 
       expect(page).to have_content("10")
-      expect(page).to have_content("20.0KG")
+      expect(page).to have_content("20")
     end
 
     it "allows adding multiple reps" do
-      select "10 x", from: "workout_rep[reps]"
-      select "20.0KG", from: "workout_rep[weight]"
-      click_button "Add"
+      select "10×", from: "workout_rep[reps]"
+      select "20.0kg", from: "workout_rep[weight]"
+      click_button "+"
 
-      select "8 x", from: "workout_rep[reps]"
-      select "25.0KG", from: "workout_rep[weight]"
-      click_button "Add"
+      select "8×", from: "workout_rep[reps]"
+      select "25.0kg", from: "workout_rep[weight]"
+      click_button "+"
 
       expect(page).to have_content("10")
-      expect(page).to have_content("20.0KG")
+      expect(page).to have_content("20")
       expect(page).to have_content("8")
-      expect(page).to have_content("25.0KG")
+      expect(page).to have_content("25")
     end
 
     it "allows completing a set after adding reps" do
-      select "12 x", from: "workout_rep[reps]"
-      select "15.0KG", from: "workout_rep[weight]"
-      click_button "Add"
+      select "12×", from: "workout_rep[reps]"
+      select "15.0kg", from: "workout_rep[weight]"
+      click_button "+"
 
       click_button "Complete this set"
 
@@ -214,9 +214,9 @@ RSpec.describe "Workouts", type: :feature do
     end
 
     it "allows adding another set with a different exercise after completing one" do
-      select "10 x", from: "workout_rep[reps]"
-      select "20.0KG", from: "workout_rep[weight]"
-      click_button "Add"
+      select "10×", from: "workout_rep[reps]"
+      select "20.0kg", from: "workout_rep[weight]"
+      click_button "+"
       click_button "Complete this set"
 
       # Should be able to start another set with a different exercise
