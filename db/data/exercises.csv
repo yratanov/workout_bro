@@ -1,0 +1,50 @@
+name,muscles,with_weights,with_band
+Bench Press,chest,true,false
+Incline Bench Press,chest,true,false
+Dumbbell Fly,chest,true,false
+Push-Up,chest,false,false
+Cable Crossover,chest,true,false
+Dips,chest,false,false
+Pull-Up,back,false,false
+Lat Pulldown,back,true,false
+Barbell Row,back,true,false
+Dumbbell Row,back,true,false
+Seated Cable Row,back,true,false
+Face Pull,back,true,true
+Deadlift,back,true,false
+Romanian Deadlift,back,true,false
+Overhead Press,shoulders,true,false
+Dumbbell Lateral Raise,shoulders,true,false
+Front Raise,shoulders,true,false
+Rear Delt Fly,shoulders,true,false
+Arnold Press,shoulders,true,false
+Shrugs,shoulders,true,false
+Barbell Curl,biceps,true,false
+Dumbbell Curl,biceps,true,false
+Hammer Curl,biceps,true,false
+Preacher Curl,biceps,true,false
+Concentration Curl,biceps,true,false
+Tricep Pushdown,triceps,true,false
+Skull Crusher,triceps,true,false
+Overhead Tricep Extension,triceps,true,false
+Close Grip Bench Press,triceps,true,false
+Squat,legs,true,false
+Front Squat,legs,true,false
+Leg Press,legs,true,false
+Lunges,legs,true,false
+Bulgarian Split Squat,legs,true,false
+Leg Extension,legs,true,false
+Leg Curl,legs,true,false
+Calf Raise,legs,true,false
+Hip Thrust,glutes,true,false
+Glute Bridge,glutes,false,true
+Cable Kickback,glutes,true,false
+Plank,core,false,false
+Crunch,core,false,false
+Russian Twist,core,true,false
+Hanging Leg Raise,core,false,false
+Cable Woodchop,core,true,false
+Ab Wheel Rollout,core,false,false
+Band Pull Apart,back,false,true
+Banded Squat,legs,false,true
+Banded Glute Bridge,glutes,false,true
