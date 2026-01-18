@@ -16,7 +16,7 @@ class CalendarDayComponent < ViewComponent::Base
   end
 
   def day_classes
-    base = "min-h-24 p-1 rounded bg-slate-700 border"
+    base = "min-h-16 sm:min-h-24 p-0.5 sm:p-1 rounded bg-slate-700 border"
 
     if today?
       "#{base} border-sky-500"
@@ -28,7 +28,7 @@ class CalendarDayComponent < ViewComponent::Base
   end
 
   def day_number_classes
-    base = "text-sm font-medium mb-1"
+    base = "text-xs sm:text-sm font-medium mb-0.5 sm:mb-1"
     in_current_month? ? "#{base} text-slate-200" : "#{base} text-slate-500"
   end
 end

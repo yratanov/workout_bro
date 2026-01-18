@@ -14,7 +14,7 @@ class WorkoutPillComponent < ViewComponent::Base
   end
 
   def pill_classes
-    base = "block w-full px-2 py-1 text-xs rounded hover:opacity-80 transition-opacity"
+    base = "block w-full px-1 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs rounded hover:opacity-80 transition-opacity"
 
     if @workout.run?
       "#{base} bg-green-600 text-green-100"

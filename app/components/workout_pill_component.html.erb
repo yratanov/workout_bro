@@ -1,8 +1,8 @@
 <div data-controller="modal">
   <button type="button" class="<%= pill_classes %>" data-action="click->modal#open">
-    <span class="flex justify-between gap-2">
+    <span class="flex justify-between gap-1 sm:gap-2">
       <span class="truncate"><%= label %></span>
-      <span class="text-xs opacity-75 whitespace-nowrap"><%= helpers.seconds_to_human(@workout.time_in_seconds) %></span>
+      <span class="hidden sm:inline text-xs opacity-75 whitespace-nowrap"><%= helpers.seconds_to_human(@workout.time_in_seconds) %></span>
     </span>
   </button>
 

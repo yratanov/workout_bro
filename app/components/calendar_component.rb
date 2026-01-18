@@ -14,7 +14,11 @@ class CalendarComponent < ViewComponent::Base
     (@calendar_start..@calendar_end).to_a.each_slice(7)
   end
 
-  def day_names
+  def day_names_short
+    %w[M T W T F S S]
+  end
+
+  def day_names_full
     %w[Mon Tue Wed Thu Fri Sat Sun]
   end
 
