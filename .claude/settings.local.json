@@ -5,7 +5,12 @@
       "Bash(bin/rails generate:*)",
       "Bash(bin/rails db:migrate:*)",
       "Bash(chmod:*)",
-      "Bash(bin/rails test:*)"
+      "Bash(bin/rails test:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(bundle install:*)",
+      "Bash(bundle exec rspec:*)",
+      "Bash(git restore:*)"
     ]
   }
 }
