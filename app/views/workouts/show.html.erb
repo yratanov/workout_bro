@@ -1,40 +1,29 @@
 <% content_for :title, "Workout" %>
 
-<div>
-  <div class="lg:min-w-[600px] flex gap-4 items-center mb-5 text-xl">
-    <% if @workout.workout_routine_day %>
-      <div>
-        <%= @workout.workout_routine_day.workout_routine.name %>
-      </div>
-      <div>
-        ·
-      </div>
-      <div>
-        <%= @workout.workout_routine_day.name %>
-      </div>
-    <% else %>
-      <div>
-        Workout
-      </div>
-    <% end %>
-    <div>
-      ·
+<div class="w-full max-w-xl text-lg">
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-2 text-xl">
+      <% if @workout.workout_routine_day %>
+        <span class="font-semibold"><%= @workout.workout_routine_day.workout_routine.name %></span>
+        <span class="text-slate-400">·</span>
+        <span><%= @workout.workout_routine_day.name %></span>
+      <% else %>
+        <span class="font-semibold">Workout</span>
+      <% end %>
     </div>
-    <div>
-      <%= @workout.created_at.strftime("%d %b") %>
+    <div class="flex items-center gap-3 text-base text-slate-300">
+      <span><%= @workout.created_at.strftime("%d %b") %></span>
+      <span class="text-slate-500">|</span>
+      <%= render(
+        TimerComponent.new(
+          started_at: @workout.started_at,
+          ended_at: @workout.ended_at,
+          show_hours: true,
+          paused_at: @workout.paused_at,
+          total_paused_seconds: @workout.total_paused_seconds
+        ),
+      ) %>
     </div>
-    <div>
-      ·
-    </div>
-    <%= render(
-      TimerComponent.new(
-        started_at: @workout.started_at,
-        ended_at: @workout.ended_at,
-        show_hours: true,
-        paused_at: @workout.paused_at,
-        total_paused_seconds: @workout.total_paused_seconds
-      ),
-    ) %>
   </div>
 
   <% if @workout.strength? %>
@@ -57,15 +46,15 @@
       <% end %>
 
       <%= turbo_frame_tag ["workout_sets"] do %>
-        <% @workout.workout_sets.each do |set| %>
-          <div class="mb-5">
+        <div class="space-y-3">
+          <% @workout.workout_sets.each do |set| %>
             <%= render set %>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       <% end %>
 
       <% unless @workout.ended? %>
-        <div class="mb-5">
+        <div class="mt-3">
           <%= turbo_frame_tag ["new_workout_set"] do %>
             <% if @workout.workout_sets.none?(&:running?) %>
               <%= render "workout_sets/form", workout_set: WorkoutSet.new(workout: @workout) %>
@@ -75,18 +64,21 @@
       <% end %>
     </div>
   <% else %>
-    <div class="mb-5">
-      Distance:
-      <%= @workout.distance.to_f / 1000 %>
-      km
-    </div>
-    <div class="mb-5">
-      Average pace:
-      <%= run_pace @workout %>
+    <div class="bg-slate-800 rounded-lg p-4 mb-4">
+      <div class="grid grid-cols-2 gap-4 text-center">
+        <div>
+          <div class="text-slate-400 text-sm">Distance</div>
+          <div class="text-xl font-semibold"><%= @workout.distance.to_f / 1000 %> km</div>
+        </div>
+        <div>
+          <div class="text-slate-400 text-sm">Avg Pace</div>
+          <div class="text-xl font-semibold"><%= run_pace @workout %></div>
+        </div>
+      </div>
     </div>
   <% end %>
 
-  <div class="flex gap-4">
+  <div class="flex gap-3 mt-4">
     <% if @workout.ended? %>
       <%= button "Back", type: "link", style: "outlined", route: workouts_path %>
       <%= button "Destroy",

@@ -1,33 +1,13 @@
-<div class="flex gap-1 mb-2 items-center">
+<div class="inline-flex gap-1 items-center">
   <%= badge do %>
-    <%= workout_rep.reps %>
-  <% end %>
-  
-  <% if workout_rep.weight %>
-    <div>
-      x
-    </div>
-    <%= badge do %>
-      <%= workout_rep.weight %>KG
-    <% end %>
-  <% end %>
-  
-  <% if workout_rep.band %>
-    <div>
-      x
-    </div>
-    <%= badge do %>
-      <%= workout_rep.band.humanize %>
-    <% end %>
+    <%= workout_rep.reps %><% if workout_rep.weight %> × <%= workout_rep.weight %>kg<% end %><% if workout_rep.band %> + <%= workout_rep.band.humanize.downcase %><% end %>
   <% end %>
   <% if delete_visible %>
-    <div class="ml-2">
-      <%= button route: workout_rep_path(workout_rep),
-      method: :delete,
-      type: 'button',
-      style: "link_hover_danger" do %>
-        <%= icon_xmark %>
-      <% end %>
-    </div>
+    <%= button route: workout_rep_path(workout_rep),
+    method: :delete,
+    type: 'button',
+    style: "link_hover_danger" do %>
+      <%= icon_xmark %>
+    <% end %>
   <% end %>
 </div>

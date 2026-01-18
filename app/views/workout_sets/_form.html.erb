@@ -1,51 +1,36 @@
-<div class="flex items-center gap-4">
+<div class="flex items-center gap-3 flex-wrap">
   <%= form_with(model: workout_set, class: "contents") do |form| %>
     <% if workout_set.errors.any? %>
-      <div
-        id="error_explanation"
-        class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3"
-      >
-        <h2><%= pluralize(workout_set.errors.count, "error") %>
-          prohibited this workout_set from being saved:</h2>
-
-        <ul class="list-disc ml-6">
-          <% workout_set.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
+      <div class="w-full bg-red-900/50 text-red-200 px-2 py-1 text-sm rounded mb-2">
+        <%= workout_set.errors.full_messages.join(", ") %>
       </div>
     <% end %>
-
-    <div>
-      <%= form.hidden_field :workout_id %>
-      <%= form.collection_select(
-        :exercise_id,
-        (
-          if workout_set.workout.workout_routine_day
-            (
-              workout_set.workout.workout_routine_day.exercises +
-                ::Exercise.order(:name)
-            ).uniq.without(workout_set.workout.exercises)
-          else
-            Exercise.order(:name).where.not(id: workout_set.workout.exercise_ids)
-          end
-        ),
-        :id,
-        :name,
-        {},
-        { class: "border w-[300px] border-slate-300 px-3.5 py-2 rounded" },
-      ) %>
-    </div>
-
+    <%= form.hidden_field :workout_id %>
+    <%= form.collection_select(
+      :exercise_id,
+      (
+        if workout_set.workout.workout_routine_day
+          (
+            workout_set.workout.workout_routine_day.exercises +
+              ::Exercise.order(:name)
+          ).uniq.without(workout_set.workout.exercises)
+        else
+          Exercise.order(:name).where.not(id: workout_set.workout.exercise_ids)
+        end
+      ),
+      :id,
+      :name,
+      {},
+      { class: "border flex-1 min-w-[200px] border-slate-500 bg-slate-600 text-white px-3 py-2 rounded" },
+    ) %>
     <%= button text: "Start!",
     type: "submit",
     style: "primary",
     disabled: workout_set.workout.workout_sets.any?(&:running?) %>
   <% end %>
-
   <% last_completed_set = workout_set.workout.workout_sets.where.not(ended_at: nil).order(:ended_at).last %>
   <% if last_completed_set %>
-    <%= button "Go to prev set",
+    <%= button "Reopen prev",
     style: "outlined",
     method: :post,
     route: reopen_workout_set_path(last_completed_set) %>

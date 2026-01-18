@@ -1,26 +1,42 @@
-<div class="mb-2">
-  <%= render collection: workout_set.workout_reps.filter(&:persisted?),
-  partial: "workout_reps/workout_rep",
-  locals: {
-    delete_visible: true,
-  } %>
-</div>
-<% unless workout_set.ended? %>
-  <div class="mb-2 flex">
-    <%= badge do %>
-      <div class="flex gap-2">
-        <div>
-          <%= icon_stopwatch %>
-        </div>
+<div class="flex gap-4">
+  <div class="flex-1">
+    <% persisted_reps = workout_set.workout_reps.filter(&:persisted?) %>
+    <% if persisted_reps.any? %>
+      <table class="w-full text-sm">
+        <% persisted_reps.each_with_index do |rep, i| %>
+          <tr class="border-b border-slate-600 last:border-0">
+            <td class="py-1 text-slate-400 w-6"><%= i + 1 %>.</td>
+            <td class="py-1 font-medium"><%= rep.reps %> reps</td>
+            <% if rep.weight %>
+              <td class="py-1"><%= rep.weight %>kg</td>
+            <% end %>
+            <% if rep.band %>
+              <td class="py-1 text-slate-300"><%= rep.band.humanize %></td>
+            <% end %>
+            <td class="py-1 w-6 text-right">
+              <%= button route: workout_rep_path(rep), method: :delete, type: 'button', style: "link_hover_danger", data: { turbo_confirm: "Delete?" } do %>
+                <%= icon_xmark %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    <% else %>
+      <div class="text-slate-500 text-sm">No reps yet</div>
+    <% end %>
+  </div>
+  <% unless workout_set.ended? %>
+    <div class="flex flex-col gap-1 border-l border-slate-600 pl-4 w-36">
+      <div class="flex items-center gap-1 text-slate-400 text-sm mb-1">
+        <%= icon_stopwatch %>
         <div
           data-controller="timer"
           data-timer-show-hours-value="false"
           data-timer-date-value="<%= workout_set.workout_reps.filter(&:persisted?).last&.updated_at || DateTime.now %>"
-          ></div>
+        ></div>
       </div>
-    <% end %>
-  </div>
-  <%= render "workout_reps/form",
-  workout_rep:
-    workout_set.workout_reps.new(workout_set.default_rep_values) %>
-<% end %>
+      <%= render "workout_reps/form",
+      workout_rep: workout_set.workout_reps.new(workout_set.default_rep_values) %>
+    </div>
+  <% end %>
+</div>

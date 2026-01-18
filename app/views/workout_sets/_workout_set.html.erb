@@ -1,36 +1,28 @@
 <div class="bg-slate-700 rounded relative" data-controller="accordion">
-  <div
-    class="
-      flex bg-slate-800 items-center rounded-t justify-between px-4 py-3 mb-2 gap-2
-    "
-  >
+  <div class="flex bg-slate-800 items-center rounded-t justify-between px-4 py-3 gap-2">
     <button
       data-action="click->accordion#toggle"
       data-accordion-target="trigger"
-      class="w-full cursor-pointer transition flex items-center gap-2"
+      class="w-full cursor-pointer transition flex items-center gap-3"
       aria-expanded="<%= workout_set.running? || workout_set.workout.ended? ? "true" : "false" %>"
     >
-      <div data-accordion-target="icon">
+      <div data-accordion-target="icon" class="text-slate-400">
         <%= icon_chevron_down %>
       </div>
-      <div class="flex gap-2 items-center">
-        <div class="font-bold">
-          <%= workout_set.exercise.name %>
+      <span class="font-semibold text-lg"><%= workout_set.exercise.name %></span>
+      <%= badge do %>
+        <div class="flex gap-1 items-center">
+          <%= icon_stopwatch %>
+          <%= render(
+            TimerComponent.new(
+              started_at: workout_set.started_at,
+              ended_at: workout_set.ended_at,
+              paused_at: workout_set.paused_at,
+              total_paused_seconds: workout_set.total_paused_seconds,
+            ),
+          ) %>
         </div>
-        <%= badge do %>
-          <div class="flex gap-2 items-center">
-            <%= icon_stopwatch %>
-            <%= render(
-              TimerComponent.new(
-                started_at: workout_set.started_at,
-                ended_at: workout_set.ended_at,
-                paused_at: workout_set.paused_at,
-                total_paused_seconds: workout_set.total_paused_seconds,
-              ),
-            ) %>
-          </div>
-        <% end %>
-      </div>
+      <% end %>
     </button>
     <%= button route: workout_set_path(workout_set),
     method: :delete,
@@ -44,10 +36,10 @@
   </div>
 
   <div
-    class="overflow-hidden transition-all duration-300 ease-in-out"
+    class="overflow-hidden transition-all duration-200 ease-in-out"
     data-accordion-target="content"
   >
-    <div class="pb-4 px-4">
+    <div class="py-3 px-4">
       <%= turbo_frame_tag workout_set, "reps" do %>
         <%= render partial: "workout_reps/list_with_form",
         locals: {
@@ -58,7 +50,7 @@
     </div>
 
     <% unless workout_set.ended? %>
-      <div class="p-4 flex rounded-b justify-center bg-slate-800">
+      <div class="px-4 py-3 flex rounded-b justify-center bg-slate-800">
         <%= button "Complete this set",
         type: "button",
         style: "success",
