@@ -1,66 +1,61 @@
 <% content_for :title, "Stats" %>
 
-<div class="w-full max-w-4xl">
-  <h1 class="text-2xl font-bold mb-4">Stats</h1>
+<div class="w-full max-w-6xl">
+  <h1 class="text-2xl font-bold mb-6">Stats</h1>
 
-  <div class="flex gap-4 mb-8">
-    <div>
-      <div class="mb-6">
-        <p class="text-lg font-semibold mb-2">Total Workouts</p>
-        <p class="text-xl"><%= Current.user.workouts.strength.count %></p>
-      </div>
-
-      <div class="mb-6">
-        <p class="text-lg font-semibold mb-2">Total Workout Sets</p>
-        <p class="text-xl"><%= Current.user.workout_sets.count %></p>
-      </div>
-
-      <div class="mb-6">
-        <p class="text-lg font-semibold mb-2">Total Workout Reps</p>
-        <p class="text-xl"><%= Current.user.workout_reps.count %></p>
-      </div>
-      <div class="mb-6">
-        <p class="text-lg font-semibold mb-2">Time spent workouts</p>
-        <p class="text-xl"><%= seconds_to_human(Current.user.workouts.strength.sum(:time_in_seconds)) %></p>
-      </div>
-      <div class="mb-6">
-        <p class="text-lg font-semibold mb-2">Average workout</p>
-        <p class="text-xl">
-          <%= seconds_to_human(Current.user.workouts.strength.average(:time_in_seconds).to_i) %>
-        </p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-slate-800 rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-4 text-blue-400">Strength Training</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-slate-400 text-sm">Total Workouts</p>
+          <p class="text-2xl font-semibold"><%= Current.user.workouts.strength.count %></p>
+        </div>
+        <div>
+          <p class="text-slate-400 text-sm">Total Sets</p>
+          <p class="text-2xl font-semibold"><%= Current.user.workout_sets.count %></p>
+        </div>
+        <div>
+          <p class="text-slate-400 text-sm">Total Reps</p>
+          <p class="text-2xl font-semibold"><%= Current.user.workout_reps.count %></p>
+        </div>
+        <div>
+          <p class="text-slate-400 text-sm">Time Spent</p>
+          <p class="text-2xl font-semibold"><%= seconds_to_human(Current.user.workouts.strength.sum(:time_in_seconds)) %></p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-slate-400 text-sm">Average Workout</p>
+          <p class="text-2xl font-semibold"><%= seconds_to_human(Current.user.workouts.strength.average(:time_in_seconds).to_i) %></p>
+        </div>
       </div>
     </div>
-    <div>
-      <div class="mb-6">
-        <p class="text-lg font-semibold mb-2">Total runs</p>
-        <p class="text-xl"><%= Current.user.workouts.run.count %></p>
-      </div>
 
-      <div class="mb-6">
-        <p class="text-lg font-semibold mb-2">Time spent running</p>
-        <p class="text-xl"><%= seconds_to_human(Current.user.workouts.run.sum(:time_in_seconds)) %></p>
-      </div>
-
-      <div class="mb-6">
-        <p class="text-lg font-semibold mb-2">Total distance run</p>
-        <p class="text-xl">
-          <%= (Current.user.workouts.run.sum(:distance) / 1000.0).round(2) %>
-          km
-        </p>
-      </div>
-
-      <div class="mb-6">
-        <p class="text-lg font-semibold mb-2">Average run</p>
-        <p class="text-xl">
-          <%= seconds_to_human(Current.user.workouts.run.average(:time_in_seconds).to_i) %>
-        </p>
+    <div class="bg-slate-800 rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-4 text-green-400">Running</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-slate-400 text-sm">Total Runs</p>
+          <p class="text-2xl font-semibold"><%= Current.user.workouts.run.count %></p>
+        </div>
+        <div>
+          <p class="text-slate-400 text-sm">Total Distance</p>
+          <p class="text-2xl font-semibold"><%= (Current.user.workouts.run.sum(:distance) / 1000.0).round(2) %> km</p>
+        </div>
+        <div>
+          <p class="text-slate-400 text-sm">Time Spent</p>
+          <p class="text-2xl font-semibold"><%= seconds_to_human(Current.user.workouts.run.sum(:time_in_seconds)) %></p>
+        </div>
+        <div>
+          <p class="text-slate-400 text-sm">Average Run</p>
+          <p class="text-2xl font-semibold"><%= seconds_to_human(Current.user.workouts.run.average(:time_in_seconds).to_i) %></p>
+        </div>
       </div>
     </div>
   </div>
 
-  <h2 class="text-xl font-bold mb-4">Charts</h2>
+  <h2 class="text-xl font-bold mb-6">Charts</h2>
 
-  <div class="grid gap-8">
+  <div class="grid gap-6">
     <div class="bg-slate-800 p-4 rounded-lg">
       <h3 class="text-lg font-semibold mb-4">Hours per Week</h3>
       <div class="h-64">

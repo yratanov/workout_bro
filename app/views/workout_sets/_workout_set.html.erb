@@ -47,55 +47,14 @@
     class="overflow-hidden transition-all duration-300 ease-in-out"
     data-accordion-target="content"
   >
-    <div class=" flex gap-6 pb-4 px-4 ">
-      <% Current
-      .user
-      .workout_sets
-      .where(exercise: workout_set.exercise)
-      .where.not(id: workout_set.id)
-      .where.not(ended_at: nil)
-      .order(created_at: :asc)
-      .last(3).each do |prev_workout_set| %>
-        <% if prev_workout_set %>
-          <div class="mb-2 border-r border-slate-600 pr-6 text-slate-400 hidden lg:block">
-            <div class="flex gap-2 mb-2 border-b border-slate-600 pb-2">
-              <%= badge do %>
-                <%= prev_workout_set.created_at.strftime("%d %b") %>
-              <% end %>
-              <%= badge do %>
-                <%= Time
-                  .at(prev_workout_set.ended_at - prev_workout_set.started_at)
-                  .utc
-                  .strftime("%M:%S") %>
-              <% end %>
-            </div>
-            <%= render collection: prev_workout_set.workout_reps,
-            partial: "workout_reps/workout_rep",
-            locals: {
-              delete_visible: false,
-            } %>
-          </div>
-        <% end %>
+    <div class="pb-4 px-4">
+      <%= turbo_frame_tag workout_set, "reps" do %>
+        <%= render partial: "workout_reps/list_with_form",
+        locals: {
+          workout_set:,
+          workout_rep: workout_set.workout_reps.new(workout_set.default_rep_values),
+        } %>
       <% end %>
-
-      <div class="flex-grow">
-        <div class="flex mb-2 border-b border-slate-600 pb-2">
-          <%= badge do %>
-            <% if workout_set.workout.running? %>
-              Today
-            <% else %>
-              <%= workout_set.created_at.strftime("%d %b") %>
-            <% end %>
-          <% end %>
-        </div>
-        <%= turbo_frame_tag workout_set, "reps" do %>
-          <%= render partial: "workout_reps/list_with_form",
-          locals: {
-            workout_set:,
-            workout_rep: workout_set.workout_reps.new(workout_set.default_rep_values),
-          } %>
-        <% end %>
-      </div>
     </div>
 
     <% unless workout_set.ended? %>
