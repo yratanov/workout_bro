@@ -1,3 +1,4 @@
+<% input_class = "border border-slate-500 bg-slate-600 text-white px-2 py-1.5 rounded text-sm" %>
 <%= app_form_with(model: workout_rep, class: "contents") do |form| %>
   <% if workout_rep.errors.any? %>
     <div class="bg-red-900/50 text-red-200 px-2 py-1 text-xs rounded mb-2">
@@ -6,27 +7,24 @@
   <% end %>
   <%= form.hidden_field :workout_set_id %>
   <div class="flex flex-wrap items-center gap-2">
-    <%= form.select(
-      :reps,
-      (1..40).map { |r| ["#{r}×", r] },
-      {},
-      { class: "border border-slate-500 bg-slate-600 text-white px-2 py-1.5 rounded text-sm" },
-    ) %>
+    <%= form.input :reps,
+      as: :select,
+      collection: (1..40).map { |r| ["#{r}×", r] },
+      inline: true,
+      input_html: { class: input_class } %>
     <% if workout_rep.workout_set.exercise.with_weights %>
-      <%= form.select(
-        :weight,
-        (0..40).step(2.5).map { |w| ["#{w}kg", w] },
-        {},
-        { class: "border border-slate-500 bg-slate-600 text-white px-2 py-1.5 rounded text-sm" },
-      ) %>
+      <%= form.input :weight,
+        as: :select,
+        collection: (0..40).step(2.5).map { |w| ["#{w}kg", w] },
+        inline: true,
+        input_html: { class: input_class } %>
     <% end %>
     <% if workout_rep.workout_set.exercise.with_band %>
-      <%= form.select(
-        :band,
-        [[t("workout_reps.form.no_band"), nil]] + WorkoutRep::BANDS.map { |b| [b.humanize, b] },
-        {},
-        { class: "border border-slate-500 bg-slate-600 text-white px-2 py-1.5 rounded text-sm" },
-      ) %>
+      <%= form.input :band,
+        as: :select,
+        collection: [[t("workout_reps.form.no_band"), nil]] + WorkoutRep::BANDS.map { |b| [b.humanize, b] },
+        inline: true,
+        input_html: { class: input_class } %>
     <% end %>
     <%= button text: "+", type: "submit", style: "primary", class: "px-3 py-1.5" %>
   </div>

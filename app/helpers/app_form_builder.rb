@@ -15,13 +15,7 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def select(method, collection, options = {}, html_options = {})
-    @template.select(
-      object_name,
-      method,
-      collection,
-      options,
-      html_options
-    )
+    super(method, collection, options, html_options)
   end
 
   def toggle(method, label_text = nil, color: :blue)
@@ -70,6 +64,7 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
           :select,
           field,
           options[:collection],
+          { selected: @object.send(field) },
           merge_input_options({ error: error?(field) }, options[:input_html])
         )
       else
@@ -89,6 +84,8 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def wrap_with_label(field, type, options = {})
+    return yield if options[:inline]
+
     tag.div class:
               "#{options[:margin] || "mb-4"} #{type == :check_box ? "flex gap-3 items-center" : ""} #{options[:class]} h-full",
             data: options[:data] do

@@ -14,7 +14,7 @@ module FormHelpers
       method,
       choices,
       options,
-      html_options.merge(class: input_class(options)),
+      html_options[:class] ? html_options : html_options.merge(class: input_class(options)),
     )
   end
 
