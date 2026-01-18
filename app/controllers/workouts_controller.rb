@@ -3,22 +3,7 @@ class WorkoutsController < ApplicationController
 
   # GET /workouts or /workouts.json
   def index
-    @current_date = params[:month].present? ? Date.parse(params[:month]) : Date.current
-
-    @calendar_start = @current_date.beginning_of_month.beginning_of_week(:monday)
-    @calendar_end = @current_date.end_of_month.end_of_week(:monday)
-
-    @active_workout = current_user.workouts.find_by(ended_at: nil)
-
-    @workouts = current_user.workouts
-      .includes(:workout_routine_day, workout_sets: [:exercise, :workout_reps])
-      .where(started_at: @calendar_start.beginning_of_day..@calendar_end.end_of_day)
-      .order(:started_at)
-
-    @workouts_by_date = @workouts.group_by { |w| w.started_at.to_date }
-
-    @prev_month = @current_date - 1.month
-    @next_month = @current_date + 1.month
+    setup_index_variables
   end
 
   # GET /workouts/1 or /workouts/1.json
@@ -43,9 +28,9 @@ class WorkoutsController < ApplicationController
   # POST /workouts or /workouts.json
   def create
     if Workout.exists?(user: current_user, ended_at: nil)
-      flash[:alert] = "You already have an active workout. Please stop it before starting a new one."
-      @workouts = Workout.all
-      render 'index'
+      flash.now[:alert] = "You already have an active workout. Please stop it before starting a new one."
+      setup_index_variables
+      render 'index', status: :unprocessable_entity
       return
     end
     
@@ -155,6 +140,21 @@ class WorkoutsController < ApplicationController
   end
 
   private
+
+    def setup_index_variables
+      @current_date = params[:month].present? ? Date.parse(params[:month]) : Date.current
+      @calendar_start = @current_date.beginning_of_month.beginning_of_week(:monday)
+      @calendar_end = @current_date.end_of_month.end_of_week(:monday)
+      @active_workout = current_user.workouts.find_by(ended_at: nil)
+      @workouts = current_user.workouts
+        .includes(:workout_routine_day, workout_sets: [:exercise, :workout_reps])
+        .where(started_at: @calendar_start.beginning_of_day..@calendar_end.end_of_day)
+        .order(:started_at)
+      @workouts_by_date = @workouts.group_by { |w| w.started_at.to_date }
+      @prev_month = @current_date - 1.month
+      @next_month = @current_date + 1.month
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_workout
       @workout = current_user.workouts.find(params.expect(:id))

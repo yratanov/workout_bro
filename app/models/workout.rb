@@ -41,7 +41,6 @@ class Workout < ApplicationRecord
 
   validates :workout_type, presence: true
   validates :started_at, presence: true
-  validates :workout_routine_day, presence: true, if: :strength?
   validates :user, presence: true
 
   validates :distance, numericality: { greater_than_or_equal_to: 0 }, if: :run?
