@@ -10,7 +10,11 @@
       "Bash(git commit:*)",
       "Bash(bundle install:*)",
       "Bash(bundle exec rspec:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(bin/rails runner:*)",
+      "Bash(git stash:*)",
+      "Bash(bin/importmap pin:*)",
+      "Bash(bin/rails routes:*)"
     ]
   }
 }
