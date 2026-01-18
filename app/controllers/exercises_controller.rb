@@ -8,6 +8,13 @@ class ExercisesController < ApplicationController
 
   # GET /exercises/1 or /exercises/1.json
   def show
+    @workout_sets = Current.user
+      .workout_sets
+      .includes(:workout_reps, workout: :workout_routine_day)
+      .where(exercise: @exercise)
+      .where.not(ended_at: nil)
+      .order(created_at: :desc)
+      .limit(50)
   end
 
   # GET /exercises/new
