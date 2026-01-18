@@ -89,4 +89,66 @@ RSpec.describe "Workouts", type: :feature do
       expect(page).to have_button("Pause")
     end
   end
+
+  describe "workout reps" do
+    before do
+      click_link "Start workout"
+      click_button "Start"
+      select "Bench Press", from: "workout_set[exercise_id]"
+      click_button "Start!"
+    end
+
+    it "allows adding a rep with weight" do
+      select "10 x", from: "workout_rep[reps]"
+      select "20.0KG", from: "workout_rep[weight]"
+      click_button "Add"
+
+      expect(page).to have_content("10")
+      expect(page).to have_content("20.0KG")
+    end
+
+    it "allows adding multiple reps" do
+      select "10 x", from: "workout_rep[reps]"
+      select "20.0KG", from: "workout_rep[weight]"
+      click_button "Add"
+
+      select "8 x", from: "workout_rep[reps]"
+      select "25.0KG", from: "workout_rep[weight]"
+      click_button "Add"
+
+      expect(page).to have_content("10")
+      expect(page).to have_content("20.0KG")
+      expect(page).to have_content("8")
+      expect(page).to have_content("25.0KG")
+    end
+
+    it "allows completing a set after adding reps" do
+      select "12 x", from: "workout_rep[reps]"
+      select "15.0KG", from: "workout_rep[weight]"
+      click_button "Add"
+
+      click_button "Complete this set"
+
+      # After completing, the set should still show the exercise name
+      expect(page).to have_content("Bench Press")
+      # The "Complete this set" button should be gone for this set
+      expect(page).not_to have_button("Complete this set")
+    end
+
+    it "allows adding another set with a different exercise after completing one" do
+      select "10 x", from: "workout_rep[reps]"
+      select "20.0KG", from: "workout_rep[weight]"
+      click_button "Add"
+      click_button "Complete this set"
+
+      # Should be able to start another set with a different exercise
+      # (Bench Press is no longer available since it was already used)
+      select "Squat", from: "workout_set[exercise_id]"
+      click_button "Start!"
+
+      # New set form should appear for Squat
+      expect(page).to have_content("Squat")
+      expect(page).to have_select("workout_rep[reps]")
+    end
+  end
 end
