@@ -13,6 +13,12 @@ class WorkoutsController < ApplicationController
 
   # GET /workouts/new
   def new
+    @active_workout = current_user.workouts.find_by(ended_at: nil)
+    if @active_workout
+      redirect_to @active_workout, alert: "You already have an active workout."
+      return
+    end
+
     @default_workout_routine = WorkoutRoutine.last
     @workout = Workout.new(
       workout_routine_day: @default_workout_routine.workout_routine_days.first,

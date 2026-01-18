@@ -46,6 +46,8 @@ class Workout < ApplicationRecord
   validates :distance, numericality: { greater_than_or_equal_to: 0 }, if: :run?
   validates :time_in_seconds, numericality: { greater_than_or_equal_to: 0 }, if: :run?
 
+  validate :no_other_active_workout, on: :create
+
   before_save :fill_in_time_in_seconds, if: :ended?
   
   def running?
@@ -66,6 +68,16 @@ class Workout < ApplicationRecord
       self.time_in_seconds = elapsed - (total_paused_seconds || 0)
     else
       self.time_in_seconds = nil
+    end
+  end
+
+  private
+
+  def no_other_active_workout
+    return if ended_at.present? # Allow creating completed workouts (e.g., runs)
+
+    if user && Workout.exists?(user: user, ended_at: nil)
+      errors.add(:base, "You already have an active workout")
     end
   end
 end
