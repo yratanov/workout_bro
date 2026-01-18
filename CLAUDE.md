@@ -16,13 +16,20 @@ bin/rails server       # Start Rails server only
 
 ## Testing
 
+Uses RSpec with Capybara for feature tests. Fixtures are stored in `test/fixtures/`.
+
 ```bash
-bin/rails test                           # Run all tests
-bin/rails test:models                    # Run model tests only
-bin/rails test:system                    # Run system tests (Selenium)
-bin/rails test:components                # Run ViewComponent tests
-bin/rails test test/models/user_test.rb  # Run a single test file
+bundle exec rspec                        # Run all tests
+bundle exec rspec spec/features          # Run feature tests only
+bundle exec rspec spec/requests          # Run request specs only
+bundle exec rspec spec/features/workouts_spec.rb  # Run a single test file
 ```
+
+**Test Structure:**
+- `spec/features/` - Capybara feature tests (browser-based integration tests)
+- `spec/requests/` - Controller/request specs
+- `spec/support/` - Shared helpers (login_helpers.rb, capybara.rb)
+- `test/fixtures/` - Test data fixtures (shared with RSpec)
 
 ## Code Quality
 
