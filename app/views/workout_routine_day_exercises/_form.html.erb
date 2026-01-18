@@ -1,22 +1,28 @@
-<%= app_form_with(model: workout_routine_day_exercise, url: workout_routine_workout_routine_day_workout_routine_day_exercises_path(workout_routine_day_exercise.workout_routine_day.workout_routine, workout_routine_day_exercise.workout_routine_day), class: "contents") do |form| %>
-  <div class="flex gap-4 items-end">
-    <div class="flex-1">
-      <%= form.hidden_field :workout_routine_day_id %>
-      <%= form.collection_select(
-        :exercise_id,
-        ::Exercise
-          .order(:name)
-          .uniq
-          .without(workout_routine_day_exercise.workout_routine_day.exercises),
-        :id,
-        :name,
-        {},
-        { class: "w-full bg-slate-800 border border-slate-600 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" },
-      ) %>
+<div class="bg-slate-700/50 rounded-lg px-4 py-3 mt-2">
+  <%= app_form_with(model: workout_routine_day_exercise, url: workout_routine_workout_routine_day_workout_routine_day_exercises_path(workout_routine_day_exercise.workout_routine_day.workout_routine, workout_routine_day_exercise.workout_routine_day), class: "contents") do |form| %>
+    <%= form.hidden_field :workout_routine_day_id %>
+    <div class="flex gap-3 items-center">
+      <div class="flex-1">
+        <%= form.collection_select(
+          :exercise_id,
+          ::Exercise
+            .order(:name)
+            .uniq
+            .without(workout_routine_day_exercise.workout_routine_day.exercises),
+          :id,
+          :name,
+          { prompt: t("workout_routine_days.form.select_exercise") },
+          { class: "w-full bg-slate-800 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" },
+        ) %>
+      </div>
+      <%= button text: t("shared.buttons.add"), type: "submit", style: "primary", class: "px-4 py-2 text-sm" %>
+      <%= button route: edit_workout_routine_workout_routine_day_path(workout_routine_day_exercise.workout_routine_day.workout_routine, workout_routine_day_exercise.workout_routine_day),
+          type: "link",
+          style: "link",
+          class: "text-sm",
+          data: { turbo_frame: "new_exercise_form" } do %>
+        <%= t("shared.buttons.cancel") %>
+      <% end %>
     </div>
-
-    <div>
-      <%= form.submit t("shared.buttons.save") %>
-    </div>
-  </div>
-<% end %>
+  <% end %>
+</div>

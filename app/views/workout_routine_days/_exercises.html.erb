@@ -1,27 +1,40 @@
-<% workout_routine_day.workout_routine_day_exercises.order(:position).each do |workout_routine_day_exercise| %>
-  <div class="flex gap-5">
-    <div>
-      <%= workout_routine_day_exercise.exercise.name %>
-    </div>
-    <div>
-      <%= button style: "link_danger",
-          type: "link",
-          route: workout_routine_workout_routine_day_workout_routine_day_exercise_path(workout_routine_day.workout_routine, workout_routine_day, workout_routine_day_exercise),
-          method: :delete,
-          data: {
-            turbo_prefetch: false,
-            turbo_confirm: t("shared.confirmations.are_you_sure"),
-            turbo_method: :delete,
-          } do %>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 448 512"
-          class="h-5 w-5 text-current"
-          fill="currentColor"
-        ><path
-            d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
-          /></svg>
-      <% end %>
-    </div>
+<% exercises = workout_routine_day.workout_routine_day_exercises.order(:position) %>
+<% if exercises.any? %>
+  <div
+    class="space-y-2"
+    data-controller="sortable"
+    data-sortable-url-value="<%= move_workout_routine_workout_routine_day_workout_routine_day_exercise_path(workout_routine_day.workout_routine, workout_routine_day, ":id") %>"
+  >
+    <% exercises.each_with_index do |workout_routine_day_exercise, index| %>
+      <div
+        class="group flex items-center gap-3 bg-slate-700/50 rounded-lg px-4 py-3 hover:bg-slate-700 transition-colors"
+        data-sortable-id="<%= workout_routine_day_exercise.id %>"
+      >
+        <div class="cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300" data-sortable-handle>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="h-4 w-4" fill="currentColor">
+            <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48C0 49.9 17.9 32 40 32zM232 160c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0z"/>
+          </svg>
+        </div>
+        <span class="flex-1 font-medium"><%= workout_routine_day_exercise.exercise.name %></span>
+        <% if workout_routine_day_exercise.exercise.muscles.present? %>
+          <span class="text-slate-400 text-sm hidden sm:block"><%= workout_routine_day_exercise.exercise.muscles %></span>
+        <% end %>
+        <%= button style: "link_hover_danger",
+            type: "link",
+            route: workout_routine_workout_routine_day_workout_routine_day_exercise_path(workout_routine_day.workout_routine, workout_routine_day, workout_routine_day_exercise),
+            method: :delete,
+            data: {
+              turbo_prefetch: false,
+              turbo_confirm: t("shared.confirmations.delete_confirm"),
+              turbo_method: :delete,
+            } do %>
+          <span class="opacity-0 group-hover:opacity-100 transition-opacity">
+            <%= icon_xmark %>
+          </span>
+        <% end %>
+      </div>
+    <% end %>
   </div>
+<% else %>
+  <div class="text-slate-500 text-sm italic py-4"><%= t("workout_routine_days.form.no_exercises") %></div>
 <% end %>

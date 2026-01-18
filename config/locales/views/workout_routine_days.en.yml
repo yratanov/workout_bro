@@ -7,4 +7,8 @@ en:
       title: "Editing workout routine day"
       back_to_routine: "Back to routine"
     form:
-      add_exercise: "Add new exercise"
+      name_placeholder: "Day name (e.g., Push Day, Leg Day)"
+      exercises_title: "Exercises"
+      add_exercise: "Add exercise"
+      no_exercises: "No exercises added yet"
+      select_exercise: "Select an exercise..."

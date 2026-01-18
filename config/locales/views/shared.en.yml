@@ -8,6 +8,7 @@ en:
       exercises: "Exercises"
     buttons:
       save: "Save"
+      add: "Add"
       cancel: "Cancel"
       back: "Back"
       edit: "Edit"
