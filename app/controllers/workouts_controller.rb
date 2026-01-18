@@ -11,7 +11,7 @@ class WorkoutsController < ApplicationController
     @active_workout = current_user.workouts.find_by(ended_at: nil)
 
     @workouts = current_user.workouts
-      .includes(:workout_routine_day)
+      .includes(:workout_routine_day, workout_sets: [:exercise, :workout_reps])
       .where(started_at: @calendar_start.beginning_of_day..@calendar_end.end_of_day)
       .order(:started_at)
 

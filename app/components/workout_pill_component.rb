@@ -14,7 +14,7 @@ class WorkoutPillComponent < ViewComponent::Base
   end
 
   def pill_classes
-    base = "block px-2 py-1 text-xs rounded truncate hover:opacity-80 transition-opacity"
+    base = "block w-full px-2 py-1 text-xs rounded hover:opacity-80 transition-opacity"
 
     if @workout.run?
       "#{base} bg-green-600 text-green-100"
@@ -25,5 +25,14 @@ class WorkoutPillComponent < ViewComponent::Base
 
   def workout_path
     helpers.workout_path(@workout)
+  end
+
+  def modal_title
+    date = @workout.created_at.strftime("%d %b %Y")
+    if @workout.run?
+      "Run · #{date}"
+    else
+      "#{@workout.workout_routine_day&.name || 'Strength'} · #{date}"
+    end
   end
 end

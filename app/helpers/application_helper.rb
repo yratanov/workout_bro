@@ -1,7 +1,7 @@
 module ApplicationHelper
   include ComponentsShorthand
   
-  components :button, :badge, :icon_xmark, :icon_stopwatch, :icon_exit, :icon_chevron_down
+  components :button, :badge, :modal, :icon_xmark, :icon_stopwatch, :icon_exit, :icon_chevron_down
 
   def seconds_to_human(seconds)
     return 0 if seconds.nil? || seconds < 0

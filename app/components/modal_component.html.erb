@@ -1,0 +1,36 @@
+<div
+  data-modal-open-value="<%= open? %>"
+  class="<%= 'hidden' unless open? %>"
+  data-modal-target="container"
+>
+  <div
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+    data-action="click->modal#close"
+    data-modal-target="backdrop"
+  ></div>
+
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4" data-action="click->modal#close">
+    <div
+      class="bg-slate-800 rounded-lg shadow-xl w-full <%= size_class %>"
+      data-modal-target="dialog"
+      data-action="click->modal#stopPropagation"
+    >
+      <% if @title %>
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-700">
+          <h3 class="text-lg font-semibold"><%= @title %></h3>
+          <button
+            type="button"
+            class="text-slate-400 hover:text-slate-200 cursor-pointer"
+            data-action="click->modal#close"
+          >
+            <%= render(IconXmarkComponent.new) %>
+          </button>
+        </div>
+      <% end %>
+
+      <div class="p-6">
+        <%= content %>
+      </div>
+    </div>
+  </div>
+</div>
