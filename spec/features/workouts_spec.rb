@@ -90,6 +90,43 @@ RSpec.describe "Workouts", type: :feature do
     end
   end
 
+  describe "deleting a workout from modal" do
+    it "allows deleting a completed workout from the calendar modal" do
+      # Verify we're on the workouts page (logged in from before block)
+      expect(page).to have_content("Workouts")
+
+      # Create a completed workout for today so it shows in the calendar
+      Workout.create!(
+        user: user,
+        workout_type: :strength,
+        started_at: Time.current.beginning_of_day + 10.hours,
+        ended_at: Time.current.beginning_of_day + 11.hours,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+
+      # Refresh the page to see the new workout
+      visit workouts_path
+
+      initial_count = user.workouts.count
+
+      # Click on the workout pill in the calendar to open modal
+      first('button.bg-blue-600', text: /Push Day/i).click
+
+      # Modal should be open with workout details
+      expect(page).to have_content("Push Day")
+      expect(page).to have_button("Delete")
+
+      # Click delete and confirm
+      accept_confirm do
+        click_button "Delete"
+      end
+
+      # Should redirect to workouts index and workout count should decrease
+      expect(page).to have_current_path(workouts_path)
+      expect(user.workouts.reload.count).to eq(initial_count - 1)
+    end
+  end
+
   describe "workout reps" do
     before do
       click_link "Start workout"
