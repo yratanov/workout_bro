@@ -25,13 +25,13 @@
 
   <body class="w-full relative">
     <% if flash.any? %>
-      <div class="absolute top-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2">
+      <div class="fixed top-4 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-50 flex flex-col items-center gap-2">
         <% flash.each do |type, message| %>
           <div
             data-controller="flash"
             class="
-              px-5 py-3 rounded-lg font-medium shadow-xl border backdrop-blur-sm
-              transition-all duration-300 ease-in-out
+              w-full sm:w-auto max-w-md px-4 py-3 rounded-lg font-medium shadow-xl border backdrop-blur-sm
+              transition-all duration-300 ease-in-out text-sm sm:text-base
               <%= type == 'alert' ? 'bg-red-800 text-red-100 border-red-600' : 'bg-green-800 text-green-100 border-green-600' %>
             "
           >
