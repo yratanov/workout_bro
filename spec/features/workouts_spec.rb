@@ -20,9 +20,9 @@ RSpec.describe "Workouts", type: :feature do
     it "allows starting a new workout with default routine" do
       click_link "Start workout"
 
-      expect(page).to have_content("New workout")
+      expect(page).to have_content("New Workout")
       # Default routine is Upper Lower with Upper Day pre-selected
-      click_button "Start"
+      click_button "Start Workout"
 
       expect(page).to have_content("Upper Lower")
       expect(page).to have_content("Upper Day")
@@ -41,7 +41,7 @@ RSpec.describe "Workouts", type: :feature do
         expect(page).to have_select("workout[workout_routine_day_id]", with_options: ["Push Day"])
       end
       select "Push Day", from: "workout[workout_routine_day_id]"
-      click_button "Start"
+      click_button "Start Workout"
 
       expect(page).to have_content("Push Pull Legs")
       expect(page).to have_content("Push Day")
@@ -52,7 +52,7 @@ RSpec.describe "Workouts", type: :feature do
   describe "completing a workout" do
     it "allows finishing an active workout" do
       click_link "Start workout"
-      click_button "Start"
+      click_button "Start Workout"
 
       accept_confirm do
         click_button "Finish workout"
@@ -68,7 +68,7 @@ RSpec.describe "Workouts", type: :feature do
     it "allows adding a set to a workout" do
       click_link "Start workout"
       # Use default routine (Upper Lower / Upper Day) which has Bench Press
-      click_button "Start"
+      click_button "Start Workout"
 
       select "Bench Press", from: "workout_set[exercise_id]"
       click_button "Start!"
@@ -80,7 +80,7 @@ RSpec.describe "Workouts", type: :feature do
   describe "pausing and resuming a workout" do
     it "allows pausing and resuming a workout" do
       click_link "Start workout"
-      click_button "Start"
+      click_button "Start Workout"
 
       click_button "Pause"
       expect(page).to have_button("Resume")
@@ -130,7 +130,7 @@ RSpec.describe "Workouts", type: :feature do
   describe "workout reps" do
     before do
       click_link "Start workout"
-      click_button "Start"
+      click_button "Start Workout"
       select "Bench Press", from: "workout_set[exercise_id]"
       click_button "Start!"
     end
