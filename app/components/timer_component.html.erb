@@ -1,4 +1,4 @@
-<div class="<%= @ended_at ? "" : (paused? ? "text-yellow-600" : "text-green-600") %>">
+<div class="tabular-nums <%= @ended_at ? "" : (paused? ? "text-yellow-600" : "text-green-600") %>">
   <% if @ended_at %>
     <% elapsed = (@ended_at - @started_at).to_i - @total_paused_seconds %>
     <% diff = Time.at(elapsed).utc %>
