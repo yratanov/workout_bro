@@ -1,31 +1,19 @@
-# == Schema Information
-#
-# Table name: workout_routine_day_exercises
-#
-#  id                     :integer          not null, primary key
-#  position               :integer
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  exercise_id            :integer          not null
-#  workout_routine_day_id :integer          not null
-#
-# Indexes
-#
-#  index_workout_routine_day_exercises_on_exercise_id             (exercise_id)
-#  index_workout_routine_day_exercises_on_workout_routine_day_id  (workout_routine_day_id)
-#
-# Foreign Keys
-#
-#  exercise_id             (exercise_id => exercises.id)
-#  workout_routine_day_id  (workout_routine_day_id => workout_routine_days.id)
-#
+push_day_bench:
+  workout_routine_day: push_day
+  exercise: bench_press
+  position: 1
 
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+leg_day_squat:
+  workout_routine_day: leg_day
+  exercise: squat
+  position: 1
 
-one:
-  workout_routine_day: one
-  exercise: one
+pull_day_deadlift:
+  workout_routine_day: pull_day
+  exercise: deadlift
+  position: 1
 
-two:
-  workout_routine_day: two
-  exercise: two
+upper_day_bench:
+  workout_routine_day: upper_day
+  exercise: bench_press
+  position: 1

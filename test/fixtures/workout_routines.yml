@@ -1,26 +1,7 @@
-# == Schema Information
-#
-# Table name: workout_routines
-#
-#  id         :integer          not null, primary key
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :integer
-#
-# Indexes
-#
-#  index_workout_routines_on_user_id  (user_id)
-#
-# Foreign Keys
-#
-#  user_id  (user_id => users.id)
-#
+push_pull_legs:
+  name: Push Pull Legs
+  user: one
 
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  name: MyString
-
-two:
-  name: MyString
+upper_lower:
+  name: Upper Lower
+  user: one

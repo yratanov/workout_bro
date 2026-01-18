@@ -1,35 +1,23 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+completed_workout:
+  date: <%= Date.today - 1 %>
+  workout_type: 0
+  started_at: <%= 1.day.ago %>
+  ended_at: <%= 1.day.ago + 1.hour %>
+  user: one
+  workout_routine_day: push_day
 
-# == Schema Information
-#
-# Table name: workouts
-#
-#  id                     :integer          not null, primary key
-#  date                   :date
-#  distance               :integer
-#  ended_at               :datetime
-#  paused_at              :datetime
-#  started_at             :datetime
-#  time_in_seconds        :integer
-#  total_paused_seconds   :integer          default(0)
-#  workout_type           :integer          default("strength"), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  user_id                :integer
-#  workout_routine_day_id :integer
-#
-# Indexes
-#
-#  index_workouts_on_user_id                 (user_id)
-#  index_workouts_on_workout_routine_day_id  (workout_routine_day_id)
-#
-# Foreign Keys
-#
-#  user_id                 (user_id => users.id)
-#  workout_routine_day_id  (workout_routine_day_id => workout_routine_days.id)
-#
-one:
-  date: 2025-05-04
+active_workout:
+  date: <%= Date.today %>
+  workout_type: 0
+  started_at: <%= 1.hour.ago %>
+  user: two
+  workout_routine_day: push_day
 
-two:
-  date: 2025-05-04
+run_workout:
+  date: <%= Date.today - 2 %>
+  workout_type: 1
+  started_at: <%= 2.days.ago %>
+  ended_at: <%= 2.days.ago + 30.minutes %>
+  distance: 5000
+  time_in_seconds: 1800
+  user: one
