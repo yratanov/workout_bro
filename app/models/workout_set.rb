@@ -52,12 +52,22 @@ class WorkoutSet < ApplicationRecord
 
   def default_rep_values
     current_rep_index = workout_reps.count
-    prev_rep = previous_workout_set&.workout_reps&.order(:created_at)&.[](current_rep_index)
 
-    if prev_rep
-      { weight: prev_rep.weight, reps: prev_rep.reps, band: prev_rep.band }
-    else
-      { weight: 10, reps: 10, band: nil }
-    end
+    # 1. Try to get values from the same rep index of previous workout's same exercise
+    prev_workout_rep = previous_workout_set&.workout_reps&.order(:created_at)&.[](current_rep_index)
+    return values_from_rep(prev_workout_rep) if prev_workout_rep
+
+    # 2. Fall back to the last rep in the current set
+    last_rep = workout_reps.order(:created_at).last
+    return values_from_rep(last_rep) if last_rep
+
+    # 3. Default values
+    { reps: 10, weight: 10, band: nil }
+  end
+
+  private
+
+  def values_from_rep(rep)
+    { reps: rep.reps, weight: rep.weight, band: rep.band }
   end
 end
