@@ -127,6 +127,47 @@ RSpec.describe "Workouts", type: :feature do
     end
   end
 
+  describe "run workout form" do
+    it "shows run fields when run type is selected and keeps them after validation error" do
+      click_link "Start workout"
+
+      # Select run workout type
+      find('label', text: 'Run').click
+
+      # Run fields should be visible
+      expect(page).to have_field("workout[distance]")
+      expect(page).to have_field("workout[time_in_seconds]")
+
+      # Submit with invalid data (negative distance)
+      fill_in "workout[distance]", with: "-100"
+      fill_in "workout[time_in_seconds]", with: "30:00"
+      click_button "Start Workout"
+
+      # Should show error and still have run fields visible
+      expect(page).to have_content("error")
+      expect(page).to have_field("workout[distance]")
+      expect(page).to have_field("workout[time_in_seconds]")
+    end
+
+    it "has day select available when switching back to strength after run validation error" do
+      click_link "Start workout"
+
+      # Select run workout type
+      find('label', text: 'Run').click
+
+      # Submit with invalid data
+      fill_in "workout[distance]", with: "-100"
+      fill_in "workout[time_in_seconds]", with: "30:00"
+      click_button "Start Workout"
+
+      # Switch back to strength
+      find('label', text: 'Strength').click
+
+      # Should have the day select available
+      expect(page).to have_select("workout[workout_routine_day_id]")
+    end
+  end
+
   describe "workout reps" do
     before do
       click_link "Start workout"

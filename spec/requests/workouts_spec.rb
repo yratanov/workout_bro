@@ -82,38 +82,6 @@ RSpec.describe "Workouts", type: :request do
         expect(response).to redirect_to(workouts_path)
       end
 
-      it "shows run form elements when validation fails" do
-        post workouts_path, params: {
-          workout: {
-            workout_type: "run",
-            started_at: Date.today,
-            distance: -100, # invalid: negative distance
-            time_in_seconds: "30:00"
-          }
-        }
-
-        expect(response).to have_http_status(:unprocessable_entity)
-        # Run section should be visible (no hidden class)
-        expect(response.body).to include('data-workout-type-switcher-target="runToggle"')
-        expect(response.body).not_to match(/class="[^"]*hidden[^"]*"[^>]*data-workout-type-switcher-target="runToggle"/)
-        # Strength section should be hidden
-        expect(response.body).to match(/class="[^"]*hidden[^"]*"[^>]*data-workout-type-switcher-target="strengthToggle"/)
-      end
-
-      it "includes workout routine day select for switching back to strength" do
-        post workouts_path, params: {
-          workout: {
-            workout_type: "run",
-            started_at: Date.today,
-            distance: -100,
-            time_in_seconds: "30:00"
-          }
-        }
-
-        expect(response).to have_http_status(:unprocessable_entity)
-        # Day select should be present so user can switch to strength
-        expect(response.body).to include('workout[workout_routine_day_id]')
-      end
     end
 
     context "when user already has an active workout" do
