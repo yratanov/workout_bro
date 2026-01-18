@@ -13,13 +13,13 @@
         <% if rep.band %>
           <span class="text-xs text-slate-400 ml-1"><%= rep.band.humanize %></span>
         <% end %>
-        <%= button route: workout_rep_path(rep), method: :delete, type: 'button', style: "link_hover_danger", data: { turbo_confirm: "Delete?" } do %>
+        <%= button route: workout_rep_path(rep), method: :delete, type: 'button', style: "link_hover_danger", data: { turbo_confirm: t("shared.confirmations.delete_confirm") } do %>
           <span class="opacity-0 group-hover:opacity-100 transition-opacity"><%= icon_xmark %></span>
         <% end %>
       </div>
     <% end %>
     <% if persisted_reps.empty? && !workout_set.ended? %>
-      <span class="text-slate-500 text-sm italic">Add your first rep</span>
+      <span class="text-slate-500 text-sm italic"><%= t("workout_reps.list_with_form.add_first_rep") %></span>
     <% end %>
   </div>
 

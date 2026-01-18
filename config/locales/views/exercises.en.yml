@@ -1,0 +1,28 @@
+en:
+  exercises:
+    index:
+      title: "Exercises"
+      new_exercise: "New exercise"
+      no_exercises: "No exercises found."
+    new:
+      title: "New exercise"
+      back_to_exercises: "Back to exercises"
+    edit:
+      title: "Editing exercise"
+      back_to_show: "Back to show"
+      back_to_exercises: "Back to exercises"
+    show:
+      back_to_exercises: "Back to exercises"
+      weights: "Weights"
+      band: "Band"
+      total_sets: "Total Sets"
+      max_weight: "Max Weight"
+      last_performed: "Last Performed"
+      previous_results: "Previous Results"
+      no_history_title: "No history yet"
+      no_history_description: "Complete a workout with this exercise to see your results here."
+      duration: "duration"
+    exercise:
+      muscles: "Muscles:"
+      with_weights: "With weights"
+      with_band: "With band"

@@ -10,6 +10,6 @@ class WorkoutRoutinesController < ApplicationController
   def destroy
     @workout_routine = current_user.workout_routines.find(params[:id])
     @workout_routine.destroy
-    redirect_to workout_routines_path, notice: "Workout routine was successfully deleted."
+    redirect_to workout_routines_path, notice: I18n.t("controllers.workout_routines.destroyed")
   end
 end

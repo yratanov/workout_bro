@@ -1,5 +1,5 @@
 <% if workout.workout_sets.none?(&:running?) %>
-  <%= button "Start set",
+  <%= button t("workouts.new_set_link.start_set"),
   type: "link",
   style: "success",
   route: new_workout_set_path(workout_id: workout.id) %>

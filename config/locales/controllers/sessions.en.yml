@@ -1,0 +1,5 @@
+en:
+  controllers:
+    sessions:
+      rate_limited: "Try again later."
+      invalid_credentials: "Try another email address or password."

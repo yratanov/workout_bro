@@ -19,7 +19,7 @@ class WorkoutRoutineDaysController < ApplicationController
     @workout_routine_day.workout_routine = @workout_routine
 
     if @workout_routine_day.save
-      redirect_to edit_workout_routine_workout_routine_day_path(@workout_routine, @workout_routine_day), notice: "Workout routine day was successfully created."
+      redirect_to edit_workout_routine_workout_routine_day_path(@workout_routine, @workout_routine_day), notice: I18n.t("controllers.workout_routine_days.created")
     else
       render :new
     end
@@ -28,7 +28,7 @@ class WorkoutRoutineDaysController < ApplicationController
   def update
     @workout_routine_day = WorkoutRoutineDay.find(params[:id])
     if @workout_routine_day.update(workout_routine_day_params)
-      redirect_to workout_routine_path(@workout_routine_day.workout_routine), notice: "Workout routine day was successfully updated."
+      redirect_to workout_routine_path(@workout_routine_day.workout_routine), notice: I18n.t("controllers.workout_routine_days.updated")
     else
       render :edit
     end

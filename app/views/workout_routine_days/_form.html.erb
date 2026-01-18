@@ -4,8 +4,7 @@
       id="error_explanation"
       class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3"
     >
-      <h2><%= pluralize(workout_routine_day.errors.count, "error") %>
-        prohibited this workout_routine_day from being saved:</h2>
+      <h2><%= t("activerecord.errors.template.header", count: workout_routine_day.errors.count, model: WorkoutRoutineDay.model_name.human.downcase) %></h2>
 
       <ul class="list-disc ml-6">
         <% workout_routine_day.errors.each do |error| %>
@@ -30,7 +29,7 @@
   </div>
 
   <div>
-    <%= button text: "Save", type: "submit", style: "primary" %>
+    <%= button text: t("shared.buttons.save"), type: "submit", style: "primary" %>
   </div>
 <% end %>
 
@@ -42,7 +41,7 @@
   </div>
 
   <div class="mb-5">
-    <%= button "Add new exercise",
+    <%= button t("workout_routine_days.form.add_exercise"),
     type: "link",
     style: "success",
     method: :get,

@@ -1,0 +1,9 @@
+en:
+  workout_routines:
+    index:
+      title: "Workout Routines"
+      new_routine: "New workout routine"
+      days: "days"
+      no_routines: "No workout_routines found."
+    show:
+      add_day: "Add day"

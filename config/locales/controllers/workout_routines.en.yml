@@ -1,0 +1,4 @@
+en:
+  controllers:
+    workout_routines:
+      destroyed: "Workout routine was successfully deleted."

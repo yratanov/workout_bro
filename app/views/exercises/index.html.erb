@@ -1,9 +1,9 @@
-<% content_for :title, "Exercises" %>
+<% content_for :title, t(".title") %>
 
 <div class="lg:min-w-[600px]">
   <div class="flex justify-between items-center mb-5">
-    <h1 class="font-bold text-4xl">Exercises</h1>
-    <%= button "New exercise", route: new_exercise_path, style: "primary", type: "link" %>
+    <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
+    <%= button t(".new_exercise"), route: new_exercise_path, style: "primary", type: "link" %>
   </div>
 
   <div id="exercises" class="divide-y divide-gray-400 space-y-2">
@@ -25,7 +25,7 @@
         </div>
       <% end %>
     <% else %>
-      <p class="text-center my-10">No exercises found.</p>
+      <p class="text-center my-10"><%= t(".no_exercises") %></p>
     <% end %>
   </div>
 </div>

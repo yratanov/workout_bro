@@ -1,11 +1,11 @@
-<% content_for :title, "New exercise" %>
+<% content_for :title, t(".title") %>
 
 <div class="lg:min-w-[600px]">
-  <h1 class="font-bold text-4xl">New exercise</h1>
+  <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
 
   <%= render "form", exercise: @exercise %>
 
-  <%= button "Back to exercises",
+  <%= button t(".back_to_exercises"),
   route: exercises_path,
   type: "link",
   style: "outlined" %>

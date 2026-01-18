@@ -22,7 +22,7 @@ RSpec.describe "Authentication", type: :feature do
       fill_in "password", with: "wrongpassword"
       click_button "Sign in"
 
-      expect(page).to have_content("Try another email address or password")
+      expect(page).to have_content(I18n.t("controllers.sessions.invalid_credentials"))
     end
   end
 

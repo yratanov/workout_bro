@@ -1,0 +1,9 @@
+en:
+  controllers:
+    workouts:
+      created: "Workout was successfully created."
+      updated: "Workout was successfully updated."
+      destroyed: "Workout was successfully destroyed."
+      ended: "Workout was successfully ended."
+      active_exists: "You already have an active workout."
+      active_exists_long: "You already have an active workout. Please stop it before starting a new one."

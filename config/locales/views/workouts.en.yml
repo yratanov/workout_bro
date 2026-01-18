@@ -1,0 +1,37 @@
+en:
+  workouts:
+    index:
+      title: "Workouts"
+      continue_workout: "Continue workout"
+      start_workout: "Start workout"
+    new:
+      title: "New Workout"
+    edit:
+      title: "Editing workout"
+      show_workout: "Show this workout"
+      back_to_workouts: "Back to workouts"
+    show:
+      title: "Workout"
+      distance: "Distance"
+      avg_pace: "Avg Pace"
+      resume: "Resume"
+      pause: "Pause"
+      finish: "Finish"
+    form:
+      workout_type: "Workout Type"
+      run_details: "Run Details"
+      date: "Date"
+      distance_meters: "Distance (meters)"
+      time_mmss: "Time (mm:ss)"
+      select_routine: "Select Routine"
+      routine: "Routine"
+      day: "Day"
+      or_divider: "— or —"
+      custom_workout_prompt: "Want to create a workout without a predefined routine?"
+      start_custom_workout: "Start Custom Workout"
+      custom_workout: "Custom Workout"
+      custom_workout_description: "You'll be able to add any exercises during the workout"
+      use_routine_instead: "Use a routine instead"
+      start_workout: "Start Workout"
+    new_set_link:
+      start_set: "Start set"

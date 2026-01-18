@@ -6,9 +6,9 @@
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
       </svg>
-      Back to exercises
+      <%= t(".back_to_exercises") %>
     <% end %>
-    <%= link_to "Edit", edit_exercise_path(@exercise), class: "text-blue-400 hover:text-blue-300" %>
+    <%= link_to t("shared.buttons.edit"), edit_exercise_path(@exercise), class: "text-blue-400 hover:text-blue-300" %>
   </div>
 
   <div class="bg-slate-800 rounded-lg p-6 mb-6">
@@ -24,7 +24,7 @@
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path d="M3 10a1 1 0 011-1h1V6a1 1 0 112 0v3h6V6a1 1 0 112 0v3h1a1 1 0 110 2h-1v3a1 1 0 11-2 0v-3H7v3a1 1 0 11-2 0v-3H4a1 1 0 01-1-1z"/>
           </svg>
-          Weights
+          <%= t(".weights") %>
         </span>
       <% end %>
       <% if @exercise.with_band %>
@@ -32,7 +32,7 @@
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
           </svg>
-          Band
+          <%= t(".band") %>
         </span>
       <% end %>
     </div>
@@ -44,23 +44,23 @@
 
     <div class="grid grid-cols-2 gap-4 mb-6">
       <div class="bg-slate-800 rounded-lg p-4">
-        <div class="text-slate-400 text-sm mb-1">Total Sets</div>
+        <div class="text-slate-400 text-sm mb-1"><%= t(".total_sets") %></div>
         <div class="text-2xl font-bold"><%= total_sets %></div>
       </div>
       <% if max_weight && max_weight > 0 %>
         <div class="bg-slate-800 rounded-lg p-4">
-          <div class="text-slate-400 text-sm mb-1">Max Weight</div>
+          <div class="text-slate-400 text-sm mb-1"><%= t(".max_weight") %></div>
           <div class="text-2xl font-bold"><%= max_weight %>KG</div>
         </div>
       <% else %>
         <div class="bg-slate-800 rounded-lg p-4">
-          <div class="text-slate-400 text-sm mb-1">Last Performed</div>
+          <div class="text-slate-400 text-sm mb-1"><%= t(".last_performed") %></div>
           <div class="text-2xl font-bold"><%= @workout_sets.first.created_at.strftime("%b %d") %></div>
         </div>
       <% end %>
     </div>
 
-    <h2 class="text-lg font-semibold mb-4">Previous Results</h2>
+    <h2 class="text-lg font-semibold mb-4"><%= t(".previous_results") %></h2>
 
     <div class="space-y-3">
       <% @workout_sets.group_by { |ws| ws.created_at.to_date }.each do |date, sets| %>
@@ -80,7 +80,7 @@
                     <span><%= workout_set.created_at.strftime("%H:%M") %></span>
                     <span class="text-slate-600">|</span>
                     <span>
-                      <%= Time.at(workout_set.ended_at - workout_set.started_at).utc.strftime("%M:%S") %> duration
+                      <%= Time.at(workout_set.ended_at - workout_set.started_at).utc.strftime("%M:%S") %> <%= t(".duration") %>
                     </span>
                     <% if workout_set.workout&.workout_routine_day %>
                       <span class="text-slate-600">|</span>
@@ -113,8 +113,8 @@
   <% else %>
     <div class="bg-slate-800 rounded-lg p-8 text-center">
       <div class="text-4xl mb-3">📊</div>
-      <h3 class="font-semibold text-lg mb-2">No history yet</h3>
-      <p class="text-slate-400">Complete a workout with this exercise to see your results here.</p>
+      <h3 class="font-semibold text-lg mb-2"><%= t(".no_history_title") %></h3>
+      <p class="text-slate-400"><%= t(".no_history_description") %></p>
     </div>
   <% end %>
 </div>

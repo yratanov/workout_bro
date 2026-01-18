@@ -1,70 +1,70 @@
-<% content_for :title, "Stats" %>
+<% content_for :title, t(".title") %>
 
 <div class="w-full max-w-6xl">
-  <h1 class="text-2xl font-bold mb-6">Stats</h1>
+  <h1 class="text-2xl font-bold mb-6"><%= t(".title") %></h1>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     <div class="bg-slate-800 rounded-lg p-6">
-      <h2 class="text-xl font-bold mb-4 text-blue-400">Strength Training</h2>
+      <h2 class="text-xl font-bold mb-4 text-blue-400"><%= t(".strength_training") %></h2>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <p class="text-slate-400 text-sm">Total Workouts</p>
+          <p class="text-slate-400 text-sm"><%= t(".total_workouts") %></p>
           <p class="text-2xl font-semibold"><%= Current.user.workouts.strength.count %></p>
         </div>
         <div>
-          <p class="text-slate-400 text-sm">Total Sets</p>
+          <p class="text-slate-400 text-sm"><%= t(".total_sets") %></p>
           <p class="text-2xl font-semibold"><%= Current.user.workout_sets.count %></p>
         </div>
         <div>
-          <p class="text-slate-400 text-sm">Total Reps</p>
+          <p class="text-slate-400 text-sm"><%= t(".total_reps") %></p>
           <p class="text-2xl font-semibold"><%= Current.user.workout_reps.count %></p>
         </div>
         <div>
-          <p class="text-slate-400 text-sm">Time Spent</p>
+          <p class="text-slate-400 text-sm"><%= t(".time_spent") %></p>
           <p class="text-2xl font-semibold"><%= seconds_to_human(Current.user.workouts.strength.sum(:time_in_seconds)) %></p>
         </div>
         <div class="col-span-2">
-          <p class="text-slate-400 text-sm">Average Workout</p>
+          <p class="text-slate-400 text-sm"><%= t(".average_workout") %></p>
           <p class="text-2xl font-semibold"><%= seconds_to_human(Current.user.workouts.strength.average(:time_in_seconds).to_i) %></p>
         </div>
       </div>
     </div>
 
     <div class="bg-slate-800 rounded-lg p-6">
-      <h2 class="text-xl font-bold mb-4 text-green-400">Running</h2>
+      <h2 class="text-xl font-bold mb-4 text-green-400"><%= t(".running") %></h2>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <p class="text-slate-400 text-sm">Total Runs</p>
+          <p class="text-slate-400 text-sm"><%= t(".total_runs") %></p>
           <p class="text-2xl font-semibold"><%= Current.user.workouts.run.count %></p>
         </div>
         <div>
-          <p class="text-slate-400 text-sm">Total Distance</p>
+          <p class="text-slate-400 text-sm"><%= t(".total_distance") %></p>
           <p class="text-2xl font-semibold"><%= (Current.user.workouts.run.sum(:distance) / 1000.0).round(2) %> km</p>
         </div>
         <div>
-          <p class="text-slate-400 text-sm">Time Spent</p>
+          <p class="text-slate-400 text-sm"><%= t(".time_spent") %></p>
           <p class="text-2xl font-semibold"><%= seconds_to_human(Current.user.workouts.run.sum(:time_in_seconds)) %></p>
         </div>
         <div>
-          <p class="text-slate-400 text-sm">Average Run</p>
+          <p class="text-slate-400 text-sm"><%= t(".average_run") %></p>
           <p class="text-2xl font-semibold"><%= seconds_to_human(Current.user.workouts.run.average(:time_in_seconds).to_i) %></p>
         </div>
       </div>
     </div>
   </div>
 
-  <h2 class="text-xl font-bold mb-6">Charts</h2>
+  <h2 class="text-xl font-bold mb-6"><%= t(".charts") %></h2>
 
   <div class="grid gap-6">
     <div class="bg-slate-800 p-4 rounded-lg">
-      <h3 class="text-lg font-semibold mb-4">Hours per Week</h3>
+      <h3 class="text-lg font-semibold mb-4"><%= t(".hours_per_week") %></h3>
       <div class="h-64">
         <canvas
           data-controller="chart"
           data-chart-type-value="bar"
           data-chart-labels-value="<%= @hours_per_week[:labels].to_json %>"
           data-chart-datasets-value="<%= [{
-            label: 'Hours',
+            label: t(".hours"),
             data: @hours_per_week[:data],
             backgroundColor: 'rgba(59, 130, 246, 0.7)',
             borderColor: 'rgb(59, 130, 246)',
@@ -74,7 +74,7 @@
             scales: {
               y: {
                 beginAtZero: true,
-                title: { display: true, text: 'Hours', color: '#94a3b8' },
+                title: { display: true, text: t(".hours"), color: '#94a3b8' },
                 ticks: { color: '#94a3b8' },
                 grid: { color: '#334155' }
               },
@@ -92,14 +92,14 @@
     </div>
 
     <div class="bg-slate-800 p-4 rounded-lg">
-      <h3 class="text-lg font-semibold mb-4">Running Distance per Week (km)</h3>
+      <h3 class="text-lg font-semibold mb-4"><%= t(".running_distance_per_week") %></h3>
       <div class="h-64">
         <canvas
           data-controller="chart"
           data-chart-type-value="bar"
           data-chart-labels-value="<%= @distance_per_week[:labels].to_json %>"
           data-chart-datasets-value="<%= [{
-            label: 'Distance (km)',
+            label: t(".distance_km"),
             data: @distance_per_week[:data],
             backgroundColor: 'rgba(34, 197, 94, 0.7)',
             borderColor: 'rgb(34, 197, 94)',
@@ -109,7 +109,7 @@
             scales: {
               y: {
                 beginAtZero: true,
-                title: { display: true, text: 'Kilometers', color: '#94a3b8' },
+                title: { display: true, text: t(".kilometers"), color: '#94a3b8' },
                 ticks: { color: '#94a3b8' },
                 grid: { color: '#334155' }
               },
@@ -127,7 +127,7 @@
     </div>
 
     <div class="bg-slate-800 p-4 rounded-lg">
-      <h3 class="text-lg font-semibold mb-4">Workouts per Week</h3>
+      <h3 class="text-lg font-semibold mb-4"><%= t(".workouts_per_week") %></h3>
       <div class="h-64">
         <canvas
           data-controller="chart"
@@ -135,14 +135,14 @@
           data-chart-labels-value="<%= @workouts_per_week[:labels].to_json %>"
           data-chart-datasets-value="<%= [
             {
-              label: 'Strength',
+              label: t(".strength"),
               data: @workouts_per_week[:data_strength],
               backgroundColor: 'rgba(168, 85, 247, 0.7)',
               borderColor: 'rgb(168, 85, 247)',
               borderWidth: 1
             },
             {
-              label: 'Runs',
+              label: t(".runs"),
               data: @workouts_per_week[:data_runs],
               backgroundColor: 'rgba(251, 146, 60, 0.7)',
               borderColor: 'rgb(251, 146, 60)',
@@ -153,7 +153,7 @@
             scales: {
               y: {
                 beginAtZero: true,
-                title: { display: true, text: 'Count', color: '#94a3b8' },
+                title: { display: true, text: t(".count"), color: '#94a3b8' },
                 ticks: { color: '#94a3b8', stepSize: 1 },
                 grid: { color: '#334155' }
               },

@@ -1,7 +1,7 @@
 <%= form_with(model: workout, class: "contents") do |form| %>
   <% if workout.errors.any? %>
     <div class="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg mb-6">
-      <h2 class="font-semibold mb-2"><%= pluralize(workout.errors.count, "error") %> prohibited this workout from being saved:</h2>
+      <h2 class="font-semibold mb-2"><%= t("activerecord.errors.template.header", count: workout.errors.count, model: Workout.model_name.human.downcase) %></h2>
       <ul class="list-disc ml-6 text-sm">
         <% workout.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -12,7 +12,7 @@
 
   <div data-controller="workout-type-switcher">
     <div class="bg-slate-800 rounded-lg p-6 mb-6">
-      <h2 class="text-lg font-semibold mb-4">Workout Type</h2>
+      <h2 class="text-lg font-semibold mb-4"><%= t("workouts.form.workout_type") %></h2>
       <div class="flex gap-2">
         <% Workout.workout_types.keys.each do |type| %>
           <label class="flex-1">
@@ -31,21 +31,21 @@
     </div>
 
     <div class="bg-slate-800 rounded-lg p-6 mb-6 <%= 'hidden' unless workout.run? %>" data-workout-type-switcher-target="runToggle">
-      <h2 class="text-lg font-semibold mb-4">Run Details</h2>
+      <h2 class="text-lg font-semibold mb-4"><%= t("workouts.form.run_details") %></h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <%= form.label :started_at, "Date", class: "block text-sm font-medium text-slate-300 mb-2" %>
+          <%= form.label :started_at, t("workouts.form.date"), class: "block text-sm font-medium text-slate-300 mb-2" %>
           <%= form.date_field :started_at,
             class: "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
         </div>
         <div>
-          <%= form.label :distance, "Distance (meters)", class: "block text-sm font-medium text-slate-300 mb-2" %>
+          <%= form.label :distance, t("workouts.form.distance_meters"), class: "block text-sm font-medium text-slate-300 mb-2" %>
           <%= form.number_field :distance,
             placeholder: "5000",
             class: "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
         </div>
         <div>
-          <%= form.label :time_in_seconds, "Time (mm:ss)", class: "block text-sm font-medium text-slate-300 mb-2" %>
+          <%= form.label :time_in_seconds, t("workouts.form.time_mmss"), class: "block text-sm font-medium text-slate-300 mb-2" %>
           <%= form.text_field :time_in_seconds,
             placeholder: "25:30",
             class: "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
@@ -56,10 +56,10 @@
     <div class="<%= 'hidden' if workout.run? %>" data-workout-type-switcher-target="strengthToggle" data-controller="workout-mode">
       <div data-workout-mode-target="routineSection" data-controller="routine-switcher">
         <div class="bg-slate-800 rounded-lg p-6 mb-6">
-          <h2 class="text-lg font-semibold mb-4">Select Routine</h2>
+          <h2 class="text-lg font-semibold mb-4"><%= t("workouts.form.select_routine") %></h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <%= form.label :workout_routine, "Routine", class: "block text-sm font-medium text-slate-300 mb-2" %>
+              <%= form.label :workout_routine, t("workouts.form.routine"), class: "block text-sm font-medium text-slate-300 mb-2" %>
               <%= select_tag "workout[workout_routine_day]",
                 options_from_collection_for_select(
                   WorkoutRoutine.order(:name).to_a,
@@ -71,7 +71,7 @@
                 class: "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
             </div>
             <div>
-              <%= form.label :workout_routine_day, "Day", class: "block text-sm font-medium text-slate-300 mb-2" %>
+              <%= form.label :workout_routine_day, t("workouts.form.day"), class: "block text-sm font-medium text-slate-300 mb-2" %>
               <%= turbo_frame_tag 'workout_routine_day_id' do %>
                 <% default_routine = workout.workout_routine || WorkoutRoutine.order(:name).first %>
                 <%= render partial: "workout_routine_days/select",
@@ -82,12 +82,12 @@
         </div>
 
         <div class="text-center mb-6">
-          <span class="text-slate-500">— or —</span>
+          <span class="text-slate-500"><%= t("workouts.form.or_divider") %></span>
         </div>
 
         <div class="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-lg p-6 mb-6 text-center">
-          <p class="text-slate-400 mb-3">Want to create a workout without a predefined routine?</p>
-          <%= button "Start Custom Workout",
+          <p class="text-slate-400 mb-3"><%= t("workouts.form.custom_workout_prompt") %></p>
+          <%= button t("workouts.form.start_custom_workout"),
             type: "button",
             style: "outlined",
             data: { action: "click->workout-mode#showCustom" } %>
@@ -100,14 +100,14 @@
             <div class="flex items-center gap-3">
               <div class="text-3xl">🎯</div>
               <div>
-                <h3 class="font-semibold">Custom Workout</h3>
-                <p class="text-sm text-slate-400">You'll be able to add any exercises during the workout</p>
+                <h3 class="font-semibold"><%= t("workouts.form.custom_workout") %></h3>
+                <p class="text-sm text-slate-400"><%= t("workouts.form.custom_workout_description") %></p>
               </div>
             </div>
             <button type="button"
               class="text-sm text-slate-400 hover:text-slate-300 underline"
               data-action="click->workout-mode#showRoutine">
-              Use a routine instead
+              <%= t("workouts.form.use_routine_instead") %>
             </button>
           </div>
         </div>
@@ -116,7 +116,7 @@
   </div>
 
   <div class="flex gap-4">
-    <%= button text: "Start Workout", type: "submit", style: "primary" %>
-    <%= button "Cancel", route: workouts_path, style: "outlined", type: "link" %>
+    <%= button text: t("workouts.form.start_workout"), type: "submit", style: "primary" %>
+    <%= button t("shared.buttons.cancel"), route: workouts_path, style: "outlined", type: "link" %>
   </div>
 <% end %>

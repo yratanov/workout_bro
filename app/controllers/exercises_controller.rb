@@ -32,7 +32,7 @@ class ExercisesController < ApplicationController
 
     respond_to do |format|
       if @exercise.save
-        format.html { redirect_to @exercise, notice: "Exercise was successfully created." }
+        format.html { redirect_to @exercise, notice: I18n.t("controllers.exercises.created") }
         format.json { render :show, status: :created, location: @exercise }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -45,7 +45,7 @@ class ExercisesController < ApplicationController
   def update
     respond_to do |format|
       if @exercise.update(exercise_params)
-        format.html { redirect_to @exercise, notice: "Exercise was successfully updated." }
+        format.html { redirect_to @exercise, notice: I18n.t("controllers.exercises.updated") }
         format.json { render :show, status: :ok, location: @exercise }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -59,7 +59,7 @@ class ExercisesController < ApplicationController
     @exercise.destroy!
 
     respond_to do |format|
-      format.html { redirect_to exercises_path, status: :see_other, notice: "Exercise was successfully destroyed." }
+      format.html { redirect_to exercises_path, status: :see_other, notice: I18n.t("controllers.exercises.destroyed") }
       format.json { head :no_content }
     end
   end

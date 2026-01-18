@@ -1,0 +1,5 @@
+en:
+  controllers:
+    workout_routine_days:
+      created: "Workout routine day was successfully created."
+      updated: "Workout routine day was successfully updated."

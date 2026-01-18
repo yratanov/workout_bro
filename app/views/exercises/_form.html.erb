@@ -4,8 +4,7 @@
       id="error_explanation"
       class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3"
     >
-      <h2><%= pluralize(exercise.errors.count, "error") %>
-        prohibited this exercise from being saved:</h2>
+      <h2><%= t("activerecord.errors.template.header", count: exercise.errors.count, model: Exercise.model_name.human.downcase) %></h2>
 
       <ul class="list-disc ml-6">
         <% exercise.errors.each do |error| %>
@@ -70,6 +69,6 @@
   </div>
 
   <div class="inline">
-    <%= button text: "Save", type: "submit", style: "primary" %>
+    <%= button text: t("shared.buttons.save"), type: "submit", style: "primary" %>
   </div>
 <% end %>

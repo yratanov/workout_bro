@@ -1,12 +1,12 @@
-<% content_for :title, "Workouts" %>
+<% content_for :title, t(".title") %>
 
 <div class="w-full max-w-4xl self-center">
   <div class="flex justify-between items-center mb-5">
-    <h1 class="text-2xl">Workouts</h1>
+    <h1 class="text-2xl"><%= t(".title") %></h1>
     <% if @active_workout %>
       <%= button style: "primary", type: "link", route: workout_path(@active_workout) do %>
         <span class="flex items-center gap-2">
-          Continue workout
+          <%= t(".continue_workout") %>
           <%= render(TimerComponent.new(
             started_at: @active_workout.started_at,
             ended_at: @active_workout.ended_at,
@@ -16,7 +16,7 @@
         </span>
       <% end %>
     <% else %>
-      <%= button "Start workout", style: "primary", type: "link", route: new_workout_path %>
+      <%= button t(".start_workout"), style: "primary", type: "link", route: new_workout_path %>
     <% end %>
   </div>
 

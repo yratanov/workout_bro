@@ -78,3 +78,36 @@ docker run -d -p 80:80 -e RAILS_MASTER_KEY=<key> workout_bro
 ```
 
 Alternative: `./deploy.sh` runs Ansible playbook.
+
+## Internationalization (I18n)
+
+**All user-facing strings must use I18n translations.** Never hardcode text in views or controllers.
+
+**Locale file structure:**
+```
+config/locales/
+├── en.yml                           # ActiveRecord and shared translations
+├── views/
+│   ├── shared.en.yml                # Navigation, buttons, confirmations
+│   ├── sessions.en.yml              # Login page
+│   ├── passwords.en.yml             # Password reset
+│   ├── exercises.en.yml             # Exercise views
+│   ├── workouts.en.yml              # Workout views
+│   ├── workout_sets.en.yml          # Workout set views
+│   ├── workout_reps.en.yml          # Workout rep views
+│   ├── workout_routines.en.yml      # Routine views
+│   ├── workout_routine_days.en.yml  # Routine day views
+│   └── stats.en.yml                 # Stats dashboard
+└── controllers/
+    ├── sessions.en.yml              # Flash messages
+    ├── passwords.en.yml
+    ├── exercises.en.yml
+    ├── workouts.en.yml
+    ├── workout_routines.en.yml
+    └── workout_routine_days.en.yml
+```
+
+**Usage:**
+- Views: Use `t(".key")` for relative keys or `t("namespace.key")` for absolute keys
+- Controllers: Use `I18n.t("controllers.controller_name.key")`
+- Shared strings: Use `t("shared.buttons.save")`, `t("shared.confirmations.are_you_sure")`

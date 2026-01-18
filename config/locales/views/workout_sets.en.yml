@@ -1,0 +1,7 @@
+en:
+  workout_sets:
+    form:
+      start: "Start!"
+      reopen_prev: "Reopen prev"
+    workout_set:
+      complete_set: "Complete this set"

@@ -1,0 +1,18 @@
+en:
+  shared:
+    app_name: "Workout Bro"
+    navigation:
+      workouts: "Workouts"
+      routines: "Routines"
+      stats: "Stats"
+      exercises: "Exercises"
+    buttons:
+      save: "Save"
+      cancel: "Cancel"
+      back: "Back"
+      edit: "Edit"
+      delete: "Delete"
+      destroy: "Destroy"
+    confirmations:
+      are_you_sure: "Are you sure?"
+      delete_confirm: "Delete?"

@@ -1,12 +1,12 @@
-<% content_for :title, "Editing workout routine day" %>
+<% content_for :title, t(".title") %>
 
 <div>
-  <h1 class="font-bold text-4xl">Editing workout routine day</h1>
+  <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
 
   <%= render "form", workout_routine_day: @workout_routine_day %>
 
   <div class="mt-5">
-    <%= button "Back to routine",
+    <%= button t(".back_to_routine"),
     route: workout_routine_path(@workout_routine_day.workout_routine),
     type: "link",
     style: "outlined" %>

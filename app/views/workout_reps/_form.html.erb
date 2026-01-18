@@ -23,7 +23,7 @@
     <% if workout_rep.workout_set.exercise.with_band %>
       <%= form.select(
         :band,
-        [["No band", nil]] + WorkoutRep::BANDS.map { |b| [b.humanize, b] },
+        [[t("workout_reps.form.no_band"), nil]] + WorkoutRep::BANDS.map { |b| [b.humanize, b] },
         {},
         { class: "border border-slate-500 bg-slate-600 text-white px-2 py-1.5 rounded text-sm" },
       ) %>

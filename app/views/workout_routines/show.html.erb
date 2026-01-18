@@ -14,17 +14,17 @@
   <% end %>
 
   <div class="flex gap-4">
-    <%= button "Back", type: "link", style: "outlined", route: workout_routines_path %>
-    <%= button "Add day",
+    <%= button t("shared.buttons.back"), type: "link", style: "outlined", route: workout_routines_path %>
+    <%= button t(".add_day"),
     style: "primary",
     type: "link",
     route: new_workout_routine_workout_routine_day_path(@workout_routine) %>
-    <%= button "Destroy",
+    <%= button t("shared.buttons.destroy"),
     style: "danger",
     method: :delete,
     route: workout_routine_path(@workout_routine),
     data: {
-      turbo_confirm: "Are you sure?",
+      turbo_confirm: t("shared.confirmations.are_you_sure"),
     } %>
   </div>
 </div>

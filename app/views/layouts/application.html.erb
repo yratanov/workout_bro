@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="w-full">
   <head>
-    <title><%= content_for(:title) || "Workout Bro" %></title>
+    <title><%= content_for(:title) || t("shared.app_name") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -47,14 +47,14 @@
           <div class="flex items-center">
             <%= link_to workouts_path, class: "flex items-center gap-2 py-3 pr-4 hover:opacity-80 transition-opacity" do %>
               <%= image_tag "icon.png", class: "w-8 h-8" %>
-              <span class="font-semibold text-lg hidden sm:block">Workout Bro</span>
+              <span class="font-semibold text-lg hidden sm:block"><%= t("shared.app_name") %></span>
             <% end %>
             <div class="flex items-center gap-1">
               <% nav_items = [
-                { name: "Workouts", path: workouts_path, current: controller_name == "workouts" },
-                { name: "Routines", path: workout_routines_path, current: controller_name == "workout_routines" },
-                { name: "Stats", path: stats_path, current: controller_name == "stats" },
-                { name: "Exercises", path: exercises_path, current: controller_name == "exercises" },
+                { name: t("shared.navigation.workouts"), path: workouts_path, current: controller_name == "workouts" },
+                { name: t("shared.navigation.routines"), path: workout_routines_path, current: controller_name == "workout_routines" },
+                { name: t("shared.navigation.stats"), path: stats_path, current: controller_name == "stats" },
+                { name: t("shared.navigation.exercises"), path: exercises_path, current: controller_name == "exercises" },
               ] %>
               <% nav_items.each do |item| %>
                 <%= link_to item[:name], item[:path],

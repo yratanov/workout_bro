@@ -29,7 +29,7 @@
     type: 'button',
     style: "link_hover_danger",
     data: {
-      turbo_confirm: "Are you sure?",
+      turbo_confirm: t("shared.confirmations.are_you_sure"),
     } do %>
       <%= icon_xmark %>
     <% end %>
@@ -51,7 +51,7 @@
 
     <% unless workout_set.ended? %>
       <div class="px-4 py-3 flex rounded-b justify-center bg-slate-800">
-        <%= button "Complete this set",
+        <%= button t("workout_sets.workout_set.complete_set"),
         type: "button",
         style: "success",
         method: :post,

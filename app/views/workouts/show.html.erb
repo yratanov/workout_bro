@@ -1,4 +1,4 @@
-<% content_for :title, "Workout" %>
+<% content_for :title, t(".title") %>
 
 <div class="w-full max-w-xl text-lg">
   <div class="flex items-center justify-between mb-4">
@@ -8,7 +8,7 @@
         <span class="text-slate-400">·</span>
         <span><%= @workout.workout_routine_day.name %></span>
       <% else %>
-        <span class="font-semibold">Workout</span>
+        <span class="font-semibold"><%= t(".title") %></span>
       <% end %>
     </div>
     <div class="flex items-center gap-3 text-base text-slate-300">
@@ -67,11 +67,11 @@
     <div class="bg-slate-800 rounded-lg p-4 mb-4">
       <div class="grid grid-cols-2 gap-4 text-center">
         <div>
-          <div class="text-slate-400 text-sm">Distance</div>
+          <div class="text-slate-400 text-sm"><%= t(".distance") %></div>
           <div class="text-xl font-semibold"><%= @workout.distance.to_f / 1000 %> km</div>
         </div>
         <div>
-          <div class="text-slate-400 text-sm">Avg Pace</div>
+          <div class="text-slate-400 text-sm"><%= t(".avg_pace") %></div>
           <div class="text-xl font-semibold"><%= run_pace @workout %></div>
         </div>
       </div>
@@ -82,35 +82,35 @@
   <div class="fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 p-4">
     <div class="max-w-xl mx-auto flex gap-3 justify-center">
       <% if @workout.ended? %>
-        <%= button "Back", type: "link", style: "outlined", route: workouts_path %>
-        <%= button "Delete",
+        <%= button t("shared.buttons.back"), type: "link", style: "outlined", route: workouts_path %>
+        <%= button t("shared.buttons.delete"),
         style: "danger",
         method: :delete,
         route: workout_path(@workout),
         data: {
-          turbo_confirm: "Are you sure?",
+          turbo_confirm: t("shared.confirmations.are_you_sure"),
         } %>
       <% else %>
         <% if @workout.paused? %>
-          <%= button "Resume",
+          <%= button t(".resume"),
           style: "success",
           route: resume_workout_path(@workout),
           method: :post,
           data: { turbo_method: :post } %>
         <% else %>
-          <%= button "Pause",
+          <%= button t(".pause"),
           style: "outlined",
           route: pause_workout_path(@workout),
           method: :post,
           data: { turbo_method: :post } %>
         <% end %>
-        <%= button "Finish",
+        <%= button t(".finish"),
         style: "primary",
         route: stop_workout_path(@workout),
         method: :post,
         data: {
           turbo_method: :post,
-          turbo_confirm: "Are you sure?",
+          turbo_confirm: t("shared.confirmations.are_you_sure"),
         } %>
       <% end %>
     </div>

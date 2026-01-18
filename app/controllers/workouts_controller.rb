@@ -15,7 +15,7 @@ class WorkoutsController < ApplicationController
   def new
     @active_workout = current_user.workouts.find_by(ended_at: nil)
     if @active_workout
-      redirect_to @active_workout, alert: "You already have an active workout."
+      redirect_to @active_workout, alert: I18n.t("controllers.workouts.active_exists")
       return
     end
 
@@ -34,12 +34,12 @@ class WorkoutsController < ApplicationController
   # POST /workouts or /workouts.json
   def create
     if Workout.exists?(user: current_user, ended_at: nil)
-      flash.now[:alert] = "You already have an active workout. Please stop it before starting a new one."
+      flash.now[:alert] = I18n.t("controllers.workouts.active_exists_long")
       setup_index_variables
       render 'index', status: :unprocessable_entity
       return
     end
-    
+
     @workout = Workout.new(workout_params.merge(user: current_user))
 
     if @workout.run?
@@ -48,7 +48,7 @@ class WorkoutsController < ApplicationController
         (hours, minutes, seconds) = params[:workout][:time_in_seconds].split(":")
         if seconds.nil?
           minutes, seconds = hours, minutes
-          hours = 0 
+          hours = 0
         end
         @workout.time_in_seconds = hours.to_i * 60 * 60 +  minutes.to_i * 60 + seconds.to_i
         @workout.ended_at = @workout.started_at ? @workout.started_at + @workout.time_in_seconds.seconds : nil
@@ -63,9 +63,9 @@ class WorkoutsController < ApplicationController
       if @workout.save
         format.html do
           if @workout.run?
-            redirect_to workouts_path, notice: "Workout was successfully created."
+            redirect_to workouts_path, notice: I18n.t("controllers.workouts.created")
           else
-            redirect_to @workout, notice: "Workout was successfully created."
+            redirect_to @workout, notice: I18n.t("controllers.workouts.created")
           end
         end
         format.json { render :show, status: :created, location: @workout }
@@ -75,7 +75,7 @@ class WorkoutsController < ApplicationController
       end
     end
   end
-  
+
   # POST /workouts/1/stop
   def stop
     respond_to do |format|
@@ -83,7 +83,7 @@ class WorkoutsController < ApplicationController
         workout_set.update(ended_at: Time.current)
       end
       if @workout.update(ended_at: Time.current)
-        format.html { redirect_to workouts_path, notice: "Workout was successfully ended." }
+        format.html { redirect_to workouts_path, notice: I18n.t("controllers.workouts.ended") }
         format.json { render :show, status: :created, location: @workout }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -126,7 +126,7 @@ class WorkoutsController < ApplicationController
   def update
     respond_to do |format|
       if @workout.update(workout_params)
-        format.html { redirect_to @workout, notice: "Workout was successfully updated." }
+        format.html { redirect_to @workout, notice: I18n.t("controllers.workouts.updated") }
         format.json { render :show, status: :ok, location: @workout }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -140,7 +140,7 @@ class WorkoutsController < ApplicationController
     @workout.destroy!
 
     respond_to do |format|
-      format.html { redirect_to workouts_path, status: :see_other, notice: "Workout was successfully destroyed." }
+      format.html { redirect_to workouts_path, status: :see_other, notice: I18n.t("controllers.workouts.destroyed") }
       format.json { head :no_content }
     end
   end

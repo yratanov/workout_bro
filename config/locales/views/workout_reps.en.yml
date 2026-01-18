@@ -1,0 +1,6 @@
+en:
+  workout_reps:
+    form:
+      no_band: "No band"
+    list_with_form:
+      add_first_rep: "Add your first rep"

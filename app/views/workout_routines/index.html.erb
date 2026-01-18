@@ -1,9 +1,9 @@
-<% content_for :title, "Workouts" %>
+<% content_for :title, t(".title") %>
 
 <div>
   <div class="flex justify-between items-center mb-5">
-    <h1 class="font-bold text-4xl">Workout Routines</h1>
-    <%= button "New workout routine",
+    <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
+    <%= button t(".new_routine"),
     style: "primary",
     type: "link",
     route: new_workout_routine_path %>
@@ -32,7 +32,7 @@
             </div>
             <div>
               <%= workout_routine.workout_routine_days.size %>
-              days
+              <%= t(".days") %>
             </div>
           </div>
           <div class="flex gap-2 items-center">
@@ -42,7 +42,7 @@
           method: :delete,
           data: {
             turbo_prefetch: false,
-            turbo_confirm: "Are you sure?",
+            turbo_confirm: t("shared.confirmations.are_you_sure"),
             turbo_method: :delete,
           } do %>
               <svg
@@ -58,7 +58,7 @@
         </div>
       <% end %>
     <% else %>
-      <p class="text-center my-10">No workout_routines found.</p>
+      <p class="text-center my-10"><%= t(".no_routines") %></p>
     <% end %>
   </div>
 </div>

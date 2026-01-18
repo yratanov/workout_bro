@@ -1,0 +1,10 @@
+en:
+  workout_routine_days:
+    new:
+      title: "Add workout routine day"
+      back_to_routine: "Back to routine"
+    edit:
+      title: "Editing workout routine day"
+      back_to_routine: "Back to routine"
+    form:
+      add_exercise: "Add new exercise"

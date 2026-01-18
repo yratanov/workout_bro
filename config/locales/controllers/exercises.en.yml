@@ -1,0 +1,6 @@
+en:
+  controllers:
+    exercises:
+      created: "Exercise was successfully created."
+      updated: "Exercise was successfully updated."
+      destroyed: "Exercise was successfully destroyed."
