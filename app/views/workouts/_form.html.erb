@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <div class="bg-slate-800 rounded-lg p-6 mb-6 hidden" data-workout-type-switcher-target="runToggle">
+    <div class="bg-slate-800 rounded-lg p-6 mb-6 <%= 'hidden' unless workout.run? %>" data-workout-type-switcher-target="runToggle">
       <h2 class="text-lg font-semibold mb-4">Run Details</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    <div data-workout-type-switcher-target="strengthToggle" data-controller="workout-mode">
+    <div class="<%= 'hidden' if workout.run? %>" data-workout-type-switcher-target="strengthToggle" data-controller="workout-mode">
       <div data-workout-mode-target="routineSection" data-controller="routine-switcher">
         <div class="bg-slate-800 rounded-lg p-6 mb-6">
           <h2 class="text-lg font-semibold mb-4">Select Routine</h2>
