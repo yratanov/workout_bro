@@ -1,11 +1,26 @@
-<div class="<%= day_classes %>">
-  <div class="<%= day_number_classes %>">
-    <%= @date.day %>
+<% if mobile? %>
+  <div class="<%= day_classes %>">
+    <div class="<%= day_number_classes %>">
+      <%= formatted_date %>
+    </div>
+    <div class="flex-1 flex flex-wrap gap-1">
+      <% @workouts.each do |workout| %>
+        <%= render(WorkoutPillComponent.new(workout: workout, compact: true)) %>
+      <% end %>
+      <% if @workouts.empty? %>
+        <span class="text-slate-500 text-sm">—</span>
+      <% end %>
+    </div>
   </div>
-
-  <div class="space-y-0.5 sm:space-y-1">
-    <% @workouts.each do |workout| %>
-      <%= render(WorkoutPillComponent.new(workout: workout)) %>
-    <% end %>
+<% else %>
+  <div class="<%= day_classes %>">
+    <div class="<%= day_number_classes %>">
+      <%= @date.day %>
+    </div>
+    <div class="space-y-1">
+      <% @workouts.each do |workout| %>
+        <%= render(WorkoutPillComponent.new(workout: workout)) %>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>

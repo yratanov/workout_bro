@@ -14,8 +14,8 @@ class CalendarComponent < ViewComponent::Base
     (@calendar_start..@calendar_end).to_a.each_slice(7)
   end
 
-  def day_names_short
-    %w[M T W T F S S]
+  def days_in_month
+    (@current_date.beginning_of_month..@current_date.end_of_month).to_a
   end
 
   def day_names_full
