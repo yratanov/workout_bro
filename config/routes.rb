@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resources :workouts, only: %i[index show new create edit update destroy] do
     member do
+      get :modal
       post :stop
       post :pause
       post :resume

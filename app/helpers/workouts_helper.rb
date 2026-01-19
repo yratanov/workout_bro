@@ -1,4 +1,13 @@
 module WorkoutsHelper
+  def modal_title(workout)
+    date = workout.created_at.strftime("%d %b %Y")
+    if workout.run?
+      "Run · #{date}"
+    else
+      "#{workout.workout_routine_day&.name || 'Strength'} · #{date}"
+    end
+  end
+
   def run_pace(workout)
     return unless workout.run?
 

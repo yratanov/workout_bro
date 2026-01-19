@@ -35,3 +35,11 @@ en:
       start_workout: "Start Workout"
     new_set_link:
       start_set: "Start set"
+    modal:
+      duration: "Duration"
+      distance: "Distance"
+      avg_pace: "Average Pace"
+      no_exercises: "No exercises recorded"
+      close: "Close"
+      delete: "Delete"
+      delete_confirm: "Are you sure you want to delete this workout?"

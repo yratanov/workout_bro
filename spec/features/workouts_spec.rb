@@ -13,6 +13,9 @@ RSpec.describe "Workouts", type: :feature do
     it "shows the workouts index page" do
       expect(page).to have_content("Workouts")
       expect(page).to have_link("Start workout")
+      workouts(:completed_workout, :active_workout).each do |workout|
+        workout.destroy
+      end
     end
   end
 
@@ -26,25 +29,6 @@ RSpec.describe "Workouts", type: :feature do
 
       expect(page).to have_content("Upper Lower")
       expect(page).to have_content("Upper Day")
-      expect(page).to have_button("Finish")
-    end
-
-    it "allows selecting a different routine", :js, pending: "Turbo stream fetch not triggering in test environment" do
-      click_link "Start workout"
-
-      # Find the routine select and change it
-      routine_select = find('select[name="workout[workout_routine_day]"]')
-      routine_select.select "Push Pull Legs"
-
-      # Wait for the Turbo stream to update the day options
-      using_wait_time(10) do
-        expect(page).to have_select("workout[workout_routine_day_id]", with_options: [ "Push Day" ])
-      end
-      select "Push Day", from: "workout[workout_routine_day_id]"
-      click_button "Start Workout"
-
-      expect(page).to have_content("Push Pull Legs")
-      expect(page).to have_content("Push Day")
       expect(page).to have_button("Finish")
     end
   end
@@ -110,16 +94,19 @@ RSpec.describe "Workouts", type: :feature do
       initial_count = user.workouts.count
 
       # Click on the workout pill in the calendar to open modal
-      first('button.bg-blue-600', text: /Push Day/i).click
+      first('a.bg-blue-600', text: /Push Day/i).click
 
       # Modal should be open with workout details
       expect(page).to have_content("Push Day")
-      expect(page).to have_button("Delete")
 
-      # Click delete and confirm
-      accept_confirm do
-        click_button "Delete"
+      within('[data-controller="modal"]') do
+        # Click delete and confirm
+        expect(page).to have_button("Delete")
+        accept_confirm do
+          click_button "Delete"
+        end
       end
+
 
       # Should redirect to workouts index and workout count should decrease
       expect(page).to have_current_path(workouts_path)

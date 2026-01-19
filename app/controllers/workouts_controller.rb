@@ -1,5 +1,5 @@
 class WorkoutsController < ApplicationController
-  before_action :set_workout, only: %i[ edit update destroy stop pause resume]
+  before_action :set_workout, only: %i[modal edit update destroy stop pause resume]
 
   # GET /workouts or /workouts.json
   def index
@@ -9,6 +9,12 @@ class WorkoutsController < ApplicationController
   # GET /workouts/1 or /workouts/1.json
   def show
     @workout = current_user.workouts.includes(workout_sets: :exercise).find(params[:id])
+  end
+
+  # GET /workouts/1/modal
+  def modal
+    @workout = current_user.workouts.includes(workout_sets: [ :exercise, :workout_reps ]).find(params[:id])
+    render layout: false
   end
 
   # GET /workouts/new
