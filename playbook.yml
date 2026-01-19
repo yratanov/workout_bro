@@ -52,6 +52,6 @@
       ansible.builtin.cron:
         name: "Sync Garmin running data"
         minute: "0"
-        job: "cd {{ clone_dest }} && docker-compose exec -T web /usr/bin/python3 /rails/python/sync_garmin.py >> /var/log/garmin_sync.log 2>&1"
+        job: "cd {{ clone_dest }} && docker-compose exec -T web bundle exec rake garmin:sync >> /var/log/garmin_sync.log 2>&1"
         user: "{{ current_user }}"
 

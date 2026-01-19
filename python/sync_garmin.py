@@ -1,116 +1,23 @@
 #!/usr/bin/python3
 """
-Sync running activities from Garmin Connect to the workout_bro database.
-Reads credentials from .env file and inserts new run workouts.
+Fetch running activities from Garmin Connect and output as JSON.
+Credentials are passed as command-line arguments.
 """
 
-import os
-import sqlite3
+import json
+import sys
 from datetime import datetime, timedelta
-from pathlib import Path
 
-from dotenv import load_dotenv
 from garminconnect import Garmin
 
 
-def get_db_path():
-    """Get the path to the SQLite database."""
-    script_dir = Path(__file__).parent
-    # In Docker container, DB is at /rails/storage/production.sqlite3
-    # Locally for development, it's at ../storage/development.sqlite3
-    production_db = script_dir.parent / "storage" / "production.sqlite3"
-    development_db = script_dir.parent / "storage" / "development.sqlite3"
-
-    if production_db.exists():
-        return production_db
-    return development_db
-
-
-def get_user_id(conn):
-    """Get the first user's ID from the database."""
-    cursor = conn.cursor()
-    cursor.execute("SELECT id FROM users LIMIT 1")
-    result = cursor.fetchone()
-    if result:
-        return result[0]
-    raise RuntimeError("No user found in database")
-
-
-def activity_exists(conn, started_at):
-    """Check if a workout with this started_at already exists."""
-    cursor = conn.cursor()
-    cursor.execute(
-        "SELECT id FROM workouts WHERE started_at = ? AND workout_type = 1",
-        (started_at,)
-    )
-    return cursor.fetchone() is not None
-
-
-def insert_run_workout(conn, user_id, started_at, ended_at, distance_meters, duration_seconds):
-    """Insert a new run workout into the database."""
-    cursor = conn.cursor()
-    date = started_at.date().isoformat()
-
-    cursor.execute(
-        """
-        INSERT INTO workouts (
-            user_id, workout_type, date, started_at, ended_at,
-            distance, time_in_seconds, created_at, updated_at
-        ) VALUES (?, 1, ?, ?, ?, ?, ?, ?, ?)
-        """,
-        (
-            user_id,
-            date,
-            started_at.isoformat(),
-            ended_at.isoformat() if ended_at else None,
-            int(distance_meters),
-            int(duration_seconds),
-            datetime.now().isoformat(),
-            datetime.now().isoformat(),
-        )
-    )
-    conn.commit()
-    return cursor.lastrowid
-
-
-def parse_garmin_datetime(dt_str):
-    """Parse Garmin's datetime format."""
-    # Garmin returns format like "2024-01-15 08:30:00"
-    if dt_str:
-        try:
-            return datetime.fromisoformat(dt_str.replace(" ", "T"))
-        except ValueError:
-            # Try alternative format
-            return datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
-    return None
-
-
-def sync_garmin_activities():
-    """Main sync function."""
-    # Try loading from .env file (for local development)
-    env_path = Path(__file__).parent.parent / ".env"
-    if env_path.exists():
-        load_dotenv(env_path)
-
-    # Read from environment variables (set directly in container or from .env)
-    username = os.getenv("GARMIN_USERNAME")
-    password = os.getenv("GARMIN_PASSWORD")
-
-    if not username or not password:
-        print("Error: GARMIN_USERNAME and GARMIN_PASSWORD must be set in .env file")
-        return
-
-    print(f"Connecting to Garmin as {username}...")
-
-    # Initialize Garmin client
+def fetch_garmin_activities(username, password, days=7):
+    """Fetch running activities from Garmin Connect."""
     garmin = Garmin(username, password)
     garmin.login()
 
-    print("Successfully logged in to Garmin Connect")
-
-    # Get activities from the last 7 days
     end_date = datetime.now()
-    start_date = end_date - timedelta(days=7)
+    start_date = end_date - timedelta(days=days)
 
     activities = garmin.get_activities_by_date(
         start_date.strftime("%Y-%m-%d"),
@@ -118,52 +25,40 @@ def sync_garmin_activities():
         activitytype="running"
     )
 
-    print(f"Found {len(activities)} running activities in the last 7 days")
-
-    # Connect to database
-    db_path = get_db_path()
-    print(f"Using database: {db_path}")
-
-    conn = sqlite3.connect(db_path)
-    user_id = get_user_id(conn)
-
-    imported_count = 0
-    skipped_count = 0
-
+    result = []
     for activity in activities:
-        # Extract activity data
         started_at_str = activity.get("startTimeLocal")
-        started_at = parse_garmin_datetime(started_at_str)
-
-        if not started_at:
-            print(f"Skipping activity with no start time: {activity.get('activityId')}")
+        if not started_at_str:
             continue
 
-        # Check if already imported
-        if activity_exists(conn, started_at.isoformat()):
-            print(f"Skipping already imported activity from {started_at}")
-            skipped_count += 1
-            continue
-
-        # Get activity details
         distance_meters = activity.get("distance", 0)
         duration_seconds = activity.get("duration", 0)
 
-        # Calculate ended_at
-        ended_at = started_at + timedelta(seconds=duration_seconds) if duration_seconds else None
+        result.append({
+            "started_at": started_at_str.replace(" ", "T"),
+            "distance_meters": distance_meters,
+            "duration_seconds": duration_seconds,
+        })
 
-        # Insert into database
-        workout_id = insert_run_workout(
-            conn, user_id, started_at, ended_at, distance_meters, duration_seconds
-        )
+    return result
 
-        print(f"Imported run: {started_at} - {distance_meters/1000:.2f}km in {duration_seconds/60:.1f}min (ID: {workout_id})")
-        imported_count += 1
 
-    conn.close()
+def main():
+    if len(sys.argv) < 3:
+        print(json.dumps({"error": "Usage: sync_garmin.py <username> <password> [days]"}))
+        sys.exit(1)
 
-    print(f"\nSync complete: {imported_count} imported, {skipped_count} skipped")
+    username = sys.argv[1]
+    password = sys.argv[2]
+    days = int(sys.argv[3]) if len(sys.argv) > 3 else 7
+
+    try:
+        activities = fetch_garmin_activities(username, password, days)
+        print(json.dumps({"activities": activities}))
+    except Exception as e:
+        print(json.dumps({"error": str(e)}))
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    sync_garmin_activities()
+    main()
