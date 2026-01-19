@@ -10,7 +10,7 @@ class WorkoutRepsController < ApplicationController
     @workout_set = @workout_rep.workout_set
     @workout_rep.destroy
   end
-  
+
   private
 
   def workout_rep_params

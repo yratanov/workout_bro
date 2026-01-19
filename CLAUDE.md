@@ -35,9 +35,12 @@ bundle exec rspec spec/features/workouts_spec.rb  # Run a single test file
 
 ```bash
 bin/rubocop            # Lint (Omakase Rails style)
+bin/rubocop -A         # Auto-fix offenses
 bin/brakeman           # Security scan
 bundle exec annotaterb # Add schema annotations to models
 ```
+
+**After editing Ruby files, always run `bin/rubocop -A <changed_files>` to auto-fix style issues.**
 
 ## Database
 

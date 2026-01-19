@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   private
-  
+
   def current_user
     @current_user ||= Current.user
   end

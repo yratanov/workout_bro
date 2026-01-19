@@ -13,4 +13,3 @@ module ComponentsShorthand
     end
   end
 end
-

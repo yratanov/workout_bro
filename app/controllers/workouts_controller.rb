@@ -36,7 +36,7 @@ class WorkoutsController < ApplicationController
     if Workout.exists?(user: current_user, ended_at: nil)
       flash.now[:alert] = I18n.t("controllers.workouts.active_exists_long")
       setup_index_variables
-      render 'index', status: :unprocessable_entity
+      render "index", status: :unprocessable_entity
       return
     end
 
@@ -153,7 +153,7 @@ class WorkoutsController < ApplicationController
       @calendar_end = @current_date.end_of_month.end_of_week(:monday)
       @active_workout = current_user.workouts.find_by(ended_at: nil)
       @workouts = current_user.workouts
-        .includes(:workout_routine_day, workout_sets: [:exercise, :workout_reps])
+        .includes(:workout_routine_day, workout_sets: [ :exercise, :workout_reps ])
         .where(started_at: @calendar_start.beginning_of_day..@calendar_end.end_of_day)
         .order(:started_at)
       @workouts_by_date = @workouts.group_by { |w| w.started_at.to_date }

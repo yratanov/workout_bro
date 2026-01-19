@@ -48,5 +48,3 @@ module FormHelpers
       "#{options[:error] ? "border-red-500" : "border-slate-600"}"
   end
 end
-
-

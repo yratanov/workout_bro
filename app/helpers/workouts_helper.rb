@@ -4,11 +4,11 @@ module WorkoutsHelper
 
     started_at = workout.started_at
     ended_at = workout.ended_at
-    
+
     return unless started_at && ended_at
-    
-    total_seconds = ended_at - started_at      
-      
+
+    total_seconds = ended_at - started_at
+
     distance = workout.distance
     return unless distance && distance > 0
 

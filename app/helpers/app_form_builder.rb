@@ -116,9 +116,9 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
 
       data =
         if type == :check_box
-          [yield, label, error]
+          [ yield, label, error ]
         else
-          [label, yield, error]
+          [ label, yield, error ]
         end
 
       safe_join(data)
@@ -171,4 +171,3 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
     { class: "#{DEFAULT_INPUT_CLASSES} #{error_classes}".strip }
   end
 end
-

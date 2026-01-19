@@ -15,7 +15,7 @@ MusclesSeeder.new.call
   { name: 'Deadlift', muscle: Muscle.find_by(name: 'back'), with_band: false, with_weights: true },
   { name: 'Overhead Press', muscle: Muscle.find_by(name: 'shoulders'), with_band: false, with_weights: true },
   { name: 'Pull-up', muscle: Muscle.find_by(name: 'back'), with_band: true, with_weights: false },
-  { name: 'Push-up', muscle: Muscle.find_by(name: 'chest'), with_band: true, with_weights: false },
+  { name: 'Push-up', muscle: Muscle.find_by(name: 'chest'), with_band: true, with_weights: false }
 ].each do |exercise_data|
   Exercise.create!(exercise_data)
 end

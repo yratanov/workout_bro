@@ -31,12 +31,12 @@ class Workout < ApplicationRecord
   has_many :exercises, through: :workout_sets
   belongs_to :workout_routine_day, optional: true
   belongs_to :user
-  
+
   has_one :workout_routine, through: :workout_routine_day
 
   enum :workout_type, {
     strength: 0,
-    run: 1,
+    run: 1
   }
 
   validates :workout_type, presence: true
@@ -49,11 +49,11 @@ class Workout < ApplicationRecord
   validate :no_other_active_workout, on: :create
 
   before_save :fill_in_time_in_seconds, if: :ended?
-  
+
   def running?
     !ended?
   end
-  
+
   def ended?
     ended_at.present?
   end

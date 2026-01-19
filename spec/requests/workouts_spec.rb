@@ -81,7 +81,6 @@ RSpec.describe "Workouts", type: :request do
         expect(workout.time_in_seconds).to eq(1800)
         expect(response).to redirect_to(workouts_path)
       end
-
     end
 
     context "when user already has an active workout" do

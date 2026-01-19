@@ -169,7 +169,7 @@ RSpec.describe "Settings::Garmin", type: :request do
 
       it "runs the sync service and redirects with success message" do
         allow(Open3).to receive(:capture2).and_return(
-          [{ activities: [] }.to_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+          [ { activities: [] }.to_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
         )
 
         post sync_settings_garmin_path
@@ -187,7 +187,7 @@ RSpec.describe "Settings::Garmin", type: :request do
         }.to_json
 
         allow(Open3).to receive(:capture2).and_return(
-          [activities_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+          [ activities_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
         )
 
         post sync_settings_garmin_path
@@ -200,7 +200,7 @@ RSpec.describe "Settings::Garmin", type: :request do
 
       it "shows error message when sync fails" do
         allow(Open3).to receive(:capture2).and_return(
-          [{ error: "Invalid credentials" }.to_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+          [ { error: "Invalid credentials" }.to_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
         )
 
         post sync_settings_garmin_path

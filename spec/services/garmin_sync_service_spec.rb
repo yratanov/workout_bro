@@ -46,7 +46,7 @@ RSpec.describe GarminSyncService do
 
       before do
         allow(Open3).to receive(:capture2).and_return(
-          [activities_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+          [ activities_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
         )
       end
 
@@ -101,7 +101,7 @@ RSpec.describe GarminSyncService do
 
       before do
         allow(Open3).to receive(:capture2).and_return(
-          [activities_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+          [ activities_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
         )
 
         Workout.create!(
@@ -128,7 +128,7 @@ RSpec.describe GarminSyncService do
     context 'when Python script fails' do
       before do
         allow(Open3).to receive(:capture2).and_return(
-          ['', instance_double(Process::Status, success?: false, exitstatus: 1)]
+          [ '', instance_double(Process::Status, success?: false, exitstatus: 1) ]
         )
       end
 
@@ -142,7 +142,7 @@ RSpec.describe GarminSyncService do
 
       before do
         allow(Open3).to receive(:capture2).and_return(
-          [error_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+          [ error_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
         )
       end
 
@@ -156,7 +156,7 @@ RSpec.describe GarminSyncService do
 
       before do
         allow(Open3).to receive(:capture2).and_return(
-          [empty_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+          [ empty_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
         )
       end
 
@@ -173,7 +173,7 @@ RSpec.describe GarminSyncService do
 
     before do
       allow(Open3).to receive(:capture2).and_return(
-        [activities_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+        [ activities_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
       )
     end
 

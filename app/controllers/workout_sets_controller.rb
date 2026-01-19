@@ -1,6 +1,6 @@
 class WorkoutSetsController < ApplicationController
   def new
-    @workout = Workout.find(params[:workout_id]) 
+    @workout = Workout.find(params[:workout_id])
     @workout_set = WorkoutSet.new(workout: @workout)
   end
 

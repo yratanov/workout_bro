@@ -38,7 +38,7 @@ RSpec.describe "Workouts", type: :feature do
 
       # Wait for the Turbo stream to update the day options
       using_wait_time(10) do
-        expect(page).to have_select("workout[workout_routine_day_id]", with_options: ["Push Day"])
+        expect(page).to have_select("workout[workout_routine_day_id]", with_options: [ "Push Day" ])
       end
       select "Push Day", from: "workout[workout_routine_day_id]"
       click_button "Start Workout"

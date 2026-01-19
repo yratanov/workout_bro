@@ -2,7 +2,7 @@
 
 class SettingsMenuComponent < ViewComponent::Base
   include ApplicationHelper
-  
+
   def initialize(current_page:)
     @current_page = current_page
   end
