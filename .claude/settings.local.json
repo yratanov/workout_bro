@@ -14,7 +14,11 @@
       "Bash(bin/rails runner:*)",
       "Bash(git stash:*)",
       "Bash(bin/importmap pin:*)",
-      "Bash(bin/rails routes:*)"
+      "Bash(bin/rails routes:*)",
+      "Bash(bundle add:*)",
+      "WebSearch",
+      "WebFetch(domain:uxwing.com)",
+      "WebFetch(domain:www.svgrepo.com)"
     ]
   }
 }

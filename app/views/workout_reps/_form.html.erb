@@ -6,7 +6,7 @@
     </div>
   <% end %>
   <%= form.hidden_field :workout_set_id %>
-  <div class="flex flex-wrap items-center gap-2">
+  <div class="flex lg:flex-nowrap flex-wrap items-center gap-2">
     <%= form.input :reps,
       as: :select,
       collection: (1..40).map { |r| ["#{r}×", r] },
