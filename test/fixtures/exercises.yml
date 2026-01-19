@@ -3,27 +3,35 @@
 # Table name: exercises
 #
 #  id           :integer          not null, primary key
-#  muscles      :string
 #  name         :string
 #  with_band    :boolean          default(FALSE), not null
 #  with_weights :boolean          default(TRUE), not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  muscle_id    :integer
+#
+# Indexes
+#
+#  index_exercises_on_muscle_id  (muscle_id)
+#
+# Foreign Keys
+#
+#  muscle_id  (muscle_id => muscles.id)
 #
 bench_press:
   name: Bench Press
-  muscles: chest
+  muscle: chest
   with_weights: true
   with_band: false
 
 squat:
   name: Squat
-  muscles: legs
+  muscle: legs
   with_weights: true
   with_band: false
 
 deadlift:
   name: Deadlift
-  muscles: back
+  muscle: back
   with_weights: true
   with_band: false

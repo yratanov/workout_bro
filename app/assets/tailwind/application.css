@@ -5,5 +5,5 @@ body {
 }
 
 select option {
-  @apply text-slate-800;
+  @apply bg-white text-slate-800;
 }

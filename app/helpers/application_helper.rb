@@ -11,6 +11,17 @@ module ApplicationHelper
     inline_svg_tag("icons/#{name}.svg", class: classes, **options)
   end
 
+  MUSCLE_ICONS = %w[chest back shoulders biceps triceps legs glutes core].freeze
+
+  def muscle_icon(muscle, size: "w-4 h-4", **options)
+    return nil if muscle.blank?
+
+    muscle_name = muscle.is_a?(Muscle) ? muscle.name : muscle.to_s.downcase
+    return nil unless MUSCLE_ICONS.include?(muscle_name)
+
+    icon("muscles/#{muscle_name}", size: size, **options)
+  end
+
   def seconds_to_human(seconds)
     return 0 if seconds.nil? || seconds < 0
 

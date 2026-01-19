@@ -10,14 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_12_105908) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_19_093046) do
   create_table "exercises", force: :cascade do |t|
     t.string "name"
-    t.string "muscles"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "with_weights", default: true, null: false
     t.boolean "with_band", default: false, null: false
+    t.integer "muscle_id"
+    t.index ["muscle_id"], name: "index_exercises_on_muscle_id"
+  end
+
+  create_table "muscles", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_muscles_on_name", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -103,6 +111,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_12_105908) do
     t.index ["workout_routine_day_id"], name: "index_workouts_on_workout_routine_day_id"
   end
 
+  add_foreign_key "exercises", "muscles"
   add_foreign_key "sessions", "users"
   add_foreign_key "workout_reps", "workout_sets"
   add_foreign_key "workout_routine_day_exercises", "exercises"

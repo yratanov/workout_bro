@@ -29,7 +29,7 @@ en:
       equipment: "Equipment"
       with_weights: "Uses weights"
       with_band: "Uses resistance band"
-      muscles_placeholder: "e.g., Chest, Triceps"
+      select_muscle: "Select muscle group"
     exercise:
       muscles: "Muscles:"
       with_weights: "With weights"

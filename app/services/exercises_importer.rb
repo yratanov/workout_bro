@@ -15,8 +15,9 @@ class ExercisesImporter
       exercise = Exercise.find_or_initialize_by(name: row["name"])
 
       if exercise.new_record?
+        muscle = Muscle.find_by(name: row["muscles"]&.downcase)
         exercise.assign_attributes(
-          muscles: row["muscles"],
+          muscle: muscle,
           with_weights: row["with_weights"] == "true",
           with_band: row["with_band"] == "true"
         )

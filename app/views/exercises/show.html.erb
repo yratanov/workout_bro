@@ -10,10 +10,15 @@
   </div>
 
   <div class="bg-slate-800 rounded-lg p-6 mb-6">
-    <h1 class="font-bold text-3xl mb-4"><%= @exercise.name %></h1>
+    <div class="flex items-center gap-3 mb-4">
+      <% if @exercise.muscle.present? %>
+        <span class="text-slate-400"><%= muscle_icon(@exercise.muscle, size: "w-8 h-8") %></span>
+      <% end %>
+      <h1 class="font-bold text-3xl"><%= @exercise.name %></h1>
+    </div>
 
-    <% if @exercise.muscles.present? %>
-      <p class="text-slate-400 mb-4"><%= @exercise.muscles %></p>
+    <% if @exercise.muscle.present? %>
+      <p class="text-slate-400 mb-4"><%= @exercise.muscle.human_name %></p>
     <% end %>
 
     <div class="flex gap-2">

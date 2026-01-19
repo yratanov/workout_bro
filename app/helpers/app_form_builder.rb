@@ -1,6 +1,10 @@
 class AppFormBuilder < ActionView::Helpers::FormBuilder
   delegate :tag, :content_tag, :safe_join, :render, to: :@template
 
+  DEFAULT_INPUT_CLASSES = "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 " \
+                          "text-white placeholder-slate-400 " \
+                          "focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500".freeze
+
   def submit(text = "Submit", **options)
     render(
       ButtonComponent.new(style: "success", text:, type: "submit", **options)
@@ -59,19 +63,23 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
     return send(:hidden_field, field) if type == :hidden
 
     wrap_with_label(field, type, options) do
+      default_html = default_input_options(type, error?(field))
+
       if type == :select
+        select_options = { include_blank: options[:include_blank] }
+        select_options[:selected] = @object.send(field) if @object.respond_to?(field)
         send(
           :select,
           field,
           options[:collection],
-          { selected: @object.send(field) },
-          merge_input_options({ error: error?(field) }, options[:input_html])
+          select_options,
+          merge_input_options(default_html, options[:input_html])
         )
       else
         send(
           type_to_method[type],
           field,
-          merge_input_options({ error: error?(field) }, options[:input_html])
+          merge_input_options(default_html, options[:input_html])
         )
       end
     end
@@ -148,7 +156,18 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
   def merge_input_options(options, user_options)
     return options if user_options.nil?
 
+    if user_options[:class] && options[:class]
+      user_options = user_options.merge(class: "#{options[:class]} #{user_options[:class]}")
+    end
+
     options.merge(user_options)
+  end
+
+  def default_input_options(type, has_error)
+    return {} if %i[check_box editable_text hidden].include?(type)
+
+    error_classes = has_error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
+    { class: "#{DEFAULT_INPUT_CLASSES} #{error_classes}".strip }
   end
 end
 

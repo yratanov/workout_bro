@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: workout_sets
+#
+#  id                   :integer          not null, primary key
+#  ended_at             :datetime
+#  paused_at            :datetime
+#  started_at           :datetime
+#  total_paused_seconds :integer          default(0)
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  exercise_id          :integer          not null
+#  workout_id           :integer          not null
+#
+# Indexes
+#
+#  index_workout_sets_on_exercise_id  (exercise_id)
+#  index_workout_sets_on_workout_id   (workout_id)
+#
+# Foreign Keys
+#
+#  exercise_id  (exercise_id => exercises.id)
+#  workout_id   (workout_id => workouts.id)
+#
 require 'rails_helper'
 
 RSpec.describe WorkoutSet, type: :model do
@@ -52,7 +76,7 @@ RSpec.describe WorkoutSet, type: :model do
     context 'when there are no previous reps anywhere' do
       it 'returns default values' do
         # Create a new exercise with no history
-        new_exercise = Exercise.create!(name: 'New Exercise', muscles: 'test')
+        new_exercise = Exercise.create!(name: 'New Exercise')
 
         current_workout = Workout.create!(user: user, workout_type: 'strength', started_at: 1.hour.ago)
         current_set = WorkoutSet.create!(workout: current_workout, exercise: new_exercise, started_at: 1.hour.ago)

@@ -13,9 +13,12 @@
         <div class="cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300" data-sortable-handle>
           <%= icon "grip_vertical" %>
         </div>
+        <% if workout_routine_day_exercise.exercise.muscle.present? %>
+          <span class="text-slate-400"><%= muscle_icon(workout_routine_day_exercise.exercise.muscle, size: "w-5 h-5") %></span>
+        <% end %>
         <span class="flex-1 font-medium"><%= workout_routine_day_exercise.exercise.name %></span>
-        <% if workout_routine_day_exercise.exercise.muscles.present? %>
-          <span class="text-slate-400 text-sm hidden sm:block"><%= workout_routine_day_exercise.exercise.muscles %></span>
+        <% if workout_routine_day_exercise.exercise.muscle.present? %>
+          <span class="text-slate-400 text-sm hidden sm:block"><%= workout_routine_day_exercise.exercise.muscle.human_name %></span>
         <% end %>
         <%= button style: "link_hover_danger",
             type: "link",
