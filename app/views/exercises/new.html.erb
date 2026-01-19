@@ -3,9 +3,7 @@
 <div class="w-full max-w-3xl">
   <div class="mb-6">
     <%= link_to exercises_path, class: "text-slate-400 hover:text-slate-300 flex items-center gap-2" do %>
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
+      <%= icon "back", size: "w-5 h-5" %>
       <%= t(".back_to_exercises") %>
     <% end %>
   </div>

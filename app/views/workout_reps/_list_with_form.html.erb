@@ -14,7 +14,7 @@
           <span class="text-xs text-slate-400 ml-1"><%= rep.band.humanize %></span>
         <% end %>
         <%= button route: workout_rep_path(rep), method: :delete, type: 'button', style: "link_hover_danger", data: { turbo_confirm: t("shared.confirmations.delete_confirm") } do %>
-          <span class="opacity-0 group-hover:opacity-100 transition-opacity"><%= icon_xmark %></span>
+          <span class="opacity-0 group-hover:opacity-100 transition-opacity"><%= icon "xmark" %></span>
         <% end %>
       </div>
     <% end %>
@@ -27,7 +27,7 @@
   <% unless workout_set.ended? %>
     <div class="flex items-center gap-3 pt-3 border-t border-slate-600">
       <div class="flex items-center gap-1 text-slate-400 text-sm tabular-nums">
-        <%= icon_stopwatch %>
+        <%= icon "stopwatch" %>
         <div
           data-controller="timer"
           data-timer-show-hours-value="false"

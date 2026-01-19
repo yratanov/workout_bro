@@ -74,3 +74,5 @@ gem "tailwindcss-rails", "~> 4.2"
 gem "view_component"
 
 gem "pry-rails"
+
+gem "inline_svg", "~> 1.10"

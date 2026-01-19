@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ModalComponent < ViewComponent::Base
+  include ApplicationHelper
+
   def initialize(title: nil, open: false, size: "md")
     @title = title
     @open = open

@@ -34,13 +34,8 @@
             method: :post,
             data: { turbo_method: :post },
             class: "group cursor-pointer p-4" do %>
-            <svg class="w-16 h-16 text-red-400 group-hover:hidden" fill="currentColor" viewBox="0 0 24 24">
-              <rect x="6" y="4" width="4" height="16" rx="1" />
-              <rect x="14" y="4" width="4" height="16" rx="1" />
-            </svg>
-            <svg class="w-16 h-16 text-green-400 hidden group-hover:block" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
+            <span class="text-red-400 group-hover:hidden"><%= icon "pause", size: "w-16 h-16" %></span>
+            <span class="text-green-400 hidden group-hover:block"><%= icon "play", size: "w-16 h-16" %></span>
           <% end %>
         </div>
       <% end %>

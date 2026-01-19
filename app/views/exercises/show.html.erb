@@ -3,9 +3,7 @@
 <div class="w-full max-w-3xl">
   <div class="flex items-center justify-between mb-6">
     <%= link_to exercises_path, class: "text-slate-400 hover:text-slate-300 flex items-center gap-2" do %>
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
+      <%= icon "back", size: "w-5 h-5" %>
       <%= t(".back_to_exercises") %>
     <% end %>
     <%= link_to t("shared.buttons.edit"), edit_exercise_path(@exercise), class: "text-blue-400 hover:text-blue-300" %>
@@ -21,17 +19,13 @@
     <div class="flex gap-2">
       <% if @exercise.with_weights %>
         <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-600/20 text-blue-400 rounded-full text-sm">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M3 10a1 1 0 011-1h1V6a1 1 0 112 0v3h6V6a1 1 0 112 0v3h1a1 1 0 110 2h-1v3a1 1 0 11-2 0v-3H7v3a1 1 0 11-2 0v-3H4a1 1 0 01-1-1z"/>
-          </svg>
+          <%= icon "dumbbell" %>
           <%= t(".weights") %>
         </span>
       <% end %>
       <% if @exercise.with_band %>
         <span class="inline-flex items-center gap-1 px-3 py-1 bg-purple-600/20 text-purple-400 rounded-full text-sm">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
-          </svg>
+          <%= icon "band" %>
           <%= t(".band") %>
         </span>
       <% end %>

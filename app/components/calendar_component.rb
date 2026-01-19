@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CalendarComponent < ViewComponent::Base
+  include ApplicationHelper
+
   def initialize(current_date:, calendar_start:, calendar_end:, workouts_by_date:, prev_month:, next_month:)
     @current_date = current_date
     @calendar_start = calendar_start

@@ -11,9 +11,7 @@
         data-sortable-id="<%= workout_routine_day_exercise.id %>"
       >
         <div class="cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300" data-sortable-handle>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="h-4 w-4" fill="currentColor">
-            <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48C0 49.9 17.9 32 40 32zM232 160c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0z"/>
-          </svg>
+          <%= icon "grip_vertical" %>
         </div>
         <span class="flex-1 font-medium"><%= workout_routine_day_exercise.exercise.name %></span>
         <% if workout_routine_day_exercise.exercise.muscles.present? %>
@@ -29,7 +27,7 @@
               turbo_method: :delete,
             } do %>
           <span class="opacity-0 group-hover:opacity-100 transition-opacity">
-            <%= icon_xmark %>
+            <%= icon "xmark" %>
           </span>
         <% end %>
       </div>
