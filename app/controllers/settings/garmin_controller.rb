@@ -17,6 +17,22 @@ module Settings
       end
     end
 
+    def sync
+      service = GarminSyncService.new(user: current_user)
+      result = service.call
+
+      redirect_to settings_garmin_path,
+        notice: I18n.t("controllers.settings.garmin.sync_success",
+          imported: result[:imported],
+          skipped: result[:skipped])
+    rescue GarminSyncService::MissingCredentialsError
+      redirect_to settings_garmin_path,
+        alert: I18n.t("controllers.settings.garmin.missing_credentials")
+    rescue GarminSyncService::Error => e
+      redirect_to settings_garmin_path,
+        alert: I18n.t("controllers.settings.garmin.sync_failed", error: e.message)
+    end
+
     private
 
     def garmin_params

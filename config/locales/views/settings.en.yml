@@ -20,3 +20,6 @@ en:
         password_label: "Password"
         password_placeholder: "Enter password to update"
         password_hint: "Password is saved. Leave blank to keep current password."
+        sync_section: "Sync Activities"
+        sync_description: "Manually sync your running activities from Garmin Connect."
+        sync_button: "Sync Now"

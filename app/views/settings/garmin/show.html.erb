@@ -39,6 +39,18 @@
             <%= button text: t("shared.buttons.save"), type: "submit", style: "primary" %>
           </div>
         <% end %>
+
+        <% if @credential.persisted? && @credential.username.present? && @credential.encrypted_password.present? %>
+          <div class="mt-6 pt-6 border-t border-slate-700">
+            <h3 class="font-semibold text-lg mb-2"><%= t(".sync_section") %></h3>
+            <p class="text-slate-400 text-sm mb-4"><%= t(".sync_description") %></p>
+            <%= button_to sync_settings_garmin_path, method: :post, class: "inline-flex" do %>
+              <span class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg px-6 py-2.5 transition shadow-lg hover:shadow-emerald-500/25">
+                <%= t(".sync_button") %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

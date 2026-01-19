@@ -160,4 +160,65 @@ RSpec.describe "Settings::Garmin", type: :request do
       expect(response).to redirect_to(new_session_path)
     end
   end
+
+  describe "POST /settings/garmin/sync" do
+    context "when credentials are configured" do
+      before do
+        user.garmin_credential.update!(username: "garmin_user", password: "secret123")
+      end
+
+      it "runs the sync service and redirects with success message" do
+        allow(Open3).to receive(:capture2).and_return(
+          [{ activities: [] }.to_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+        )
+
+        post sync_settings_garmin_path
+
+        expect(response).to redirect_to(settings_garmin_path)
+        follow_redirect!
+        expect(response.body).to include("Sync complete")
+      end
+
+      it "shows imported and skipped counts" do
+        activities_json = {
+          activities: [
+            { started_at: "2024-01-15T08:30:00", distance_meters: 5000, duration_seconds: 1800 }
+          ]
+        }.to_json
+
+        allow(Open3).to receive(:capture2).and_return(
+          [activities_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+        )
+
+        post sync_settings_garmin_path
+
+        expect(response).to redirect_to(settings_garmin_path)
+        follow_redirect!
+        expect(response.body).to include("1 imported")
+        expect(response.body).to include("0 skipped")
+      end
+
+      it "shows error message when sync fails" do
+        allow(Open3).to receive(:capture2).and_return(
+          [{ error: "Invalid credentials" }.to_json, instance_double(Process::Status, success?: true, exitstatus: 0)]
+        )
+
+        post sync_settings_garmin_path
+
+        expect(response).to redirect_to(settings_garmin_path)
+        follow_redirect!
+        expect(response.body).to include("Sync failed")
+      end
+    end
+
+    context "when credentials are not configured" do
+      it "shows missing credentials error" do
+        post sync_settings_garmin_path
+
+        expect(response).to redirect_to(settings_garmin_path)
+        follow_redirect!
+        expect(response.body).to include("configure your Garmin username and password")
+      end
+    end
+  end
 end

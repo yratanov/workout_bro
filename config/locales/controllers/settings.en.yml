@@ -5,3 +5,6 @@ en:
         updated: "Profile updated successfully"
       garmin:
         updated: "Garmin credentials updated successfully"
+        sync_success: "Sync complete: %{imported} imported, %{skipped} skipped"
+        sync_failed: "Sync failed: %{error}"
+        missing_credentials: "Please configure your Garmin username and password first"
