@@ -1,30 +1,68 @@
 <% content_for :title, @workout_routine.name %>
 
-<div>
-  <div class="min-w-[600px] flex gap-4 items-center mb-5 text-2xl">
-    <h1 class="font-bold">
-      <%= @workout_routine.name %>
-    </h1>
+<div class="w-full max-w-3xl">
+  <div class="flex items-center gap-3 mb-6">
+    <%= button route: workout_routines_path, type: "link", style: "link" do %>
+      <%= icon "arrow_left" %>
+    <% end %>
+    <h1 class="font-bold text-3xl"><%= @workout_routine.name %></h1>
   </div>
 
-  <% @workout_routine.workout_routine_days.each do |day| %>
-    <div class="mb-5">
-      <%= render day %>
+  <% if @workout_routine.workout_routine_days.any? %>
+    <div class="space-y-4 mb-6">
+      <% @workout_routine.workout_routine_days.each_with_index do |day, index| %>
+        <div class="bg-slate-800 rounded-lg p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center justify-center w-7 h-7 bg-slate-700 text-slate-300 rounded-full text-sm font-medium">
+                <%= index + 1 %>
+              </span>
+              <h2 class="font-semibold text-lg"><%= day.name %></h2>
+            </div>
+            <%= button route: edit_workout_routine_workout_routine_day_path(@workout_routine, day),
+              type: "link",
+              style: "link" do %>
+              <%= t("shared.buttons.edit") %>
+            <% end %>
+          </div>
+
+          <% if day.exercises.any? %>
+            <div class="space-y-2">
+              <% day.exercises.each do |exercise| %>
+                <div class="flex items-center gap-2 text-slate-300 pl-9">
+                  <span class="text-slate-500">&bull;</span>
+                  <span><%= exercise.name %></span>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-slate-500 text-sm pl-9"><%= t(".no_exercises") %></p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-slate-800 rounded-lg p-8 text-center mb-6">
+      <p class="text-slate-400"><%= t(".no_days") %></p>
     </div>
   <% end %>
 
-  <div class="flex gap-4">
-    <%= button t("shared.buttons.back"), type: "link", style: "outlined", route: workout_routines_path %>
+  <div class="flex gap-3">
     <%= button t(".add_day"),
-    style: "primary",
-    type: "link",
-    route: new_workout_routine_workout_routine_day_path(@workout_routine) %>
+      style: "primary",
+      type: "link",
+      route: new_workout_routine_workout_routine_day_path(@workout_routine) do %>
+      <span class="flex items-center gap-2">
+        <%= icon "plus", size: "w-4 h-4" %>
+        <%= t(".add_day") %>
+      </span>
+    <% end %>
     <%= button t("shared.buttons.destroy"),
-    style: "danger",
-    method: :delete,
-    route: workout_routine_path(@workout_routine),
-    data: {
-      turbo_confirm: t("shared.confirmations.are_you_sure"),
-    } %>
+      style: "danger",
+      method: :delete,
+      route: workout_routine_path(@workout_routine),
+      data: {
+        turbo_confirm: t("shared.confirmations.are_you_sure"),
+      } %>
   </div>
 </div>

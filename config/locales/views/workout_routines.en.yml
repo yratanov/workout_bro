@@ -4,6 +4,12 @@ en:
       title: "Workout Routines"
       new_routine: "New workout routine"
       days: "days"
-      no_routines: "No workout_routines found."
+      no_routines: "No routines yet. Create your first workout routine!"
     show:
       add_day: "Add day"
+      no_days: "No days added yet. Add your first day to get started."
+      no_exercises: "No exercises added"
+    new:
+      title: "New Workout Routine"
+    form:
+      name_placeholder: "Routine name"

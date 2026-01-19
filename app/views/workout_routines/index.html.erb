@@ -1,57 +1,35 @@
 <% content_for :title, t(".title") %>
 
-<div>
-  <div class="flex justify-between items-center mb-5">
-    <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
-    <%= button t(".new_routine"),
-    style: "primary",
-    type: "link",
-    route: new_workout_routine_path %>
+<div class="w-full max-w-3xl">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="font-bold text-3xl"><%= t(".title") %></h1>
+    <%= button t(".new_routine"), route: new_workout_routine_path, style: "primary", type: "link" %>
   </div>
 
-  <div
-    id="workout_routines"
-    class="divide-y divide-gray-200 space-y-5 min-w-[600px]"
-  >
-    <% if @workout_routines.any? %>
+  <% if @workout_routines.any? %>
+    <div id="workout_routines" class="space-y-3">
       <% @workout_routines.each do |workout_routine| %>
-        <div
-          class="
-            flex justify-between items-center p-4 border gap-4 border-slate-400 rounded mb-4
-          "
-        >
-          <div class="flex gap-8 items-center">
-            <div>
-              <%= button workout_routine.name,
-              style: "link",
-              type: "link",
-              route: workout_routine,
-              data: {
-                turbo_prefetch: false,
-              } %>
+        <%= link_to workout_routine, class: "block bg-slate-800 rounded-lg p-4 hover:bg-slate-700/80 transition-colors" do %>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-slate-400"><%= icon "dumbbell", size: "w-5 h-5" %></span>
+              <h3 class="font-medium text-lg"><%= workout_routine.name %></h3>
             </div>
-            <div>
-              <%= workout_routine.workout_routine_days.size %>
-              <%= t(".days") %>
+            <div class="flex items-center gap-3">
+              <span class="inline-flex items-center px-2.5 py-1 bg-slate-700 text-slate-300 rounded-full text-sm">
+                <%= workout_routine.workout_routine_days.size %> <%= t(".days") %>
+              </span>
+              <span class="text-slate-500"><%= icon "chevron_right", size: "w-5 h-5" %></span>
             </div>
           </div>
-          <div class="flex gap-2 items-center">
-            <%= button style: "link_danger",
-          type: "link",
-          route: workout_routine_path(workout_routine),
-          method: :delete,
-          data: {
-            turbo_prefetch: false,
-            turbo_confirm: t("shared.confirmations.are_you_sure"),
-            turbo_method: :delete,
-          } do %>
-              <%= icon "trash", size: "w-5 h-5" %>
-            <% end %>
-          </div>
-        </div>
+        <% end %>
       <% end %>
-    <% else %>
-      <p class="text-center my-10"><%= t(".no_routines") %></p>
-    <% end %>
-  </div>
+    </div>
+  <% else %>
+    <div class="bg-slate-800 rounded-lg p-8 text-center">
+      <div class="text-slate-500 mb-3"><%= icon "dumbbell", size: "w-12 h-12 mx-auto" %></div>
+      <p class="text-slate-400 mb-4"><%= t(".no_routines") %></p>
+      <%= button t(".new_routine"), route: new_workout_routine_path, style: "primary", type: "link" %>
+    </div>
+  <% end %>
 </div>

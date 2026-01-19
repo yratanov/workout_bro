@@ -1,0 +1,14 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-2xl">
+  <div class="flex items-center gap-3 mb-6">
+    <%= button route: workout_routines_path,
+      type: "link",
+      style: "link" do %>
+      <%= icon "arrow_left" %>
+    <% end %>
+    <h1 class="font-bold text-2xl"><%= t(".title") %></h1>
+  </div>
+
+  <%= render "form", workout_routine: @workout_routine %>
+</div>

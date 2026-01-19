@@ -1,4 +1,5 @@
 en:
   controllers:
     workout_routines:
+      created: "Workout routine was successfully created."
       destroyed: "Workout routine was successfully deleted."
