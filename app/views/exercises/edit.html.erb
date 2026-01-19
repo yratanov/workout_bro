@@ -8,9 +8,9 @@
     <% end %>
     <%= button t(".delete"),
         route: exercise_path(@exercise),
-        type: "button_to",
+        method: :delete,
         style: "link_danger",
-        data: { turbo_method: :delete, turbo_confirm: t("shared.confirmations.are_you_sure") } %>
+        data: { turbo_confirm: t("shared.confirmations.are_you_sure") } %>
   </div>
 
   <div class="bg-slate-800 rounded-lg p-6">
