@@ -1,7 +1,7 @@
 class AppFormBuilder < ActionView::Helpers::FormBuilder
   delegate :tag, :content_tag, :safe_join, :render, to: :@template
 
-  DEFAULT_INPUT_CLASSES = "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 " \
+  DEFAULT_INPUT_CLASSES = "bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 " \
                           "text-white placeholder-slate-400 " \
                           "focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500".freeze
 
@@ -68,6 +68,7 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
       if type == :select
         select_options = { include_blank: options[:include_blank] }
         select_options[:selected] = @object.send(field) if @object.respond_to?(field)
+        select_options[:width] = options[:width] if options[:width]
         send(
           :select,
           field,

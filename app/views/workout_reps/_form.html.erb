@@ -1,4 +1,3 @@
-<% input_class = "border border-slate-500 bg-slate-600 text-white px-2 py-1.5 rounded text-sm" %>
 <%= app_form_with(model: workout_rep, class: "contents") do |form| %>
   <% if workout_rep.errors.any? %>
     <div class="bg-red-900/50 text-red-200 px-2 py-1 text-xs rounded mb-2">
@@ -10,14 +9,12 @@
     <%= form.input :reps,
       as: :select,
       collection: (1..40).map { |r| ["#{r}×", r] },
-      inline: true,
-      input_html: { class: input_class } %>
+      inline: true, width: "w-20" %>
     <% if workout_rep.workout_set.exercise.with_weights %>
       <%= form.input :weight,
         as: :select,
         collection: (0..40).step(2.5).map { |w| ["#{w}kg", w] },
-        inline: true,
-        input_html: { class: input_class } %>
+        inline: true %>
     <% end %>
     <% if workout_rep.workout_set.exercise.with_band %>
       <%= form.input :band,
@@ -26,6 +23,6 @@
         inline: true,
         input_html: { class: input_class } %>
     <% end %>
-    <%= button text: "+", type: "submit", style: "primary", class: "px-3 py-1.5" %>
+    <%= button text: "+", type: "submit", style: "primary" %>
   </div>
 <% end %>
