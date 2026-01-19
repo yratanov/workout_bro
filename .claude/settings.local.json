@@ -18,7 +18,9 @@
       "Bash(bundle add:*)",
       "WebSearch",
       "WebFetch(domain:uxwing.com)",
-      "WebFetch(domain:www.svgrepo.com)"
+      "WebFetch(domain:www.svgrepo.com)",
+      "Bash(bin/rubocop:*)",
+      "Bash(bin/rails db:encryption:init:*)"
     ]
   }
 }
