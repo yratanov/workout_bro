@@ -54,7 +54,7 @@
         </button>
         <%= button_to workout_path(@workout),
           method: :delete,
-          data: { turbo_confirm: t(".delete_confirm") },
+          data: { turbo_confirm: t(".delete_confirm"), turbo_frame: "_top" },
           class: "px-4 py-2 bg-red-600 hover:bg-red-500 rounded text-white cursor-pointer" do %>
           <%= t(".delete") %>
         <% end %>
