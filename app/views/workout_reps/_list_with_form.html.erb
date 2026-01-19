@@ -31,7 +31,7 @@
         <div
           data-controller="timer"
           data-timer-show-hours-value="false"
-          data-timer-date-value="<%= persisted_reps.last&.updated_at || DateTime.now %>"
+          data-timer-date-value="<%= (persisted_reps.last&.updated_at || DateTime.now).iso8601 %>"
         ></div>
       </div>
       <div class="flex-1">
