@@ -1,20 +1,43 @@
 class AddMuscleToExercises < ActiveRecord::Migration[8.0]
+  # Mapping from old muscle names to standardized names
+  MUSCLE_MAPPING = {
+    "Back" => "back",
+    "Chest" => "chest",
+    "Shoulders" => "shoulders",
+    "Biceps" => "biceps",
+    "Triceps" => "triceps",
+    "Traps" => "back",
+    "Quads" => "legs",
+    "Hamstrings" => "legs",
+    "Glutes" => "glutes",
+    "Calves" => "legs",
+    "Core" => "core",
+    "ABS" => "core",
+    "Back, biceps" => "back",
+    "Side delts" => "shoulders"
+  }.freeze
+
+  STANDARD_MUSCLES = %w[chest back shoulders biceps triceps legs glutes core].freeze
+
   def up
     add_reference :exercises, :muscle, foreign_key: true
 
-    # Migrate data: create muscles and link exercises
-    execute <<-SQL.squish
-      INSERT OR IGNORE INTO muscles (name, created_at, updated_at)
-      SELECT DISTINCT LOWER(muscles), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-      FROM exercises
-      WHERE muscles IS NOT NULL AND muscles != ''
-    SQL
+    # Create only the standardized muscles
+    STANDARD_MUSCLES.each do |name|
+      execute <<-SQL.squish
+        INSERT OR IGNORE INTO muscles (name, created_at, updated_at)
+        VALUES ('#{name}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      SQL
+    end
 
-    execute <<-SQL.squish
-      UPDATE exercises
-      SET muscle_id = (SELECT id FROM muscles WHERE muscles.name = LOWER(exercises.muscles))
-      WHERE muscles IS NOT NULL AND muscles != ''
-    SQL
+    # Map old muscle names to standardized muscles
+    MUSCLE_MAPPING.each do |old_name, new_name|
+      execute <<-SQL.squish
+        UPDATE exercises
+        SET muscle_id = (SELECT id FROM muscles WHERE muscles.name = '#{new_name}')
+        WHERE muscles = '#{old_name}'
+      SQL
+    end
 
     remove_column :exercises, :muscles
   end

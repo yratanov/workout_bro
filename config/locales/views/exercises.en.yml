@@ -6,6 +6,7 @@ en:
       no_exercises: "No exercises found."
       weights: "Weights"
       band: "Band"
+      other: "Other"
     new:
       title: "New exercise"
       back_to_exercises: "Back"
