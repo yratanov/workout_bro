@@ -20,6 +20,13 @@ class User < ApplicationRecord
   has_many :workout_sets, through: :workouts
   has_many :workout_reps, through: :workout_sets
   has_many :workout_routines, dependent: :destroy
+  has_many :third_party_credentials, dependent: :destroy
+
+  validates :email_address, presence: true
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  def garmin_credential
+    third_party_credentials.find_or_initialize_by(provider: "garmin")
+  end
 end

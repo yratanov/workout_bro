@@ -1,0 +1,22 @@
+en:
+  settings:
+    menu:
+      profile: "Profile"
+      garmin: "Garmin"
+    profile:
+      show:
+        title: "Settings"
+        profile_info: "Profile Information"
+        email_label: "Email"
+        email_placeholder: "you@example.com"
+        save: "Save Changes"
+    garmin:
+      show:
+        title: "Garmin Settings"
+        garmin_sync: "Garmin Connect"
+        description: "Connect your Garmin account to automatically sync your running activities."
+        username_label: "Username"
+        username_placeholder: "Your Garmin username"
+        password_label: "Password"
+        password_placeholder: "Enter password to update"
+        password_hint: "Password is saved. Leave blank to keep current password."

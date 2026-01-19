@@ -1,0 +1,7 @@
+en:
+  controllers:
+    settings:
+      profile:
+        updated: "Profile updated successfully"
+      garmin:
+        updated: "Garmin credentials updated successfully"

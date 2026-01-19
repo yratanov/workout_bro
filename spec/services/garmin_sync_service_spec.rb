@@ -6,9 +6,26 @@ RSpec.describe GarminSyncService do
   let(:user) { users(:one) }
   let(:username) { 'test@example.com' }
   let(:password) { 'secret123' }
-  let(:service) { described_class.new(username: username, password: password, user: user) }
+  let(:service) { described_class.new(user: user) }
+
+  before do
+    user.garmin_credential.update!(username: username, password: password)
+  end
 
   describe '#call' do
+    context 'when credentials are missing' do
+      before do
+        user.garmin_credential.update!(username: nil, encrypted_password: nil)
+      end
+
+      it 'raises MissingCredentialsError' do
+        expect { service.call }.to raise_error(
+          GarminSyncService::MissingCredentialsError,
+          'Garmin credentials not configured'
+        )
+      end
+    end
+
     context 'when Python script returns activities' do
       let(:activities_json) do
         {
@@ -55,7 +72,7 @@ RSpec.describe GarminSyncService do
         expect(workout.ended_at).to eq(workout.started_at + 1800.seconds)
       end
 
-      it 'calls Python script with correct arguments' do
+      it 'calls Python script with credentials from database' do
         service.call
 
         expect(Open3).to have_received(:capture2).with(
@@ -151,7 +168,7 @@ RSpec.describe GarminSyncService do
   end
 
   describe 'with custom days parameter' do
-    let(:service) { described_class.new(username: username, password: password, user: user, days: 14) }
+    let(:service) { described_class.new(user: user, days: 14) }
     let(:activities_json) { { activities: [] }.to_json }
 
     before do

@@ -2,24 +2,31 @@ class GarminSyncService
   PYTHON_SCRIPT_PATH = Rails.root.join("python/sync_garmin.py").to_s
 
   class Error < StandardError; end
+  class MissingCredentialsError < Error; end
 
-  def initialize(username:, password:, user: nil, days: 7)
-    @username = username
-    @password = password
-    @user = user || User.first!
+  def initialize(user:, days: 7)
+    @user = user
     @days = days
+    @credential = user.garmin_credential
   end
 
   def call
+    validate_credentials!
     activities = fetch_activities
     import_activities(activities)
   end
 
   private
 
+  def validate_credentials!
+    if @credential.username.blank? || @credential.encrypted_password.blank?
+      raise MissingCredentialsError, "Garmin credentials not configured"
+    end
+  end
+
   def fetch_activities
     output, status = Open3.capture2(
-      "python3", PYTHON_SCRIPT_PATH, @username, @password, @days.to_s
+      "python3", PYTHON_SCRIPT_PATH, @credential.username, @credential.encrypted_password, @days.to_s
     )
 
     raise Error, "Python script failed with status #{status.exitstatus}" unless status.success?

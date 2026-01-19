@@ -1,0 +1,20 @@
+<nav class="w-64 shrink-0">
+  <ul class="space-y-1">
+    <% menu_items.each do |item| %>
+      <li>
+        <%= link_to item[:path], class: item_classes(item[:key]) do %>
+          <% if item[:icon] == "user" %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          <% elsif item[:icon] == "activity" %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          <% end %>
+          <span><%= t("settings.menu.#{item[:key]}") %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>

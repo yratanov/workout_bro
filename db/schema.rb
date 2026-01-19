@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_19_093046) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_19_123011) do
   create_table "exercises", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -35,6 +35,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_19_093046) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "third_party_credentials", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "provider", null: false
+    t.string "username"
+    t.string "encrypted_password"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "provider"], name: "index_third_party_credentials_on_user_id_and_provider", unique: true
+    t.index ["user_id"], name: "index_third_party_credentials_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -113,6 +124,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_19_093046) do
 
   add_foreign_key "exercises", "muscles"
   add_foreign_key "sessions", "users"
+  add_foreign_key "third_party_credentials", "users"
   add_foreign_key "workout_reps", "workout_sets"
   add_foreign_key "workout_routine_day_exercises", "exercises"
   add_foreign_key "workout_routine_day_exercises", "workout_routine_days"

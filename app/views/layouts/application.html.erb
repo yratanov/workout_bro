@@ -62,12 +62,18 @@
               <% end %>
             </div>
           </div>
-          <%= link_to session_path,
-            method: :destroy,
-            data: { turbo_method: :delete },
-            class: "p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors" do %>
-            <%= icon "exit" %>
-          <% end %>
+          <div class="flex items-center gap-1">
+            <%= link_to settings_profile_path,
+              class: "p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors" do %>
+              <%= icon "settings" %>
+            <% end %>
+            <%= link_to session_path,
+              method: :destroy,
+              data: { turbo_method: :delete },
+              class: "p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors" do %>
+              <%= icon "exit" %>
+            <% end %>
+          </div>
         </div>
       </nav>
     <% end %>
