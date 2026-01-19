@@ -8,7 +8,8 @@ class SettingsMenuComponent < ViewComponent::Base
   def menu_items
     [
       { key: :profile, path: settings_profile_path, icon: "user" },
-      { key: :garmin, path: settings_garmin_path, icon: "activity" }
+      { key: :garmin, path: settings_garmin_path, icon: "activity" },
+      { key: :logs, path: settings_logs_path, icon: "logs" }
     ]
   end
 

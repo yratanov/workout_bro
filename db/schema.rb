@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_19_123011) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_19_140342) do
   create_table "exercises", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -35,6 +35,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_19_123011) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "sync_logs", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "log_type", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.text "message"
+    t.json "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_sync_logs_on_created_at"
+    t.index ["log_type"], name: "index_sync_logs_on_log_type"
+    t.index ["status"], name: "index_sync_logs_on_status"
+    t.index ["user_id"], name: "index_sync_logs_on_user_id"
   end
 
   create_table "third_party_credentials", force: :cascade do |t|
@@ -124,6 +138,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_19_123011) do
 
   add_foreign_key "exercises", "muscles"
   add_foreign_key "sessions", "users"
+  add_foreign_key "sync_logs", "users"
   add_foreign_key "third_party_credentials", "users"
   add_foreign_key "workout_reps", "workout_sets"
   add_foreign_key "workout_routine_day_exercises", "exercises"

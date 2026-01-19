@@ -13,7 +13,12 @@ class GarminSyncService
   def call
     validate_credentials!
     activities = fetch_activities
-    import_activities(activities)
+    result = import_activities(activities)
+    log_success(result)
+    result
+  rescue Error => e
+    log_failure(e.message)
+    raise
   end
 
   private
@@ -74,6 +79,23 @@ class GarminSyncService
       ended_at: ended_at,
       distance: activity["distance_meters"].to_i,
       time_in_seconds: duration_seconds
+    )
+  end
+
+  def log_success(result)
+    @user.sync_logs.create!(
+      log_type: :garmin,
+      status: :success,
+      message: "Imported #{result[:imported]}, skipped #{result[:skipped]}",
+      metadata: result
+    )
+  end
+
+  def log_failure(error_message)
+    @user.sync_logs.create!(
+      log_type: :garmin,
+      status: :failure,
+      message: error_message
     )
   end
 end

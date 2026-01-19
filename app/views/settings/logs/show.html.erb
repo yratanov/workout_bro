@@ -1,0 +1,41 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-4xl">
+  <h1 class="font-bold text-2xl mb-6"><%= t("settings.profile.show.title") %></h1>
+
+  <div class="flex gap-8">
+    <%= render SettingsMenuComponent.new(current_page: :logs) %>
+
+    <div class="flex-1">
+      <div class="bg-slate-800 rounded-lg p-6">
+        <h2 class="font-semibold text-lg mb-4"><%= t(".sync_logs") %></h2>
+        <p class="text-slate-400 text-sm mb-6"><%= t(".description") %></p>
+
+        <% if @sync_logs.any? %>
+          <div class="space-y-3">
+            <% @sync_logs.each do |log| %>
+              <div class="bg-slate-700/50 rounded-lg p-4 flex items-start justify-between">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="font-medium text-slate-200"><%= t(".log_types.#{log.log_type}") %></span>
+                    <% if log.success? %>
+                      <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded"><%= t(".statuses.success") %></span>
+                    <% else %>
+                      <span class="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded"><%= t(".statuses.failure") %></span>
+                    <% end %>
+                  </div>
+                  <p class="text-sm text-slate-400"><%= log.message %></p>
+                </div>
+                <span class="text-xs text-slate-500 whitespace-nowrap ml-4">
+                  <%= l(log.created_at, format: :short) %>
+                </span>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-slate-500 text-center py-8"><%= t(".no_logs") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

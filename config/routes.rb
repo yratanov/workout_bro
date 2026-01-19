@@ -48,5 +48,6 @@ Rails.application.routes.draw do
     resource :garmin, only: %i[show update], controller: "garmin" do
       post :sync
     end
+    resource :logs, only: %i[show], controller: "logs"
   end
 end

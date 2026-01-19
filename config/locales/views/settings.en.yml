@@ -3,6 +3,7 @@ en:
     menu:
       profile: "Profile"
       garmin: "Garmin"
+      logs: "Sync Logs"
     profile:
       show:
         title: "Settings"
@@ -23,3 +24,14 @@ en:
         sync_section: "Sync Activities"
         sync_description: "Manually sync your running activities from Garmin Connect."
         sync_button: "Sync Now"
+    logs:
+      show:
+        title: "Sync Logs"
+        sync_logs: "Sync Logs"
+        description: "View the history of your sync operations."
+        no_logs: "No sync logs yet."
+        log_types:
+          garmin: "Garmin Sync"
+        statuses:
+          success: "Success"
+          failure: "Failed"
