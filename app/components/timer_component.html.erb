@@ -8,7 +8,7 @@
     <% diff = Time.at(elapsed).utc %>
     <%= diff.hour > 0 ? diff.strftime("%k:%M:%S") : diff.strftime("%M:%S") %>
   <% else %>
-    <div data-controller="timer" data-timer-date-value="<%= @started_at %>" data-timer-show-hours-value="<%= @show_hours %>" data-timer-paused-seconds-value="<%= @total_paused_seconds %>">
+    <div data-controller="timer" data-timer-date-value="<%= @started_at.iso8601 %>" data-timer-show-hours-value="<%= @show_hours %>" data-timer-paused-seconds-value="<%= @total_paused_seconds %>">
     </div>
   <% end %>
 </div>
