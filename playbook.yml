@@ -45,11 +45,5 @@
       command: docker-compose exec web bundle exec rails db:migrate
       args:
         chdir: "{{ clone_dest }}"
-
-    - name: Setup cron job for Garmin sync
-      ansible.builtin.cron:
-        name: "Sync Garmin running data"
-        minute: "0"
-        job: "cd {{ clone_dest }} && docker-compose exec -T web bundle exec rake garmin:sync >> /var/log/garmin_sync.log 2>&1"
-        user: "{{ current_user }}"
+      # Garmin sync now runs via Solid Queue recurring job (config/recurring.yml)
 
