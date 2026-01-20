@@ -21,4 +21,6 @@
 
 class Exercise < ApplicationRecord
   belongs_to :muscle, optional: true
+
+  has_many :workout_routine_day_exercises, dependent: :destroy
 end
