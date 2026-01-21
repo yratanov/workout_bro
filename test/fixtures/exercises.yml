@@ -35,3 +35,15 @@ deadlift:
   muscle: back
   with_weights: true
   with_band: false
+
+pull_up:
+  name: Pull-Up
+  muscle: back
+  with_weights: false
+  with_band: false
+
+banded_squat:
+  name: Banded Squat
+  muscle: legs
+  with_weights: false
+  with_band: true

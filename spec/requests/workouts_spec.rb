@@ -203,4 +203,39 @@ RSpec.describe "Workouts", type: :request do
       expect(response).to redirect_to(workouts_path)
     end
   end
+
+  describe "GET /workouts/:id with bodyweight exercises" do
+    let!(:workout) do
+      Workout.create!(
+        user: user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+    end
+
+    it "renders workout with exercise without weights or band (e.g. pull-up)" do
+      workout.workout_sets.create!(
+        exercise: exercises(:pull_up),
+        started_at: 30.minutes.ago
+      )
+
+      get workout_path(workout)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Pull-Up")
+    end
+
+    it "renders workout with exercise with band but no weights" do
+      workout.workout_sets.create!(
+        exercise: exercises(:banded_squat),
+        started_at: 30.minutes.ago
+      )
+
+      get workout_path(workout)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Banded Squat")
+    end
+  end
 end
