@@ -20,8 +20,7 @@
       <%= form.input :band,
         as: :select,
         collection: [[t("workout_reps.form.no_band"), nil]] + WorkoutRep::BANDS.map { |b| [b.humanize, b] },
-        inline: true,
-        input_html: { class: input_class } %>
+        inline: true %>
     <% end %>
     <%= button text: "+", type: "submit", style: "primary" %>
   </div>
