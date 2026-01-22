@@ -42,20 +42,20 @@
     <% end %>
 
     <% if authenticated? %>
-      <nav class="w-full bg-slate-800 border-b border-slate-700">
+      <% nav_items = [
+        { name: t("shared.navigation.workouts"), path: workouts_path, current: controller_name == "workouts" },
+        { name: t("shared.navigation.routines"), path: workout_routines_path, current: controller_name == "workout_routines" },
+        { name: t("shared.navigation.stats"), path: stats_path, current: controller_name == "stats" },
+        { name: t("shared.navigation.exercises"), path: exercises_path, current: controller_name == "exercises" },
+      ] %>
+      <nav class="w-full bg-slate-800 border-b border-slate-700" data-controller="mobile-menu">
         <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
           <div class="flex items-center">
             <%= link_to workouts_path, class: "flex items-center gap-2 py-3 pr-4 hover:opacity-80 transition-opacity" do %>
               <%= image_tag "icon.png", class: "w-8 h-8" %>
               <span class="font-semibold text-lg hidden sm:block"><%= t("shared.app_name") %></span>
             <% end %>
-            <div class="flex items-center gap-1">
-              <% nav_items = [
-                { name: t("shared.navigation.workouts"), path: workouts_path, current: controller_name == "workouts" },
-                { name: t("shared.navigation.routines"), path: workout_routines_path, current: controller_name == "workout_routines" },
-                { name: t("shared.navigation.stats"), path: stats_path, current: controller_name == "stats" },
-                { name: t("shared.navigation.exercises"), path: exercises_path, current: controller_name == "exercises" },
-              ] %>
+            <div class="hidden sm:flex items-center gap-1">
               <% nav_items.each do |item| %>
                 <%= link_to item[:name], item[:path],
                   class: "px-3 py-2 rounded-md text-sm font-medium transition-colors #{item[:current] ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white'}" %>
@@ -63,6 +63,10 @@
             </div>
           </div>
           <div class="flex items-center gap-1">
+            <button type="button" data-action="mobile-menu#toggle" class="sm:hidden p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
+              <span data-mobile-menu-target="openIcon"><%= icon "menu", size: "w-5 h-5" %></span>
+              <span data-mobile-menu-target="closeIcon" class="hidden"><%= icon "xmark", size: "w-5 h-5" %></span>
+            </button>
             <%= link_to settings_profile_path,
               class: "p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors" do %>
               <%= icon "settings" %>
@@ -72,6 +76,16 @@
               data: { turbo_method: :delete },
               class: "p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors" do %>
               <%= icon "exit" %>
+            <% end %>
+          </div>
+        </div>
+        <!-- Mobile menu -->
+        <div data-mobile-menu-target="menu" class="hidden sm:hidden border-t border-slate-700">
+          <div class="px-2 py-3 space-y-1">
+            <% nav_items.each do |item| %>
+              <%= link_to item[:name], item[:path],
+                data: { action: "mobile-menu#close" },
+                class: "block px-3 py-2 rounded-md text-base font-medium transition-colors #{item[:current] ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white'}" %>
             <% end %>
           </div>
         </div>
