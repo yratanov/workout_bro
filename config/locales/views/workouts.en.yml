@@ -33,6 +33,9 @@ en:
       custom_workout_description: "You'll be able to add any exercises during the workout"
       use_routine_instead: "Use a routine instead"
       start_workout: "Start Workout"
+      no_routines_title: "No Routines Yet"
+      no_routines_message: "Create a workout routine to quickly start workouts with predefined exercises, or start a custom workout below."
+      create_routine: "Create Your First Routine"
     new_set_link:
       start_set: "Start set"
     modal:

@@ -1,0 +1,33 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-md">
+  <div class="bg-slate-800 rounded-2xl shadow-2xl p-8 border border-slate-700">
+    <div class="flex flex-col items-center mb-8">
+      <%= image_tag "icon.png", class: "w-16 h-16 mb-4" %>
+      <h1 class="font-bold text-2xl text-white"><%= t(".title") %></h1>
+      <p class="text-slate-400 mt-1"><%= t(".subtitle") %></p>
+    </div>
+
+    <div class="flex justify-center mb-6">
+      <%= render_step_indicator(3, 5) %>
+    </div>
+
+    <div class="space-y-4">
+      <p class="text-slate-300 text-sm"><%= t(".description") %></p>
+
+      <%= form_with url: setup_path, method: :patch, class: "space-y-4" do |form| %>
+        <%= form.hidden_field :import_exercises, value: "1" %>
+        <div class="pt-2">
+          <%= button text: t(".import_button"), type: "submit", style: "success" %>
+        </div>
+      <% end %>
+
+      <%= form_with url: setup_path, method: :patch, class: "space-y-4" do |form| %>
+        <%= form.hidden_field :import_exercises, value: "0" %>
+        <div>
+          <%= button text: t(".skip_button"), type: "submit", style: "outlined" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

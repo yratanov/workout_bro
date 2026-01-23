@@ -1,0 +1,57 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-md">
+  <div class="bg-slate-800 rounded-2xl shadow-2xl p-8 border border-slate-700">
+    <div class="flex flex-col items-center mb-8">
+      <%= image_tag "icon.png", class: "w-16 h-16 mb-4" %>
+      <h1 class="font-bold text-2xl text-white"><%= t(".title") %></h1>
+      <p class="text-slate-400 mt-1"><%= t(".subtitle") %></p>
+    </div>
+
+    <div class="flex justify-center mb-6">
+      <%= render_step_indicator(1, 5) %>
+    </div>
+
+    <%= app_form_with model: @user || User.new, url: setup_path, method: :patch, class: "space-y-6" do |form| %>
+      <div>
+        <%= form.label :email_address, t(".email_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
+        <%= form.email_field :email_address,
+                         required: true,
+                         autofocus: true,
+                         autocomplete: "username",
+                         placeholder: t(".email_placeholder") %>
+        <% if @user&.errors&.include?(:email_address) %>
+          <p class="mt-1 text-sm text-red-400"><%= @user.errors[:email_address].first %></p>
+        <% end %>
+      </div>
+
+      <div>
+        <%= form.label :password, t(".password_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
+        <%= form.password_field :password,
+                            required: true,
+                            autocomplete: "new-password",
+                            placeholder: t(".password_placeholder"),
+                            maxlength: 72 %>
+        <% if @user&.errors&.include?(:password) %>
+          <p class="mt-1 text-sm text-red-400"><%= @user.errors[:password].first %></p>
+        <% end %>
+      </div>
+
+      <div>
+        <%= form.label :password_confirmation, t(".password_confirmation_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
+        <%= form.password_field :password_confirmation,
+                            required: true,
+                            autocomplete: "new-password",
+                            placeholder: t(".password_confirmation_placeholder"),
+                            maxlength: 72 %>
+        <% if @user&.errors&.include?(:password_confirmation) %>
+          <p class="mt-1 text-sm text-red-400"><%= @user.errors[:password_confirmation].first %></p>
+        <% end %>
+      </div>
+
+      <div class="pt-2">
+        <%= form.submit t(".next") %>
+      </div>
+    <% end %>
+  </div>
+</div>

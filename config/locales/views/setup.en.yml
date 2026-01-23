@@ -1,0 +1,45 @@
+en:
+  setup:
+    account:
+      title: "Create Account"
+      subtitle: "Set up your workout tracking account"
+      email_label: "Email"
+      email_placeholder: "you@example.com"
+      password_label: "Password"
+      password_placeholder: "Choose a password"
+      password_confirmation_label: "Confirm Password"
+      password_confirmation_placeholder: "Confirm your password"
+      next: "Next"
+
+    language:
+      title: "Language"
+      subtitle: "Choose your preferred language"
+      locale_label: "Select Language"
+      next: "Next"
+      locales:
+        en: "English"
+
+    exercises:
+      title: "Exercises"
+      subtitle: "Set up your exercise library"
+      description: "Would you like to import a default set of exercises? You can always add your own exercises later."
+      import_button: "Import default exercises"
+      skip_button: "Skip, I'll add my own"
+
+    garmin:
+      title: "Garmin Connect"
+      subtitle: "Sync your running activities"
+      description: "Connect your Garmin account to automatically sync running activities. This is optional and can be configured later in settings."
+      username_label: "Garmin Email"
+      username_placeholder: "your@garmin-email.com"
+      password_label: "Garmin Password"
+      password_placeholder: "Your Garmin password"
+      connect_button: "Connect Garmin"
+      skip_button: "Skip for now"
+
+    complete:
+      title: "You're All Set!"
+      subtitle: "Your account is ready to go"
+      message: "Start tracking your workouts and reach your fitness goals."
+      start_workout: "Start Your First Workout"
+      create_routine: "Create Your First Routine"

@@ -18,7 +18,14 @@ module Authentication
     end
 
     def require_authentication
-      resume_session || request_authentication
+      return redirect_to setup_path if User.count == 0
+
+      unless resume_session
+        request_authentication
+        return
+      end
+
+      redirect_to setup_path if Current.user && !Current.user.setup_completed?
     end
 
     def resume_session
@@ -35,7 +42,11 @@ module Authentication
     end
 
     def after_authentication_url
-      session.delete(:return_to_after_authenticating) || root_url
+      if Current.user && !Current.user.setup_completed?
+        setup_path
+      else
+        session.delete(:return_to_after_authenticating) || root_url
+      end
     end
 
     def start_new_session_for(user)

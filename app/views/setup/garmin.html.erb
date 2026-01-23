@@ -1,0 +1,49 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-md">
+  <div class="bg-slate-800 rounded-2xl shadow-2xl p-8 border border-slate-700">
+    <div class="flex flex-col items-center mb-8">
+      <%= image_tag "icon.png", class: "w-16 h-16 mb-4" %>
+      <h1 class="font-bold text-2xl text-white"><%= t(".title") %></h1>
+      <p class="text-slate-400 mt-1"><%= t(".subtitle") %></p>
+    </div>
+
+    <div class="flex justify-center mb-6">
+      <%= render_step_indicator(4, 5) %>
+    </div>
+
+    <p class="text-slate-300 text-sm mb-6"><%= t(".description") %></p>
+
+    <% credential = @credential || Current.user.garmin_credential %>
+    <%= app_form_with model: credential, url: setup_path, method: :patch, class: "space-y-6" do |form| %>
+      <div>
+        <%= form.label :username, t(".username_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
+        <%= form.text_field :username,
+                         autocomplete: "username",
+                         placeholder: t(".username_placeholder") %>
+        <% if credential.errors[:username].any? %>
+          <p class="mt-1 text-sm text-red-400"><%= credential.errors[:username].first %></p>
+        <% end %>
+      </div>
+
+      <div>
+        <%= form.label :password, t(".password_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
+        <%= form.password_field :password,
+                             autocomplete: "new-password",
+                             placeholder: t(".password_placeholder") %>
+        <% if credential.errors[:encrypted_password].any? %>
+          <p class="mt-1 text-sm text-red-400"><%= credential.errors[:encrypted_password].first %></p>
+        <% end %>
+      </div>
+
+      <div class="pt-2 flex flex-col gap-3">
+        <%= button text: t(".connect_button"), type: "submit", style: "success" %>
+      </div>
+    <% end %>
+
+    <%= form_with url: setup_path, method: :patch, class: "mt-3" do |form| %>
+      <%= form.hidden_field :skip, value: "1" %>
+      <%= button text: t(".skip_button"), type: "submit", style: "outlined" %>
+    <% end %>
+  </div>
+</div>

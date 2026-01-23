@@ -4,7 +4,10 @@
 #
 #  id              :integer          not null, primary key
 #  email_address   :string           not null
+#  locale          :string           default("en")
 #  password_digest :string           not null
+#  setup_completed :boolean          default(FALSE)
+#  wizard_step     :integer          default(0)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
@@ -23,9 +26,16 @@ class User < ApplicationRecord
   has_many :third_party_credentials, dependent: :destroy
   has_many :sync_logs, dependent: :destroy
 
+  AVAILABLE_LOCALES = %w[en].freeze
+
   validates :email_address, presence: true
+  validates :locale, inclusion: { in: AVAILABLE_LOCALES }, allow_nil: true
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  def setup_completed?
+    setup_completed
+  end
 
   def garmin_credential
     third_party_credentials.find_or_initialize_by(provider: "garmin")

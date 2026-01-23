@@ -25,9 +25,10 @@ class WorkoutsController < ApplicationController
       return
     end
 
-    @default_workout_routine = WorkoutRoutine.last
+    @workout_routines = current_user.workout_routines.order(:name)
+    @default_workout_routine = @workout_routines.last
     @workout = Workout.new(
-      workout_routine_day: @default_workout_routine.workout_routine_days.first,
+      workout_routine_day: @default_workout_routine&.workout_routine_days&.first,
       workout_type: :strength,
       started_at: Time.current,
     )

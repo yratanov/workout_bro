@@ -1,0 +1,4 @@
+en:
+  controllers:
+    setup:
+      completed: "Setup complete! Welcome to Workout Bro."

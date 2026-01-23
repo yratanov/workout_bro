@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resource :setup, only: %i[show update], controller: "setup"
   resource :session
   resources :passwords, param: :token
   resources :workouts, only: %i[index show new create edit update destroy] do

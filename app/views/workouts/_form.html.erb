@@ -53,46 +53,71 @@
       </div>
     </div>
 
+    <% workout_routines = local_assigns[:workout_routines] || @workout_routines || Current.user.workout_routines.order(:name) %>
     <div class="<%= 'hidden' if workout.run? %>" data-workout-type-switcher-target="strengthToggle" data-controller="workout-mode">
-      <div data-workout-mode-target="routineSection" data-controller="routine-switcher">
-        <div class="bg-slate-800 rounded-lg p-6 mb-6">
-          <h2 class="text-lg font-semibold mb-4"><%= t("workouts.form.select_routine") %></h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <%= form.label :workout_routine, t("workouts.form.routine"), class: "block text-sm font-medium text-slate-300 mb-2" %>
-              <%= select_tag "workout[workout_routine_day]",
-                options_from_collection_for_select(
-                  WorkoutRoutine.order(:name).to_a,
-                  "id",
-                  "name",
-                  workout.workout_routine&.id,
-                ),
-                data: { action: "change->routine-switcher#switch" },
-                class: "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
-            </div>
-            <div>
-              <%= form.label :workout_routine_day, t("workouts.form.day"), class: "block text-sm font-medium text-slate-300 mb-2" %>
-              <%= turbo_frame_tag 'workout_routine_day_id' do %>
-                <% default_routine = workout.workout_routine || WorkoutRoutine.order(:name).first %>
-                <%= render partial: "workout_routine_days/select",
-                  locals: { workout_routine_days: default_routine&.workout_routine_days } %>
-              <% end %>
+      <% if workout_routines.any? %>
+        <div data-workout-mode-target="routineSection" data-controller="routine-switcher">
+          <div class="bg-slate-800 rounded-lg p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4"><%= t("workouts.form.select_routine") %></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <%= form.label :workout_routine, t("workouts.form.routine"), class: "block text-sm font-medium text-slate-300 mb-2" %>
+                <%= select_tag "workout[workout_routine_day]",
+                  options_from_collection_for_select(
+                    workout_routines,
+                    "id",
+                    "name",
+                    workout.workout_routine&.id,
+                  ),
+                  data: { action: "change->routine-switcher#switch" },
+                  class: "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
+              </div>
+              <div>
+                <%= form.label :workout_routine_day, t("workouts.form.day"), class: "block text-sm font-medium text-slate-300 mb-2" %>
+                <%= turbo_frame_tag 'workout_routine_day_id' do %>
+                  <% default_routine = workout.workout_routine || workout_routines.first %>
+                  <%= render partial: "workout_routine_days/select",
+                    locals: { workout_routine_days: default_routine&.workout_routine_days } %>
+                <% end %>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="text-center mb-6">
-          <span class="text-slate-500"><%= t("workouts.form.or_divider") %></span>
-        </div>
+          <div class="text-center mb-6">
+            <span class="text-slate-500"><%= t("workouts.form.or_divider") %></span>
+          </div>
 
-        <div class="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-lg p-6 mb-6 text-center">
-          <p class="text-slate-400 mb-3"><%= t("workouts.form.custom_workout_prompt") %></p>
-          <%= button t("workouts.form.start_custom_workout"),
-            type: "button",
-            style: "outlined",
-            data: { action: "click->workout-mode#showCustom" } %>
+          <div class="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-lg p-6 mb-6 text-center">
+            <p class="text-slate-400 mb-3"><%= t("workouts.form.custom_workout_prompt") %></p>
+            <%= button t("workouts.form.start_custom_workout"),
+              type: "button",
+              style: "outlined",
+              data: { action: "click->workout-mode#showCustom" } %>
+          </div>
         </div>
-      </div>
+      <% else %>
+        <div data-workout-mode-target="routineSection">
+          <div class="bg-slate-800 rounded-lg p-6 mb-6 text-center">
+            <div class="text-4xl mb-4">📋</div>
+            <h2 class="text-lg font-semibold mb-2"><%= t("workouts.form.no_routines_title") %></h2>
+            <p class="text-slate-400 mb-4"><%= t("workouts.form.no_routines_message") %></p>
+            <%= link_to t("workouts.form.create_routine"), new_workout_routine_path,
+              class: "inline-block bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg px-6 py-2.5 transition shadow-lg hover:shadow-blue-500/25" %>
+          </div>
+
+          <div class="text-center mb-6">
+            <span class="text-slate-500"><%= t("workouts.form.or_divider") %></span>
+          </div>
+
+          <div class="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-lg p-6 mb-6 text-center">
+            <p class="text-slate-400 mb-3"><%= t("workouts.form.custom_workout_prompt") %></p>
+            <%= button t("workouts.form.start_custom_workout"),
+              type: "button",
+              style: "outlined",
+              data: { action: "click->workout-mode#showCustom" } %>
+          </div>
+        </div>
+      <% end %>
 
       <div class="hidden" data-workout-mode-target="customSection">
         <div class="bg-slate-800 rounded-lg p-6 mb-6">

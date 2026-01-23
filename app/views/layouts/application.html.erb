@@ -41,7 +41,7 @@
       </div>
     <% end %>
 
-    <% if authenticated? %>
+    <% if authenticated? && Current.user&.setup_completed? %>
       <% nav_items = [
         { name: t("shared.navigation.workouts"), path: workouts_path, current: controller_name == "workouts" },
         { name: t("shared.navigation.routines"), path: workout_routines_path, current: controller_name == "workout_routines" },
