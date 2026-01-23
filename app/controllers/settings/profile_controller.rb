@@ -22,7 +22,7 @@ module Settings
     end
 
     def profile_params
-      params.require(:user).permit(:email_address)
+      params.require(:user).permit(:email_address, :locale)
     end
   end
 end

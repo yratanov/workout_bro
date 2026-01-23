@@ -1,0 +1,5 @@
+ru:
+  controllers:
+    sessions:
+      rate_limited: "Попробуйте позже."
+      invalid_credentials: "Неверный email или пароль."

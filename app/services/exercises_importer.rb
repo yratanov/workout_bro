@@ -1,9 +1,19 @@
 class ExercisesImporter
-  DEFAULT_PATH = Rails.root.join("db/data/exercises.csv")
-
-  def initialize(path = DEFAULT_PATH)
-    @path = path
+  def initialize(locale: "en")
+    @locale = locale
+    @path = path_for_locale(locale)
   end
+
+  private
+
+  def path_for_locale(locale)
+    locale_path = Rails.root.join("db/data/exercises.#{locale}.csv")
+    return locale_path if File.exist?(locale_path)
+
+    Rails.root.join("db/data/exercises.csv")
+  end
+
+  public
 
   def call
     require "csv"

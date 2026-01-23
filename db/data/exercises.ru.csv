@@ -1,0 +1,50 @@
+name,muscles,with_weights,with_band
+Жим лёжа,chest,true,false
+Жим лёжа на наклонной скамье,chest,true,false
+Разведение гантелей,chest,true,false
+Отжимания,chest,false,false
+Сведение рук в кроссовере,chest,true,false
+Отжимания на брусьях,chest,false,false
+Подтягивания,back,false,false
+Тяга верхнего блока,back,true,false
+Тяга штанги в наклоне,back,true,false
+Тяга гантели в наклоне,back,true,false
+Тяга нижнего блока,back,true,false
+Тяга к лицу,back,true,true
+Становая тяга,back,true,false
+Румынская тяга,back,true,false
+Жим стоя,shoulders,true,false
+Разведение гантелей в стороны,shoulders,true,false
+Подъём гантелей перед собой,shoulders,true,false
+Разведение гантелей в наклоне,shoulders,true,false
+Жим Арнольда,shoulders,true,false
+Шраги,shoulders,true,false
+Подъём штанги на бицепс,biceps,true,false
+Подъём гантелей на бицепс,biceps,true,false
+Молотки,biceps,true,false
+Сгибания на скамье Скотта,biceps,true,false
+Концентрированные сгибания,biceps,true,false
+Разгибания на трицепс,triceps,true,false
+Французский жим,triceps,true,false
+Разгибания над головой,triceps,true,false
+Жим узким хватом,triceps,true,false
+Приседания,legs,true,false
+Фронтальные приседания,legs,true,false
+Жим ногами,legs,true,false
+Выпады,legs,true,false
+Болгарские сплит-приседания,legs,true,false
+Разгибание ног,legs,true,false
+Сгибание ног,legs,true,false
+Подъём на носки,legs,true,false
+Ягодичный мостик со штангой,glutes,true,false
+Ягодичный мостик,glutes,false,true
+Отведение ноги в кроссовере,glutes,true,false
+Планка,core,false,false
+Скручивания,core,false,false
+Русский твист,core,true,false
+Подъём ног в висе,core,false,false
+Дровосек в кроссовере,core,true,false
+Ролик для пресса,core,false,false
+Разведение рук с резинкой,back,false,true
+Приседания с резинкой,legs,false,true
+Ягодичный мостик с резинкой,glutes,false,true

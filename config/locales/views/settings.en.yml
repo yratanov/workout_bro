@@ -11,6 +11,8 @@ en:
         email_label: "Email"
         email_placeholder: "you@example.com"
         save: "Save Changes"
+        language_section: "Language"
+        language_label: "Select Language"
     garmin:
       show:
         title: "Garmin Settings"

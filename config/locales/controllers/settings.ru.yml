@@ -1,0 +1,10 @@
+ru:
+  controllers:
+    settings:
+      profile:
+        updated: "Профиль успешно обновлён"
+      garmin:
+        updated: "Учётные данные Garmin успешно обновлены"
+        sync_success: "Синхронизация завершена: %{imported} импортировано, %{skipped} пропущено"
+        sync_failed: "Ошибка синхронизации: %{error}"
+        missing_credentials: "Сначала настройте имя пользователя и пароль Garmin"

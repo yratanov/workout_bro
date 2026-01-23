@@ -26,7 +26,7 @@ class User < ApplicationRecord
   has_many :third_party_credentials, dependent: :destroy
   has_many :sync_logs, dependent: :destroy
 
-  AVAILABLE_LOCALES = %w[en].freeze
+  AVAILABLE_LOCALES = %w[en ru].freeze
 
   validates :email_address, presence: true
   validates :locale, inclusion: { in: AVAILABLE_LOCALES }, allow_nil: true

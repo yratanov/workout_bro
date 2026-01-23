@@ -1,0 +1,48 @@
+ru:
+  workouts:
+    index:
+      title: "Тренировки"
+      continue_workout: "Продолжить тренировку"
+      start_workout: "Начать тренировку"
+    new:
+      title: "Новая тренировка"
+    edit:
+      title: "Редактирование тренировки"
+      show_workout: "Показать тренировку"
+      back_to_workouts: "К тренировкам"
+    show:
+      title: "Тренировка"
+      distance: "Дистанция"
+      avg_pace: "Средний темп"
+      resume: "Продолжить"
+      pause: "Пауза"
+      finish: "Завершить"
+    form:
+      workout_type: "Тип тренировки"
+      run_details: "Детали пробежки"
+      date: "Дата"
+      distance_meters: "Дистанция (метры)"
+      time_mmss: "Время (мм:сс)"
+      select_routine: "Выберите программу"
+      routine: "Программа"
+      day: "День"
+      or_divider: "— или —"
+      custom_workout_prompt: "Хотите создать тренировку без заданной программы?"
+      start_custom_workout: "Начать свободную тренировку"
+      custom_workout: "Свободная тренировка"
+      custom_workout_description: "Вы сможете добавить любые упражнения во время тренировки"
+      use_routine_instead: "Использовать программу"
+      start_workout: "Начать тренировку"
+      no_routines_title: "Нет программ"
+      no_routines_message: "Создайте программу тренировок для быстрого старта с заданными упражнениями, или начните свободную тренировку ниже."
+      create_routine: "Создать первую программу"
+    new_set_link:
+      start_set: "Начать подход"
+    modal:
+      duration: "Длительность"
+      distance: "Дистанция"
+      avg_pace: "Средний темп"
+      no_exercises: "Упражнения не записаны"
+      close: "Закрыть"
+      delete: "Удалить"
+      delete_confirm: "Вы уверены, что хотите удалить эту тренировку?"

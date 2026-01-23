@@ -1,0 +1,5 @@
+ru:
+  controllers:
+    workout_routine_days:
+      created: "День программы успешно создан."
+      updated: "День программы успешно обновлён."

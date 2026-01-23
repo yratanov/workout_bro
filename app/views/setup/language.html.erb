@@ -12,17 +12,19 @@
       <%= render_step_indicator(2, 5) %>
     </div>
 
-    <%= form_with url: setup_path, method: :patch, class: "space-y-6" do |form| %>
+    <%= form_with url: setup_path, method: :patch, class: "space-y-6", id: "language-form" do |form| %>
+      <%= form.hidden_field :advance, value: "0", id: "advance-field" %>
       <div>
         <%= form.label :locale, t(".locale_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
         <%= form.select :locale,
                         User::AVAILABLE_LOCALES.map { |l| [t("setup.language.locales.#{l}"), l] },
                         { selected: Current.user&.locale || "en" },
-                        class: "bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white w-full focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
+                        class: "bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white w-full focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500",
+                        onchange: "this.form.requestSubmit()" %>
       </div>
 
       <div class="pt-2">
-        <%= button text: t(".next"), type: "submit", style: "success" %>
+        <%= button text: t(".next"), type: "submit", style: "success", onclick: "document.getElementById('advance-field').value = '1'" %>
       </div>
     <% end %>
   </div>

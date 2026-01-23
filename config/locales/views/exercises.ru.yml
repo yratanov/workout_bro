@@ -1,0 +1,37 @@
+ru:
+  exercises:
+    index:
+      title: "Упражнения"
+      new_exercise: "Новое упражнение"
+      no_exercises: "Упражнения не найдены."
+      weights: "С весом"
+      band: "С резинкой"
+      other: "Другие"
+    new:
+      title: "Новое упражнение"
+      back_to_exercises: "Назад"
+    edit:
+      title: "Редактирование упражнения"
+      back_to_show: "Назад"
+      back_to_exercises: "К упражнениям"
+      delete: "Удалить"
+    show:
+      back_to_exercises: "К упражнениям"
+      weights: "С весом"
+      band: "С резинкой"
+      total_sets: "Всего подходов"
+      max_weight: "Макс. вес"
+      last_performed: "Последний раз"
+      previous_results: "Предыдущие результаты"
+      no_history_title: "Нет истории"
+      no_history_description: "Выполните тренировку с этим упражнением, чтобы увидеть результаты."
+      duration: "длительность"
+    form:
+      equipment: "Оборудование"
+      with_weights: "Используется вес"
+      with_band: "Используется резинка"
+      select_muscle: "Выберите группу мышц"
+    exercise:
+      muscles: "Мышцы:"
+      with_weights: "С весом"
+      with_band: "С резинкой"

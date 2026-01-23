@@ -1,0 +1,19 @@
+ru:
+  shared:
+    app_name: "Workout Bro"
+    navigation:
+      workouts: "Тренировки"
+      routines: "Программы"
+      stats: "Статистика"
+      exercises: "Упражнения"
+    buttons:
+      save: "Сохранить"
+      add: "Добавить"
+      cancel: "Отмена"
+      back: "Назад"
+      edit: "Редактировать"
+      delete: "Удалить"
+      destroy: "Удалить"
+    confirmations:
+      are_you_sure: "Вы уверены?"
+      delete_confirm: "Удалить?"

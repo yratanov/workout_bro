@@ -1,0 +1,14 @@
+ru:
+  workout_routine_days:
+    new:
+      title: "Добавить день программы"
+      back_to_routine: "К программе"
+    edit:
+      title: "Редактирование дня программы"
+      back_to_routine: "К программе"
+    form:
+      name_placeholder: "Название дня (напр., День груди, День ног)"
+      exercises_title: "Упражнения"
+      add_exercise: "Добавить упражнение"
+      no_exercises: "Упражнения пока не добавлены"
+      select_exercise: "Выберите упражнение..."

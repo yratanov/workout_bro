@@ -1,0 +1,7 @@
+ru:
+  workout_sets:
+    form:
+      start: "Старт!"
+      reopen_prev: "Открыть пред."
+    workout_set:
+      complete_set: "Завершить подход"

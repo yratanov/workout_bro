@@ -1,0 +1,46 @@
+ru:
+  setup:
+    account:
+      title: "Создание аккаунта"
+      subtitle: "Настройте свой аккаунт для отслеживания тренировок"
+      email_label: "Email"
+      email_placeholder: "вы@example.com"
+      password_label: "Пароль"
+      password_placeholder: "Выберите пароль"
+      password_confirmation_label: "Подтверждение пароля"
+      password_confirmation_placeholder: "Подтвердите ваш пароль"
+      next: "Далее"
+
+    language:
+      title: "Язык"
+      subtitle: "Выберите предпочитаемый язык"
+      locale_label: "Выберите язык"
+      next: "Далее"
+      locales:
+        en: "English"
+        ru: "Русский"
+
+    exercises:
+      title: "Упражнения"
+      subtitle: "Настройте библиотеку упражнений"
+      description: "Хотите импортировать стандартный набор упражнений? Вы всегда сможете добавить свои упражнения позже."
+      import_button: "Импортировать стандартные упражнения"
+      skip_button: "Пропустить, добавлю свои"
+
+    garmin:
+      title: "Garmin Connect"
+      subtitle: "Синхронизация беговых активностей"
+      description: "Подключите ваш аккаунт Garmin для автоматической синхронизации беговых активностей. Это необязательно и может быть настроено позже."
+      username_label: "Email Garmin"
+      username_placeholder: "ваш@garmin-email.com"
+      password_label: "Пароль Garmin"
+      password_placeholder: "Ваш пароль Garmin"
+      connect_button: "Подключить Garmin"
+      skip_button: "Пропустить"
+
+    complete:
+      title: "Готово!"
+      subtitle: "Ваш аккаунт готов к использованию"
+      message: "Начните отслеживать тренировки и достигайте своих целей."
+      start_workout: "Начать первую тренировку"
+      create_routine: "Создать первую программу"

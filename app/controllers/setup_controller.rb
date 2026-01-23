@@ -63,7 +63,7 @@ class SetupController < ApplicationController
 
   def handle_language_step
     if Current.user.update(locale: params[:locale])
-      advance_to_step(2)
+      advance_to_step(2) if params[:advance] == "1"
       redirect_to setup_path
     else
       render :language, status: :unprocessable_entity
@@ -72,7 +72,7 @@ class SetupController < ApplicationController
 
   def handle_exercises_step
     if params[:import_exercises] == "1"
-      ExercisesImportJob.perform_later
+      ExercisesImportJob.perform_later(locale: Current.user.locale || "en")
     end
     advance_to_step(3)
     redirect_to setup_path

@@ -1,0 +1,4 @@
+ru:
+  controllers:
+    setup:
+      completed: "Настройка завершена! Добро пожаловать в Workout Bro."

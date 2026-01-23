@@ -1,0 +1,39 @@
+ru:
+  settings:
+    menu:
+      profile: "Профиль"
+      garmin: "Garmin"
+      logs: "Логи синхронизации"
+    profile:
+      show:
+        title: "Настройки"
+        profile_info: "Информация профиля"
+        email_label: "Email"
+        email_placeholder: "вы@example.com"
+        save: "Сохранить изменения"
+        language_section: "Язык"
+        language_label: "Выберите язык"
+    garmin:
+      show:
+        title: "Настройки Garmin"
+        garmin_sync: "Garmin Connect"
+        description: "Подключите ваш аккаунт Garmin для автоматической синхронизации беговых активностей."
+        username_label: "Имя пользователя"
+        username_placeholder: "Ваше имя пользователя Garmin"
+        password_label: "Пароль"
+        password_placeholder: "Введите пароль для обновления"
+        password_hint: "Пароль сохранён. Оставьте пустым, чтобы сохранить текущий."
+        sync_section: "Синхронизация активностей"
+        sync_description: "Вручную синхронизировать беговые активности из Garmin Connect."
+        sync_button: "Синхронизировать"
+    logs:
+      show:
+        title: "Логи синхронизации"
+        sync_logs: "Логи синхронизации"
+        description: "Просмотр истории операций синхронизации."
+        no_logs: "Логов пока нет."
+        log_types:
+          garmin: "Синхронизация Garmin"
+        statuses:
+          success: "Успешно"
+          failure: "Ошибка"

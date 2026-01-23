@@ -1,0 +1,10 @@
+ru:
+  sessions:
+    new:
+      title: "С возвращением"
+      subtitle: "Войдите, чтобы продолжить тренировку"
+      email_label: "Email"
+      password_label: "Пароль"
+      email_placeholder: "вы@example.com"
+      password_placeholder: "Введите ваш пароль"
+      submit: "Войти"

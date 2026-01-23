@@ -1,0 +1,13 @@
+ru:
+  activerecord:
+    attributes:
+      workout:
+        distance: "Дистанция (м)"
+        time_in_seconds: "Время (чч:мм:сс)"
+    errors:
+      template:
+        header:
+          one: "%{count} ошибка не позволяет сохранить %{model}"
+          few: "%{count} ошибки не позволяют сохранить %{model}"
+          many: "%{count} ошибок не позволяют сохранить %{model}"
+          other: "%{count} ошибок не позволяют сохранить %{model}"
