@@ -1,6 +1,12 @@
 # Workout Bro
 
-A fitness tracking application for strength training and running workouts.
+A self-hosted workout tracking app for strength training and running. Own your fitness data.
+
+- Track strength workouts with sets, reps, and weights
+- Log running sessions
+- Create custom workout routines
+- View progress statistics
+- No cloud accounts or subscriptions required
 
 ## Quick Start with Docker
 
