@@ -1,24 +1,57 @@
-# README
+# Workout Bro
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A fitness tracking application for strength training and running workouts.
 
-Things you may want to cover:
+## Quick Start with Docker
 
-* Ruby version
+1. Create a `docker-compose.yml` file:
 
-* System dependencies
+```yaml
+services:
+  web:
+    image: yratanov/workout_bro:latest
+    volumes:
+      - workout_data:/rails/storage
+    ports:
+      - "3000:80"
+    restart: unless-stopped
 
-* Configuration
+  jobs:
+    image: yratanov/workout_bro:latest
+    command: bin/jobs
+    volumes:
+      - workout_data:/rails/storage
+    restart: unless-stopped
+    depends_on:
+      - web
 
-* Database creation
+volumes:
+  workout_data:
+```
 
-* Database initialization
+2. Start the application:
 
-* How to run the test suite
+```bash
+docker compose up -d
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+3. Open http://localhost:3000
 
-* Deployment instructions
+Credentials are automatically generated on first run and stored in the volume.
 
-* ...
+## Backup
+
+```bash
+docker compose cp web:/rails/storage ./backup
+```
+
+## Update
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+## Custom Port
+
+To use a different port, change `"3000:80"` to `"YOUR_PORT:80"`.
