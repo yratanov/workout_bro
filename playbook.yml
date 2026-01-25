@@ -34,16 +34,11 @@
         group: "{{ current_user }}"
         mode: '0600'
 
-    - name: Run Rails container with docker-compose
+    - name: Run Rails container with docker compose
       ansible.builtin.command:
-        cmd: docker-compose up -d --build --force-recreate
+        cmd: docker compose up -d --build --force-recreate
         chdir: "{{ clone_dest }}"
       environment:
         DOCKER_BUILDKIT: "1"
-        
-    - name: Run database migrations
-      command: docker-compose exec web bundle exec rails db:migrate
-      args:
-        chdir: "{{ clone_dest }}"
-      # Garmin sync now runs via Solid Queue recurring job (config/recurring.yml)
+      # Database is automatically migrated on container start via db:prepare
 
