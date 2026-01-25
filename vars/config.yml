@@ -2,6 +2,5 @@ clone_dest: "{{ ansible_env.HOME }}/workout_bro"
 repo_url: "git@github.com:yratanov/workout_bro.git"
 container_name: "workout_bro"
 exposed_port: 8022
-domain_name: "example.com"
 current_user: "{{ lookup('env', 'USER') }}"
 
