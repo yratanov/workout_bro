@@ -61,44 +61,48 @@
 
     /* Features */
     .features {
-      padding: 80px 24px;
+      padding: 48px 24px;
       background: white;
     }
 
     .features h2 {
       text-align: center;
-      font-size: 2rem;
-      margin-bottom: 48px;
+      font-size: 1.6rem;
+      margin-bottom: 32px;
       color: #1a1a2e;
     }
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 32px;
-      max-width: 900px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px 24px;
+      max-width: 800px;
       margin: 0 auto;
     }
 
     .feature {
-      text-align: center;
-      padding: 24px;
+      text-align: left;
+      padding: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
     }
 
     .feature-icon {
-      font-size: 2.5rem;
-      margin-bottom: 16px;
+      font-size: 1.5rem;
+      flex-shrink: 0;
     }
 
     .feature h3 {
-      font-size: 1.2rem;
-      margin-bottom: 8px;
+      font-size: 1rem;
+      margin-bottom: 2px;
       color: #1a1a2e;
     }
 
     .feature p {
       color: #666;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
     }
 
     /* Install */
@@ -229,6 +233,10 @@
         font-size: 1.6rem;
       }
 
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
       .code-block {
         padding: 16px;
         border-radius: 8px;
@@ -256,33 +264,27 @@
     <div class="features-grid">
       <div class="feature">
         <div class="feature-icon">&#127947;</div>
-        <h3>Strength Training</h3>
-        <p>Track sets, reps, and weights. Monitor your progress over time.</p>
+        <div><h3>Strength Training</h3><p>Track sets, reps, weights</p></div>
       </div>
       <div class="feature">
         <div class="feature-icon">&#127939;</div>
-        <h3>Running</h3>
-        <p>Log your runs with distance, time, and pace.</p>
+        <div><h3>Running</h3><p>Log distance, time, pace</p></div>
       </div>
       <div class="feature">
         <div class="feature-icon">&#128203;</div>
-        <h3>Custom Routines</h3>
-        <p>Create and save workout routines for quick logging.</p>
+        <div><h3>Custom Routines</h3><p>Save workout templates</p></div>
       </div>
       <div class="feature">
         <div class="feature-icon">&#128202;</div>
-        <h3>Statistics</h3>
-        <p>View your progress with charts and insights.</p>
+        <div><h3>Statistics</h3><p>Charts and insights</p></div>
       </div>
       <div class="feature">
         <div class="feature-icon">&#128274;</div>
-        <h3>Private</h3>
-        <p>Your data stays on your server. No tracking, no ads.</p>
+        <div><h3>Private</h3><p>Your server, your data</p></div>
       </div>
       <div class="feature">
         <div class="feature-icon">&#128230;</div>
-        <h3>Easy Deployment</h3>
-        <p>Single Docker command to get started.</p>
+        <div><h3>Easy Deploy</h3><p>One Docker command</p></div>
       </div>
     </div>
   </section>
