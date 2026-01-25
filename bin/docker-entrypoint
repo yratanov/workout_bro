@@ -50,7 +50,13 @@ fi
 
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
+  if ./bin/rails runner "ActiveRecord::Base.connection" 2>/dev/null; then
+    echo "Database exists, running migrations..."
+    ./bin/rails db:migrate
+  else
+    echo "Creating database..."
+    ./bin/rails db:create db:schema:load
+  fi
 fi
 
 exec "${@}"
