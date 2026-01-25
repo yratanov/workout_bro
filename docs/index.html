@@ -302,6 +302,8 @@
       - <span class="string">workout_data:/rails/storage</span>
     <span class="key">ports</span>:
       - <span class="string">"3000:80"</span>
+    <span class="key">environment</span>:
+      - <span class="string">DISABLE_SSL=true</span>
     <span class="key">restart</span>: <span class="string">unless-stopped</span>
 
   <span class="key">jobs</span>:
@@ -309,6 +311,8 @@
     <span class="key">command</span>: <span class="string">bin/jobs</span>
     <span class="key">volumes</span>:
       - <span class="string">workout_data:/rails/storage</span>
+    <span class="key">environment</span>:
+      - <span class="string">DISABLE_SSL=true</span>
     <span class="key">restart</span>: <span class="string">unless-stopped</span>
     <span class="key">depends_on</span>:
       - <span class="string">web</span>

@@ -20,6 +20,8 @@ services:
       - workout_data:/rails/storage
     ports:
       - "3000:80"
+    environment:
+      - DISABLE_SSL=true
     restart: unless-stopped
 
   jobs:
@@ -27,6 +29,8 @@ services:
     command: bin/jobs
     volumes:
       - workout_data:/rails/storage
+    environment:
+      - DISABLE_SSL=true
     restart: unless-stopped
     depends_on:
       - web
