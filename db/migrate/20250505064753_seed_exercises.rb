@@ -1,5 +1,7 @@
 class SeedExercises < ActiveRecord::Migration[8.0]
   def change
+    return unless ENV["SEED_DEFAULT_DATA"] == "true"
+
     [
       [ "Bent Over Dumbbell Row", "Back" ],
       [ "Dumbbell Bench Press", "Chest" ],

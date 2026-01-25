@@ -1,5 +1,7 @@
 class WorkoutRoutingDumbbell4Day < ActiveRecord::Migration[8.0]
   def change
+    return unless ENV["SEED_DEFAULT_DATA"] == "true"
+
     routine = WorkoutRoutine.create(name: "Dumbbell 4 Day")
     day1 = WorkoutRoutineDay.create(name: "Day 1: Upper body", workout_routine: routine)
     [
