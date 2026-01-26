@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_26_214856) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_26_220734) do
   create_table "exercises", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -21,6 +21,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_26_214856) do
     t.integer "user_id", null: false
     t.index ["muscle_id"], name: "index_exercises_on_muscle_id"
     t.index ["user_id"], name: "index_exercises_on_user_id"
+  end
+
+  create_table "invites", force: :cascade do |t|
+    t.string "token", null: false
+    t.integer "user_id", null: false
+    t.integer "used_by_user_id"
+    t.datetime "used_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_invites_on_token", unique: true
+    t.index ["used_by_user_id"], name: "index_invites_on_used_by_user_id"
+    t.index ["user_id"], name: "index_invites_on_user_id"
   end
 
   create_table "muscles", force: :cascade do |t|
@@ -143,6 +155,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_26_214856) do
 
   add_foreign_key "exercises", "muscles"
   add_foreign_key "exercises", "users"
+  add_foreign_key "invites", "users"
+  add_foreign_key "invites", "users", column: "used_by_user_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "sync_logs", "users"
   add_foreign_key "third_party_credentials", "users"

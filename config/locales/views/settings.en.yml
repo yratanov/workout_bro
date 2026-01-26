@@ -4,6 +4,7 @@ en:
       profile: "Profile"
       garmin: "Garmin"
       logs: "Sync Logs"
+      invites: "Invites"
     profile:
       show:
         title: "Settings"
@@ -37,3 +38,17 @@ en:
         statuses:
           success: "Success"
           failure: "Failed"
+    invites:
+      show:
+        title: "Invites"
+        description: "Create and manage invite links to share with others."
+        create_invite: "Create Invite"
+        no_invites: "No invites yet. Create one to invite others."
+        table:
+          invite_link: "Invite Link"
+          used_by: "Used By"
+          used_at: "Used At"
+          actions: "Actions"
+        not_used: "Not used"
+        copy_link: "Click to copy"
+        copied: "Copied!"

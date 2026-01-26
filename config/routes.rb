@@ -51,5 +51,11 @@ Rails.application.routes.draw do
       post :sync
     end
     resource :logs, only: %i[show], controller: "logs"
+    resource :invites, only: %i[show create], controller: "invites" do
+      delete ":id", action: :destroy, as: :invite, on: :collection
+    end
   end
+
+  get "use-invite/:token", to: "invites#show", as: :use_invite
+  post "use-invite/:token", to: "invites#create"
 end

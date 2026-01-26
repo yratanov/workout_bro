@@ -26,10 +26,11 @@ class User < ApplicationRecord
   has_many :exercises, dependent: :destroy
   has_many :third_party_credentials, dependent: :destroy
   has_many :sync_logs, dependent: :destroy
+  has_many :invites, dependent: :destroy
 
   AVAILABLE_LOCALES = %w[en ru].freeze
 
-  validates :email_address, presence: true
+  validates :email_address, presence: true, uniqueness: true
   validates :locale, inclusion: { in: AVAILABLE_LOCALES }, allow_nil: true
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }

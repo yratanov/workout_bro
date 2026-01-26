@@ -1,0 +1,4 @@
+en:
+  controllers:
+    invites:
+      already_used: "This invite has already been used"

@@ -11,7 +11,8 @@ class SettingsMenuComponent < ViewComponent::Base
     [
       { key: :profile, path: settings_profile_path, icon: "user" },
       { key: :garmin, path: settings_garmin_path, icon: "activity" },
-      { key: :logs, path: settings_logs_path, icon: "logs" }
+      { key: :logs, path: settings_logs_path, icon: "logs" },
+      { key: :invites, path: settings_invites_path, icon: "plus" }
     ]
   end
 
