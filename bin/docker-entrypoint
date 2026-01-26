@@ -50,7 +50,9 @@ fi
 
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  if ./bin/rails runner "ActiveRecord::Base.connection.tables.any?" 2>/dev/null | grep -q "true"; then
+  DB_FILE="/rails/storage/production.sqlite3"
+  # Check if database file exists and has tables (using sqlite3 directly)
+  if [ -f "$DB_FILE" ] && sqlite3 "$DB_FILE" "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';" 2>/dev/null | grep -qv "^0$"; then
     echo "Database exists, running migrations..."
     ./bin/rails db:migrate
   else
