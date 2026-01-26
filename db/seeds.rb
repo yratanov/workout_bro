@@ -17,7 +17,7 @@ MusclesSeeder.new.call
   { name: 'Pull-up', muscle: Muscle.find_by(name: 'back'), with_band: true, with_weights: false },
   { name: 'Push-up', muscle: Muscle.find_by(name: 'chest'), with_band: true, with_weights: false }
 ].each do |exercise_data|
-  Exercise.create!(exercise_data)
+  Exercise.create!(exercise_data.merge(user:))
 end
 
 day = workout_day.workout_routine_days.create!(

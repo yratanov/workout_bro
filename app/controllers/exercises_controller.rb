@@ -3,7 +3,7 @@ class ExercisesController < ApplicationController
 
   # GET /exercises or /exercises.json
   def index
-    @exercises = Exercise.all.order(name: :asc)
+    @exercises = Current.user.exercises.order(name: :asc)
   end
 
   # GET /exercises/1 or /exercises/1.json
@@ -19,7 +19,7 @@ class ExercisesController < ApplicationController
 
   # GET /exercises/new
   def new
-    @exercise = Exercise.new
+    @exercise = Current.user.exercises.new
   end
 
   # GET /exercises/1/edit
@@ -28,7 +28,7 @@ class ExercisesController < ApplicationController
 
   # POST /exercises or /exercises.json
   def create
-    @exercise = Exercise.new(exercise_params)
+    @exercise = Current.user.exercises.new(exercise_params)
 
     respond_to do |format|
       if @exercise.save
@@ -67,7 +67,7 @@ class ExercisesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_exercise
-      @exercise = Exercise.find(params.expect(:id))
+      @exercise = Current.user.exercises.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.

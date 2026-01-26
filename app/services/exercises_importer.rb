@@ -1,7 +1,7 @@
 class ExercisesImporter
-  def initialize(locale: "en")
-    @locale = locale
-    @path = path_for_locale(locale)
+  def initialize(user:)
+    @user = user
+    @path = path_for_locale(user.locale || "en")
   end
 
   private
@@ -22,7 +22,7 @@ class ExercisesImporter
     skipped = 0
 
     CSV.foreach(@path, headers: true) do |row|
-      exercise = Exercise.find_or_initialize_by(name: row["name"])
+      exercise = @user.exercises.find_or_initialize_by(name: row["name"])
 
       if exercise.new_record?
         muscle = Muscle.find_by(name: row["muscles"]&.downcase)

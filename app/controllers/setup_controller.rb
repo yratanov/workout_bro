@@ -72,7 +72,7 @@ class SetupController < ApplicationController
 
   def handle_exercises_step
     if params[:import_exercises] == "1"
-      ExercisesImportJob.perform_later(locale: Current.user.locale || "en")
+      ExercisesImportJob.perform_later(user: Current.user)
     end
     advance_to_step(3)
     redirect_to setup_path

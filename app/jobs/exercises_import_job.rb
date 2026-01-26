@@ -1,7 +1,7 @@
 class ExercisesImportJob < ApplicationJob
   queue_as :default
 
-  def perform(locale: "en")
-    ExercisesImporter.new(locale: locale).call
+  def perform(user:)
+    ExercisesImporter.new(user: user).call
   end
 end

@@ -9,41 +9,49 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  muscle_id    :integer
+#  user_id      :integer          not null
 #
 # Indexes
 #
 #  index_exercises_on_muscle_id  (muscle_id)
+#  index_exercises_on_user_id    (user_id)
 #
 # Foreign Keys
 #
 #  muscle_id  (muscle_id => muscles.id)
+#  user_id    (user_id => users.id)
 #
 bench_press:
   name: Bench Press
   muscle: chest
   with_weights: true
   with_band: false
+  user: one
 
 squat:
   name: Squat
   muscle: legs
   with_weights: true
   with_band: false
+  user: one
 
 deadlift:
   name: Deadlift
   muscle: back
   with_weights: true
   with_band: false
+  user: one
 
 pull_up:
   name: Pull-Up
   muscle: back
   with_weights: false
   with_band: false
+  user: one
 
 banded_squat:
   name: Banded Squat
   muscle: legs
   with_weights: false
   with_band: true
+  user: one

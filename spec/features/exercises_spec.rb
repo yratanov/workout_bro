@@ -10,7 +10,7 @@ RSpec.describe "Exercises", type: :feature do
 
   describe "deleting an exercise" do
     it "allows deleting an exercise from the edit page" do
-      exercise = Exercise.create!(name: "Test Exercise for Deletion", muscle: muscles(:chest))
+      exercise = Exercise.create!(name: "Test Exercise for Deletion", muscle: muscles(:chest), user: user)
 
       visit exercise_path(exercise)
 
@@ -31,7 +31,7 @@ RSpec.describe "Exercises", type: :feature do
     end
 
     it "allows deleting an exercise from the show page" do
-      exercise = Exercise.create!(name: "Test Exercise for Show Deletion", muscle: muscles(:chest))
+      exercise = Exercise.create!(name: "Test Exercise for Show Deletion", muscle: muscles(:chest), user: user)
 
       visit exercise_path(exercise)
 

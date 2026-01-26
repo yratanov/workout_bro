@@ -76,7 +76,7 @@ RSpec.describe WorkoutSet, type: :model do
     context 'when there are no previous reps anywhere' do
       it 'returns default values' do
         # Create a new exercise with no history
-        new_exercise = Exercise.create!(name: 'New Exercise')
+        new_exercise = Exercise.create!(name: 'New Exercise', user: user)
 
         current_workout = Workout.create!(user: user, workout_type: 'strength', started_at: 1.hour.ago)
         current_set = WorkoutSet.create!(workout: current_workout, exercise: new_exercise, started_at: 1.hour.ago)
