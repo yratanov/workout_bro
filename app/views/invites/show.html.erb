@@ -9,42 +9,15 @@
     </div>
 
     <%= app_form_with model: @user, url: use_invite_path(token: @invite.token), method: :post, class: "space-y-6" do |form| %>
-      <div>
-        <%= form.label :email_address, t(".email_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
-        <%= form.email_field :email_address,
-                         required: true,
-                         autofocus: true,
-                         autocomplete: "username",
-                         placeholder: t(".email_placeholder") %>
-        <% if @user.errors.include?(:email_address) %>
-          <p class="mt-1 text-sm text-red-400"><%= @user.errors[:email_address].first %></p>
-        <% end %>
-      </div>
-
-      <div>
-        <%= form.label :password, t(".password_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
-        <%= form.password_field :password,
-                            required: true,
-                            autocomplete: "new-password",
-                            placeholder: t(".password_placeholder"),
-                            maxlength: 72 %>
-        <% if @user.errors.include?(:password) %>
-          <p class="mt-1 text-sm text-red-400"><%= @user.errors[:password].first %></p>
-        <% end %>
-      </div>
-
-      <div>
-        <%= form.label :password_confirmation, t(".password_confirmation_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
-        <%= form.password_field :password_confirmation,
-                            required: true,
-                            autocomplete: "new-password",
-                            placeholder: t(".password_confirmation_placeholder"),
-                            maxlength: 72 %>
-        <% if @user.errors.include?(:password_confirmation) %>
-          <p class="mt-1 text-sm text-red-400"><%= @user.errors[:password_confirmation].first %></p>
-        <% end %>
-      </div>
-
+      <%= form.input :email_address, as: :email, label: t(".email_label"), margin: "",
+          input_html: { required: true, autofocus: true, autocomplete: "username",
+                       placeholder: t(".email_placeholder") } %>
+      <%= form.input :password, as: :password, label: t(".password_label"), margin: "",
+          input_html: { required: true, autocomplete: "new-password",
+                       placeholder: t(".password_placeholder"), maxlength: 72 } %>
+      <%= form.input :password_confirmation, as: :password, label: t(".password_confirmation_label"), margin: "",
+          input_html: { required: true, autocomplete: "new-password",
+                       placeholder: t(".password_confirmation_placeholder"), maxlength: 72 } %>
       <div class="pt-2">
         <%= form.submit t(".submit") %>
       </div>

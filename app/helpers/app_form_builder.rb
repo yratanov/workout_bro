@@ -100,11 +100,12 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
             data: options[:data] do
       label =
         if options[:label] != false && type != :editable_text
-          label(
-            field,
-            class:
-              "#{type == :check_box ? "" : "mb-2"} block text-sm font-medium #{error?(field) ? "text-red-400" : "text-slate-300"}"
-          )
+          label_class = "#{type == :check_box ? "" : "mb-2"} block text-sm font-medium #{error?(field) ? "text-red-400" : "text-slate-300"}"
+          if options[:label].is_a?(String)
+            label(field, options[:label], class: label_class)
+          else
+            label(field, class: label_class)
+          end
         end
 
       error =

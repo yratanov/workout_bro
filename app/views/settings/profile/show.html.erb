@@ -11,17 +11,8 @@
         <h2 class="font-semibold text-lg mb-4"><%= t(".profile_info") %></h2>
 
         <%= app_form_with model: @user, url: settings_profile_path, method: :patch, class: "space-y-6" do |form| %>
-          <div>
-            <%= form.label :email_address, t(".email_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
-            <%= form.email_field :email_address,
-                             required: true,
-                             autocomplete: "email",
-                             placeholder: t(".email_placeholder") %>
-            <% if @user.errors[:email_address].any? %>
-              <p class="mt-1 text-sm text-red-400"><%= @user.errors[:email_address].first %></p>
-            <% end %>
-          </div>
-
+          <%= form.input :email_address, as: :email, label: t(".email_label"), margin: "",
+              input_html: { required: true, autocomplete: "email", placeholder: t(".email_placeholder") } %>
           <div class="pt-2">
             <%= button text: t(".save"), type: "submit", style: "primary" %>
           </div>
@@ -32,14 +23,8 @@
         <h2 class="font-semibold text-lg mb-4"><%= t(".language_section") %></h2>
 
         <%= app_form_with model: @user, url: settings_profile_path, method: :patch, class: "space-y-6" do |form| %>
-          <div>
-            <%= form.label :locale, t(".language_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
-            <%= form.select :locale,
-                            User::AVAILABLE_LOCALES.map { |l| [t("setup.language.locales.#{l}"), l] },
-                            { selected: @user.locale || "en" },
-                            class: "bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white w-full focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
-          </div>
-
+          <%= form.input :locale, as: :select, label: t(".language_label"), margin: "",
+              collection: User::AVAILABLE_LOCALES.map { |l| [t("setup.language.locales.#{l}"), l] } %>
           <div class="pt-2">
             <%= button text: t(".save"), type: "submit", style: "primary" %>
           </div>
