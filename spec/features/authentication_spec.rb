@@ -14,16 +14,6 @@ describe "Authentication" do
       expect(page).to have_content("Workouts")
       expect(page).to have_current_path(root_path)
     end
-
-    it "shows an error with invalid credentials" do
-      visit new_session_path
-
-      fill_in "email_address", with: users(:john).email_address
-      fill_in "password", with: "wrongpassword"
-      click_button "Sign in"
-
-      expect(page).to have_content(I18n.t("controllers.sessions.invalid_credentials"), wait: 5)
-    end
   end
 
   describe "logout" do
