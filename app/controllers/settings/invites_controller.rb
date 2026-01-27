@@ -2,6 +2,7 @@
 
 module Settings
   class InvitesController < ApplicationController
+    before_action :require_admin
     before_action :set_invite, only: :destroy
 
     def show

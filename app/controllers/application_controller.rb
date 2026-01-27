@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   around_action :switch_locale
 
+  helper_method :current_user
+
   private
 
   def switch_locale(&)
@@ -15,5 +17,9 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= Current.user
+  end
+
+  def require_admin
+    redirect_to root_path, alert: I18n.t("controllers.application.admin_required") unless current_user&.admin?
   end
 end

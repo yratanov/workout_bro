@@ -52,6 +52,7 @@ class SetupController < ApplicationController
 
   def handle_account_step
     @user = User.new(account_params)
+    @user.role = :admin if User.count == 0
     if @user.save
       start_new_session_for(@user)
       advance_to_step(1)

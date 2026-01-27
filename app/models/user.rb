@@ -6,6 +6,7 @@
 #  email_address   :string           not null
 #  locale          :string           default("en")
 #  password_digest :string           not null
+#  role            :integer          default("user"), not null
 #  setup_completed :boolean          default(FALSE)
 #  wizard_step     :integer          default(0)
 #  created_at      :datetime         not null
@@ -18,6 +19,9 @@
 
 class User < ApplicationRecord
   has_secure_password
+
+  enum :role, { user: 0, admin: 1 }
+
   has_many :sessions, dependent: :destroy
   has_many :workouts, dependent: :destroy
   has_many :workout_sets, through: :workouts

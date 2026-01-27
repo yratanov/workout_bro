@@ -3,17 +3,19 @@
 class SettingsMenuComponent < ViewComponent::Base
   include ApplicationHelper
 
-  def initialize(current_page:)
+  def initialize(current_page:, current_user:)
     @current_page = current_page
+    @current_user = current_user
   end
 
   def menu_items
-    [
+    items = [
       { key: :profile, path: settings_profile_path, icon: "user" },
       { key: :garmin, path: settings_garmin_path, icon: "activity" },
-      { key: :logs, path: settings_logs_path, icon: "logs" },
-      { key: :invites, path: settings_invites_path, icon: "plus" }
+      { key: :logs, path: settings_logs_path, icon: "logs" }
     ]
+    items << { key: :invites, path: settings_invites_path, icon: "plus" } if @current_user&.admin?
+    items
   end
 
   def active?(key)
