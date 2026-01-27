@@ -26,6 +26,6 @@ module WorkoutBro
 
     # Report unhandled errors to ErrorLog
     require_relative "../app/middleware/error_reporter_middleware"
-    config.middleware.insert_before ActionDispatch::ShowExceptions, ErrorReporterMiddleware
+    config.middleware.insert_after ActionDispatch::DebugExceptions, ErrorReporterMiddleware
   end
 end

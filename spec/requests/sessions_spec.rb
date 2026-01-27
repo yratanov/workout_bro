@@ -1,9 +1,7 @@
-require 'rails_helper'
+describe "Sessions" do
+  fixtures :all
 
-RSpec.describe "Sessions", type: :request do
-  fixtures :users
-
-  let(:user) { users(:one) }
+  let(:user) { users(:john) }
 
   describe "POST /session" do
     context "with valid credentials" do

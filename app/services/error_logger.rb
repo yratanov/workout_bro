@@ -14,8 +14,8 @@ class ErrorLogger
         message: error.message.to_s[0, 10_000],
         severity: 0,
         source: source.to_s[0, 255],
-        backtrace: safe_json(error.backtrace&.first(20)),
-        context: safe_json(context),
+        backtrace: safe_array(error.backtrace&.first(20)),
+        context: safe_hash(context),
         request_id: context[:request_id].to_s[0, 255],
         created_at: Time.current,
         updated_at: Time.current
@@ -28,10 +28,19 @@ class ErrorLogger
 
     private
 
-    def safe_json(obj)
-      return nil if obj.nil?
+    def safe_array(arr)
+      return nil if arr.nil?
 
-      obj.to_json
+      Array(arr).map(&:to_s)
+    rescue StandardError
+      nil
+    end
+
+    def safe_hash(hash)
+      return nil if hash.nil?
+
+      # Convert to JSON and back to ensure all values are serializable
+      JSON.parse(hash.to_json)
     rescue StandardError
       nil
     end
