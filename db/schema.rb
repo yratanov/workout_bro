@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_27_074822) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_27_215345) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -37,6 +37,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_27_074822) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "error_logs", force: :cascade do |t|
+    t.string "error_class", null: false
+    t.text "message"
+    t.integer "severity", default: 0, null: false
+    t.string "source", default: "application"
+    t.json "backtrace"
+    t.json "context"
+    t.string "request_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_error_logs_on_created_at"
+    t.index ["severity"], name: "index_error_logs_on_severity"
   end
 
   create_table "exercises", force: :cascade do |t|

@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: sync_logs
+# Database name: primary
 #
 #  id         :integer          not null, primary key
 #  log_type   :integer          default("garmin"), not null

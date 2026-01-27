@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: workouts
+# Database name: primary
 #
 #  id                     :integer          not null, primary key
 #  date                   :date

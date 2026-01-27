@@ -22,6 +22,9 @@
       "Bash(bin/rubocop:*)",
       "Bash(bin/rails db:encryption:init:*)",
       "Bash(find:*)"
+      "Bash(bin/rails db:encryption:init:*)"
+      "Bash(bin/rails db:encryption:init:*)",
+      "WebFetch(domain:guides.rubyonrails.org)"
     ]
   }
 }

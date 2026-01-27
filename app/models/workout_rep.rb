@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: workout_reps
+# Database name: primary
 #
 #  id             :integer          not null, primary key
 #  band           :string

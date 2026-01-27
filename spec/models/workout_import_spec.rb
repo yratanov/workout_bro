@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: workout_imports
+# Database name: primary
 #
 #  id                :integer          not null, primary key
 #  error_details     :json

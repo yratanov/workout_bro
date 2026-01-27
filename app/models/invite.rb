@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: invites
+# Database name: primary
 #
 #  id              :integer          not null, primary key
 #  token           :string           not null

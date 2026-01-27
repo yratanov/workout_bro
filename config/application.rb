@@ -23,5 +23,9 @@ module WorkoutBro
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Report unhandled errors to ErrorLog
+    require_relative "../app/middleware/error_reporter_middleware"
+    config.middleware.insert_before ActionDispatch::ShowExceptions, ErrorReporterMiddleware
   end
 end

@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: workout_sets
+# Database name: primary
 #
 #  id                   :integer          not null, primary key
 #  ended_at             :datetime

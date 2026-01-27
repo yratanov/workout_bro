@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: third_party_credentials
+# Database name: primary
 #
 #  id                 :integer          not null, primary key
 #  encrypted_password :string

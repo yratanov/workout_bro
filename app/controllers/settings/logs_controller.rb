@@ -2,8 +2,10 @@
 
 module Settings
   class LogsController < ApplicationController
+    before_action :require_admin
+
     def show
-      @sync_logs = current_user.sync_logs.recent.limit(50)
+      @error_logs = ErrorLog.recent.limit(100)
     end
   end
 end

@@ -4,7 +4,7 @@ ru:
       profile: "Профиль"
       garmin: "Garmin"
       imports: "Импорт"
-      logs: "Логи синхронизации"
+      logs: "Логи ошибок"
       invites: "Приглашения"
     profile:
       show:
@@ -28,6 +28,13 @@ ru:
         sync_section: "Синхронизация активностей"
         sync_description: "Вручную синхронизировать беговые активности из Garmin Connect."
         sync_button: "Синхронизировать"
+        sync_history: "История синхронизации"
+        sync_history_description: "Просмотр истории операций синхронизации."
+        log_types:
+          garmin: "Синхронизация Garmin"
+        statuses:
+          success: "Успешно"
+          failure: "Ошибка"
     imports:
       show:
         title: "Импорт тренировок"
@@ -62,12 +69,27 @@ ru:
           failed: "Ошибка"
     logs:
       show:
-        title: "Логи синхронизации"
-        sync_logs: "Логи синхронизации"
-        description: "Просмотр истории операций синхронизации."
-        no_logs: "Логов пока нет."
-        log_types:
-          garmin: "Синхронизация Garmin"
-        statuses:
-          success: "Успешно"
-          failure: "Ошибка"
+        title: "Логи ошибок"
+        error_logs: "Логи ошибок"
+        description: "Просмотр логов ошибок приложения."
+        no_logs: "Логов ошибок пока нет."
+        severities:
+          error: "Ошибка"
+          warning: "Предупреждение"
+          info: "Информация"
+        show_backtrace: "Показать стек вызовов"
+        show_params: "Показать параметры"
+    invites:
+      show:
+        title: "Приглашения"
+        description: "Создание и управление ссылками приглашений."
+        create_invite: "Создать приглашение"
+        no_invites: "Приглашений пока нет. Создайте, чтобы пригласить других."
+        table:
+          invite_link: "Ссылка"
+          used_by: "Использовано"
+          used_at: "Когда"
+          actions: "Действия"
+        not_used: "Не использовано"
+        copy_link: "Нажмите для копирования"
+        copied: "Скопировано!"
