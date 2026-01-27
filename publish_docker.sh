@@ -3,10 +3,7 @@ set -e
 
 IMAGE_NAME="yratanov/workout_bro"
 
-echo "Building Docker image..."
-docker build -t "$IMAGE_NAME" .
-
-echo "Pushing to Docker Hub..."
-docker push "$IMAGE_NAME:latest"
+echo "Building Docker image for linux/amd64..."
+docker buildx build --platform linux/amd64 -t "$IMAGE_NAME:latest" --push .
 
 echo "Done! Image pushed to $IMAGE_NAME:latest"
