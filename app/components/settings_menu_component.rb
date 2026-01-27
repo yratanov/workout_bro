@@ -12,6 +12,7 @@ class SettingsMenuComponent < ViewComponent::Base
     items = [
       { key: :profile, path: settings_profile_path, icon: "user" },
       { key: :garmin, path: settings_garmin_path, icon: "activity" },
+      { key: :imports, path: settings_imports_path, icon: "plus" },
       { key: :logs, path: settings_logs_path, icon: "logs" }
     ]
     items << { key: :invites, path: settings_invites_path, icon: "plus" } if @current_user&.admin?

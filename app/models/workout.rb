@@ -14,16 +14,19 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  user_id                :integer
+#  workout_import_id      :integer
 #  workout_routine_day_id :integer
 #
 # Indexes
 #
 #  index_workouts_on_user_id                 (user_id)
+#  index_workouts_on_workout_import_id       (workout_import_id)
 #  index_workouts_on_workout_routine_day_id  (workout_routine_day_id)
 #
 # Foreign Keys
 #
 #  user_id                 (user_id => users.id)
+#  workout_import_id       (workout_import_id => workout_imports.id)
 #  workout_routine_day_id  (workout_routine_day_id => workout_routine_days.id)
 #
 class Workout < ApplicationRecord
@@ -31,6 +34,7 @@ class Workout < ApplicationRecord
   has_many :exercises, through: :workout_sets
   belongs_to :workout_routine_day, optional: true
   belongs_to :user
+  belongs_to :workout_import, optional: true
 
   has_one :workout_routine, through: :workout_routine_day
 

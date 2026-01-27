@@ -54,6 +54,10 @@ Rails.application.routes.draw do
     resource :invites, only: %i[show create], controller: "invites" do
       delete ":id", action: :destroy, as: :invite, on: :collection
     end
+    resource :imports, only: %i[show create], controller: "imports" do
+      get ":id/status", action: :status, as: :status, on: :collection
+      delete ":id", action: :destroy, as: :import, on: :collection
+    end
   end
 
   get "use-invite/:token", to: "invites#show", as: :use_invite

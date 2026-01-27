@@ -3,7 +3,9 @@ ru:
     menu:
       profile: "Профиль"
       garmin: "Garmin"
+      imports: "Импорт"
       logs: "Логи синхронизации"
+      invites: "Приглашения"
     profile:
       show:
         title: "Настройки"
@@ -26,6 +28,38 @@ ru:
         sync_section: "Синхронизация активностей"
         sync_description: "Вручную синхронизировать беговые активности из Garmin Connect."
         sync_button: "Синхронизировать"
+    imports:
+      show:
+        title: "Импорт тренировок"
+        import_workouts: "Импорт тренировок"
+        description: "Загрузите CSV файл для импорта истории тренировок из других приложений."
+        file_label: "CSV файл"
+        file_hint: "Поддерживаемые форматы: Custom, Strong App, Hevy, FitNotes"
+        upload_button: "Импортировать"
+        supported_formats: "Поддерживаемые форматы"
+        format_custom: "Custom формат"
+        format_custom_desc: "Дата на одной строке, упражнения с вес×повторения на следующих строках"
+        format_strong: "Strong App"
+        format_strong_desc: "Экспорт из Strong App с колонками Date, Exercise Name, Weight, Reps"
+        format_hevy: "Hevy"
+        format_hevy_desc: "Экспорт из Hevy с колонками start_time, exercise_title, weight_kg, reps"
+        format_fitnotes: "FitNotes"
+        format_fitnotes_desc: "Экспорт из FitNotes с колонками Date, Exercise, Weight, Reps"
+        import_history: "История импортов"
+        unknown_file: "Неизвестный файл"
+        stats: "Импортировано: %{imported}, Пропущено: %{skipped}"
+        processing: "Обработка..."
+        revert_button: "Отменить"
+        revert_confirm:
+          one: "Вы уверены, что хотите удалить импортированную тренировку?"
+          few: "Вы уверены, что хотите удалить %{count} импортированные тренировки?"
+          many: "Вы уверены, что хотите удалить %{count} импортированных тренировок?"
+          other: "Вы уверены, что хотите удалить %{count} импортированных тренировок?"
+        statuses:
+          pending: "Ожидание"
+          in_progress: "Обработка"
+          completed: "Завершено"
+          failed: "Ошибка"
     logs:
       show:
         title: "Логи синхронизации"

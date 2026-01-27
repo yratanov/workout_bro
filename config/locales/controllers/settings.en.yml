@@ -11,3 +11,8 @@ en:
       invites:
         created: "Invite created successfully"
         destroyed: "Invite deleted successfully"
+      imports:
+        started: "Import started. Your workouts will be imported in the background."
+        reverted:
+          one: "%{count} workout deleted."
+          other: "%{count} workouts deleted."

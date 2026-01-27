@@ -3,6 +3,7 @@ en:
     menu:
       profile: "Profile"
       garmin: "Garmin"
+      imports: "Import"
       logs: "Sync Logs"
       invites: "Invites"
     profile:
@@ -27,6 +28,36 @@ en:
         sync_section: "Sync Activities"
         sync_description: "Manually sync your running activities from Garmin Connect."
         sync_button: "Sync Now"
+    imports:
+      show:
+        title: "Import Workouts"
+        import_workouts: "Import Workouts"
+        description: "Upload a CSV file to import your workout history from other apps."
+        file_label: "CSV File"
+        file_hint: "Supported formats: Custom, Strong App, Hevy, FitNotes"
+        upload_button: "Import Workouts"
+        supported_formats: "Supported Formats"
+        format_custom: "Custom Format"
+        format_custom_desc: "Date on one line, exercises with weight×reps on following lines"
+        format_strong: "Strong App"
+        format_strong_desc: "Export from Strong App with Date, Exercise Name, Weight, Reps columns"
+        format_hevy: "Hevy"
+        format_hevy_desc: "Export from Hevy with start_time, exercise_title, weight_kg, reps columns"
+        format_fitnotes: "FitNotes"
+        format_fitnotes_desc: "Export from FitNotes with Date, Exercise, Weight, Reps columns"
+        import_history: "Import History"
+        unknown_file: "Unknown file"
+        stats: "Imported: %{imported}, Skipped: %{skipped}"
+        processing: "Processing..."
+        revert_button: "Revert"
+        revert_confirm:
+          one: "Are you sure you want to delete this imported workout?"
+          other: "Are you sure you want to delete %{count} imported workouts?"
+        statuses:
+          pending: "Pending"
+          in_progress: "Processing"
+          completed: "Completed"
+          failed: "Failed"
     logs:
       show:
         title: "Sync Logs"
