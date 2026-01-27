@@ -13,6 +13,11 @@ en:
         distance: "Distance(m)"
         time_in_seconds: "Time (hh:mm:ss)"
     errors:
+      models:
+        workout_import:
+          attributes:
+            file:
+              invalid_format: "must be a CSV file"
       template:
         header:
           one: "%{count} error prohibited this %{model} from being saved"

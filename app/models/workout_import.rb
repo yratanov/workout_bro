@@ -34,4 +34,16 @@ class WorkoutImport < ApplicationRecord
   }
 
   validates :status, presence: true
+  validates :file, presence: true
+  validate :file_must_be_csv
+
+  private
+
+  def file_must_be_csv
+    return unless file.attached?
+
+    unless file.content_type == "text/csv" || file.filename.to_s.end_with?(".csv")
+      errors.add(:file, :invalid_format)
+    end
+  end
 end

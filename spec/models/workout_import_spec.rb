@@ -26,6 +26,20 @@ RSpec.describe WorkoutImport, type: :model do
   fixtures :users
 
   let(:user) { users(:one) }
+  let(:csv_file) do
+    {
+      io: StringIO.new("test,data"),
+      filename: "test.csv",
+      content_type: "text/csv"
+    }
+  end
+
+  def create_workout_import(attrs = {})
+    import = described_class.new(user: user, **attrs)
+    import.file.attach(csv_file) unless attrs[:skip_file]
+    import.save!
+    import
+  end
 
   describe "associations" do
     it { should belong_to(:user) }
@@ -34,6 +48,39 @@ RSpec.describe WorkoutImport, type: :model do
 
   describe "validations" do
     it { should validate_presence_of(:status) }
+
+    it "requires a file to be attached" do
+      import = described_class.new(user: user)
+      expect(import).not_to be_valid
+      expect(import.errors[:file]).to include("can't be blank")
+    end
+
+    it "accepts CSV files" do
+      import = described_class.new(user: user)
+      import.file.attach(csv_file)
+      expect(import).to be_valid
+    end
+
+    it "rejects non-CSV files by content type" do
+      import = described_class.new(user: user)
+      import.file.attach(
+        io: StringIO.new("not a csv"),
+        filename: "test.txt",
+        content_type: "text/plain"
+      )
+      expect(import).not_to be_valid
+      expect(import.errors[:file]).to include("must be a CSV file")
+    end
+
+    it "accepts files with .csv extension regardless of content type" do
+      import = described_class.new(user: user)
+      import.file.attach(
+        io: StringIO.new("data"),
+        filename: "data.csv",
+        content_type: "application/octet-stream"
+      )
+      expect(import).to be_valid
+    end
   end
 
   describe "enums" do
@@ -48,7 +95,7 @@ RSpec.describe WorkoutImport, type: :model do
   end
 
   describe "status transitions" do
-    let(:workout_import) { described_class.create!(user: user) }
+    let(:workout_import) { create_workout_import }
 
     it "defaults to pending status" do
       expect(workout_import.status).to eq("pending")
@@ -71,7 +118,7 @@ RSpec.describe WorkoutImport, type: :model do
   end
 
   describe "counter defaults" do
-    let(:workout_import) { described_class.create!(user: user) }
+    let(:workout_import) { create_workout_import }
 
     it "defaults imported_count to 0" do
       expect(workout_import.imported_count).to eq(0)
@@ -83,20 +130,14 @@ RSpec.describe WorkoutImport, type: :model do
   end
 
   describe "file attachment" do
-    let(:workout_import) { described_class.create!(user: user) }
-
     it "can attach a file" do
-      workout_import.file.attach(
-        io: StringIO.new("test,data"),
-        filename: "test.csv",
-        content_type: "text/csv"
-      )
+      workout_import = create_workout_import
       expect(workout_import.file).to be_attached
     end
   end
 
   describe "workouts association" do
-    let(:workout_import) { described_class.create!(user: user) }
+    let(:workout_import) { create_workout_import }
 
     it "nullifies workout_import_id when destroyed" do
       workout = user.workouts.create!(

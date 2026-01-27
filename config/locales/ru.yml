@@ -13,6 +13,11 @@ ru:
         distance: "Дистанция (м)"
         time_in_seconds: "Время (чч:мм:сс)"
     errors:
+      models:
+        workout_import:
+          attributes:
+            file:
+              invalid_format: "должен быть CSV файлом"
       template:
         header:
           one: "%{count} ошибка не позволяет сохранить %{model}"

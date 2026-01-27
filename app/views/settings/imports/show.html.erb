@@ -12,6 +12,11 @@
         <p class="text-slate-400 text-sm mb-6"><%= t(".description") %></p>
 
         <%= app_form_with model: @workout_import, url: settings_imports_path, method: :post, class: "space-y-6" do |form| %>
+          <% if @workout_import.errors.any? %>
+            <div class="bg-red-900/50 border border-red-500 rounded-lg p-4">
+              <p class="text-red-400 text-sm"><%= @workout_import.errors.full_messages.join(", ") %></p>
+            </div>
+          <% end %>
           <div>
             <%= form.label :file, t(".file_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
             <%= form.file_field :file,
