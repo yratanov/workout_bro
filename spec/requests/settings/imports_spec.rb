@@ -22,7 +22,8 @@ RSpec.describe "Settings::Imports", type: :request do
 
     context "with existing imports" do
       let!(:completed_import) do
-        user.workout_imports.create!(
+        create_workout_import(
+          user: user,
           status: :completed,
           imported_count: 5,
           skipped_count: 2,
@@ -92,7 +93,8 @@ RSpec.describe "Settings::Imports", type: :request do
 
   describe "GET /settings/imports/:id/status" do
     let!(:workout_import) do
-      user.workout_imports.create!(
+      create_workout_import(
+        user: user,
         status: :completed,
         imported_count: 10,
         skipped_count: 3,
@@ -114,7 +116,8 @@ RSpec.describe "Settings::Imports", type: :request do
 
     context "with failed import" do
       let!(:failed_import) do
-        user.workout_imports.create!(
+        create_workout_import(
+          user: user,
           status: :failed,
           error_details: { "message" => "Test error" },
           original_filename: "bad.csv"
@@ -133,7 +136,8 @@ RSpec.describe "Settings::Imports", type: :request do
     context "when import belongs to another user" do
       let(:other_user) { users(:two) }
       let!(:other_import) do
-        other_user.workout_imports.create!(
+        create_workout_import(
+          user: other_user,
           status: :completed,
           original_filename: "other.csv"
         )
@@ -148,7 +152,8 @@ RSpec.describe "Settings::Imports", type: :request do
 
   describe "DELETE /settings/imports/:id" do
     let!(:workout_import) do
-      user.workout_imports.create!(
+      create_workout_import(
+        user: user,
         status: :completed,
         imported_count: 2,
         skipped_count: 0,
@@ -191,7 +196,8 @@ RSpec.describe "Settings::Imports", type: :request do
     context "when import belongs to another user" do
       let(:other_user) { users(:two) }
       let!(:other_import) do
-        other_user.workout_imports.create!(
+        create_workout_import(
+          user: other_user,
           status: :completed,
           original_filename: "other.csv"
         )

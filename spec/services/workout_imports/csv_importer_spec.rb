@@ -4,7 +4,7 @@ RSpec.describe WorkoutImports::CsvImporter do
   fixtures :users, :exercises
 
   let(:user) { users(:one) }
-  let(:workout_import) { WorkoutImport.create!(user: user) }
+  let(:workout_import) { create_workout_import(user: user) }
 
   describe "#call" do
     context "with custom format CSV" do
@@ -72,6 +72,8 @@ RSpec.describe WorkoutImports::CsvImporter do
     end
 
     context "without attached file" do
+      let(:workout_import) { create_workout_import(user: user, skip_file: true) }
+
       it "fails with appropriate error" do
         result = described_class.new(workout_import).call
 

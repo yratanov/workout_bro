@@ -4,7 +4,7 @@ RSpec.describe WorkoutImports::Parsers::HevyParser do
   fixtures :users, :exercises
 
   let(:user) { users(:one) }
-  let(:workout_import) { WorkoutImport.create!(user: user) }
+  let(:workout_import) { create_workout_import(user: user) }
   let(:exercise_matcher) { WorkoutImports::ExerciseMatcher.new(user: user) }
 
   def build_parser(csv_content)

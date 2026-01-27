@@ -4,7 +4,7 @@ RSpec.describe WorkoutImports::Parsers::CustomFormatParser do
   fixtures :users, :exercises
 
   let(:user) { users(:one) }
-  let(:workout_import) { WorkoutImport.create!(user: user) }
+  let(:workout_import) { create_workout_import(user: user) }
   let(:exercise_matcher) { WorkoutImports::ExerciseMatcher.new(user: user) }
 
   def build_parser(csv_content)
@@ -206,7 +206,7 @@ RSpec.describe WorkoutImports::Parsers::CustomFormatParser do
       it "does not create duplicate workouts on re-import" do
         build_parser(csv_content).parse
 
-        second_import = WorkoutImport.create!(user: user)
+        second_import = create_workout_import(user: user)
         second_parser = described_class.new(
           csv_content: csv_content,
           user: user,
