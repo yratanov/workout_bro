@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe "Authentication", type: :feature do
+describe "Authentication" do
   fixtures :users
 
   describe "login" do
     it "allows a user to sign in with valid credentials" do
       visit new_session_path
 
-      fill_in "email_address", with: users(:one).email_address
+      fill_in "email_address", with: users(:john).email_address
       fill_in "password", with: "password"
       click_button "Sign in"
 
@@ -18,7 +18,7 @@ RSpec.describe "Authentication", type: :feature do
     it "shows an error with invalid credentials" do
       visit new_session_path
 
-      fill_in "email_address", with: users(:one).email_address
+      fill_in "email_address", with: users(:john).email_address
       fill_in "password", with: "wrongpassword"
       click_button "Sign in"
 
@@ -28,7 +28,7 @@ RSpec.describe "Authentication", type: :feature do
 
   describe "logout" do
     it "allows a user to sign out" do
-      login_as(users(:one))
+      login_as(users(:john))
 
       find('a[href="/session"][data-turbo-method="delete"]').click
 

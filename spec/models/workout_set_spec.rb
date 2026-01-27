@@ -24,11 +24,11 @@
 #
 require 'rails_helper'
 
-RSpec.describe WorkoutSet, type: :model do
+describe WorkoutSet do
   fixtures :users, :workouts, :exercises, :workout_sets, :workout_reps
 
   describe '#default_rep_values' do
-    let(:user) { users(:one) }
+    let(:user) { users(:john) }
     let(:exercise) { exercises(:bench_press) }
 
     context 'when previous workout has a rep at the same index' do

@@ -1,0 +1,5 @@
+workout_import_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "workouts.csv", content_type: "text/csv", service_name: "test" %>
+workout_import_csv_blob_two: <%= ActiveStorage::FixtureSet.blob filename: "workouts.csv", content_type: "text/csv", service_name: "test" %>
+workout_import_csv_blob_completed: <%= ActiveStorage::FixtureSet.blob filename: "workouts.csv", content_type: "text/csv", service_name: "test" %>
+workout_import_csv_blob_failed: <%= ActiveStorage::FixtureSet.blob filename: "workouts.csv", content_type: "text/csv", service_name: "test" %>
+workout_import_csv_blob_other: <%= ActiveStorage::FixtureSet.blob filename: "workouts.csv", content_type: "text/csv", service_name: "test" %>

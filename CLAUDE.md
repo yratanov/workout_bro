@@ -16,7 +16,7 @@ bin/rails server       # Start Rails server only
 
 ## Testing
 
-Uses RSpec with Capybara for feature tests. Fixtures are stored in `test/fixtures/`.
+Uses RSpec with Capybara for feature tests.
 
 ```bash
 bundle exec rspec                        # Run all tests
@@ -29,7 +29,14 @@ bundle exec rspec spec/features/workouts_spec.rb  # Run a single test file
 - `spec/features/` - Capybara feature tests (browser-based integration tests)
 - `spec/requests/` - Controller/request specs
 - `spec/support/` - Shared helpers (login_helpers.rb, capybara.rb)
-- `test/fixtures/` - Test data fixtures (shared with RSpec)
+- `spec/fixtures/` - Test data fixtures
+
+**Spec file conventions:**
+- Do NOT include `require "rails_helper"` - it's loaded automatically
+- Use `describe` not `RSpec.describe`
+- Do NOT use `type:` declarations (e.g., `type: :request`) - spec type is inferred from directory
+- Use `fixtures :all` to load all fixtures
+- Use descriptive fixture names (e.g., `users(:john)`, not `users(:one)`)
 
 ## Code Quality
 

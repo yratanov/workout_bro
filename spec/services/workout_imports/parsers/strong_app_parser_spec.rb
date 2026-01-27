@@ -1,10 +1,8 @@
-require "rails_helper"
+describe WorkoutImports::Parsers::StrongAppParser do
+  fixtures :all
 
-RSpec.describe WorkoutImports::Parsers::StrongAppParser do
-  fixtures :users, :exercises
-
-  let(:user) { users(:one) }
-  let(:workout_import) { create_workout_import(user: user) }
+  let(:user) { users(:john) }
+  let(:workout_import) { workout_imports(:pending_import) }
   let(:exercise_matcher) { WorkoutImports::ExerciseMatcher.new(user: user) }
 
   def build_parser(csv_content)

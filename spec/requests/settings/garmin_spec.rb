@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "Settings::Garmin", type: :request do
+describe "Settings::Garmin" do
   fixtures :users
 
-  let(:user) { users(:one) }
+  let(:user) { users(:john) }
 
   before do
     sign_in(user)
@@ -126,7 +126,7 @@ RSpec.describe "Settings::Garmin", type: :request do
   end
 
   describe "credential isolation" do
-    let(:other_user) { users(:two) }
+    let(:other_user) { users(:jane) }
 
     it "does not expose other user credentials" do
       other_user.garmin_credential.update!(username: "other_user_garmin", password: "other_secret")

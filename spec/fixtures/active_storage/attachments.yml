@@ -1,0 +1,24 @@
+workout_import_file:
+  name: file
+  record: pending_import (WorkoutImport)
+  blob: workout_import_csv_blob
+
+workout_import_file_two:
+  name: file
+  record: second_import (WorkoutImport)
+  blob: workout_import_csv_blob_two
+
+workout_import_file_completed:
+  name: file
+  record: completed (WorkoutImport)
+  blob: workout_import_csv_blob_completed
+
+workout_import_file_failed:
+  name: file
+  record: failed (WorkoutImport)
+  blob: workout_import_csv_blob_failed
+
+workout_import_file_other:
+  name: file
+  record: other_user_import (WorkoutImport)
+  blob: workout_import_csv_blob_other

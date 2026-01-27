@@ -18,8 +18,8 @@
 #
 push_pull_legs:
   name: Push Pull Legs
-  user: one
+  user: john
 
 upper_lower:
   name: Upper Lower
-  user: one
+  user: john

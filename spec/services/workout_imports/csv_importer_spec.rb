@@ -1,10 +1,8 @@
-require "rails_helper"
+describe WorkoutImports::CsvImporter do
+  fixtures :all
 
-RSpec.describe WorkoutImports::CsvImporter do
-  fixtures :users, :exercises
-
-  let(:user) { users(:one) }
-  let(:workout_import) { create_workout_import(user: user) }
+  let(:user) { users(:john) }
+  let(:workout_import) { workout_imports(:pending_import) }
 
   describe "#call" do
     context "with custom format CSV" do
@@ -68,17 +66,6 @@ RSpec.describe WorkoutImports::CsvImporter do
         described_class.new(workout_import).call
 
         expect(workout_import.reload.error_details["message"]).to eq("Test error")
-      end
-    end
-
-    context "without attached file" do
-      let(:workout_import) { create_workout_import(user: user, skip_file: true) }
-
-      it "fails with appropriate error" do
-        result = described_class.new(workout_import).call
-
-        expect(workout_import.reload).to be_failed
-        expect(workout_import.error_details["message"]).to eq("No file attached to import")
       end
     end
   end

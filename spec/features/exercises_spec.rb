@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe "Exercises", type: :feature do
-  let(:user) { users(:one) }
+describe "Exercises" do
+  let(:user) { users(:john) }
 
   before do
     login_as(user)

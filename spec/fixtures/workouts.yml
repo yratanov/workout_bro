@@ -34,14 +34,14 @@ completed_workout:
   workout_type: 0
   started_at: <%= 1.day.ago %>
   ended_at: <%= 1.day.ago + 1.hour %>
-  user: one
+  user: john
   workout_routine_day: push_day
 
 active_workout:
   date: <%= Date.today %>
   workout_type: 0
   started_at: <%= 1.hour.ago %>
-  user: two
+  user: jane
   workout_routine_day: push_day
 
 run_workout:
@@ -51,4 +51,4 @@ run_workout:
   ended_at: <%= 2.days.ago + 30.minutes %>
   distance: 5000
   time_in_seconds: 1800
-  user: one
+  user: john

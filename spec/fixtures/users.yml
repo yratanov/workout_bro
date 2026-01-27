@@ -18,15 +18,15 @@
 #
 #  index_users_on_email_address  (email_address) UNIQUE
 #
-one:
-  email_address: one@example.com
+john:
+  email_address: john@example.com
   password_digest: <%= password_digest %>
   setup_completed: true
   wizard_step: 4
   role: admin
 
-two:
-  email_address: two@example.com
+jane:
+  email_address: jane@example.com
   password_digest: <%= password_digest %>
   setup_completed: true
   wizard_step: 4

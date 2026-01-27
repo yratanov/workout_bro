@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe GarminSyncService do
+describe GarminSyncService do
   fixtures :users
 
-  let(:user) { users(:one) }
+  let(:user) { users(:john) }
   let(:username) { 'test@example.com' }
   let(:password) { 'secret123' }
   let(:service) { described_class.new(user: user) }

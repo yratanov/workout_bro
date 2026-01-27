@@ -1,0 +1,35 @@
+pending_import:
+  user: john
+  status: 0
+  imported_count: 0
+  skipped_count: 0
+  original_filename: workouts.csv
+
+second_import:
+  user: john
+  status: 0
+  imported_count: 0
+  skipped_count: 0
+  original_filename: workouts2.csv
+
+completed:
+  user: john
+  status: 2
+  imported_count: 5
+  skipped_count: 2
+  original_filename: test.csv
+
+failed:
+  user: john
+  status: 3
+  imported_count: 0
+  skipped_count: 0
+  original_filename: bad.csv
+  error_details: <%= { "message" => "Test error" }.to_json %>
+
+other_user_import:
+  user: jane
+  status: 2
+  imported_count: 3
+  skipped_count: 0
+  original_filename: other.csv

@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe ExercisesImporter do
+describe ExercisesImporter do
   fixtures :users, :muscles
 
-  let(:user) { users(:one) }
+  let(:user) { users(:john) }
 
   describe '#initialize' do
     it 'accepts user' do

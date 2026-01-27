@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "Invites", type: :request do
+describe "Invites" do
   fixtures :users
 
-  let(:owner) { users(:one) }
+  let(:owner) { users(:john) }
   let!(:invite) { owner.invites.create! }
 
   describe "GET /use-invite/:token" do
@@ -23,13 +23,13 @@ RSpec.describe "Invites", type: :request do
     end
 
     it "redirects to login for already used invite" do
-      invite.update!(used_at: Time.current, used_by_user: users(:two))
+      invite.update!(used_at: Time.current, used_by_user: users(:jane))
       get use_invite_path(token: invite.token)
       expect(response).to redirect_to(new_session_path)
     end
 
     it "redirects to root if already signed in" do
-      sign_in(users(:two))
+      sign_in(users(:jane))
       get use_invite_path(token: invite.token)
       expect(response).to redirect_to(root_path)
     end
@@ -104,13 +104,13 @@ RSpec.describe "Invites", type: :request do
     end
 
     it "redirects to root if already signed in" do
-      sign_in(users(:two))
+      sign_in(users(:jane))
       post use_invite_path(token: invite.token), params: valid_params
       expect(response).to redirect_to(root_path)
     end
 
     it "redirects to login for already used invite" do
-      invite.update!(used_at: Time.current, used_by_user: users(:two))
+      invite.update!(used_at: Time.current, used_by_user: users(:jane))
       post use_invite_path(token: invite.token), params: valid_params
       expect(response).to redirect_to(new_session_path)
     end

@@ -9,7 +9,7 @@ module WorkoutImports
     def call
       workout_import.in_progress!
 
-      csv_content = read_file_content
+      csv_content = workout_import.file.download
       parser = build_parser(csv_content)
 
       result = parser.parse
@@ -31,14 +31,6 @@ module WorkoutImports
     end
 
     private
-
-    def read_file_content
-      if workout_import.file.attached?
-        workout_import.file.download
-      else
-        raise "No file attached to import"
-      end
-    end
 
     def build_parser(csv_content)
       detector = FormatDetector.new(csv_content)

@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe "Settings::Invites", type: :request do
+describe "Settings::Invites" do
   fixtures :users
 
-  let(:admin_user) { users(:one) }
-  let(:regular_user) { users(:two) }
+  let(:admin_user) { users(:john) }
+  let(:regular_user) { users(:jane) }
 
   describe "as admin" do
     before do

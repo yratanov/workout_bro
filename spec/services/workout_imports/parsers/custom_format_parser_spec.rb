@@ -1,10 +1,8 @@
-require "rails_helper"
+describe WorkoutImports::Parsers::CustomFormatParser do
+  fixtures :all
 
-RSpec.describe WorkoutImports::Parsers::CustomFormatParser do
-  fixtures :users, :exercises
-
-  let(:user) { users(:one) }
-  let(:workout_import) { create_workout_import(user: user) }
+  let(:user) { users(:john) }
+  let(:workout_import) { workout_imports(:pending_import) }
   let(:exercise_matcher) { WorkoutImports::ExerciseMatcher.new(user: user) }
 
   def build_parser(csv_content)
@@ -206,11 +204,10 @@ RSpec.describe WorkoutImports::Parsers::CustomFormatParser do
       it "does not create duplicate workouts on re-import" do
         build_parser(csv_content).parse
 
-        second_import = create_workout_import(user: user)
         second_parser = described_class.new(
           csv_content: csv_content,
           user: user,
-          workout_import: second_import,
+          workout_import: workout_imports(:second_import),
           exercise_matcher: WorkoutImports::ExerciseMatcher.new(user: user)
         )
 

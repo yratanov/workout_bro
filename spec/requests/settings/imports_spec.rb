@@ -1,9 +1,7 @@
-require "rails_helper"
+describe "Settings::Imports" do
+  fixtures :all
 
-RSpec.describe "Settings::Imports", type: :request do
-  fixtures :users
-
-  let(:user) { users(:one) }
+  let(:user) { users(:john) }
 
   before do
     sign_in(user)
@@ -21,16 +19,6 @@ RSpec.describe "Settings::Imports", type: :request do
     end
 
     context "with existing imports" do
-      let!(:completed_import) do
-        create_workout_import(
-          user: user,
-          status: :completed,
-          imported_count: 5,
-          skipped_count: 2,
-          original_filename: "test.csv"
-        )
-      end
-
       it "displays import history" do
         get settings_imports_path
         expect(response.body).to include("test.csv")
@@ -92,15 +80,7 @@ RSpec.describe "Settings::Imports", type: :request do
   end
 
   describe "GET /settings/imports/:id/status" do
-    let!(:workout_import) do
-      create_workout_import(
-        user: user,
-        status: :completed,
-        imported_count: 10,
-        skipped_count: 3,
-        original_filename: "test.csv"
-      )
-    end
+    let(:workout_import) { workout_imports(:completed) }
 
     it "returns import status as JSON" do
       get status_settings_imports_path(workout_import.id)
@@ -110,19 +90,12 @@ RSpec.describe "Settings::Imports", type: :request do
 
       json = JSON.parse(response.body)
       expect(json["status"]).to eq("completed")
-      expect(json["imported_count"]).to eq(10)
-      expect(json["skipped_count"]).to eq(3)
+      expect(json["imported_count"]).to eq(5)
+      expect(json["skipped_count"]).to eq(2)
     end
 
     context "with failed import" do
-      let!(:failed_import) do
-        create_workout_import(
-          user: user,
-          status: :failed,
-          error_details: { "message" => "Test error" },
-          original_filename: "bad.csv"
-        )
-      end
+      let(:failed_import) { workout_imports(:failed) }
 
       it "includes error details" do
         get status_settings_imports_path(failed_import.id)
@@ -134,14 +107,7 @@ RSpec.describe "Settings::Imports", type: :request do
     end
 
     context "when import belongs to another user" do
-      let(:other_user) { users(:two) }
-      let!(:other_import) do
-        create_workout_import(
-          user: other_user,
-          status: :completed,
-          original_filename: "other.csv"
-        )
-      end
+      let(:other_import) { workout_imports(:other_user_import) }
 
       it "returns not found" do
         get status_settings_imports_path(other_import.id)
@@ -151,15 +117,7 @@ RSpec.describe "Settings::Imports", type: :request do
   end
 
   describe "DELETE /settings/imports/:id" do
-    let!(:workout_import) do
-      create_workout_import(
-        user: user,
-        status: :completed,
-        imported_count: 2,
-        skipped_count: 0,
-        original_filename: "test.csv"
-      )
-    end
+    let(:workout_import) { workout_imports(:completed) }
 
     let!(:imported_workouts) do
       [
@@ -194,14 +152,7 @@ RSpec.describe "Settings::Imports", type: :request do
     end
 
     context "when import belongs to another user" do
-      let(:other_user) { users(:two) }
-      let!(:other_import) do
-        create_workout_import(
-          user: other_user,
-          status: :completed,
-          original_filename: "other.csv"
-        )
-      end
+      let(:other_import) { workout_imports(:other_user_import) }
 
       it "returns not found" do
         delete import_settings_imports_path(other_import.id)

@@ -26,32 +26,32 @@ bench_press:
   muscle: chest
   with_weights: true
   with_band: false
-  user: one
+  user: john
 
 squat:
   name: Squat
   muscle: legs
   with_weights: true
   with_band: false
-  user: one
+  user: john
 
 deadlift:
   name: Deadlift
   muscle: back
   with_weights: true
   with_band: false
-  user: one
+  user: john
 
 pull_up:
   name: Pull-Up
   muscle: back
   with_weights: false
   with_band: false
-  user: one
+  user: john
 
 banded_squat:
   name: Banded Squat
   muscle: legs
   with_weights: false
   with_band: true
-  user: one
+  user: john

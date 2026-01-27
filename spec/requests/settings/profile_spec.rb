@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "Settings::Profile", type: :request do
+describe "Settings::Profile" do
   fixtures :users
 
-  let(:user) { users(:one) }
+  let(:user) { users(:john) }
 
   before do
     sign_in(user)

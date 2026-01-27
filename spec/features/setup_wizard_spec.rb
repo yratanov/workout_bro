@@ -1,14 +1,18 @@
-require 'rails_helper'
-
-RSpec.describe "Setup Wizard", type: :feature do
+describe "Setup Wizard" do
   before do
     Capybara.reset_sessions!
   end
 
-  describe "fresh installation (no users)" do
+  describe "fresh installation (no users)", fixtures: false do
     before do
-      User.destroy_all
-      Session.destroy_all
+      conn = ActiveRecord::Base.connection
+      conn.disable_referential_integrity do
+        conn.tables.each do |table|
+          next if table == "schema_migrations" || table == "ar_internal_metadata"
+
+          conn.execute("DELETE FROM #{table}")
+        end
+      end
     end
 
     it "redirects to setup wizard from root" do

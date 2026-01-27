@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "Workouts", type: :request do
+describe "Workouts" do
   fixtures :users, :exercises, :workout_routines, :workout_routine_days, :workout_routine_day_exercises
 
-  let(:user) { users(:one) }
+  let(:user) { users(:john) }
 
   before do
     sign_in(user)

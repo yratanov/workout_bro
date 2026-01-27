@@ -20,25 +20,17 @@
 #
 #  user_id  (user_id => users.id)
 #
-require "rails_helper"
 
-RSpec.describe WorkoutImport, type: :model do
-  fixtures :users
+describe WorkoutImport do
+  fixtures :all
 
-  let(:user) { users(:one) }
+  let(:user) { users(:john) }
   let(:csv_file) do
     {
       io: StringIO.new("test,data"),
       filename: "test.csv",
       content_type: "text/csv"
     }
-  end
-
-  def create_workout_import(attrs = {})
-    import = described_class.new(user: user, **attrs)
-    import.file.attach(csv_file) unless attrs[:skip_file]
-    import.save!
-    import
   end
 
   describe "associations" do
@@ -95,7 +87,7 @@ RSpec.describe WorkoutImport, type: :model do
   end
 
   describe "status transitions" do
-    let(:workout_import) { create_workout_import }
+    let(:workout_import) { workout_imports(:pending_import) }
 
     it "defaults to pending status" do
       expect(workout_import.status).to eq("pending")
@@ -118,7 +110,7 @@ RSpec.describe WorkoutImport, type: :model do
   end
 
   describe "counter defaults" do
-    let(:workout_import) { create_workout_import }
+    let(:workout_import) { workout_imports(:pending_import) }
 
     it "defaults imported_count to 0" do
       expect(workout_import.imported_count).to eq(0)
@@ -131,13 +123,12 @@ RSpec.describe WorkoutImport, type: :model do
 
   describe "file attachment" do
     it "can attach a file" do
-      workout_import = create_workout_import
-      expect(workout_import.file).to be_attached
+      expect(workout_imports(:pending_import).file).to be_attached
     end
   end
 
   describe "workouts association" do
-    let(:workout_import) { create_workout_import }
+    let(:workout_import) { workout_imports(:pending_import) }
 
     it "nullifies workout_import_id when destroyed" do
       workout = user.workouts.create!(
