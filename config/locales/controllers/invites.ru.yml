@@ -1,0 +1,4 @@
+ru:
+  controllers:
+    invites:
+      already_used: "Это приглашение уже было использовано"

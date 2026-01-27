@@ -1,0 +1,4 @@
+ru:
+  controllers:
+    application:
+      admin_required: "Для доступа к этой странице необходимы права администратора"

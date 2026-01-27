@@ -1,4 +1,12 @@
 ru:
+  time:
+    formats:
+      short: "%d %b %H:%M"
+      long: "%d %B %Y %H:%M"
+  date:
+    formats:
+      short: "%d %b"
+      long: "%d %B %Y"
   activerecord:
     attributes:
       workout:

@@ -114,3 +114,5 @@ config/locales/
 - Views: Use `t(".key")` for relative keys or `t("namespace.key")` for absolute keys
 - Controllers: Use `I18n.t("controllers.controller_name.key")`
 - Shared strings: Use `t("shared.buttons.save")`, `t("shared.confirmations.are_you_sure")`
+
+**Important: All translations must be added to both locales (en and ru).** When adding new translation keys, always create or update both the `.en.yml` and `.ru.yml` files.

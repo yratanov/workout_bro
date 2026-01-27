@@ -1,4 +1,12 @@
 en:
+  time:
+    formats:
+      short: "%d %b %H:%M"
+      long: "%B %d, %Y %H:%M"
+  date:
+    formats:
+      short: "%b %d"
+      long: "%B %d, %Y"
   activerecord:
     attributes:
       workout:
