@@ -13,7 +13,10 @@ module WorkoutImports
 
           if date_line?(line)
             if current_date && current_exercises.any?
-              if create_workout(date: current_date, exercises_data: current_exercises)
+              if create_workout(
+                   date: current_date,
+                   exercises_data: current_exercises
+                 )
                 imported += 1
               else
                 skipped += 1
@@ -33,7 +36,10 @@ module WorkoutImports
         end
 
         if current_date && current_exercises.any?
-          if create_workout(date: current_date, exercises_data: current_exercises)
+          if create_workout(
+               date: current_date,
+               exercises_data: current_exercises
+             )
             imported += 1
           else
             skipped += 1

@@ -6,7 +6,11 @@ describe "Sessions" do
   describe "POST /session" do
     context "with valid credentials" do
       it "redirects to root path" do
-        post session_path, params: { email_address: user.email_address, password: "password" }
+        post session_path,
+             params: {
+               email_address: user.email_address,
+               password: "password"
+             }
 
         expect(response).to redirect_to(root_path)
       end
@@ -14,19 +18,31 @@ describe "Sessions" do
 
     context "with invalid credentials" do
       it "redirects to login with alert" do
-        post session_path, params: { email_address: user.email_address, password: "wrongpassword" }
+        post session_path,
+             params: {
+               email_address: user.email_address,
+               password: "wrongpassword"
+             }
 
         expect(response).to redirect_to(new_session_path)
-        expect(flash[:alert]).to eq(I18n.t("controllers.sessions.invalid_credentials"))
+        expect(flash[:alert]).to eq(
+          I18n.t("controllers.sessions.invalid_credentials")
+        )
       end
     end
 
     context "with non-existent user" do
       it "redirects to login with alert" do
-        post session_path, params: { email_address: "nonexistent@example.com", password: "password" }
+        post session_path,
+             params: {
+               email_address: "nonexistent@example.com",
+               password: "password"
+             }
 
         expect(response).to redirect_to(new_session_path)
-        expect(flash[:alert]).to eq(I18n.t("controllers.sessions.invalid_credentials"))
+        expect(flash[:alert]).to eq(
+          I18n.t("controllers.sessions.invalid_credentials")
+        )
       end
     end
   end

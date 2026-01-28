@@ -21,14 +21,23 @@
       :id,
       :name,
       {},
-      { class: "border flex-1 min-w-[200px] border-slate-500 bg-slate-600 text-white px-3 py-2 rounded" },
+      {
+        class:
+          "border flex-1 min-w-[200px] border-slate-500 bg-slate-600 text-white px-3 py-2 rounded",
+      },
     ) %>
     <%= button text: t("workout_sets.form.start"),
     type: "submit",
     style: "primary",
     disabled: workout_set.workout.workout_sets.any?(&:running?) %>
   <% end %>
-  <% last_completed_set = workout_set.workout.workout_sets.where.not(ended_at: nil).order(:ended_at).last %>
+  <% last_completed_set =
+    workout_set
+      .workout
+      .workout_sets
+      .where.not(ended_at: nil)
+      .order(:ended_at)
+      .last %>
   <% if last_completed_set %>
     <%= button t("workout_sets.form.reopen_prev"),
     style: "outlined",

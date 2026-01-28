@@ -14,7 +14,12 @@
         <div class="bg-slate-800 rounded-lg p-4">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
-              <span class="inline-flex items-center justify-center w-7 h-7 bg-slate-700 text-slate-300 rounded-full text-sm font-medium">
+              <span
+                class="
+                  inline-flex items-center justify-center w-7 h-7 bg-slate-700 text-slate-300
+                  rounded-full text-sm font-medium
+                "
+              >
                 <%= index + 1 %>
               </span>
               <h2 class="font-semibold text-lg"><%= day.name %></h2>
@@ -58,11 +63,11 @@
       </span>
     <% end %>
     <%= button t("shared.buttons.destroy"),
-      style: "danger",
-      method: :delete,
-      route: workout_routine_path(@workout_routine),
-      data: {
-        turbo_confirm: t("shared.confirmations.are_you_sure"),
-      } %>
+    style: "danger",
+    method: :delete,
+    route: workout_routine_path(@workout_routine),
+    data: {
+      turbo_confirm: t("shared.confirmations.are_you_sure"),
+    } %>
   </div>
 </div>

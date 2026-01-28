@@ -9,17 +9,19 @@ class ErrorLogger
 
       Thread.current[THREAD_KEY] = true
 
-      ErrorLog.insert({
-        error_class: error.class.name.to_s[0, 255],
-        message: error.message.to_s[0, 10_000],
-        severity: 0,
-        source: source.to_s[0, 255],
-        backtrace: safe_array(error.backtrace&.first(20)),
-        context: safe_hash(context),
-        request_id: context[:request_id].to_s[0, 255],
-        created_at: Time.current,
-        updated_at: Time.current
-      })
+      ErrorLog.insert(
+        {
+          error_class: error.class.name.to_s[0, 255],
+          message: error.message.to_s[0, 10_000],
+          severity: 0,
+          source: source.to_s[0, 255],
+          backtrace: safe_array(error.backtrace&.first(20)),
+          context: safe_hash(context),
+          request_id: context[:request_id].to_s[0, 255],
+          created_at: Time.current,
+          updated_at: Time.current
+        }
+      )
     rescue Exception # rubocop:disable Lint/RescueException
       # Silently fail - can't safely log errors about logging
     ensure

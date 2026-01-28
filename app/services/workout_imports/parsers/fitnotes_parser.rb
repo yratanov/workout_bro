@@ -28,9 +28,8 @@ module WorkoutImports
         end
 
         workouts_by_date.each do |date, exercises|
-          exercises_data = exercises.map do |name, reps_data|
-            { name: name, reps: reps_data }
-          end
+          exercises_data =
+            exercises.map { |name, reps_data| { name: name, reps: reps_data } }
 
           if create_workout(date: date, exercises_data: exercises_data)
             imported += 1

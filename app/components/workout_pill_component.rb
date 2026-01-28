@@ -11,19 +11,16 @@ class WorkoutPillComponent < ViewComponent::Base
   end
 
   def label
-    if @workout.run?
-      "Run"
-    else
-      @workout.workout_routine_day&.name || "Strength"
-    end
+    @workout.run? ? "Run" : @workout.workout_routine_day&.name || "Strength"
   end
 
   def pill_classes
-    base = if compact?
-             "inline-block px-2 py-1 text-xs rounded hover:opacity-80 transition-opacity"
-    else
-             "block w-full px-2 py-1 text-xs rounded hover:opacity-80 transition-opacity"
-    end
+    base =
+      if compact?
+        "inline-block px-2 py-1 text-xs rounded hover:opacity-80 transition-opacity"
+      else
+        "block w-full px-2 py-1 text-xs rounded hover:opacity-80 transition-opacity"
+      end
 
     if @workout.run?
       "#{base} bg-green-600 text-green-100"

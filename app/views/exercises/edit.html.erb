@@ -7,10 +7,12 @@
       <%= t(".back_to_show") %>
     <% end %>
     <%= button t(".delete"),
-        route: exercise_path(@exercise),
-        method: :delete,
-        style: "link_danger",
-        data: { turbo_confirm: t("shared.confirmations.are_you_sure") } %>
+    route: exercise_path(@exercise),
+    method: :delete,
+    style: "link_danger",
+    data: {
+      turbo_confirm: t("shared.confirmations.are_you_sure"),
+    } %>
   </div>
 
   <div class="bg-slate-800 rounded-lg p-6">

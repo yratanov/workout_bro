@@ -7,10 +7,18 @@
   >
     <% exercises.each_with_index do |workout_routine_day_exercise, index| %>
       <div
-        class="group flex items-center gap-3 bg-slate-700/50 rounded-lg px-4 py-3 hover:bg-slate-700 transition-colors"
+        class="
+          group flex items-center gap-3 bg-slate-700/50 rounded-lg px-4 py-3
+          hover:bg-slate-700 transition-colors
+        "
         data-sortable-id="<%= workout_routine_day_exercise.id %>"
       >
-        <div class="cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300" data-sortable-handle>
+        <div
+          class="
+            cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300
+          "
+          data-sortable-handle
+        >
           <%= icon "grip_vertical" %>
         </div>
         <% if workout_routine_day_exercise.exercise.muscle.present? %>

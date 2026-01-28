@@ -1,14 +1,14 @@
 describe "Setup Wizard" do
-  before do
-    Capybara.reset_sessions!
-  end
+  before { Capybara.reset_sessions! }
 
   describe "fresh installation (no users)", fixtures: false do
     before do
       conn = ActiveRecord::Base.connection
       conn.disable_referential_integrity do
         conn.tables.each do |table|
-          next if table == "schema_migrations" || table == "ar_internal_metadata"
+          if table == "schema_migrations" || table == "ar_internal_metadata"
+            next
+          end
 
           conn.execute("DELETE FROM #{table}")
         end
@@ -90,7 +90,14 @@ describe "Setup Wizard" do
   end
 
   describe "resuming wizard" do
-    let!(:user) { User.create!(email_address: "test@example.com", password: "password", setup_completed: true, wizard_step: 4) }
+    let!(:user) do
+      User.create!(
+        email_address: "test@example.com",
+        password: "password",
+        setup_completed: true,
+        wizard_step: 4
+      )
+    end
 
     it "redirects incomplete setup users to wizard" do
       user.update!(setup_completed: false, wizard_step: 2)

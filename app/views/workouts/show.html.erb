@@ -20,7 +20,7 @@
           ended_at: @workout.ended_at,
           show_hours: true,
           paused_at: @workout.paused_at,
-          total_paused_seconds: @workout.total_paused_seconds
+          total_paused_seconds: @workout.total_paused_seconds,
         ),
       ) %>
     </div>
@@ -29,7 +29,12 @@
   <% if @workout.strength? %>
     <div class="relative">
       <% if @workout.paused? %>
-        <div class="absolute inset-0 z-10 flex items-center justify-center border-2 border-red-400 rounded bg-gray-500/60 backdrop-blur-sm">
+        <div
+          class="
+            absolute inset-0 z-10 flex items-center justify-center border-2 border-red-400
+            rounded bg-gray-500/60 backdrop-blur-sm
+          "
+        >
           <%= link_to resume_workout_path(@workout),
             method: :post,
             data: { turbo_method: :post },
@@ -63,7 +68,8 @@
       <div class="grid grid-cols-2 gap-4 text-center">
         <div>
           <div class="text-slate-400 text-sm"><%= t(".distance") %></div>
-          <div class="text-xl font-semibold"><%= @workout.distance.to_f / 1000 %> km</div>
+          <div class="text-xl font-semibold"><%= @workout.distance.to_f / 1000 %>
+            km</div>
         </div>
         <div>
           <div class="text-slate-400 text-sm"><%= t(".avg_pace") %></div>
@@ -74,10 +80,17 @@
   <% end %>
 
   <div class="h-20"></div>
-  <div class="fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 p-4">
+  <div
+    class="
+      fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 p-4
+    "
+  >
     <div class="max-w-xl mx-auto flex gap-3 justify-center">
       <% if @workout.ended? %>
-        <%= button t("shared.buttons.back"), type: "link", style: "outlined", route: workouts_path %>
+        <%= button t("shared.buttons.back"),
+        type: "link",
+        style: "outlined",
+        route: workouts_path %>
         <%= button t("shared.buttons.delete"),
         style: "danger",
         method: :delete,
@@ -91,13 +104,17 @@
           style: "success",
           route: resume_workout_path(@workout),
           method: :post,
-          data: { turbo_method: :post } %>
+          data: {
+            turbo_method: :post,
+          } %>
         <% else %>
           <%= button t(".pause"),
           style: "outlined",
           route: pause_workout_path(@workout),
           method: :post,
-          data: { turbo_method: :post } %>
+          data: {
+            turbo_method: :post,
+          } %>
         <% end %>
         <%= button t(".finish"),
         style: "primary",

@@ -1,5 +1,6 @@
 class WorkoutsController < ApplicationController
-  before_action :set_workout, only: %i[modal edit update destroy stop pause resume]
+  before_action :set_workout,
+                only: %i[modal edit update destroy stop pause resume]
 
   # GET /workouts or /workouts.json
   def index
@@ -8,12 +9,17 @@ class WorkoutsController < ApplicationController
 
   # GET /workouts/1 or /workouts/1.json
   def show
-    @workout = current_user.workouts.includes(workout_sets: :exercise).find(params[:id])
+    @workout =
+      current_user.workouts.includes(workout_sets: :exercise).find(params[:id])
   end
 
   # GET /workouts/1/modal
   def modal
-    @workout = current_user.workouts.includes(workout_sets: [ :exercise, :workout_reps ]).find(params[:id])
+    @workout =
+      current_user
+        .workouts
+        .includes(workout_sets: %i[exercise workout_reps])
+        .find(params[:id])
     render layout: false
   end
 
@@ -21,17 +27,20 @@ class WorkoutsController < ApplicationController
   def new
     @active_workout = current_user.workouts.find_by(ended_at: nil)
     if @active_workout
-      redirect_to @active_workout, alert: I18n.t("controllers.workouts.active_exists")
+      redirect_to @active_workout,
+                  alert: I18n.t("controllers.workouts.active_exists")
       return
     end
 
     @workout_routines = current_user.workout_routines.order(:name)
     @default_workout_routine = @workout_routines.last
-    @workout = Workout.new(
-      workout_routine_day: @default_workout_routine&.workout_routine_days&.first,
-      workout_type: :strength,
-      started_at: Time.current,
-    )
+    @workout =
+      Workout.new(
+        workout_routine_day:
+          @default_workout_routine&.workout_routine_days&.first,
+        workout_type: :strength,
+        started_at: Time.current
+      )
   end
 
   # GET /workouts/1/edit
@@ -52,13 +61,21 @@ class WorkoutsController < ApplicationController
     if @workout.run?
       @workout.workout_routine_day = nil
       if params[:workout][:time_in_seconds]
-        (hours, minutes, seconds) = params[:workout][:time_in_seconds].split(":")
+        hours, minutes, seconds = params[:workout][:time_in_seconds].split(":")
         if seconds.nil?
           minutes, seconds = hours, minutes
           hours = 0
         end
-        @workout.time_in_seconds = hours.to_i * 60 * 60 +  minutes.to_i * 60 + seconds.to_i
-        @workout.ended_at = @workout.started_at ? @workout.started_at + @workout.time_in_seconds.seconds : nil
+        @workout.time_in_seconds =
+          hours.to_i * 60 * 60 + minutes.to_i * 60 + seconds.to_i
+        @workout.ended_at =
+          (
+            if @workout.started_at
+              @workout.started_at + @workout.time_in_seconds.seconds
+            else
+              nil
+            end
+          )
       end
     else
       @workout.started_at = Time.current
@@ -70,7 +87,8 @@ class WorkoutsController < ApplicationController
       if @workout.save
         format.html do
           if @workout.run?
-            redirect_to workouts_path, notice: I18n.t("controllers.workouts.created")
+            redirect_to workouts_path,
+                        notice: I18n.t("controllers.workouts.created")
           else
             redirect_to @workout, notice: I18n.t("controllers.workouts.created")
           end
@@ -78,7 +96,9 @@ class WorkoutsController < ApplicationController
         format.json { render :show, status: :created, location: @workout }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @workout.errors, status: :unprocessable_entity }
+        format.json do
+          render json: @workout.errors, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -86,15 +106,21 @@ class WorkoutsController < ApplicationController
   # POST /workouts/1/stop
   def stop
     respond_to do |format|
-      @workout.workout_sets.where(ended_at: nil).each do |workout_set|
-        workout_set.update(ended_at: Time.current)
-      end
+      @workout
+        .workout_sets
+        .where(ended_at: nil)
+        .each { |workout_set| workout_set.update(ended_at: Time.current) }
       if @workout.update(ended_at: Time.current)
-        format.html { redirect_to workouts_path, notice: I18n.t("controllers.workouts.ended") }
+        format.html do
+          redirect_to workouts_path,
+                      notice: I18n.t("controllers.workouts.ended")
+        end
         format.json { render :show, status: :created, location: @workout }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @workout.errors, status: :unprocessable_entity }
+        format.json do
+          render json: @workout.errors, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -104,7 +130,10 @@ class WorkoutsController < ApplicationController
     if @workout.running? && !@workout.paused?
       now = Time.current
       @workout.update(paused_at: now)
-      @workout.workout_sets.where(ended_at: nil, paused_at: nil).update_all(paused_at: now)
+      @workout
+        .workout_sets
+        .where(ended_at: nil, paused_at: nil)
+        .update_all(paused_at: now)
     end
     redirect_to @workout
   end
@@ -118,13 +147,17 @@ class WorkoutsController < ApplicationController
         paused_at: nil,
         total_paused_seconds: @workout.total_paused_seconds + pause_duration
       )
-      @workout.workout_sets.where(ended_at: nil).where.not(paused_at: nil).find_each do |set|
-        set_pause_duration = (now - set.paused_at).to_i
-        set.update(
-          paused_at: nil,
-          total_paused_seconds: set.total_paused_seconds + set_pause_duration
-        )
-      end
+      @workout
+        .workout_sets
+        .where(ended_at: nil)
+        .where.not(paused_at: nil)
+        .find_each do |set|
+          set_pause_duration = (now - set.paused_at).to_i
+          set.update(
+            paused_at: nil,
+            total_paused_seconds: set.total_paused_seconds + set_pause_duration
+          )
+        end
     end
     redirect_to @workout
   end
@@ -133,11 +166,15 @@ class WorkoutsController < ApplicationController
   def update
     respond_to do |format|
       if @workout.update(workout_params)
-        format.html { redirect_to @workout, notice: I18n.t("controllers.workouts.updated") }
+        format.html do
+          redirect_to @workout, notice: I18n.t("controllers.workouts.updated")
+        end
         format.json { render :show, status: :ok, location: @workout }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @workout.errors, status: :unprocessable_entity }
+        format.json do
+          render json: @workout.errors, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -147,34 +184,49 @@ class WorkoutsController < ApplicationController
     @workout.destroy!
 
     respond_to do |format|
-      format.html { redirect_to workouts_path, status: :see_other, notice: I18n.t("controllers.workouts.destroyed") }
+      format.html do
+        redirect_to workouts_path,
+                    status: :see_other,
+                    notice: I18n.t("controllers.workouts.destroyed")
+      end
       format.json { head :no_content }
     end
   end
 
   private
 
-    def setup_index_variables
-      @current_date = params[:month].present? ? Date.parse(params[:month]) : Date.current
-      @calendar_start = @current_date.beginning_of_month.beginning_of_week(:monday)
-      @calendar_end = @current_date.end_of_month.end_of_week(:monday)
-      @active_workout = current_user.workouts.find_by(ended_at: nil)
-      @workouts = current_user.workouts
-        .includes(:workout_routine_day, workout_sets: [ :exercise, :workout_reps ])
-        .where(started_at: @calendar_start.beginning_of_day..@calendar_end.end_of_day)
+  def setup_index_variables
+    @current_date =
+      params[:month].present? ? Date.parse(params[:month]) : Date.current
+    @calendar_start =
+      @current_date.beginning_of_month.beginning_of_week(:monday)
+    @calendar_end = @current_date.end_of_month.end_of_week(:monday)
+    @active_workout = current_user.workouts.find_by(ended_at: nil)
+    @workouts =
+      current_user
+        .workouts
+        .includes(:workout_routine_day, workout_sets: %i[exercise workout_reps])
+        .where(
+          started_at: @calendar_start.beginning_of_day..@calendar_end.end_of_day
+        )
         .order(:started_at)
-      @workouts_by_date = @workouts.group_by { |w| w.started_at.to_date }
-      @prev_month = @current_date - 1.month
-      @next_month = @current_date + 1.month
-    end
+    @workouts_by_date = @workouts.group_by { |w| w.started_at.to_date }
+    @prev_month = @current_date - 1.month
+    @next_month = @current_date + 1.month
+  end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_workout
-      @workout = current_user.workouts.find(params.expect(:id))
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_workout
+    @workout = current_user.workouts.find(params.expect(:id))
+  end
 
-    # Only allow a list of trusted parameters through.
-    def workout_params
-      params.require(:workout).permit(:workout_routine_day_id, :workout_type, :distance, :started_at)
-    end
+  # Only allow a list of trusted parameters through.
+  def workout_params
+    params.require(:workout).permit(
+      :workout_routine_day_id,
+      :workout_type,
+      :distance,
+      :started_at
+    )
+  end
 end

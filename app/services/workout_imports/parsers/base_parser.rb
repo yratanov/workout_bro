@@ -43,12 +43,13 @@ module WorkoutImports
         started_at = date.to_datetime.change(hour: 9)
         ended_at = started_at + 1.hour
 
-        workout = user.workouts.create!(
-          workout_type: :strength,
-          started_at: started_at,
-          ended_at: ended_at,
-          workout_import: workout_import
-        )
+        workout =
+          user.workouts.create!(
+            workout_type: :strength,
+            started_at: started_at,
+            ended_at: ended_at,
+            workout_import: workout_import
+          )
 
         exercises_data.each do |exercise_data|
           create_workout_set(workout, exercise_data)
@@ -58,18 +59,22 @@ module WorkoutImports
       end
 
       def workout_exists_for_date?(date)
-        user.workouts.where(started_at: date.beginning_of_day..date.end_of_day).exists?
+        user
+          .workouts
+          .where(started_at: date.beginning_of_day..date.end_of_day)
+          .exists?
       end
 
       def create_workout_set(workout, exercise_data)
         exercise = exercise_matcher.match(exercise_data[:name])
         return unless exercise
 
-        workout_set = workout.workout_sets.create!(
-          exercise: exercise,
-          started_at: workout.started_at,
-          ended_at: workout.ended_at
-        )
+        workout_set =
+          workout.workout_sets.create!(
+            exercise: exercise,
+            started_at: workout.started_at,
+            ended_at: workout.ended_at
+          )
 
         exercise_data[:reps].each do |rep_data|
           workout_set.workout_reps.create!(

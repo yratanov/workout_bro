@@ -12,10 +12,16 @@
           :id,
           :name,
           { prompt: t("workout_routine_days.form.select_exercise") },
-          { class: "w-full bg-slate-800 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" },
+          {
+            class:
+              "w-full bg-slate-800 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
+          },
         ) %>
       </div>
-      <%= button text: t("shared.buttons.add"), type: "submit", style: "primary", class: "px-4 py-2 text-sm" %>
+      <%= button text: t("shared.buttons.add"),
+      type: "submit",
+      style: "primary",
+      class: "px-4 py-2 text-sm" %>
       <%= button route: edit_workout_routine_workout_routine_day_path(workout_routine_day_exercise.workout_routine_day.workout_routine, workout_routine_day_exercise.workout_routine_day),
           type: "link",
           style: "link",

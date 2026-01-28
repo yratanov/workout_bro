@@ -31,12 +31,14 @@
     <div class="grid grid-cols-7 gap-1">
       <% weeks.each do |week| %>
         <% week.each do |date| %>
-          <%= render(CalendarDayComponent.new(
-            date: date,
-            current_month: @current_date,
-            workouts: @workouts_by_date[date] || [],
-            mobile: false
-          )) %>
+          <%= render(
+            CalendarDayComponent.new(
+              date: date,
+              current_month: @current_date,
+              workouts: @workouts_by_date[date] || [],
+              mobile: false,
+            ),
+          ) %>
         <% end %>
       <% end %>
     </div>
@@ -45,12 +47,14 @@
   <%# Mobile: List view %>
   <div class="md:hidden space-y-1">
     <% days_in_month.each do |date| %>
-      <%= render(CalendarDayComponent.new(
-        date: date,
-        current_month: @current_date,
-        workouts: @workouts_by_date[date] || [],
-        mobile: true
-      )) %>
+      <%= render(
+        CalendarDayComponent.new(
+          date: date,
+          current_month: @current_date,
+          workouts: @workouts_by_date[date] || [],
+          mobile: true,
+        ),
+      ) %>
     <% end %>
   </div>
 </div>

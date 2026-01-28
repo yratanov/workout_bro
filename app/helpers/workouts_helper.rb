@@ -4,7 +4,7 @@ module WorkoutsHelper
     if workout.run?
       "Run · #{date}"
     else
-      "#{workout.workout_routine_day&.name || 'Strength'} · #{date}"
+      "#{workout.workout_routine_day&.name || "Strength"} · #{date}"
     end
   end
 

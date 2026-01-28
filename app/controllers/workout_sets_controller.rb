@@ -5,7 +5,8 @@ class WorkoutSetsController < ApplicationController
   end
 
   def create
-    @workout_set = WorkoutSet.new(workout_set_params.merge(started_at: Time.current))
+    @workout_set =
+      WorkoutSet.new(workout_set_params.merge(started_at: Time.current))
     @workout_set.save!
   end
 

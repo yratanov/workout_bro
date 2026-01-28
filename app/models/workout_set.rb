@@ -43,19 +43,26 @@ class WorkoutSet < ApplicationRecord
   end
 
   def previous_workout_set
-    @previous_workout_set ||= workout.user.workout_sets
-      .where(exercise:)
-      .where.not(id:)
-      .where.not(ended_at: nil)
-      .order(created_at: :desc)
-      .first
+    @previous_workout_set ||=
+      workout
+        .user
+        .workout_sets
+        .where(exercise:)
+        .where.not(id:)
+        .where.not(ended_at: nil)
+        .order(created_at: :desc)
+        .first
   end
 
   def default_rep_values
     current_rep_index = workout_reps.count
 
     # 1. Try to get values from the same rep index of previous workout's same exercise
-    prev_workout_rep = previous_workout_set&.workout_reps&.order(:created_at)&.[](current_rep_index)
+    prev_workout_rep =
+      previous_workout_set
+        &.workout_reps
+        &.order(:created_at)
+        &.[](current_rep_index)
     return values_from_rep(prev_workout_rep) if prev_workout_rep
 
     # 2. Fall back to the last rep in the current set

@@ -4,7 +4,11 @@ class WorkoutRoutinesController < ApplicationController
   end
 
   def show
-    @workout_routine = current_user.workout_routines.includes(workout_routine_days: :exercises).find(params[:id])
+    @workout_routine =
+      current_user
+        .workout_routines
+        .includes(workout_routine_days: :exercises)
+        .find(params[:id])
   end
 
   def new
@@ -12,10 +16,12 @@ class WorkoutRoutinesController < ApplicationController
   end
 
   def create
-    @workout_routine = current_user.workout_routines.build(workout_routine_params)
+    @workout_routine =
+      current_user.workout_routines.build(workout_routine_params)
 
     if @workout_routine.save
-      redirect_to @workout_routine, notice: I18n.t("controllers.workout_routines.created")
+      redirect_to @workout_routine,
+                  notice: I18n.t("controllers.workout_routines.created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -24,7 +30,8 @@ class WorkoutRoutinesController < ApplicationController
   def destroy
     @workout_routine = current_user.workout_routines.find(params[:id])
     @workout_routine.destroy
-    redirect_to workout_routines_path, notice: I18n.t("controllers.workout_routines.destroyed")
+    redirect_to workout_routines_path,
+                notice: I18n.t("controllers.workout_routines.destroyed")
   end
 
   private

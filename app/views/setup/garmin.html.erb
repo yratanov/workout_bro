@@ -16,13 +16,20 @@
 
     <% credential = @credential || Current.user.garmin_credential %>
     <%= app_form_with model: credential, url: setup_path, method: :patch, class: "space-y-6" do |form| %>
-      <%= form.input :username, label: t(".username_label"), margin: "",
-          input_html: { autocomplete: "username", placeholder: t(".username_placeholder") } %>
+      <%= form.input :username,
+                 label: t(".username_label"),
+                 margin: "",
+                 input_html: {
+                   autocomplete: "username",
+                   placeholder: t(".username_placeholder"),
+                 } %>
       <div>
-        <%= form.label :password, t(".password_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
+        <%= form.label :password,
+                   t(".password_label"),
+                   class: "block text-sm font-medium text-slate-300 mb-2" %>
         <%= form.password_field :password,
-                             autocomplete: "new-password",
-                             placeholder: t(".password_placeholder") %>
+                            autocomplete: "new-password",
+                            placeholder: t(".password_placeholder") %>
         <% if credential.errors[:encrypted_password].any? %>
           <p class="mt-1 text-sm text-red-400"><%= credential.errors[:encrypted_password].first %></p>
         <% end %>

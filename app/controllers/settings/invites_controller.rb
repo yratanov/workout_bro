@@ -11,12 +11,14 @@ module Settings
 
     def create
       @invite = current_user.invites.create!
-      redirect_to settings_invites_path, notice: I18n.t("controllers.settings.invites.created")
+      redirect_to settings_invites_path,
+                  notice: I18n.t("controllers.settings.invites.created")
     end
 
     def destroy
       @invite.destroy!
-      redirect_to settings_invites_path, notice: I18n.t("controllers.settings.invites.destroyed")
+      redirect_to settings_invites_path,
+                  notice: I18n.t("controllers.settings.invites.destroyed")
     end
 
     private

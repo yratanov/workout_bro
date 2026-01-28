@@ -1,13 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe "Settings::Profile" do
   fixtures :users
 
   let(:user) { users(:john) }
 
-  before do
-    sign_in(user)
-  end
+  before { sign_in(user) }
 
   describe "GET /settings/profile" do
     it "returns success" do
@@ -24,9 +22,12 @@ describe "Settings::Profile" do
   describe "PATCH /settings/profile" do
     context "with valid params" do
       it "updates the email address" do
-        patch settings_profile_path, params: {
-          user: { email_address: "newemail@example.com" }
-        }
+        patch settings_profile_path,
+              params: {
+                user: {
+                  email_address: "newemail@example.com"
+                }
+              }
 
         user.reload
         expect(user.email_address).to eq("newemail@example.com")
@@ -36,9 +37,12 @@ describe "Settings::Profile" do
       end
 
       it "normalizes the email address" do
-        patch settings_profile_path, params: {
-          user: { email_address: "  UPPERCASE@EXAMPLE.COM  " }
-        }
+        patch settings_profile_path,
+              params: {
+                user: {
+                  email_address: "  UPPERCASE@EXAMPLE.COM  "
+                }
+              }
 
         user.reload
         expect(user.email_address).to eq("uppercase@example.com")
@@ -49,9 +53,7 @@ describe "Settings::Profile" do
       it "does not update with blank email" do
         original_email = user.email_address
 
-        patch settings_profile_path, params: {
-          user: { email_address: "" }
-        }
+        patch settings_profile_path, params: { user: { email_address: "" } }
 
         user.reload
         expect(user.email_address).to eq(original_email)
@@ -61,9 +63,7 @@ describe "Settings::Profile" do
   end
 
   context "when not authenticated" do
-    before do
-      delete session_path
-    end
+    before { delete session_path }
 
     it "redirects to login" do
       get settings_profile_path

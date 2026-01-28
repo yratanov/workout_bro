@@ -31,6 +31,8 @@ class ThirdPartyCredential < ApplicationRecord
 
   encrypts :encrypted_password
 
+  scope :for_provider, ->(provider) { where(provider: provider) }
+
   def password=(value)
     self.encrypted_password = value if value.present?
   end

@@ -3,12 +3,26 @@
     <h1 class="font-bold text-2xl text-white mb-6"><%= t(".title") %></h1>
 
     <%= app_form_with url: password_path(params[:token]), method: :put, class: "space-y-6" do |form| %>
-      <%= form.input :password, as: :password, label: t(".password_label"), margin: "",
-          input_html: { required: true, autocomplete: "new-password",
-                       placeholder: t(".password_placeholder"), maxlength: 72 } %>
-      <%= form.input :password_confirmation, as: :password, label: t(".password_confirmation_label"), margin: "",
-          input_html: { required: true, autocomplete: "new-password",
-                       placeholder: t(".password_confirmation_placeholder"), maxlength: 72 } %>
+      <%= form.input :password,
+                 as: :password,
+                 label: t(".password_label"),
+                 margin: "",
+                 input_html: {
+                   required: true,
+                   autocomplete: "new-password",
+                   placeholder: t(".password_placeholder"),
+                   maxlength: 72,
+                 } %>
+      <%= form.input :password_confirmation,
+                 as: :password,
+                 label: t(".password_confirmation_label"),
+                 margin: "",
+                 input_html: {
+                   required: true,
+                   autocomplete: "new-password",
+                   placeholder: t(".password_confirmation_placeholder"),
+                   maxlength: 72,
+                 } %>
       <div>
         <%= form.submit t(".submit") %>
       </div>

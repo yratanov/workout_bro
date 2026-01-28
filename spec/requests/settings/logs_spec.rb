@@ -5,9 +5,7 @@ describe "Settings::Logs" do
   let(:regular_user) { users(:jane) }
 
   describe "as admin" do
-    before do
-      sign_in(admin_user)
-    end
+    before { sign_in(admin_user) }
 
     describe "GET /settings/logs" do
       it "returns success" do
@@ -17,7 +15,9 @@ describe "Settings::Logs" do
 
       it "displays the error logs page" do
         get settings_logs_path
-        expect(response.body).to include(I18n.t("settings.logs.show.error_logs"))
+        expect(response.body).to include(
+          I18n.t("settings.logs.show.error_logs")
+        )
       end
 
       it "displays error logs when present" do
@@ -48,7 +48,8 @@ describe "Settings::Logs" do
         )
 
         get settings_logs_path
-        expect(response.body.index("NewError")).to be < response.body.index("OldError")
+        expect(response.body.index("NewError")).to be <
+          response.body.index("OldError")
       end
 
       it "displays severity badge" do
@@ -59,7 +60,9 @@ describe "Settings::Logs" do
         )
 
         get settings_logs_path
-        expect(response.body).to include(I18n.t("settings.logs.show.severities.error"))
+        expect(response.body).to include(
+          I18n.t("settings.logs.show.severities.error")
+        )
       end
 
       it "displays source when present" do
@@ -79,11 +82,13 @@ describe "Settings::Logs" do
           error_class: "TestError",
           message: "Test",
           severity: :error,
-          backtrace: [ "/app/test.rb:1", "/app/test.rb:2" ]
+          backtrace: %w[/app/test.rb:1 /app/test.rb:2]
         )
 
         get settings_logs_path
-        expect(response.body).to include(I18n.t("settings.logs.show.show_backtrace"))
+        expect(response.body).to include(
+          I18n.t("settings.logs.show.show_backtrace")
+        )
         expect(response.body).to include("/app/test.rb:1")
       end
 
@@ -111,9 +116,7 @@ describe "Settings::Logs" do
   end
 
   describe "as regular user" do
-    before do
-      sign_in(regular_user)
-    end
+    before { sign_in(regular_user) }
 
     it "redirects from GET /settings/logs" do
       get settings_logs_path
@@ -123,7 +126,9 @@ describe "Settings::Logs" do
     it "shows admin required flash message" do
       get settings_logs_path
       follow_redirect!
-      expect(response.body).to include(I18n.t("controllers.application.admin_required"))
+      expect(response.body).to include(
+        I18n.t("controllers.application.admin_required")
+      )
     end
   end
 

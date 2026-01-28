@@ -20,12 +20,12 @@ Rails.application.routes.draw do
   end
 
   resources :workout_reps, only: %i[new create show edit update destroy]
-  resources :workout_routines, only: %i[index new create show edit update destroy] do
-    resources :workout_routine_days, only: %i[index new create show edit update destroy] do
+  resources :workout_routines,
+            only: %i[index new create show edit update destroy] do
+    resources :workout_routine_days,
+              only: %i[index new create show edit update destroy] do
       resources :workout_routine_day_exercises, only: %i[destroy new create] do
-        member do
-          patch :move
-        end
+        member { patch :move }
       end
     end
   end
@@ -34,7 +34,7 @@ Rails.application.routes.draw do
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  get "up" => "rails/health#show", :as => :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

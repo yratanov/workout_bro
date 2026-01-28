@@ -9,6 +9,6 @@ class CreateThirdPartyCredentials < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :third_party_credentials, [ :user_id, :provider ], unique: true
+    add_index :third_party_credentials, %i[user_id provider], unique: true
   end
 end

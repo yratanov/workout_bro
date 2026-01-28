@@ -10,12 +10,16 @@ class ApplicationJob < ActiveJob::Base
   private
 
   def log_and_reraise_error(error)
-    ErrorLogger.log(error, source: "job", context: {
-      job_class: self.class.name,
-      job_id: job_id,
-      queue_name: queue_name,
-      arguments: arguments
-    })
+    ErrorLogger.log(
+      error,
+      source: "job",
+      context: {
+        job_class: self.class.name,
+        job_id: job_id,
+        queue_name: queue_name,
+        arguments: arguments
+      }
+    )
     raise error
   end
 end

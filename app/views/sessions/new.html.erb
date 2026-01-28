@@ -7,12 +7,27 @@
     </div>
 
     <%= app_form_with url: session_url, class: "space-y-6" do |form| %>
-      <%= form.input :email_address, as: :email, label: t(".email_label"), margin: "",
-          input_html: { required: true, autofocus: true, autocomplete: "username",
-                       placeholder: t(".email_placeholder"), value: params[:email_address] } %>
-      <%= form.input :password, as: :password, label: t(".password_label"), margin: "",
-          input_html: { required: true, autocomplete: "current-password",
-                       placeholder: t(".password_placeholder"), maxlength: 72 } %>
+      <%= form.input :email_address,
+                 as: :email,
+                 label: t(".email_label"),
+                 margin: "",
+                 input_html: {
+                   required: true,
+                   autofocus: true,
+                   autocomplete: "username",
+                   placeholder: t(".email_placeholder"),
+                   value: params[:email_address],
+                 } %>
+      <%= form.input :password,
+                 as: :password,
+                 label: t(".password_label"),
+                 margin: "",
+                 input_html: {
+                   required: true,
+                   autocomplete: "current-password",
+                   placeholder: t(".password_placeholder"),
+                   maxlength: 72,
+                 } %>
       <div class="pt-2">
         <%= form.submit t(".submit") %>
       </div>

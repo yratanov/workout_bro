@@ -4,7 +4,8 @@ class AddRoleToUsers < ActiveRecord::Migration[8.0]
 
     reversible do |dir|
       dir.up do
-        first_user_id = execute("SELECT id FROM users ORDER BY id LIMIT 1").first&.fetch("id")
+        first_user_id =
+          execute("SELECT id FROM users ORDER BY id LIMIT 1").first&.fetch("id")
         if first_user_id
           execute("UPDATE users SET role = 1 WHERE id = #{first_user_id}")
         end

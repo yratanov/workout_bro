@@ -2,7 +2,12 @@
   <%= app_form_with(model: workout_routine_day, url: workout_routine_day.new_record? ? workout_routine_workout_routine_days_path : workout_routine_workout_routine_day_path(workout_routine_day), class: "contents") do |form| %>
     <div class="flex gap-3 items-end">
       <div class="flex-1">
-        <%= form.input :name, label: false, margin: "mb-0", input_html: { placeholder: t("workout_routine_days.form.name_placeholder") } %>
+        <%= form.input :name,
+                   label: false,
+                   margin: "mb-0",
+                   input_html: {
+                     placeholder: t("workout_routine_days.form.name_placeholder"),
+                   } %>
       </div>
       <%= form.submit t("shared.buttons.save") %>
     </div>

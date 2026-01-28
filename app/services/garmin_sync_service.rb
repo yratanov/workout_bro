@@ -1,8 +1,10 @@
 class GarminSyncService
   PYTHON_SCRIPT_PATH = Rails.root.join("python/sync_garmin.py").to_s
 
-  class Error < StandardError; end
-  class MissingCredentialsError < Error; end
+  class Error < StandardError
+  end
+  class MissingCredentialsError < Error
+  end
 
   def initialize(user:, days: 7)
     @user = user
@@ -30,11 +32,18 @@ class GarminSyncService
   end
 
   def fetch_activities
-    output, status = Open3.capture2(
-      "python3", PYTHON_SCRIPT_PATH, @credential.username, @credential.encrypted_password, @days.to_s
-    )
+    output, status =
+      Open3.capture2(
+        "python3",
+        PYTHON_SCRIPT_PATH,
+        @credential.username,
+        @credential.encrypted_password,
+        @days.to_s
+      )
 
-    raise Error, "Python script failed with status #{status.exitstatus}" unless status.success?
+    unless status.success?
+      raise Error, "Python script failed with status #{status.exitstatus}"
+    end
 
     result = JSON.parse(output)
 
@@ -69,7 +78,8 @@ class GarminSyncService
 
   def create_workout(activity, started_at)
     duration_seconds = activity["duration_seconds"].to_i
-    ended_at = duration_seconds.positive? ? started_at + duration_seconds.seconds : nil
+    ended_at =
+      duration_seconds.positive? ? started_at + duration_seconds.seconds : nil
 
     Workout.create!(
       user: @user,

@@ -16,15 +16,13 @@ describe WorkoutImports::Parsers::FitnotesParser do
 
   describe "#parse" do
     context "with valid FitNotes format (kg)" do
-      let(:csv_content) do
-        <<~CSV
+      let(:csv_content) { <<~CSV }
           Date,Exercise,Category,Weight (kg),Reps,Notes
           2024-01-15,Bench Press,Chest,60,10,
           2024-01-15,Bench Press,Chest,70,8,
           2024-01-15,Squat,Legs,100,5,
           2024-01-17,Deadlift,Back,120,3,
         CSV
-      end
 
       it "imports workouts grouped by date" do
         result = build_parser(csv_content).parse
@@ -35,8 +33,11 @@ describe WorkoutImports::Parsers::FitnotesParser do
       it "creates workout sets for each exercise" do
         build_parser(csv_content).parse
 
-        jan15_workout = user.workouts.where(workout_import: workout_import)
-                            .find { |w| w.started_at.to_date == Date.parse("2024-01-15") }
+        jan15_workout =
+          user
+            .workouts
+            .where(workout_import: workout_import)
+            .find { |w| w.started_at.to_date == Date.parse("2024-01-15") }
 
         expect(jan15_workout.workout_sets.count).to eq(2)
       end
@@ -44,24 +45,32 @@ describe WorkoutImports::Parsers::FitnotesParser do
       it "creates workout reps with correct weight" do
         build_parser(csv_content).parse
 
-        jan15_workout = user.workouts.where(workout_import: workout_import)
-                            .find { |w| w.started_at.to_date == Date.parse("2024-01-15") }
+        jan15_workout =
+          user
+            .workouts
+            .where(workout_import: workout_import)
+            .find { |w| w.started_at.to_date == Date.parse("2024-01-15") }
 
-        bench_set = jan15_workout.workout_sets.joins(:exercise)
-                                 .where(exercises: { name: "Bench Press" }).first
+        bench_set =
+          jan15_workout
+            .workout_sets
+            .joins(:exercise)
+            .where(exercises: { name: "Bench Press" })
+            .first
 
         expect(bench_set.workout_reps.count).to eq(2)
-        expect(bench_set.workout_reps.map(&:weight)).to contain_exactly(60.0, 70.0)
+        expect(bench_set.workout_reps.map(&:weight)).to contain_exactly(
+          60.0,
+          70.0
+        )
       end
     end
 
     context "with pounds weight" do
-      let(:csv_content) do
-        <<~CSV
+      let(:csv_content) { <<~CSV }
           Date,Exercise,Category,Weight (lbs),Reps
           2024-01-15,Bench Press,Chest,132,10
         CSV
-      end
 
       it "converts pounds to kilograms" do
         build_parser(csv_content).parse
@@ -74,12 +83,10 @@ describe WorkoutImports::Parsers::FitnotesParser do
     end
 
     context "with generic Weight column" do
-      let(:csv_content) do
-        <<~CSV
+      let(:csv_content) { <<~CSV }
           Date,Exercise,Category,Weight,Reps
           2024-01-15,Bench Press,Chest,60,10
         CSV
-      end
 
       it "parses generic weight column" do
         result = build_parser(csv_content).parse
@@ -93,12 +100,10 @@ describe WorkoutImports::Parsers::FitnotesParser do
     end
 
     context "with missing weight" do
-      let(:csv_content) do
-        <<~CSV
+      let(:csv_content) { <<~CSV }
           Date,Exercise,Category,Weight (kg),Reps
           2024-01-15,Pull-Up,Back,,15
         CSV
-      end
 
       it "imports with nil weight" do
         result = build_parser(csv_content).parse
@@ -113,12 +118,10 @@ describe WorkoutImports::Parsers::FitnotesParser do
     end
 
     context "with invalid date" do
-      let(:csv_content) do
-        <<~CSV
+      let(:csv_content) { <<~CSV }
           Date,Exercise,Category,Weight (kg),Reps
           invalid,Bench Press,Chest,60,10
         CSV
-      end
 
       it "skips rows with invalid dates" do
         result = build_parser(csv_content).parse
@@ -128,12 +131,10 @@ describe WorkoutImports::Parsers::FitnotesParser do
     end
 
     context "with zero reps" do
-      let(:csv_content) do
-        <<~CSV
+      let(:csv_content) { <<~CSV }
           Date,Exercise,Category,Weight (kg),Reps
           2024-01-15,Bench Press,Chest,60,0
         CSV
-      end
 
       it "skips rows with zero reps" do
         result = build_parser(csv_content).parse
@@ -143,12 +144,10 @@ describe WorkoutImports::Parsers::FitnotesParser do
     end
 
     context "with missing exercise name" do
-      let(:csv_content) do
-        <<~CSV
+      let(:csv_content) { <<~CSV }
           Date,Exercise,Category,Weight (kg),Reps
           2024-01-15,,Chest,60,10
         CSV
-      end
 
       it "skips rows with missing exercise" do
         result = build_parser(csv_content).parse

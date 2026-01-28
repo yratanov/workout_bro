@@ -7,6 +7,4 @@ module LoginHelpers
   end
 end
 
-RSpec.configure do |config|
-  config.include LoginHelpers, type: :feature
-end
+RSpec.configure { |config| config.include LoginHelpers, type: :feature }

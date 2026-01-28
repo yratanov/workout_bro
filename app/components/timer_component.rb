@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 class TimerComponent < ViewComponent::Base
-  def initialize(started_at:, ended_at:, show_hours: false, paused_at: nil, total_paused_seconds: 0)
+  def initialize(
+    started_at:,
+    ended_at:,
+    show_hours: false,
+    paused_at: nil,
+    total_paused_seconds: 0
+  )
     @started_at = started_at
     @ended_at = ended_at
     @show_hours = show_hours

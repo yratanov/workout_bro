@@ -12,7 +12,8 @@ module Settings
       @credential.assign_attributes(garmin_params)
 
       if @credential.save
-        redirect_to settings_garmin_path, notice: I18n.t("controllers.settings.garmin.updated")
+        redirect_to settings_garmin_path,
+                    notice: I18n.t("controllers.settings.garmin.updated")
       else
         render :show, status: :unprocessable_entity
       end
@@ -23,15 +24,23 @@ module Settings
       result = service.call
 
       redirect_to settings_garmin_path,
-        notice: I18n.t("controllers.settings.garmin.sync_success",
-          imported: result[:imported],
-          skipped: result[:skipped])
+                  notice:
+                    I18n.t(
+                      "controllers.settings.garmin.sync_success",
+                      imported: result[:imported],
+                      skipped: result[:skipped]
+                    )
     rescue GarminSyncService::MissingCredentialsError
       redirect_to settings_garmin_path,
-        alert: I18n.t("controllers.settings.garmin.missing_credentials")
+                  alert:
+                    I18n.t("controllers.settings.garmin.missing_credentials")
     rescue GarminSyncService::Error => e
       redirect_to settings_garmin_path,
-        alert: I18n.t("controllers.settings.garmin.sync_failed", error: e.message)
+                  alert:
+                    I18n.t(
+                      "controllers.settings.garmin.sync_failed",
+                      error: e.message
+                    )
     end
 
     private

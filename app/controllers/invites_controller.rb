@@ -32,11 +32,16 @@ class InvitesController < ApplicationController
     @invite = Invite.find_by!(token: params[:token])
 
     if @invite.used?
-      redirect_to new_session_path, alert: I18n.t("controllers.invites.already_used")
+      redirect_to new_session_path,
+                  alert: I18n.t("controllers.invites.already_used")
     end
   end
 
   def user_params
-    params.require(:user).permit(:email_address, :password, :password_confirmation)
+    params.require(:user).permit(
+      :email_address,
+      :password,
+      :password_confirmation
+    )
   end
 end

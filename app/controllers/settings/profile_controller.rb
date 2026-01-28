@@ -9,7 +9,8 @@ module Settings
 
     def update
       if @user.update(profile_params)
-        redirect_to settings_profile_path, notice: I18n.t("controllers.settings.profile.updated")
+        redirect_to settings_profile_path,
+                    notice: I18n.t("controllers.settings.profile.updated")
       else
         render :show, status: :unprocessable_entity
       end

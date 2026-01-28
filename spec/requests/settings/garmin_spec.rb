@@ -1,13 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe "Settings::Garmin" do
   fixtures :users
 
   let(:user) { users(:john) }
 
-  before do
-    sign_in(user)
-  end
+  before { sign_in(user) }
 
   describe "GET /settings/garmin" do
     it "returns success" do
@@ -17,7 +15,10 @@ describe "Settings::Garmin" do
 
     context "when credential exists" do
       before do
-        user.garmin_credential.update!(username: "garmin_user", password: "secret123")
+        user.garmin_credential.update!(
+          username: "garmin_user",
+          password: "secret123"
+        )
       end
 
       it "displays the username" do
@@ -48,12 +49,13 @@ describe "Settings::Garmin" do
     context "with valid params" do
       it "creates a new credential" do
         expect {
-          patch settings_garmin_path, params: {
-            third_party_credential: {
-              username: "new_garmin_user",
-              password: "new_password"
-            }
-          }
+          patch settings_garmin_path,
+                params: {
+                  third_party_credential: {
+                    username: "new_garmin_user",
+                    password: "new_password"
+                  }
+                }
         }.to change(ThirdPartyCredential, :count).by(1)
 
         credential = user.garmin_credential
@@ -63,14 +65,18 @@ describe "Settings::Garmin" do
       end
 
       it "updates an existing credential" do
-        user.garmin_credential.update!(username: "old_user", password: "old_pass")
+        user.garmin_credential.update!(
+          username: "old_user",
+          password: "old_pass"
+        )
 
-        patch settings_garmin_path, params: {
-          third_party_credential: {
-            username: "updated_user",
-            password: "updated_pass"
-          }
-        }
+        patch settings_garmin_path,
+              params: {
+                third_party_credential: {
+                  username: "updated_user",
+                  password: "updated_pass"
+                }
+              }
 
         credential = user.garmin_credential.reload
         expect(credential.username).to eq("updated_user")
@@ -78,14 +84,18 @@ describe "Settings::Garmin" do
       end
 
       it "keeps existing password when password field is blank" do
-        user.garmin_credential.update!(username: "garmin_user", password: "original_password")
+        user.garmin_credential.update!(
+          username: "garmin_user",
+          password: "original_password"
+        )
 
-        patch settings_garmin_path, params: {
-          third_party_credential: {
-            username: "updated_user",
-            password: ""
-          }
-        }
+        patch settings_garmin_path,
+              params: {
+                third_party_credential: {
+                  username: "updated_user",
+                  password: ""
+                }
+              }
 
         credential = user.garmin_credential.reload
         expect(credential.username).to eq("updated_user")
@@ -93,14 +103,18 @@ describe "Settings::Garmin" do
       end
 
       it "updates username while preserving password when password is blank" do
-        user.garmin_credential.update!(username: "garmin_user", password: "original_password")
+        user.garmin_credential.update!(
+          username: "garmin_user",
+          password: "original_password"
+        )
 
-        patch settings_garmin_path, params: {
-          third_party_credential: {
-            username: "new_username",
-            password: ""
-          }
-        }
+        patch settings_garmin_path,
+              params: {
+                third_party_credential: {
+                  username: "new_username",
+                  password: ""
+                }
+              }
 
         credential = user.garmin_credential.reload
         expect(credential.username).to eq("new_username")
@@ -110,12 +124,13 @@ describe "Settings::Garmin" do
 
     context "with only username" do
       it "saves username without password" do
-        patch settings_garmin_path, params: {
-          third_party_credential: {
-            username: "just_username",
-            password: ""
-          }
-        }
+        patch settings_garmin_path,
+              params: {
+                third_party_credential: {
+                  username: "just_username",
+                  password: ""
+                }
+              }
 
         credential = user.garmin_credential
         expect(credential.username).to eq("just_username")
@@ -129,7 +144,10 @@ describe "Settings::Garmin" do
     let(:other_user) { users(:jane) }
 
     it "does not expose other user credentials" do
-      other_user.garmin_credential.update!(username: "other_user_garmin", password: "other_secret")
+      other_user.garmin_credential.update!(
+        username: "other_user_garmin",
+        password: "other_secret"
+      )
 
       get settings_garmin_path
       expect(response.body).not_to include("other_user_garmin")
@@ -139,11 +157,12 @@ describe "Settings::Garmin" do
       other_credential = other_user.garmin_credential
       other_credential.update!(username: "other_user", password: "other_pass")
 
-      patch settings_garmin_path, params: {
-        third_party_credential: {
-          username: "hacked_user"
-        }
-      }
+      patch settings_garmin_path,
+            params: {
+              third_party_credential: {
+                username: "hacked_user"
+              }
+            }
 
       other_credential.reload
       expect(other_credential.username).to eq("other_user")
@@ -151,9 +170,7 @@ describe "Settings::Garmin" do
   end
 
   context "when not authenticated" do
-    before do
-      delete session_path
-    end
+    before { delete session_path }
 
     it "redirects to login" do
       get settings_garmin_path
@@ -164,12 +181,18 @@ describe "Settings::Garmin" do
   describe "POST /settings/garmin/sync" do
     context "when credentials are configured" do
       before do
-        user.garmin_credential.update!(username: "garmin_user", password: "secret123")
+        user.garmin_credential.update!(
+          username: "garmin_user",
+          password: "secret123"
+        )
       end
 
       it "runs the sync service and redirects with success message" do
         allow(Open3).to receive(:capture2).and_return(
-          [ { activities: [] }.to_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
+          [
+            { activities: [] }.to_json,
+            instance_double(Process::Status, success?: true, exitstatus: 0)
+          ]
         )
 
         post sync_settings_garmin_path
@@ -182,12 +205,19 @@ describe "Settings::Garmin" do
       it "shows imported and skipped counts" do
         activities_json = {
           activities: [
-            { started_at: "2024-01-15T08:30:00", distance_meters: 5000, duration_seconds: 1800 }
+            {
+              started_at: "2024-01-15T08:30:00",
+              distance_meters: 5000,
+              duration_seconds: 1800
+            }
           ]
         }.to_json
 
         allow(Open3).to receive(:capture2).and_return(
-          [ activities_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
+          [
+            activities_json,
+            instance_double(Process::Status, success?: true, exitstatus: 0)
+          ]
         )
 
         post sync_settings_garmin_path
@@ -200,7 +230,10 @@ describe "Settings::Garmin" do
 
       it "shows error message when sync fails" do
         allow(Open3).to receive(:capture2).and_return(
-          [ { error: "Invalid credentials" }.to_json, instance_double(Process::Status, success?: true, exitstatus: 0) ]
+          [
+            { error: "Invalid credentials" }.to_json,
+            instance_double(Process::Status, success?: true, exitstatus: 0)
+          ]
         )
 
         post sync_settings_garmin_path
@@ -217,7 +250,9 @@ describe "Settings::Garmin" do
 
         expect(response).to redirect_to(settings_garmin_path)
         follow_redirect!
-        expect(response.body).to include("configure your Garmin username and password")
+        expect(response.body).to include(
+          "configure your Garmin username and password"
+        )
       end
     end
   end

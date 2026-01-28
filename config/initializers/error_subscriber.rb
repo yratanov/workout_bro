@@ -5,7 +5,11 @@ class ErrorSubscriber
     # Skip if ErrorLogger will handle it (avoid duplicates from middleware)
     return if source == "controller"
 
-    ErrorLogger.log(error, source: source || "application", context: context || {})
+    ErrorLogger.log(
+      error,
+      source: source || "application",
+      context: context || {}
+    )
   end
 end
 

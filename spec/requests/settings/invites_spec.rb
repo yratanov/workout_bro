@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe "Settings::Invites" do
   fixtures :users
@@ -7,9 +7,7 @@ describe "Settings::Invites" do
   let(:regular_user) { users(:jane) }
 
   describe "as admin" do
-    before do
-      sign_in(admin_user)
-    end
+    before { sign_in(admin_user) }
 
     describe "GET /settings/invites" do
       it "returns success" do
@@ -26,16 +24,19 @@ describe "Settings::Invites" do
 
     describe "POST /settings/invites" do
       it "creates a new invite" do
-        expect {
-          post settings_invites_path
-        }.to change(admin_user.invites, :count).by(1)
+        expect { post settings_invites_path }.to change(
+          admin_user.invites,
+          :count
+        ).by(1)
       end
 
       it "redirects to invites page with notice" do
         post settings_invites_path
         expect(response).to redirect_to(settings_invites_path)
         follow_redirect!
-        expect(response.body).to include(I18n.t("controllers.settings.invites.created"))
+        expect(response.body).to include(
+          I18n.t("controllers.settings.invites.created")
+        )
       end
 
       it "generates a unique token" do
@@ -50,9 +51,10 @@ describe "Settings::Invites" do
       let!(:invite) { admin_user.invites.create! }
 
       it "destroys the invite" do
-        expect {
-          delete invite_settings_invites_path(invite)
-        }.to change(admin_user.invites, :count).by(-1)
+        expect { delete invite_settings_invites_path(invite) }.to change(
+          admin_user.invites,
+          :count
+        ).by(-1)
       end
 
       it "redirects to invites page with notice" do
@@ -70,9 +72,7 @@ describe "Settings::Invites" do
   end
 
   describe "as regular user" do
-    before do
-      sign_in(regular_user)
-    end
+    before { sign_in(regular_user) }
 
     it "redirects from GET /settings/invites" do
       get settings_invites_path

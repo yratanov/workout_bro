@@ -9,28 +9,35 @@
       <%= button style: "primary", type: "link", route: workout_path(@active_workout) do %>
         <span class="flex items-center gap-2">
           <%= t(".continue_workout") %>
-          <%= render(TimerComponent.new(
-            started_at: @active_workout.started_at,
-            ended_at: @active_workout.ended_at,
-            paused_at: @active_workout.paused_at,
-            total_paused_seconds: @active_workout.total_paused_seconds,
-            show_hours: true,
-          )) %>
+          <%= render(
+            TimerComponent.new(
+              started_at: @active_workout.started_at,
+              ended_at: @active_workout.ended_at,
+              paused_at: @active_workout.paused_at,
+              total_paused_seconds: @active_workout.total_paused_seconds,
+              show_hours: true,
+            ),
+          ) %>
         </span>
       <% end %>
     <% else %>
-      <%= button t(".start_workout"), style: "primary", type: "link", route: new_workout_path %>
+      <%= button t(".start_workout"),
+      style: "primary",
+      type: "link",
+      route: new_workout_path %>
     <% end %>
   </div>
 
   <%= turbo_frame_tag "calendar" do %>
-    <%= render(CalendarComponent.new(
-      current_date: @current_date,
-      calendar_start: @calendar_start,
-      calendar_end: @calendar_end,
-      workouts_by_date: @workouts_by_date,
-      prev_month: @prev_month,
-      next_month: @next_month
-    )) %>
+    <%= render(
+      CalendarComponent.new(
+        current_date: @current_date,
+        calendar_start: @calendar_start,
+        calendar_end: @calendar_end,
+        workouts_by_date: @workouts_by_date,
+        prev_month: @prev_month,
+        next_month: @next_month,
+      ),
+    ) %>
   <% end %>
 </div>

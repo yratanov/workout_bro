@@ -25,9 +25,7 @@ module WorkoutImports
 
       FORMATS.each do |format_name, config|
         headers = config[:headers]
-        if headers_match?(first_line, headers)
-          return format_name
-        end
+        return format_name if headers_match?(first_line, headers)
       end
 
       :custom_format

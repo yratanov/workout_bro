@@ -78,12 +78,9 @@ describe WorkoutImport do
 
   describe "enums" do
     it "defines status enum with correct values" do
-      expect(described_class.statuses).to eq({
-        "pending" => 0,
-        "in_progress" => 1,
-        "completed" => 2,
-        "failed" => 3
-      })
+      expect(described_class.statuses).to eq(
+        { "pending" => 0, "in_progress" => 1, "completed" => 2, "failed" => 3 }
+      )
     end
   end
 
@@ -132,12 +129,13 @@ describe WorkoutImport do
     let(:workout_import) { workout_imports(:pending_import) }
 
     it "nullifies workout_import_id when destroyed" do
-      workout = user.workouts.create!(
-        workout_type: :strength,
-        started_at: Time.current,
-        ended_at: Time.current + 1.hour,
-        workout_import: workout_import
-      )
+      workout =
+        user.workouts.create!(
+          workout_type: :strength,
+          started_at: Time.current,
+          ended_at: Time.current + 1.hour,
+          workout_import: workout_import
+        )
 
       workout_import.destroy!
       workout.reload

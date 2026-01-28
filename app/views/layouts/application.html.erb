@@ -25,13 +25,18 @@
 
   <body class="w-full relative">
     <% if flash.any? %>
-      <div class="fixed top-4 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-50 flex flex-col items-center gap-2">
+      <div
+        class="
+          fixed top-4 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-50
+          flex flex-col items-center gap-2
+        "
+      >
         <% flash.each do |type, message| %>
           <div
             data-controller="flash"
             class="
-              w-full sm:w-auto max-w-md px-4 py-3 rounded-lg font-medium shadow-xl border backdrop-blur-sm
-              transition-all duration-300 ease-in-out text-sm sm:text-base
+              w-full sm:w-auto max-w-md px-4 py-3 rounded-lg font-medium shadow-xl border
+              backdrop-blur-sm transition-all duration-300 ease-in-out text-sm sm:text-base
               <%= type == 'alert' ? 'bg-red-800 text-red-100 border-red-600' : 'bg-green-800 text-green-100 border-green-600' %>
             "
           >
@@ -43,12 +48,31 @@
 
     <% if authenticated? && Current.user&.setup_completed? %>
       <% nav_items = [
-        { name: t("shared.navigation.workouts"), path: workouts_path, current: controller_name == "workouts" },
-        { name: t("shared.navigation.routines"), path: workout_routines_path, current: controller_name == "workout_routines" },
-        { name: t("shared.navigation.stats"), path: stats_path, current: controller_name == "stats" },
-        { name: t("shared.navigation.exercises"), path: exercises_path, current: controller_name == "exercises" },
+        {
+          name: t("shared.navigation.workouts"),
+          path: workouts_path,
+          current: controller_name == "workouts",
+        },
+        {
+          name: t("shared.navigation.routines"),
+          path: workout_routines_path,
+          current: controller_name == "workout_routines",
+        },
+        {
+          name: t("shared.navigation.stats"),
+          path: stats_path,
+          current: controller_name == "stats",
+        },
+        {
+          name: t("shared.navigation.exercises"),
+          path: exercises_path,
+          current: controller_name == "exercises",
+        },
       ] %>
-      <nav class="w-full bg-slate-800 border-b border-slate-700" data-controller="mobile-menu">
+      <nav
+        class="w-full bg-slate-800 border-b border-slate-700"
+        data-controller="mobile-menu"
+      >
         <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
           <div class="flex items-center">
             <%= link_to workouts_path, class: "flex items-center gap-2 py-3 pr-4 hover:opacity-80 transition-opacity" do %>
@@ -57,13 +81,22 @@
             <% end %>
             <div class="hidden sm:flex items-center gap-1">
               <% nav_items.each do |item| %>
-                <%= link_to item[:name], item[:path],
-                  class: "px-3 py-2 rounded-md text-sm font-medium transition-colors #{item[:current] ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white'}" %>
+                <%= link_to item[:name],
+                item[:path],
+                class:
+                  "px-3 py-2 rounded-md text-sm font-medium transition-colors #{item[:current] ? "bg-slate-700 text-white" : "text-slate-300 hover:bg-slate-700 hover:text-white"}" %>
               <% end %>
             </div>
           </div>
           <div class="flex items-center gap-1">
-            <button type="button" data-action="mobile-menu#toggle" class="sm:hidden p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
+            <button
+              type="button"
+              data-action="mobile-menu#toggle"
+              class="
+                sm:hidden p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700
+                transition-colors
+              "
+            >
               <span data-mobile-menu-target="openIcon"><%= icon "menu", size: "w-5 h-5" %></span>
               <span data-mobile-menu-target="closeIcon" class="hidden"><%= icon "xmark", size: "w-5 h-5" %></span>
             </button>
@@ -80,12 +113,19 @@
           </div>
         </div>
         <!-- Mobile menu -->
-        <div data-mobile-menu-target="menu" class="hidden sm:hidden border-t border-slate-700">
+        <div
+          data-mobile-menu-target="menu"
+          class="hidden sm:hidden border-t border-slate-700"
+        >
           <div class="px-2 py-3 space-y-1">
             <% nav_items.each do |item| %>
-              <%= link_to item[:name], item[:path],
-                data: { action: "mobile-menu#close" },
-                class: "block px-3 py-2 rounded-md text-base font-medium transition-colors #{item[:current] ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white'}" %>
+              <%= link_to item[:name],
+              item[:path],
+              data: {
+                action: "mobile-menu#close",
+              },
+              class:
+                "block px-3 py-2 rounded-md text-base font-medium transition-colors #{item[:current] ? "bg-slate-700 text-white" : "text-slate-300 hover:bg-slate-700 hover:text-white"}" %>
             <% end %>
           </div>
         </div>

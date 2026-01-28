@@ -4,15 +4,25 @@
   <h1 class="font-bold text-2xl mb-4 sm:mb-6"><%= t(".title") %></h1>
 
   <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
-    <%= render SettingsMenuComponent.new(current_page: :profile, current_user: current_user) %>
+    <%= render SettingsMenuComponent.new(
+      current_page: :profile,
+      current_user: current_user,
+    ) %>
 
     <div class="flex-1 min-w-0">
       <div class="bg-slate-800 rounded-lg p-4 sm:p-6">
         <h2 class="font-semibold text-lg mb-4"><%= t(".profile_info") %></h2>
 
         <%= app_form_with model: @user, url: settings_profile_path, method: :patch, class: "space-y-6" do |form| %>
-          <%= form.input :email_address, as: :email, label: t(".email_label"), margin: "",
-              input_html: { required: true, autocomplete: "email", placeholder: t(".email_placeholder") } %>
+          <%= form.input :email_address,
+                     as: :email,
+                     label: t(".email_label"),
+                     margin: "",
+                     input_html: {
+                       required: true,
+                       autocomplete: "email",
+                       placeholder: t(".email_placeholder"),
+                     } %>
           <div class="pt-2">
             <%= button text: t(".save"), type: "submit", style: "primary" %>
           </div>
@@ -23,8 +33,14 @@
         <h2 class="font-semibold text-lg mb-4"><%= t(".language_section") %></h2>
 
         <%= app_form_with model: @user, url: settings_profile_path, method: :patch, class: "space-y-6" do |form| %>
-          <%= form.input :locale, as: :select, label: t(".language_label"), margin: "",
-              collection: User::AVAILABLE_LOCALES.map { |l| [t("setup.language.locales.#{l}"), l] } %>
+          <%= form.input :locale,
+                     as: :select,
+                     label: t(".language_label"),
+                     margin: "",
+                     collection:
+                       User::AVAILABLE_LOCALES.map { |l|
+                         [t("setup.language.locales.#{l}"), l]
+                       } %>
           <div class="pt-2">
             <%= button text: t(".save"), type: "submit", style: "primary" %>
           </div>

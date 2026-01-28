@@ -17,27 +17,32 @@ class AddMuscleToExercises < ActiveRecord::Migration[8.0]
     "Side delts" => "shoulders"
   }.freeze
 
-  STANDARD_MUSCLES = %w[chest back shoulders biceps triceps legs glutes core].freeze
+  STANDARD_MUSCLES = %w[
+    chest
+    back
+    shoulders
+    biceps
+    triceps
+    legs
+    glutes
+    core
+  ].freeze
 
   def up
     add_reference :exercises, :muscle, foreign_key: true
 
     # Create only the standardized muscles
-    STANDARD_MUSCLES.each do |name|
-      execute <<-SQL.squish
+    STANDARD_MUSCLES.each { |name| execute <<-SQL.squish }
         INSERT OR IGNORE INTO muscles (name, created_at, updated_at)
         VALUES ('#{name}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
       SQL
-    end
 
     # Map old muscle names to standardized muscles
-    MUSCLE_MAPPING.each do |old_name, new_name|
-      execute <<-SQL.squish
+    MUSCLE_MAPPING.each { |old_name, new_name| execute <<-SQL.squish }
         UPDATE exercises
         SET muscle_id = (SELECT id FROM muscles WHERE muscles.name = '#{new_name}')
         WHERE muscles = '#{old_name}'
       SQL
-    end
 
     remove_column :exercises, :muscles
   end

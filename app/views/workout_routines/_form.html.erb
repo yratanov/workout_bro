@@ -2,7 +2,12 @@
   <%= app_form_with(model: workout_routine, class: "contents") do |form| %>
     <div class="flex gap-3 items-end">
       <div class="flex-1">
-        <%= form.input :name, label: false, margin: "mb-0", input_html: { placeholder: t("workout_routines.form.name_placeholder") } %>
+        <%= form.input :name,
+                   label: false,
+                   margin: "mb-0",
+                   input_html: {
+                     placeholder: t("workout_routines.form.name_placeholder"),
+                   } %>
       </div>
       <%= form.submit t("shared.buttons.save") %>
     </div>

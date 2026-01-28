@@ -4,11 +4,16 @@
   <%# Reps as horizontal pills %>
   <div class="flex flex-wrap gap-2 mb-4">
     <% persisted_reps.each_with_index do |rep, i| %>
-      <div class="group flex items-center gap-1 bg-slate-600 rounded-full pl-3 pr-1 py-1">
+      <div
+        class="
+          group flex items-center gap-1 bg-slate-600 rounded-full pl-3 pr-1 py-1
+        "
+      >
         <span class="text-slate-400 text-sm"><%= i + 1 %>.</span>
         <span class="font-medium"><%= rep.reps %></span>
         <% if rep.weight %>
-          <span class="text-slate-300">× <%= rep.weight %>kg</span>
+          <span class="text-slate-300">×
+            <%= rep.weight %>kg</span>
         <% end %>
         <% if rep.band %>
           <span class="text-xs text-slate-400 ml-1"><%= rep.band.humanize %></span>

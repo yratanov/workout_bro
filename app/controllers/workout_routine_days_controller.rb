@@ -10,7 +10,8 @@ class WorkoutRoutineDaysController < ApplicationController
 
   def new
     @workout_routine = WorkoutRoutine.find(params[:workout_routine_id])
-    @workout_routine_day = WorkoutRoutineDay.new(workout_routine: @workout_routine)
+    @workout_routine_day =
+      WorkoutRoutineDay.new(workout_routine: @workout_routine)
   end
 
   def create
@@ -19,7 +20,11 @@ class WorkoutRoutineDaysController < ApplicationController
     @workout_routine_day.workout_routine = @workout_routine
 
     if @workout_routine_day.save
-      redirect_to edit_workout_routine_workout_routine_day_path(@workout_routine, @workout_routine_day), notice: I18n.t("controllers.workout_routine_days.created")
+      redirect_to edit_workout_routine_workout_routine_day_path(
+                    @workout_routine,
+                    @workout_routine_day
+                  ),
+                  notice: I18n.t("controllers.workout_routine_days.created")
     else
       render :new
     end
@@ -28,7 +33,8 @@ class WorkoutRoutineDaysController < ApplicationController
   def update
     @workout_routine_day = WorkoutRoutineDay.find(params[:id])
     if @workout_routine_day.update(workout_routine_day_params)
-      redirect_to workout_routine_path(@workout_routine_day.workout_routine), notice: I18n.t("controllers.workout_routine_days.updated")
+      redirect_to workout_routine_path(@workout_routine_day.workout_routine),
+                  notice: I18n.t("controllers.workout_routine_days.updated")
     else
       render :edit
     end
@@ -37,8 +43,6 @@ class WorkoutRoutineDaysController < ApplicationController
   private
 
   def workout_routine_day_params
-    params.require(:workout_routine_day).permit(
-      :name
-    )
+    params.require(:workout_routine_day).permit(:name)
   end
 end

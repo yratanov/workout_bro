@@ -24,7 +24,10 @@ module WorkoutImports
     rescue StandardError => e
       workout_import.update!(
         status: :failed,
-        error_details: { message: e.message, backtrace: e.backtrace&.first(5) }
+        error_details: {
+          message: e.message,
+          backtrace: e.backtrace&.first(5)
+        }
       )
 
       { imported: 0, skipped: 0, error: e.message }

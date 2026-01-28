@@ -3,7 +3,10 @@
 <div class="w-full max-w-3xl">
   <div class="flex justify-between items-center mb-6">
     <h1 class="font-bold text-3xl"><%= t(".title") %></h1>
-    <%= button t(".new_exercise"), route: new_exercise_path, style: "primary", type: "link" %>
+    <%= button t(".new_exercise"),
+    route: new_exercise_path,
+    style: "primary",
+    type: "link" %>
   </div>
 
   <% if @exercises.any? %>
@@ -25,12 +28,22 @@
                   <h3 class="font-medium text-lg"><%= exercise.name %></h3>
                   <div class="flex gap-2">
                     <% if exercise.with_weights %>
-                      <span class="inline-flex items-center px-2 py-1 bg-blue-600/20 text-blue-400 rounded-full text-xs">
+                      <span
+                        class="
+                          inline-flex items-center px-2 py-1 bg-blue-600/20 text-blue-400 rounded-full
+                          text-xs
+                        "
+                      >
                         <%= t(".weights") %>
                       </span>
                     <% end %>
                     <% if exercise.with_band %>
-                      <span class="inline-flex items-center px-2 py-1 bg-purple-600/20 text-purple-400 rounded-full text-xs">
+                      <span
+                        class="
+                          inline-flex items-center px-2 py-1 bg-purple-600/20 text-purple-400 rounded-full
+                          text-xs
+                        "
+                      >
                         <%= t(".band") %>
                       </span>
                     <% end %>

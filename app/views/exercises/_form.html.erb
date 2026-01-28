@@ -1,8 +1,9 @@
 <%= app_form_with(model: exercise, class: "contents") do |form| %>
   <%= form.input :name %>
-  <%= form.input :muscle_id, as: :select,
-      collection: Muscle.order(:name).map { |m| [m.human_name, m.id] },
-      include_blank: t(".select_muscle") %>
+  <%= form.input :muscle_id,
+             as: :select,
+             collection: Muscle.order(:name).map { |m| [m.human_name, m.id] },
+             include_blank: t(".select_muscle") %>
 
   <div class="mb-4 space-y-4">
     <p class="block text-sm font-medium text-slate-300"><%= t(".equipment") %></p>

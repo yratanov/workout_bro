@@ -15,7 +15,10 @@ class StatsController < ApplicationController
     sorted_weeks = grouped.keys.sort
 
     labels = sorted_weeks.map { |w| w.strftime("%b %d") }
-    data = sorted_weeks.map { |w| (grouped[w].sum(&:time_in_seconds) / 3600.0).round(2) }
+    data =
+      sorted_weeks.map do |w|
+        (grouped[w].sum(&:time_in_seconds) / 3600.0).round(2)
+      end
 
     { labels: labels, data: data }
   end
@@ -28,7 +31,8 @@ class StatsController < ApplicationController
     sorted_weeks = grouped.keys.sort
 
     labels = sorted_weeks.map { |w| w.strftime("%b %d") }
-    data = sorted_weeks.map { |w| (grouped[w].sum(&:distance) / 1000.0).round(2) }
+    data =
+      sorted_weeks.map { |w| (grouped[w].sum(&:distance) / 1000.0).round(2) }
 
     { labels: labels, data: data }
   end
@@ -37,8 +41,10 @@ class StatsController < ApplicationController
     workouts = Current.user.workouts.where.not(ended_at: nil)
     return { labels: [], data_strength: [], data_runs: [] } if workouts.empty?
 
-    strength_grouped = workouts.strength.group_by { |w| w.started_at.beginning_of_week.to_date }
-    runs_grouped = workouts.run.group_by { |w| w.started_at.beginning_of_week.to_date }
+    strength_grouped =
+      workouts.strength.group_by { |w| w.started_at.beginning_of_week.to_date }
+    runs_grouped =
+      workouts.run.group_by { |w| w.started_at.beginning_of_week.to_date }
 
     all_weeks = (strength_grouped.keys + runs_grouped.keys).uniq.sort
 

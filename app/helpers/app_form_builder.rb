@@ -1,9 +1,10 @@
 class AppFormBuilder < ActionView::Helpers::FormBuilder
   delegate :tag, :content_tag, :safe_join, :render, to: :@template
 
-  DEFAULT_INPUT_CLASSES = "bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 " \
-                          "text-white placeholder-slate-400 " \
-                          "focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500".freeze
+  DEFAULT_INPUT_CLASSES =
+    "bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 " \
+      "text-white placeholder-slate-400 " \
+      "focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500".freeze
 
   def submit(text = "Submit", **options)
     render(
@@ -30,16 +31,22 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
     }
 
     tag.label class: "flex items-center gap-3 cursor-pointer" do
-      safe_join([
-        check_box(method, class: "sr-only peer"),
-        tag.span(
-          class: "w-10 h-6 bg-slate-700 rounded-full peer #{color_classes[color]} peer-focus:ring-2 " \
-                 "relative after:content-[''] after:absolute after:top-0.5 after:left-0.5 " \
-                 "after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all " \
-                 "peer-checked:after:translate-x-4"
-        ),
-        tag.span(label_text || object.class.human_attribute_name(method), class: "text-slate-300")
-      ])
+      safe_join(
+        [
+          check_box(method, class: "sr-only peer"),
+          tag.span(
+            class:
+              "w-10 h-6 bg-slate-700 rounded-full peer #{color_classes[color]} peer-focus:ring-2 " \
+                "relative after:content-[''] after:absolute after:top-0.5 after:left-0.5 " \
+                "after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all " \
+                "peer-checked:after:translate-x-4"
+          ),
+          tag.span(
+            label_text || object.class.human_attribute_name(method),
+            class: "text-slate-300"
+          )
+        ]
+      )
     end
   end
 
@@ -67,7 +74,9 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
 
       if type == :select
         select_options = { include_blank: options[:include_blank] }
-        select_options[:selected] = @object.send(field) if @object.respond_to?(field)
+        select_options[:selected] = @object.send(field) if @object.respond_to?(
+          field
+        )
         select_options[:width] = options[:width] if options[:width]
         send(
           :select,
@@ -100,7 +109,8 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
             data: options[:data] do
       label =
         if options[:label] != false && type != :editable_text
-          label_class = "#{type == :check_box ? "" : "mb-2"} block text-sm font-medium #{error?(field) ? "text-red-400" : "text-slate-300"}"
+          label_class =
+            "#{type == :check_box ? "" : "mb-2"} block text-sm font-medium #{error?(field) ? "text-red-400" : "text-slate-300"}"
           if options[:label].is_a?(String)
             label(field, options[:label], class: label_class)
           else
@@ -117,9 +127,9 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
 
       data =
         if type == :check_box
-          [ yield, label, error ]
+          [yield, label, error]
         else
-          [ label, yield, error ]
+          [label, yield, error]
         end
 
       safe_join(data)
@@ -159,7 +169,8 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
     return options if user_options.nil?
 
     if user_options[:class] && options[:class]
-      user_options = user_options.merge(class: "#{options[:class]} #{user_options[:class]}")
+      user_options =
+        user_options.merge(class: "#{options[:class]} #{user_options[:class]}")
     end
 
     options.merge(user_options)
@@ -168,7 +179,8 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
   def default_input_options(type, has_error)
     return {} if %i[check_box editable_text hidden].include?(type)
 
-    error_classes = has_error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
+    error_classes =
+      has_error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
     { class: "#{DEFAULT_INPUT_CLASSES} #{error_classes}".strip }
   end
 end

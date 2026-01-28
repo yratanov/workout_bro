@@ -27,23 +27,24 @@ class SetupController < ApplicationController
   private
 
   def require_setup_access
-    if User.count == 0
-      return true
-    end
+    return true if User.count == 0
 
-    return redirect_to root_path if authenticated? && Current.user.setup_completed?
+    if authenticated? && Current.user.setup_completed?
+      return redirect_to root_path
+    end
 
     resume_session || request_authentication
   end
 
   def set_current_step
-    @current_step = if User.count == 0
-      "account"
-    elsif authenticated?
-      STEPS[Current.user.wizard_step] || "complete"
-    else
-      "account"
-    end
+    @current_step =
+      if User.count == 0
+        "account"
+      elsif authenticated?
+        STEPS[Current.user.wizard_step] || "complete"
+      else
+        "account"
+      end
   end
 
   def current_step_template
@@ -99,14 +100,15 @@ class SetupController < ApplicationController
   def handle_complete_step
     Current.user.update!(setup_completed: true)
 
-    redirect_path = case params[:next_path]
-    when "workout"
-      new_workout_path
-    when "routine"
-      new_workout_routine_path
-    else
-      root_path
-    end
+    redirect_path =
+      case params[:next_path]
+      when "workout"
+        new_workout_path
+      when "routine"
+        new_workout_routine_path
+      else
+        root_path
+      end
 
     redirect_to redirect_path, notice: I18n.t("controllers.setup.completed")
   end
@@ -116,7 +118,11 @@ class SetupController < ApplicationController
   end
 
   def account_params
-    params.require(:user).permit(:email_address, :password, :password_confirmation)
+    params.require(:user).permit(
+      :email_address,
+      :password,
+      :password_confirmation
+    )
   end
 
   def garmin_params

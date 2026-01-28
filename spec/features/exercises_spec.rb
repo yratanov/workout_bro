@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe "Exercises" do
   let(:user) { users(:john) }
@@ -10,7 +10,12 @@ describe "Exercises" do
 
   describe "deleting an exercise" do
     it "allows deleting an exercise from the edit page" do
-      exercise = Exercise.create!(name: "Test Exercise for Deletion", muscle: muscles(:chest), user: user)
+      exercise =
+        Exercise.create!(
+          name: "Test Exercise for Deletion",
+          muscle: muscles(:chest),
+          user: user
+        )
 
       visit exercise_path(exercise)
 
@@ -21,9 +26,7 @@ describe "Exercises" do
 
       initial_count = Exercise.count
 
-      accept_confirm do
-        click_button "Delete"
-      end
+      accept_confirm { click_button "Delete" }
 
       expect(page).to have_current_path(exercises_path)
       expect(Exercise.count).to eq(initial_count - 1)
@@ -31,7 +34,12 @@ describe "Exercises" do
     end
 
     it "allows deleting an exercise from the show page" do
-      exercise = Exercise.create!(name: "Test Exercise for Show Deletion", muscle: muscles(:chest), user: user)
+      exercise =
+        Exercise.create!(
+          name: "Test Exercise for Show Deletion",
+          muscle: muscles(:chest),
+          user: user
+        )
 
       visit exercise_path(exercise)
 
@@ -39,9 +47,7 @@ describe "Exercises" do
 
       initial_count = Exercise.count
 
-      accept_confirm do
-        click_button "Delete"
-      end
+      accept_confirm { click_button "Delete" }
 
       expect(page).to have_current_path(exercises_path)
       expect(Exercise.count).to eq(initial_count - 1)

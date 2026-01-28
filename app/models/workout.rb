@@ -39,17 +39,18 @@ class Workout < ApplicationRecord
 
   has_one :workout_routine, through: :workout_routine_day
 
-  enum :workout_type, {
-    strength: 0,
-    run: 1
-  }
+  enum :workout_type, { strength: 0, run: 1 }
 
   validates :workout_type, presence: true
   validates :started_at, presence: true
   validates :user, presence: true
 
   validates :distance, numericality: { greater_than_or_equal_to: 0 }, if: :run?
-  validates :time_in_seconds, numericality: { greater_than_or_equal_to: 0 }, if: :run?
+  validates :time_in_seconds,
+            numericality: {
+              greater_than_or_equal_to: 0
+            },
+            if: :run?
 
   validate :no_other_active_workout, on: :create
 

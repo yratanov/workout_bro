@@ -3,36 +3,37 @@ describe ErrorLog do
 
   describe "validations" do
     it "is valid with valid attributes" do
-      error_log = ErrorLog.new(
-        error_class: "StandardError",
-        message: "Test error",
-        severity: :error
-      )
+      error_log =
+        ErrorLog.new(
+          error_class: "StandardError",
+          message: "Test error",
+          severity: :error
+        )
       expect(error_log).to be_valid
     end
 
     it "requires error_class" do
-      error_log = ErrorLog.new(
-        message: "Test error",
-        severity: :error
-      )
+      error_log = ErrorLog.new(message: "Test error", severity: :error)
       expect(error_log).not_to be_valid
       expect(error_log.errors[:error_class]).to include("can't be blank")
     end
 
     it "requires severity" do
-      error_log = ErrorLog.new(
-        error_class: "StandardError",
-        message: "Test error",
-        severity: nil
-      )
+      error_log =
+        ErrorLog.new(
+          error_class: "StandardError",
+          message: "Test error",
+          severity: nil
+        )
       expect(error_log).not_to be_valid
     end
   end
 
   describe "enums" do
     it "defines severity enum" do
-      expect(ErrorLog.severities).to eq({ "error" => 0, "warning" => 1, "info" => 2 })
+      expect(ErrorLog.severities).to eq(
+        { "error" => 0, "warning" => 1, "info" => 2 }
+      )
     end
 
     it "allows setting severity to error" do
@@ -54,8 +55,18 @@ describe ErrorLog do
   describe "scopes" do
     describe ".recent" do
       it "orders by created_at descending" do
-        old_log = ErrorLog.create!(error_class: "Old", severity: :error, created_at: 1.hour.ago)
-        new_log = ErrorLog.create!(error_class: "New", severity: :error, created_at: Time.current)
+        old_log =
+          ErrorLog.create!(
+            error_class: "Old",
+            severity: :error,
+            created_at: 1.hour.ago
+          )
+        new_log =
+          ErrorLog.create!(
+            error_class: "New",
+            severity: :error,
+            created_at: Time.current
+          )
 
         expect(ErrorLog.recent.first).to eq(new_log)
         expect(ErrorLog.recent.last).to eq(old_log)
@@ -77,21 +88,26 @@ describe ErrorLog do
 
   describe "json fields" do
     it "stores backtrace as array" do
-      error_log = ErrorLog.create!(
-        error_class: "StandardError",
-        severity: :error,
-        backtrace: [ "/app/file.rb:1", "/app/file.rb:2" ]
-      )
+      error_log =
+        ErrorLog.create!(
+          error_class: "StandardError",
+          severity: :error,
+          backtrace: %w[/app/file.rb:1 /app/file.rb:2]
+        )
       error_log.reload
-      expect(error_log.backtrace).to eq([ "/app/file.rb:1", "/app/file.rb:2" ])
+      expect(error_log.backtrace).to eq(%w[/app/file.rb:1 /app/file.rb:2])
     end
 
     it "stores context as hash" do
-      error_log = ErrorLog.create!(
-        error_class: "StandardError",
-        severity: :error,
-        context: { user_id: 1, action: "test" }
-      )
+      error_log =
+        ErrorLog.create!(
+          error_class: "StandardError",
+          severity: :error,
+          context: {
+            user_id: 1,
+            action: "test"
+          }
+        )
       error_log.reload
       expect(error_log.context).to eq({ "user_id" => 1, "action" => "test" })
     end

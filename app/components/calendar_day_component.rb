@@ -23,11 +23,7 @@ class CalendarDayComponent < ViewComponent::Base
   def day_classes
     if mobile?
       base = "flex items-center gap-3 p-2 rounded bg-slate-700 border"
-      if today?
-        "#{base} border-sky-500"
-      else
-        "#{base} border-slate-600"
-      end
+      today? ? "#{base} border-sky-500" : "#{base} border-slate-600"
     else
       base = "min-h-24 p-1 rounded bg-slate-700 border"
       if today?

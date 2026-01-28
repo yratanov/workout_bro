@@ -23,7 +23,8 @@ class ErrorReporterMiddleware
       path: request.path,
       url: request.url[0, 2000],
       method: request.method,
-      controller: env["action_dispatch.request.path_parameters"]&.dig(:controller),
+      controller:
+        env["action_dispatch.request.path_parameters"]&.dig(:controller),
       action: env["action_dispatch.request.path_parameters"]&.dig(:action),
       params: filtered_params(request),
       user_agent: request.user_agent&.[](0, 500),

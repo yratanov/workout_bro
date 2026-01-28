@@ -1,5 +1,12 @@
 module FormHelpers
-  def app_form_with(model: false, scope: nil, url: nil, format: nil, **options, &)
+  def app_form_with(
+    model: false,
+    scope: nil,
+    url: nil,
+    format: nil,
+    **options,
+    &
+  )
     options = options.reverse_merge(builder: AppFormBuilder)
     form_with(model:, scope:, url:, format:, **options, &)
   end
@@ -14,7 +21,13 @@ module FormHelpers
       method,
       choices,
       options,
-      html_options[:class] ? html_options : html_options.merge(class: input_class(options)),
+      (
+        if html_options[:class]
+          html_options
+        else
+          html_options.merge(class: input_class(options))
+        end
+      )
     )
   end
 

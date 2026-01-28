@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe "Invites" do
   fixtures :users
@@ -81,24 +81,39 @@ describe "Invites" do
     context "with invalid params" do
       it "does not create a user with missing email" do
         expect {
-          post use_invite_path(token: invite.token), params: {
-            user: { email_address: "", password: "password123", password_confirmation: "password123" }
-          }
+          post use_invite_path(token: invite.token),
+               params: {
+                 user: {
+                   email_address: "",
+                   password: "password123",
+                   password_confirmation: "password123"
+                 }
+               }
         }.not_to change(User, :count)
       end
 
       it "does not create a user with mismatched passwords" do
         expect {
-          post use_invite_path(token: invite.token), params: {
-            user: { email_address: "test@example.com", password: "password123", password_confirmation: "different" }
-          }
+          post use_invite_path(token: invite.token),
+               params: {
+                 user: {
+                   email_address: "test@example.com",
+                   password: "password123",
+                   password_confirmation: "different"
+                 }
+               }
         }.not_to change(User, :count)
       end
 
       it "renders the form again with errors" do
-        post use_invite_path(token: invite.token), params: {
-          user: { email_address: "", password: "password123", password_confirmation: "password123" }
-        }
+        post use_invite_path(token: invite.token),
+             params: {
+               user: {
+                 email_address: "",
+                 password: "password123",
+                 password_confirmation: "password123"
+               }
+             }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end

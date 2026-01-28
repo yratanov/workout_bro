@@ -4,7 +4,10 @@
   <h1 class="font-bold text-2xl mb-4 sm:mb-6"><%= t("settings.profile.show.title") %></h1>
 
   <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
-    <%= render SettingsMenuComponent.new(current_page: :imports, current_user: current_user) %>
+    <%= render SettingsMenuComponent.new(
+      current_page: :imports,
+      current_user: current_user,
+    ) %>
 
     <div class="flex-1 min-w-0">
       <div class="bg-slate-800 rounded-lg p-4 sm:p-6">
@@ -18,12 +21,17 @@
             </div>
           <% end %>
           <div>
-            <%= form.label :file, t(".file_label"), class: "block text-sm font-medium text-slate-300 mb-2" %>
+            <%= form.label :file,
+                       t(".file_label"),
+                       class: "block text-sm font-medium text-slate-300 mb-2" %>
             <%= form.file_field :file,
-                accept: ".csv",
-                class: "block w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 file:cursor-pointer cursor-pointer",
-                required: true,
-                data: { action: "change->import-upload#setFilename" } %>
+                            accept: ".csv",
+                            class:
+                              "block w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 file:cursor-pointer cursor-pointer",
+                            required: true,
+                            data: {
+                              action: "change->import-upload#setFilename",
+                            } %>
             <p class="mt-2 text-xs text-slate-500"><%= t(".file_hint") %></p>
           </div>
           <%= form.hidden_field :original_filename, id: "original_filename" %>
@@ -35,10 +43,14 @@
         <div class="mt-6 pt-6 border-t border-slate-700">
           <h3 class="font-semibold mb-4"><%= t(".supported_formats") %></h3>
           <ul class="text-sm text-slate-400 space-y-2">
-            <li><strong><%= t(".format_custom") %>:</strong> <%= t(".format_custom_desc") %></li>
-            <li><strong><%= t(".format_strong") %>:</strong> <%= t(".format_strong_desc") %></li>
-            <li><strong><%= t(".format_hevy") %>:</strong> <%= t(".format_hevy_desc") %></li>
-            <li><strong><%= t(".format_fitnotes") %>:</strong> <%= t(".format_fitnotes_desc") %></li>
+            <li><strong><%= t(".format_custom") %>:</strong>
+              <%= t(".format_custom_desc") %></li>
+            <li><strong><%= t(".format_strong") %>:</strong>
+              <%= t(".format_strong_desc") %></li>
+            <li><strong><%= t(".format_hevy") %>:</strong>
+              <%= t(".format_hevy_desc") %></li>
+            <li><strong><%= t(".format_fitnotes") %>:</strong>
+              <%= t(".format_fitnotes_desc") %></li>
           </ul>
         </div>
       </div>
@@ -49,13 +61,16 @@
 
           <div class="space-y-3">
             <% @workout_imports.each do |import| %>
-              <div class="bg-slate-700/50 rounded-lg p-4"
-                   data-controller="<%= import.pending? || import.in_progress? ? 'import-status' : '' %>"
-                   data-import-status-id-value="<%= import.id %>"
-                   data-import-status-url-value="<%= status_settings_imports_path(import.id) %>">
+              <div
+                class="bg-slate-700/50 rounded-lg p-4"
+                data-controller="<%= import.pending? || import.in_progress? ? 'import-status' : '' %>"
+                data-import-status-id-value="<%= import.id %>"
+                data-import-status-url-value="<%= status_settings_imports_path(import.id) %>"
+              >
                 <div class="flex items-center justify-between mb-2">
                   <span class="text-sm font-medium">
-                    <%= import.original_filename.presence || (import.file.attached? && import.file.filename.to_s) || t(".unknown_file") %>
+                    <%= import.original_filename.presence ||
+                      (import.file.attached? && import.file.filename.to_s) || t(".unknown_file") %>
                   </span>
                   <div class="flex items-center gap-2">
                     <span data-import-status-target="badge">

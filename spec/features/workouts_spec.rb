@@ -1,13 +1,15 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe "Workouts" do
-  fixtures :users, :exercises, :workout_routines, :workout_routine_days, :workout_routine_day_exercises
+  fixtures :users,
+           :exercises,
+           :workout_routines,
+           :workout_routine_days,
+           :workout_routine_day_exercises
 
   let(:user) { users(:john) }
 
-  before do
-    login_as(user)
-  end
+  before { login_as(user) }
 
   describe "viewing workouts" do
     it "shows the workouts index page" do
@@ -38,9 +40,7 @@ describe "Workouts" do
       click_link "Start workout"
       click_button "Start Workout"
 
-      accept_confirm do
-        click_button "Finish"
-      end
+      accept_confirm { click_button "Finish" }
 
       # After finishing, should redirect to workouts index
       expect(page).to have_content("Workouts")
@@ -94,7 +94,7 @@ describe "Workouts" do
       initial_count = user.workouts.count
 
       # Click on the workout pill in the calendar to open modal
-      first('a.bg-blue-600', text: /Push Day/i).click
+      first("a.bg-blue-600", text: /Push Day/i).click
 
       # Modal should be open with workout details
       expect(page).to have_content("Push Day")
@@ -102,9 +102,7 @@ describe "Workouts" do
       within('[data-controller="modal"]') do
         # Click delete and confirm
         expect(page).to have_button("Delete")
-        accept_confirm do
-          click_button "Delete"
-        end
+        accept_confirm { click_button "Delete" }
       end
 
       # Wait for flash message to ensure deletion completed
@@ -118,7 +116,7 @@ describe "Workouts" do
       click_link "Start workout"
 
       # Select run workout type
-      find('label', text: 'Run').click
+      find("label", text: "Run").click
 
       # Run fields should be visible
       expect(page).to have_field("workout[distance]")
@@ -139,7 +137,7 @@ describe "Workouts" do
       click_link "Start workout"
 
       # Select run workout type
-      find('label', text: 'Run').click
+      find("label", text: "Run").click
 
       # Submit with invalid data
       fill_in "workout[distance]", with: "-100"
@@ -147,7 +145,7 @@ describe "Workouts" do
       click_button "Start Workout"
 
       # Switch back to strength
-      find('label', text: 'Strength').click
+      find("label", text: "Strength").click
 
       # Should have the day select available
       expect(page).to have_select("workout[workout_routine_day_id]")

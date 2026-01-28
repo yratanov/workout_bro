@@ -6,15 +6,13 @@ describe WorkoutImports::CsvImporter do
 
   describe "#call" do
     context "with custom format CSV" do
-      let(:csv_content) do
-        <<~CSV
+      let(:csv_content) { <<~CSV }
           2024-01-15,,,,
           Bench Press,60x10,70x8,,
 
           2024-01-17,,,,
           Squat,100x5,110x5,,
         CSV
-      end
 
       before do
         workout_import.file.attach(
@@ -34,7 +32,9 @@ describe WorkoutImports::CsvImporter do
       it "creates workout records with correct associations" do
         described_class.new(workout_import).call
 
-        expect(user.workouts.where(workout_import: workout_import).count).to eq(2)
+        expect(user.workouts.where(workout_import: workout_import).count).to eq(
+          2
+        )
       end
 
       it "updates workout_import counters" do
@@ -48,7 +48,9 @@ describe WorkoutImports::CsvImporter do
 
     context "when import fails" do
       before do
-        allow_any_instance_of(WorkoutImports::FormatDetector).to receive(:parser_class).and_raise(StandardError, "Test error")
+        allow_any_instance_of(WorkoutImports::FormatDetector).to receive(
+          :parser_class
+        ).and_raise(StandardError, "Test error")
         workout_import.file.attach(
           io: StringIO.new("invalid"),
           filename: "bad.csv",
@@ -65,7 +67,9 @@ describe WorkoutImports::CsvImporter do
       it "records error details" do
         described_class.new(workout_import).call
 
-        expect(workout_import.reload.error_details["message"]).to eq("Test error")
+        expect(workout_import.reload.error_details["message"]).to eq(
+          "Test error"
+        )
       end
     end
   end

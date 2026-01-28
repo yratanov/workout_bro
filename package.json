@@ -1,0 +1,28 @@
+{
+  "name": "workout_bro",
+  "version": "1.0.0",
+  "description": "A self-hosted workout tracking app for strength training and running. Own your fitness data.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yratanov/workout_bro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yratanov/workout_bro/issues"
+  },
+  "homepage": "https://github.com/yratanov/workout_bro#readme",
+  "devDependencies": {
+    "@prettier/plugin-ruby": "^4.0.4",
+    "prettier": "^3.8.1"
+  }
+}

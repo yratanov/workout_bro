@@ -1,5 +1,6 @@
 <% if workout_routine_days %>
   <%= select_tag "workout[workout_routine_day_id]",
-    options_from_collection_for_select(workout_routine_days, "id", "name"),
-    class: "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
+  options_from_collection_for_select(workout_routine_days, "id", "name"),
+  class:
+    "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" %>
 <% end %>

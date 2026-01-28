@@ -3,9 +3,7 @@ describe "Settings::Imports" do
 
   let(:user) { users(:john) }
 
-  before do
-    sign_in(user)
-  end
+  before { sign_in(user) }
 
   describe "GET /settings/imports" do
     it "returns success" do
@@ -28,12 +26,10 @@ describe "Settings::Imports" do
   end
 
   describe "POST /settings/imports" do
-    let(:csv_content) do
-      <<~CSV
+    let(:csv_content) { <<~CSV }
         2024-01-15,,,,
         Bench Press,60x10,70x8,,
       CSV
-    end
 
     let(:csv_file) do
       Rack::Test::UploadedFile.new(
@@ -45,33 +41,36 @@ describe "Settings::Imports" do
 
     it "creates a new import" do
       expect {
-        post settings_imports_path, params: {
-          workout_import: {
-            file: csv_file,
-            original_filename: "workouts.csv"
-          }
-        }
+        post settings_imports_path,
+             params: {
+               workout_import: {
+                 file: csv_file,
+                 original_filename: "workouts.csv"
+               }
+             }
       }.to change(WorkoutImport, :count).by(1)
     end
 
     it "enqueues the import job" do
       expect {
-        post settings_imports_path, params: {
-          workout_import: {
-            file: csv_file,
-            original_filename: "workouts.csv"
-          }
-        }
+        post settings_imports_path,
+             params: {
+               workout_import: {
+                 file: csv_file,
+                 original_filename: "workouts.csv"
+               }
+             }
       }.to have_enqueued_job(WorkoutImportJob)
     end
 
     it "redirects with success message" do
-      post settings_imports_path, params: {
-        workout_import: {
-          file: csv_file,
-          original_filename: "workouts.csv"
-        }
-      }
+      post settings_imports_path,
+           params: {
+             workout_import: {
+               file: csv_file,
+               original_filename: "workouts.csv"
+             }
+           }
 
       expect(response).to redirect_to(settings_imports_path)
       follow_redirect!
@@ -139,8 +138,9 @@ describe "Settings::Imports" do
     it "deletes the import and its workouts" do
       expect {
         delete import_settings_imports_path(workout_import.id)
-      }.to change(WorkoutImport, :count).by(-1)
-        .and change(Workout, :count).by(-2)
+      }.to change(WorkoutImport, :count).by(-1).and change(Workout, :count).by(
+              -2
+            )
     end
 
     it "redirects with success message" do
@@ -162,9 +162,7 @@ describe "Settings::Imports" do
   end
 
   context "when not authenticated" do
-    before do
-      delete session_path
-    end
+    before { delete session_path }
 
     it "redirects to login" do
       get settings_imports_path

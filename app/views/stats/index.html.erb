@@ -39,7 +39,8 @@
         </div>
         <div>
           <p class="text-slate-400 text-sm"><%= t(".total_distance") %></p>
-          <p class="text-2xl font-semibold"><%= (Current.user.workouts.run.sum(:distance) / 1000.0).round(2) %> km</p>
+          <p class="text-2xl font-semibold"><%= (Current.user.workouts.run.sum(:distance) / 1000.0).round(2) %>
+            km</p>
         </div>
         <div>
           <p class="text-slate-400 text-sm"><%= t(".time_spent") %></p>

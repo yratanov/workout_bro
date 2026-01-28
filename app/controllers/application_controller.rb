@@ -20,6 +20,9 @@ class ApplicationController < ActionController::Base
   end
 
   def require_admin
-    redirect_to root_path, alert: I18n.t("controllers.application.admin_required") unless current_user&.admin?
+    unless current_user&.admin?
+      redirect_to root_path,
+                  alert: I18n.t("controllers.application.admin_required")
+    end
   end
 end

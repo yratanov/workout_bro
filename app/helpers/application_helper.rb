@@ -40,16 +40,20 @@ module ApplicationHelper
 
   def render_step_indicator(current_step, total_steps)
     content_tag(:div, class: "flex items-center gap-2") do
-      (1..total_steps).map do |step|
-        classes = if step < current_step
-          "w-3 h-3 rounded-full bg-emerald-500"
-        elsif step == current_step
-          "w-3 h-3 rounded-full bg-blue-500"
-        else
-          "w-3 h-3 rounded-full bg-slate-600"
+      (1..total_steps)
+        .map do |step|
+          classes =
+            if step < current_step
+              "w-3 h-3 rounded-full bg-emerald-500"
+            elsif step == current_step
+              "w-3 h-3 rounded-full bg-blue-500"
+            else
+              "w-3 h-3 rounded-full bg-slate-600"
+            end
+          content_tag(:div, "", class: classes)
         end
-        content_tag(:div, "", class: classes)
-      end.join.html_safe
+        .join
+        .html_safe
     end
   end
 end

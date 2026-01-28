@@ -14,8 +14,12 @@ class SettingsMenuComponent < ViewComponent::Base
       { key: :garmin, path: settings_garmin_path, icon: "activity" },
       { key: :imports, path: settings_imports_path, icon: "upload" }
     ]
-    items << { key: :logs, path: settings_logs_path, icon: "logs" } if @current_user&.admin?
-    items << { key: :invites, path: settings_invites_path, icon: "plus" } if @current_user&.admin?
+    if @current_user&.admin?
+      items << { key: :logs, path: settings_logs_path, icon: "logs" }
+    end
+    if @current_user&.admin?
+      items << { key: :invites, path: settings_invites_path, icon: "plus" }
+    end
     items
   end
 

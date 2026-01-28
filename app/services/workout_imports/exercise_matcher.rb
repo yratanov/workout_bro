@@ -25,7 +25,8 @@ module WorkoutImports
     end
 
     def find_or_create_exercise(original_name, normalized_name)
-      exercise = user.exercises.find { |e| normalize(e.name) == normalized_name }
+      exercise =
+        user.exercises.find { |e| normalize(e.name) == normalized_name }
       return exercise if exercise
 
       user.exercises.create!(name: original_name.strip)

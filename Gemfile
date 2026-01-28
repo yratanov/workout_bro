@@ -59,6 +59,8 @@ end
 
 group :development do
   gem "annotaterb"
+  gem "erb-formatter"
+  gem "syntax_tree"
   gem "web-console"
 end
 

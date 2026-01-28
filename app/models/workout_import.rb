@@ -27,12 +27,7 @@ class WorkoutImport < ApplicationRecord
 
   has_one_attached :file
 
-  enum :status, {
-    pending: 0,
-    in_progress: 1,
-    completed: 2,
-    failed: 3
-  }
+  enum :status, { pending: 0, in_progress: 1, completed: 2, failed: 3 }
 
   validates :status, presence: true
   validates :file, presence: true
@@ -43,7 +38,8 @@ class WorkoutImport < ApplicationRecord
   def file_must_be_csv
     return unless file.attached?
 
-    unless file.content_type == "text/csv" || file.filename.to_s.end_with?(".csv")
+    unless file.content_type == "text/csv" ||
+             file.filename.to_s.end_with?(".csv")
       errors.add(:file, :invalid_format)
     end
   end

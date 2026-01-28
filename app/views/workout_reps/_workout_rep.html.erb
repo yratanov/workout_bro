@@ -1,6 +1,9 @@
 <div class="inline-flex gap-1 items-center">
   <%= badge do %>
-    <%= workout_rep.reps %><% if workout_rep.weight %> × <%= workout_rep.weight %>kg<% end %><% if workout_rep.band %> + <%= workout_rep.band.humanize.downcase %><% end %>
+    <%= workout_rep.reps %><% if workout_rep.weight %>
+      ×
+      <%= workout_rep.weight %>g<% end %><% if workout_rep.band %>+
+      <%= workout_rep.band.humanize.downcase %><% end %>
   <% end %>
   <% if delete_visible %>
     <%= button route: workout_rep_path(workout_rep),
