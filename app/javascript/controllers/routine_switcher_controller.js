@@ -15,7 +15,7 @@ export default class extends Controller {
           "Content-Type": "application/json",
           Accept: "text/vnd.turbo-stream.html",
         },
-      }
+      },
     );
 
     let html = await result.text();

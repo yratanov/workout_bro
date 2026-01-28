@@ -49,6 +49,8 @@ bundle exec annotaterb # Add schema annotations to models
 
 **After editing Ruby files, always run `npx prettier --write <changed_files>` to format, then `bin/rubocop -A <changed_files>` to auto-fix style issues.**
 
+**After editing JavaScript files, always run `npx prettier --write <changed_files>` to format.**
+
 **After editing ERB files, always run `bundle exec erb-format --write <changed_files>` to format.**
 
 ## Database

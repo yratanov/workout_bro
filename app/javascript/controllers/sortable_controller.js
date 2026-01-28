@@ -31,7 +31,8 @@ export default class extends Controller {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]')
+          .content,
       },
       body: JSON.stringify({
         position: newIndex + 1,

@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="workout-type-switcher"
 export default class extends Controller {
   static targets = ["strengthToggle", "runToggle"];
-  
+
   switch(event) {
     let value = event.target.value;
 
