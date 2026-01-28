@@ -107,9 +107,8 @@ describe "Workouts" do
         end
       end
 
-
-      # Should redirect to workouts index and workout count should decrease
-      expect(page).to have_current_path(workouts_path)
+      # Wait for flash message to ensure deletion completed
+      expect(page).to have_content("Workout was successfully destroyed.")
       expect(user.workouts.reload.count).to eq(initial_count - 1)
     end
   end
