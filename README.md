@@ -17,7 +17,7 @@ services:
   web:
     image: yratanov/workout_bro:latest
     volumes:
-      - workout_data:/rails/storage
+      - ./storage:/rails/storage
     ports:
       - "3000:80"
     environment:
@@ -28,31 +28,34 @@ services:
     image: yratanov/workout_bro:latest
     command: bin/jobs
     volumes:
-      - workout_data:/rails/storage
+      - ./storage:/rails/storage
     environment:
       - DISABLE_SSL=true
     restart: unless-stopped
     depends_on:
       - web
-
-volumes:
-  workout_data:
 ```
 
-2. Start the application:
+2. Create the storage directory:
+
+```bash
+mkdir -p storage
+```
+
+3. Start the application:
 
 ```bash
 docker compose up -d
 ```
 
-3. Open http://localhost:3000
-
-Credentials are automatically generated on first run and stored in the volume.
+4. Open http://localhost:3000
 
 ## Backup
 
+Your data is stored in the `./storage` directory. Simply backup this folder:
+
 ```bash
-docker compose cp web:/rails/storage ./backup
+cp -r storage backup
 ```
 
 ## Update

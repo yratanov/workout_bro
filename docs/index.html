@@ -299,7 +299,7 @@
   <span class="key">web</span>:
     <span class="key">image</span>: <span class="string">yratanov/workout_bro:latest</span>
     <span class="key">volumes</span>:
-      - <span class="string">workout_data:/rails/storage</span>
+      - <span class="string">./storage:/rails/storage</span>
     <span class="key">ports</span>:
       - <span class="string">"3000:80"</span>
     <span class="key">environment</span>:
@@ -310,15 +310,12 @@
     <span class="key">image</span>: <span class="string">yratanov/workout_bro:latest</span>
     <span class="key">command</span>: <span class="string">bin/jobs</span>
     <span class="key">volumes</span>:
-      - <span class="string">workout_data:/rails/storage</span>
+      - <span class="string">./storage:/rails/storage</span>
     <span class="key">environment</span>:
       - <span class="string">DISABLE_SSL=true</span>
     <span class="key">restart</span>: <span class="string">unless-stopped</span>
     <span class="key">depends_on</span>:
-      - <span class="string">web</span>
-
-<span class="key">volumes</span>:
-  <span class="key">workout_data</span>:</pre>
+      - <span class="string">web</span></pre>
     </div>
 
     <div class="steps">
@@ -332,12 +329,19 @@
       <div class="step">
         <div class="step-number">2</div>
         <div class="step-content">
+          <h4>Create storage directory</h4>
+          <p>Run <code>mkdir -p storage</code></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
           <h4>Start the app</h4>
           <p>Run <code>docker compose up -d</code></p>
         </div>
       </div>
       <div class="step">
-        <div class="step-number">3</div>
+        <div class="step-number">4</div>
         <div class="step-content">
           <h4>Open in browser</h4>
           <p>Go to <code>http://localhost:3000</code></p>

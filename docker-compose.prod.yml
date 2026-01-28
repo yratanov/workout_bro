@@ -5,7 +5,7 @@ services:
   web:
     image: yratanov/workout_bro:latest
     volumes:
-      - workout_data:/rails/storage
+      - ./storage:/rails/storage
     ports:
       - "3000:80"
     environment:
@@ -16,12 +16,9 @@ services:
     image: yratanov/workout_bro:latest
     command: bin/jobs
     volumes:
-      - workout_data:/rails/storage
+      - ./storage:/rails/storage
     environment:
       - DISABLE_SSL=true
     restart: unless-stopped
     depends_on:
       - web
-
-volumes:
-  workout_data:
