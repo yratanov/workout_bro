@@ -3,6 +3,8 @@ ru:
     settings:
       profile:
         updated: "Профиль успешно обновлён"
+      weights:
+        updated: "Настройки веса успешно обновлены"
       garmin:
         updated: "Учётные данные Garmin успешно обновлены"
         sync_success: "Синхронизация завершена: %{imported} импортировано, %{skipped} пропущено"

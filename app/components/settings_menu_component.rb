@@ -10,6 +10,7 @@ class SettingsMenuComponent < ViewComponent::Base
   def menu_items
     [
       { key: :profile, path: settings_profile_path, icon: "user" },
+      { key: :weights, path: settings_weights_path, icon: "dumbbell" },
       { key: :garmin, path: settings_garmin_path, icon: "activity" },
       { key: :imports, path: settings_imports_path, icon: "upload" }
     ]

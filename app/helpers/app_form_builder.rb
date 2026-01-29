@@ -65,7 +65,9 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
       hidden: :hidden_field,
       select: :select,
       editable_text: :editable_text_field,
-      rich_textarea: :rich_textarea
+      rich_textarea: :rich_textarea,
+      float: :number_field,
+      integer: :number_field
     }
     return send(:hidden_field, field) if type == :hidden
 

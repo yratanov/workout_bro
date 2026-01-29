@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   namespace :settings do
     get "/", to: redirect("/settings/profile")
     resource :profile, only: %i[show update], controller: "profile"
+    resource :weights, only: %i[show update], controller: "weights"
     resource :garmin, only: %i[show update], controller: "garmin" do
       post :sync
     end

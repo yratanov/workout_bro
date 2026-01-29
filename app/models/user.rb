@@ -11,6 +11,10 @@
 #  password_digest :string           not null
 #  role            :integer          default("user"), not null
 #  setup_completed :boolean          default(FALSE)
+#  weight_max      :float            default(100.0), not null
+#  weight_min      :float            default(2.5), not null
+#  weight_step     :float            default(2.5), not null
+#  weight_unit     :string           default("kg"), not null
 #  wizard_step     :integer          default(0)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
@@ -42,9 +46,14 @@ class User < ApplicationRecord
   has_many :workout_imports, dependent: :destroy
 
   AVAILABLE_LOCALES = %w[en ru].freeze
+  WEIGHT_UNITS = %w[kg lbs].freeze
 
   validates :email_address, presence: true, uniqueness: true
   validates :locale, inclusion: { in: AVAILABLE_LOCALES }, allow_nil: true
+  validates :weight_unit, inclusion: { in: WEIGHT_UNITS }
+  validates :weight_min, numericality: { greater_than: 0 }
+  validates :weight_max, numericality: { greater_than: :weight_min }
+  validates :weight_step, numericality: { greater_than: 0 }
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

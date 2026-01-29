@@ -3,6 +3,8 @@ en:
     settings:
       profile:
         updated: "Profile updated successfully"
+      weights:
+        updated: "Weight settings updated successfully"
       garmin:
         updated: "Garmin credentials updated successfully"
         sync_success: "Sync complete: %{imported} imported, %{skipped} skipped"

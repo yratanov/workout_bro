@@ -2,6 +2,7 @@ ru:
   settings:
     menu:
       profile: "Профиль"
+      weights: "Веса"
       garmin: "Garmin"
       imports: "Импорт"
     profile:
@@ -17,6 +18,18 @@ ru:
         save: "Сохранить изменения"
         language_section: "Язык"
         language_label: "Выберите язык"
+    weights:
+      show:
+        title: "Настройки веса"
+        weight_preferences: "Параметры веса"
+        unit_label: "Единица измерения"
+        units:
+          kg: "Килограммы (кг)"
+          lbs: "Фунты (lbs)"
+        min_label: "Минимальный вес"
+        max_label: "Максимальный вес"
+        step_label: "Шаг веса"
+        save: "Сохранить изменения"
     garmin:
       show:
         title: "Настройки Garmin"

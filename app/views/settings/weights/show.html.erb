@@ -1,0 +1,50 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-4xl">
+  <h1 class="font-bold text-2xl mb-4 sm:mb-6"><%= t(".title") %></h1>
+
+  <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
+    <%= render SettingsMenuComponent.new(current_page: :weights) %>
+
+    <div class="flex-1 min-w-0">
+      <div class="bg-slate-800 rounded-lg p-4 sm:p-6">
+        <h2 class="font-semibold text-lg mb-4"><%= t(".weight_preferences") %></h2>
+
+        <%= app_form_with model: @user, url: settings_weights_path, method: :patch, class: "space-y-6" do |form| %>
+          <%= form.input :weight_unit,
+                     as: :select,
+                     label: t(".unit_label"),
+                     margin: "",
+                     collection: User::WEIGHT_UNITS.map { |u| [t(".units.#{u}"), u] } %>
+          <%= form.input :weight_min,
+                     as: :float,
+                     label: t(".min_label"),
+                     margin: "",
+                     input_html: {
+                       min: 0.1,
+                       step: 0.1,
+                     } %>
+          <%= form.input :weight_max,
+                     as: :float,
+                     label: t(".max_label"),
+                     margin: "",
+                     input_html: {
+                       min: 0.1,
+                       step: 0.1,
+                     } %>
+          <%= form.input :weight_step,
+                     as: :float,
+                     label: t(".step_label"),
+                     margin: "",
+                     input_html: {
+                       min: 0.1,
+                       step: 0.1,
+                     } %>
+          <div class="pt-2">
+            <%= button text: t(".save"), type: "submit", style: "primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

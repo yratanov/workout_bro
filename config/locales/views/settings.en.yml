@@ -2,6 +2,7 @@ en:
   settings:
     menu:
       profile: "Profile"
+      weights: "Weights"
       garmin: "Garmin"
       imports: "Import"
     profile:
@@ -17,6 +18,18 @@ en:
         save: "Save Changes"
         language_section: "Language"
         language_label: "Select Language"
+    weights:
+      show:
+        title: "Weight Settings"
+        weight_preferences: "Weight Preferences"
+        unit_label: "Weight Unit"
+        units:
+          kg: "Kilograms (kg)"
+          lbs: "Pounds (lbs)"
+        min_label: "Minimum Weight"
+        max_label: "Maximum Weight"
+        step_label: "Weight Step"
+        save: "Save Changes"
     garmin:
       show:
         title: "Garmin Settings"

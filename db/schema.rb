@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_29_221951) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -128,6 +128,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_221951) do
     t.integer "role", default: 0, null: false
     t.boolean "setup_completed", default: false
     t.datetime "updated_at", null: false
+    t.float "weight_max", default: 100.0, null: false
+    t.float "weight_min", default: 2.5, null: false
+    t.float "weight_step", default: 2.5, null: false
+    t.string "weight_unit", default: "kg", null: false
     t.integer "wizard_step", default: 0
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end

@@ -14,7 +14,7 @@
     <% if workout_rep.workout_set.exercise.with_weights %>
       <%= form.input :weight,
                  as: :select,
-                 collection: (0..40).step(2.5).map { |w| ["#{w}kg", w] },
+                 collection: weight_options(workout_rep.workout_set.workout.user),
                  inline: true %>
     <% end %>
     <% if workout_rep.workout_set.exercise.with_band %>
