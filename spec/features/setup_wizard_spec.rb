@@ -23,6 +23,8 @@ describe "Setup Wizard" do
     it "shows the account creation step" do
       visit setup_path
       expect(page).to have_content(I18n.t("setup.account.title"))
+      expect(page).to have_field("user_first_name")
+      expect(page).to have_field("user_last_name")
       expect(page).to have_field("user_email_address")
       expect(page).to have_field("user_password")
     end
@@ -32,6 +34,8 @@ describe "Setup Wizard" do
 
       # Step 1: Create account
       expect(page).to have_content(I18n.t("setup.account.title"))
+      fill_in "user_first_name", with: "Test"
+      fill_in "user_last_name", with: "User"
       fill_in "user_email_address", with: "test@example.com"
       fill_in "user_password", with: "password123"
       fill_in "user_password_confirmation", with: "password123"
@@ -61,6 +65,8 @@ describe "Setup Wizard" do
       visit setup_path
 
       # Step 1: Create account
+      fill_in "user_first_name", with: "Test"
+      fill_in "user_last_name", with: "User"
       fill_in "user_email_address", with: "test@example.com"
       fill_in "user_password", with: "password123"
       fill_in "user_password_confirmation", with: "password123"
@@ -79,6 +85,8 @@ describe "Setup Wizard" do
     it "shows validation errors on account creation" do
       visit setup_path
 
+      fill_in "user_first_name", with: "Test"
+      fill_in "user_last_name", with: "User"
       fill_in "user_email_address", with: "test@example.com"
       fill_in "user_password", with: "password123"
       fill_in "user_password_confirmation", with: "different"

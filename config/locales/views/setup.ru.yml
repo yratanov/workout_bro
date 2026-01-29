@@ -3,6 +3,10 @@ ru:
     account:
       title: "Создание аккаунта"
       subtitle: "Настройте свой аккаунт для отслеживания тренировок"
+      first_name_label: "Имя"
+      first_name_placeholder: "Иван"
+      last_name_label: "Фамилия"
+      last_name_placeholder: "Иванов"
       email_label: "Email"
       email_placeholder: "вы@example.com"
       password_label: "Пароль"

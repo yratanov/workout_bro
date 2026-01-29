@@ -9,13 +9,27 @@
     </div>
 
     <%= app_form_with model: @user, url: use_invite_path(token: @invite.token), method: :post, class: "space-y-6" do |form| %>
+      <%= form.input :first_name,
+                 label: t(".first_name_label"),
+                 margin: "",
+                 input_html: {
+                   autofocus: true,
+                   autocomplete: "given-name",
+                   placeholder: t(".first_name_placeholder"),
+                 } %>
+      <%= form.input :last_name,
+                 label: t(".last_name_label"),
+                 margin: "",
+                 input_html: {
+                   autocomplete: "family-name",
+                   placeholder: t(".last_name_placeholder"),
+                 } %>
       <%= form.input :email_address,
                  as: :email,
                  label: t(".email_label"),
                  margin: "",
                  input_html: {
                    required: true,
-                   autofocus: true,
                    autocomplete: "username",
                    placeholder: t(".email_placeholder"),
                  } %>

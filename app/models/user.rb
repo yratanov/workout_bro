@@ -5,6 +5,8 @@
 #
 #  id              :integer          not null, primary key
 #  email_address   :string           not null
+#  first_name      :string
+#  last_name       :string
 #  locale          :string           default("en")
 #  password_digest :string           not null
 #  role            :integer          default("user"), not null

@@ -65,6 +65,19 @@ describe "Admin::Users" do
         expect(regular_user.reload.email_address).to eq("newemail@example.com")
       end
 
+      it "updates the user name" do
+        patch admin_user_path(regular_user),
+              params: {
+                user: {
+                  first_name: "Updated",
+                  last_name: "Name"
+                }
+              }
+        regular_user.reload
+        expect(regular_user.first_name).to eq("Updated")
+        expect(regular_user.last_name).to eq("Name")
+      end
+
       it "redirects to users index with notice" do
         patch admin_user_path(regular_user),
               params: {

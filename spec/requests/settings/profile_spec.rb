@@ -47,6 +47,20 @@ describe "Settings::Profile" do
         user.reload
         expect(user.email_address).to eq("uppercase@example.com")
       end
+
+      it "updates the name" do
+        patch settings_profile_path,
+              params: {
+                user: {
+                  first_name: "Updated",
+                  last_name: "Name"
+                }
+              }
+
+        user.reload
+        expect(user.first_name).to eq("Updated")
+        expect(user.last_name).to eq("Name")
+      end
     end
 
     context "with invalid params" do

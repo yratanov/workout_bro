@@ -8,6 +8,10 @@ en:
       show:
         title: "Settings"
         profile_info: "Profile Information"
+        first_name_label: "First Name"
+        first_name_placeholder: "John"
+        last_name_label: "Last Name"
+        last_name_placeholder: "Doe"
         email_label: "Email"
         email_placeholder: "you@example.com"
         save: "Save Changes"

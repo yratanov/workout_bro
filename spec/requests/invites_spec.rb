@@ -39,6 +39,8 @@ describe "Invites" do
     let(:valid_params) do
       {
         user: {
+          first_name: "New",
+          last_name: "User",
           email_address: "newuser@example.com",
           password: "password123",
           password_confirmation: "password123"

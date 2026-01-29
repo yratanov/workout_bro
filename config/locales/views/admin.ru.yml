@@ -22,6 +22,10 @@ ru:
       edit:
         title: "Админ"
         edit_user: "Редактировать пользователя"
+        first_name_label: "Имя"
+        first_name_placeholder: "Иван"
+        last_name_label: "Фамилия"
+        last_name_placeholder: "Иванов"
         email_label: "Email"
         email_placeholder: "user@example.com"
     logs:

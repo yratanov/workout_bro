@@ -10,101 +10,97 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_27_215345) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_29_221951) do
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index %w[record_type record_id name blob_id],
-            name: "index_active_storage_attachments_uniqueness",
-            unique: true
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
+    t.string "content_type"
     t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
-    t.index %w[blob_id variation_digest],
-            name: "index_active_storage_variant_records_uniqueness",
-            unique: true
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "error_logs", force: :cascade do |t|
-    t.string "error_class", null: false
-    t.text "message"
-    t.integer "severity", default: 0, null: false
-    t.string "source", default: "application"
     t.json "backtrace"
     t.json "context"
-    t.string "request_id"
     t.datetime "created_at", null: false
+    t.string "error_class", null: false
+    t.text "message"
+    t.string "request_id"
+    t.integer "severity", default: 0, null: false
+    t.string "source", default: "application"
     t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_error_logs_on_created_at"
     t.index ["severity"], name: "index_error_logs_on_severity"
   end
 
   create_table "exercises", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "with_weights", default: true, null: false
-    t.boolean "with_band", default: false, null: false
     t.integer "muscle_id"
+    t.string "name"
+    t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.boolean "with_band", default: false, null: false
+    t.boolean "with_weights", default: true, null: false
     t.index ["muscle_id"], name: "index_exercises_on_muscle_id"
     t.index ["user_id"], name: "index_exercises_on_user_id"
   end
 
   create_table "invites", force: :cascade do |t|
-    t.string "token", null: false
-    t.integer "user_id", null: false
-    t.integer "used_by_user_id"
-    t.datetime "used_at"
     t.datetime "created_at", null: false
+    t.string "token", null: false
     t.datetime "updated_at", null: false
+    t.datetime "used_at"
+    t.integer "used_by_user_id"
+    t.integer "user_id", null: false
     t.index ["token"], name: "index_invites_on_token", unique: true
     t.index ["used_by_user_id"], name: "index_invites_on_used_by_user_id"
     t.index ["user_id"], name: "index_invites_on_user_id"
   end
 
   create_table "muscles", force: :cascade do |t|
-    t.string "name", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_muscles_on_name", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.string "ip_address"
-    t.string "user_agent"
     t.datetime "created_at", null: false
+    t.string "ip_address"
     t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.integer "user_id", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "sync_logs", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
     t.integer "log_type", default: 0, null: false
-    t.integer "status", default: 0, null: false
     t.text "message"
     t.json "metadata"
-    t.datetime "created_at", null: false
+    t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["created_at"], name: "index_sync_logs_on_created_at"
     t.index ["log_type"], name: "index_sync_logs_on_log_type"
     t.index ["status"], name: "index_sync_logs_on_status"
@@ -112,123 +108,112 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_27_215345) do
   end
 
   create_table "third_party_credentials", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.string "provider", null: false
-    t.string "username"
-    t.string "encrypted_password"
     t.datetime "created_at", null: false
+    t.string "encrypted_password"
+    t.string "provider", null: false
     t.datetime "updated_at", null: false
-    t.index %w[user_id provider],
-            name: "index_third_party_credentials_on_user_id_and_provider",
-            unique: true
+    t.integer "user_id", null: false
+    t.string "username"
+    t.index ["user_id", "provider"], name: "index_third_party_credentials_on_user_id_and_provider", unique: true
     t.index ["user_id"], name: "index_third_party_credentials_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email_address", null: false
-    t.string "password_digest", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "email_address", null: false
+    t.string "first_name"
+    t.string "last_name"
     t.string "locale", default: "en"
-    t.integer "wizard_step", default: 0
-    t.boolean "setup_completed", default: false
+    t.string "password_digest", null: false
     t.integer "role", default: 0, null: false
-    t.index ["email_address"],
-            name: "index_users_on_email_address",
-            unique: true
+    t.boolean "setup_completed", default: false
+    t.datetime "updated_at", null: false
+    t.integer "wizard_step", default: 0
+    t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
   create_table "workout_imports", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "status", default: 0, null: false
-    t.integer "imported_count", default: 0, null: false
-    t.integer "skipped_count", default: 0, null: false
-    t.json "error_details"
-    t.string "original_filename"
     t.datetime "created_at", null: false
+    t.json "error_details"
+    t.integer "imported_count", default: 0, null: false
+    t.string "original_filename"
+    t.integer "skipped_count", default: 0, null: false
+    t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["user_id"], name: "index_workout_imports_on_user_id"
   end
 
   create_table "workout_reps", force: :cascade do |t|
-    t.float "weight"
-    t.integer "reps"
-    t.integer "workout_set_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "band"
+    t.datetime "created_at", null: false
+    t.integer "reps"
+    t.datetime "updated_at", null: false
+    t.float "weight"
+    t.integer "workout_set_id", null: false
     t.index ["workout_set_id"], name: "index_workout_reps_on_workout_set_id"
   end
 
   create_table "workout_routine_day_exercises", force: :cascade do |t|
-    t.integer "workout_routine_day_id", null: false
-    t.integer "exercise_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "exercise_id", null: false
     t.integer "position"
-    t.index ["exercise_id"],
-            name: "index_workout_routine_day_exercises_on_exercise_id"
-    t.index ["workout_routine_day_id"],
-            name:
-              "index_workout_routine_day_exercises_on_workout_routine_day_id"
+    t.datetime "updated_at", null: false
+    t.integer "workout_routine_day_id", null: false
+    t.index ["exercise_id"], name: "index_workout_routine_day_exercises_on_exercise_id"
+    t.index ["workout_routine_day_id"], name: "index_workout_routine_day_exercises_on_workout_routine_day_id"
   end
 
   create_table "workout_routine_days", force: :cascade do |t|
-    t.string "name"
-    t.integer "workout_routine_id", null: false
     t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
-    t.index ["workout_routine_id"],
-            name: "index_workout_routine_days_on_workout_routine_id"
+    t.integer "workout_routine_id", null: false
+    t.index ["workout_routine_id"], name: "index_workout_routine_days_on_workout_routine_id"
   end
 
   create_table "workout_routines", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.index ["user_id"], name: "index_workout_routines_on_user_id"
   end
 
   create_table "workout_sets", force: :cascade do |t|
-    t.datetime "started_at"
-    t.datetime "ended_at"
-    t.integer "workout_id", null: false
-    t.integer "exercise_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "ended_at"
+    t.integer "exercise_id", null: false
     t.datetime "paused_at"
+    t.datetime "started_at"
     t.integer "total_paused_seconds", default: 0
+    t.datetime "updated_at", null: false
+    t.integer "workout_id", null: false
     t.index ["exercise_id"], name: "index_workout_sets_on_exercise_id"
     t.index ["workout_id"], name: "index_workout_sets_on_workout_id"
   end
 
   create_table "workouts", force: :cascade do |t|
-    t.date "date"
-    t.datetime "started_at"
-    t.datetime "ended_at"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "workout_routine_day_id"
-    t.integer "user_id"
-    t.integer "workout_type", default: 0, null: false
+    t.date "date"
     t.integer "distance"
-    t.integer "time_in_seconds"
+    t.datetime "ended_at"
     t.datetime "paused_at"
+    t.datetime "started_at"
+    t.integer "time_in_seconds"
     t.integer "total_paused_seconds", default: 0
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
     t.integer "workout_import_id"
+    t.integer "workout_routine_day_id"
+    t.integer "workout_type", default: 0, null: false
     t.index ["user_id"], name: "index_workouts_on_user_id"
     t.index ["workout_import_id"], name: "index_workouts_on_workout_import_id"
-    t.index ["workout_routine_day_id"],
-            name: "index_workouts_on_workout_routine_day_id"
+    t.index ["workout_routine_day_id"], name: "index_workouts_on_workout_routine_day_id"
   end
 
-  add_foreign_key "active_storage_attachments",
-                  "active_storage_blobs",
-                  column: "blob_id"
-  add_foreign_key "active_storage_variant_records",
-                  "active_storage_blobs",
-                  column: "blob_id"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "exercises", "muscles"
   add_foreign_key "exercises", "users"
   add_foreign_key "invites", "users"
