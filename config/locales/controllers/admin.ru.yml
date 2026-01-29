@@ -4,3 +4,7 @@ ru:
       invites:
         created: "Приглашение создано"
         destroyed: "Приглашение удалено"
+      users:
+        updated: "Пользователь обновлён"
+        destroyed: "Пользователь удалён"
+        cannot_delete_self: "Вы не можете удалить свой аккаунт"

@@ -1,8 +1,29 @@
 en:
   admin:
     menu:
+      users: "Users"
       logs: "Error Logs"
       invites: "Invites"
+    users:
+      index:
+        title: "Admin"
+        users: "Users"
+        description: "Manage all users in the system."
+        no_users: "No users yet."
+        table:
+          email: "Email"
+          role: "Role"
+          created_at: "Created"
+          actions: "Actions"
+        roles:
+          admin: "Admin"
+          user: "User"
+        delete_confirm: "Are you sure you want to delete %{email}?"
+      edit:
+        title: "Admin"
+        edit_user: "Edit User"
+        email_label: "Email"
+        email_placeholder: "user@example.com"
     logs:
       show:
         title: "Admin"

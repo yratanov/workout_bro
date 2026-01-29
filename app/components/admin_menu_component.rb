@@ -9,6 +9,7 @@ class AdminMenuComponent < ViewComponent::Base
 
   def menu_items
     [
+      { key: :users, path: admin_users_path, icon: "user" },
       { key: :logs, path: admin_logs_path, icon: "logs" },
       { key: :invites, path: admin_invites_path, icon: "plus" }
     ]

@@ -32,6 +32,11 @@ class User < ApplicationRecord
   has_many :third_party_credentials, dependent: :destroy
   has_many :sync_logs, dependent: :destroy
   has_many :invites, dependent: :destroy
+  has_many :used_invites,
+           class_name: "Invite",
+           foreign_key: :used_by_user_id,
+           dependent: :nullify,
+           inverse_of: :used_by_user
   has_many :workout_imports, dependent: :destroy
 
   AVAILABLE_LOCALES = %w[en ru].freeze

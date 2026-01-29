@@ -1,0 +1,70 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-4xl">
+  <h1 class="font-bold text-2xl mb-4 sm:mb-6"><%= t(".title") %></h1>
+
+  <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
+    <%= render AdminMenuComponent.new(current_page: :users) %>
+
+    <div class="flex-1 min-w-0">
+      <div class="bg-slate-800 rounded-lg p-4 sm:p-6">
+        <div class="mb-4">
+          <h2 class="font-semibold text-lg"><%= t(".users") %></h2>
+          <p class="text-slate-400 text-sm mt-1"><%= t(".description") %></p>
+        </div>
+
+        <% if @users.any? %>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="text-left text-slate-400 text-sm border-b border-slate-700">
+                  <th class="pb-3 font-medium"><%= t(".table.email") %></th>
+                  <th class="pb-3 font-medium"><%= t(".table.role") %></th>
+                  <th class="pb-3 font-medium"><%= t(".table.created_at") %></th>
+                  <th class="pb-3 font-medium"><%= t(".table.actions") %></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-700">
+                <% @users.each do |user| %>
+                  <tr>
+                    <td class="py-3 text-sm">
+                      <%= user.email_address %>
+                    </td>
+                    <td class="py-3 text-sm">
+                      <% if user.admin? %>
+                        <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded"><%= t(".roles.admin") %></span>
+                      <% else %>
+                        <span class="text-xs bg-slate-600/50 text-slate-400 px-2 py-0.5 rounded"><%= t(".roles.user") %></span>
+                      <% end %>
+                    </td>
+                    <td class="py-3 text-sm text-slate-400">
+                      <%= l(user.created_at, format: :short) %>
+                    </td>
+                    <td class="py-3">
+                      <div class="flex items-center gap-2">
+                        <%= link_to edit_admin_user_path(user),
+                            class: "text-slate-400 hover:text-white transition-colors" do %>
+                          <%= icon("settings", size: "w-5 h-5") %>
+                        <% end %>
+                        <% unless user == current_user %>
+                          <%= button_to admin_user_path(user),
+                              method: :delete,
+                              class: "text-red-400 hover:text-red-300 transition-colors",
+                              data: { turbo_confirm: t(".delete_confirm", email: user.email_address) } do %>
+                            <%= icon("trash", size: "w-5 h-5") %>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <p class="text-slate-400 text-center py-8"><%= t(".no_users") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,3 +4,7 @@ en:
       invites:
         created: "Invite created successfully"
         destroyed: "Invite deleted successfully"
+      users:
+        updated: "User updated successfully"
+        destroyed: "User deleted successfully"
+        cannot_delete_self: "You cannot delete your own account"

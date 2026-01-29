@@ -1,0 +1,33 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-4xl">
+  <h1 class="font-bold text-2xl mb-4 sm:mb-6"><%= t(".title") %></h1>
+
+  <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
+    <%= render AdminMenuComponent.new(current_page: :users) %>
+
+    <div class="flex-1 min-w-0">
+      <div class="bg-slate-800 rounded-lg p-4 sm:p-6">
+        <h2 class="font-semibold text-lg mb-4"><%= t(".edit_user") %></h2>
+
+        <%= app_form_with model: @user, url: admin_user_path(@user), method: :patch, class: "space-y-6" do |form| %>
+          <%= form.input :email_address,
+                     as: :email,
+                     label: t(".email_label"),
+                     margin: "",
+                     input_html: {
+                       required: true,
+                       autocomplete: "email",
+                       placeholder: t(".email_placeholder"),
+                     } %>
+          <div class="flex items-center gap-4 pt-2">
+            <%= button text: t("shared.buttons.save"), type: "submit", style: "primary" %>
+            <%= link_to t("shared.buttons.cancel"),
+            admin_users_path,
+            class: "text-slate-400 hover:text-white transition-colors" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

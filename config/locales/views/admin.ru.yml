@@ -1,8 +1,29 @@
 ru:
   admin:
     menu:
+      users: "Пользователи"
       logs: "Логи ошибок"
       invites: "Приглашения"
+    users:
+      index:
+        title: "Админ"
+        users: "Пользователи"
+        description: "Управление всеми пользователями системы."
+        no_users: "Пользователей пока нет."
+        table:
+          email: "Email"
+          role: "Роль"
+          created_at: "Создан"
+          actions: "Действия"
+        roles:
+          admin: "Админ"
+          user: "Пользователь"
+        delete_confirm: "Вы уверены, что хотите удалить %{email}?"
+      edit:
+        title: "Админ"
+        edit_user: "Редактировать пользователя"
+        email_label: "Email"
+        email_placeholder: "user@example.com"
     logs:
       show:
         title: "Админ"

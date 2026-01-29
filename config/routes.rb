@@ -57,7 +57,8 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    get "/", to: redirect("/admin/logs")
+    get "/", to: redirect("/admin/users")
+    resources :users, only: %i[index edit update destroy]
     resource :logs, only: %i[show], controller: "logs"
     resource :invites, only: %i[show create], controller: "invites" do
       delete ":id", action: :destroy, as: :invite, on: :collection
