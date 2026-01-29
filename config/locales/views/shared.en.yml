@@ -6,6 +6,7 @@ en:
       routines: "Routines"
       stats: "Stats"
       exercises: "Exercises"
+      admin: "Admin"
     buttons:
       save: "Save"
       add: "Add"

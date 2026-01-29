@@ -1,0 +1,6 @@
+en:
+  controllers:
+    admin:
+      invites:
+        created: "Invite created successfully"
+        destroyed: "Invite deleted successfully"

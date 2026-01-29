@@ -4,10 +4,7 @@
   <h1 class="font-bold text-2xl mb-4 sm:mb-6"><%= t(".title") %></h1>
 
   <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
-    <%= render SettingsMenuComponent.new(
-      current_page: :invites,
-      current_user: current_user,
-    ) %>
+    <%= render AdminMenuComponent.new(current_page: :invites) %>
 
     <div class="flex-1 min-w-0">
       <div class="bg-slate-800 rounded-lg p-4 sm:p-6">
@@ -17,7 +14,7 @@
             <p class="text-slate-400 text-sm mt-1"><%= t(".description") %></p>
           </div>
           <%= button_to t(".create_invite"),
-          settings_invites_path,
+          admin_invites_path,
           method: :post,
           class:
             "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors" %>
@@ -67,7 +64,7 @@
                       <% end %>
                     </td>
                     <td class="py-3">
-                      <%= button_to invite_settings_invites_path(invite),
+                      <%= button_to invite_admin_invites_path(invite),
                           method: :delete,
                           class: "text-red-400 hover:text-red-300 transition-colors",
                           data: { turbo_confirm: t("shared.confirmations.are_you_sure") } do %>

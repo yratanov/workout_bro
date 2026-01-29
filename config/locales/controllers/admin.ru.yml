@@ -1,0 +1,6 @@
+ru:
+  controllers:
+    admin:
+      invites:
+        created: "Приглашение создано"
+        destroyed: "Приглашение удалено"

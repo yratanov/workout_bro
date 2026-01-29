@@ -1,6 +1,4 @@
-require "rails_helper"
-
-describe "Settings::Invites" do
+describe "Admin::Invites" do
   fixtures :users
 
   let(:admin_user) { users(:john) }
@@ -9,63 +7,63 @@ describe "Settings::Invites" do
   describe "as admin" do
     before { sign_in(admin_user) }
 
-    describe "GET /settings/invites" do
+    describe "GET /admin/invites" do
       it "returns success" do
-        get settings_invites_path
+        get admin_invites_path
         expect(response).to have_http_status(:success)
       end
 
       it "displays user's invites" do
         invite = admin_user.invites.create!
-        get settings_invites_path
+        get admin_invites_path
         expect(response.body).to include(invite.token)
       end
     end
 
-    describe "POST /settings/invites" do
+    describe "POST /admin/invites" do
       it "creates a new invite" do
-        expect { post settings_invites_path }.to change(
+        expect { post admin_invites_path }.to change(
           admin_user.invites,
           :count
         ).by(1)
       end
 
       it "redirects to invites page with notice" do
-        post settings_invites_path
-        expect(response).to redirect_to(settings_invites_path)
+        post admin_invites_path
+        expect(response).to redirect_to(admin_invites_path)
         follow_redirect!
         expect(response.body).to include(
-          I18n.t("controllers.settings.invites.created")
+          I18n.t("controllers.admin.invites.created")
         )
       end
 
       it "generates a unique token" do
-        post settings_invites_path
+        post admin_invites_path
         invite = admin_user.invites.last
         expect(invite.token).to be_present
         expect(invite.token.length).to eq(32)
       end
     end
 
-    describe "DELETE /settings/invites/:id" do
+    describe "DELETE /admin/invites/:id" do
       let!(:invite) { admin_user.invites.create! }
 
       it "destroys the invite" do
-        expect { delete invite_settings_invites_path(invite) }.to change(
+        expect { delete invite_admin_invites_path(invite) }.to change(
           admin_user.invites,
           :count
         ).by(-1)
       end
 
       it "redirects to invites page with notice" do
-        delete invite_settings_invites_path(invite)
-        expect(response).to redirect_to(settings_invites_path)
+        delete invite_admin_invites_path(invite)
+        expect(response).to redirect_to(admin_invites_path)
       end
 
       it "does not allow deleting other users' invites" do
         other_invite = regular_user.invites.create!
 
-        delete invite_settings_invites_path(other_invite)
+        delete invite_admin_invites_path(other_invite)
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -74,19 +72,19 @@ describe "Settings::Invites" do
   describe "as regular user" do
     before { sign_in(regular_user) }
 
-    it "redirects from GET /settings/invites" do
-      get settings_invites_path
+    it "redirects from GET /admin/invites" do
+      get admin_invites_path
       expect(response).to redirect_to(root_path)
     end
 
-    it "redirects from POST /settings/invites" do
-      post settings_invites_path
+    it "redirects from POST /admin/invites" do
+      post admin_invites_path
       expect(response).to redirect_to(root_path)
     end
 
-    it "redirects from DELETE /settings/invites/:id" do
+    it "redirects from DELETE /admin/invites/:id" do
       invite = admin_user.invites.create!
-      delete invite_settings_invites_path(invite)
+      delete invite_admin_invites_path(invite)
       expect(response).to redirect_to(root_path)
     end
   end

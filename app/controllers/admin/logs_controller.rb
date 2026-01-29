@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Settings
+module Admin
   class LogsController < ApplicationController
     before_action :require_admin
 

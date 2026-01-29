@@ -1,0 +1,31 @@
+en:
+  admin:
+    menu:
+      logs: "Error Logs"
+      invites: "Invites"
+    logs:
+      show:
+        title: "Admin"
+        error_logs: "Error Logs"
+        description: "View application error logs."
+        no_logs: "No error logs yet."
+        severities:
+          error: "Error"
+          warning: "Warning"
+          info: "Info"
+        show_backtrace: "Show backtrace"
+        show_params: "Show params"
+    invites:
+      show:
+        title: "Admin"
+        description: "Create and manage invite links to share with others."
+        create_invite: "Create Invite"
+        no_invites: "No invites yet. Create one to invite others."
+        table:
+          invite_link: "Invite Link"
+          used_by: "Used By"
+          used_at: "Used At"
+          actions: "Actions"
+        not_used: "Not used"
+        copy_link: "Click to copy"
+        copied: "Copied!"

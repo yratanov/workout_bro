@@ -6,6 +6,7 @@ ru:
       routines: "Программы"
       stats: "Статистика"
       exercises: "Упражнения"
+      admin: "Админ"
     buttons:
       save: "Сохранить"
       add: "Добавить"

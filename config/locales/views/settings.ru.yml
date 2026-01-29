@@ -4,8 +4,6 @@ ru:
       profile: "Профиль"
       garmin: "Garmin"
       imports: "Импорт"
-      logs: "Логи ошибок"
-      invites: "Приглашения"
     profile:
       show:
         title: "Настройки"
@@ -67,29 +65,3 @@ ru:
           in_progress: "Обработка"
           completed: "Завершено"
           failed: "Ошибка"
-    logs:
-      show:
-        title: "Логи ошибок"
-        error_logs: "Логи ошибок"
-        description: "Просмотр логов ошибок приложения."
-        no_logs: "Логов ошибок пока нет."
-        severities:
-          error: "Ошибка"
-          warning: "Предупреждение"
-          info: "Информация"
-        show_backtrace: "Показать стек вызовов"
-        show_params: "Показать параметры"
-    invites:
-      show:
-        title: "Приглашения"
-        description: "Создание и управление ссылками приглашений."
-        create_invite: "Создать приглашение"
-        no_invites: "Приглашений пока нет. Создайте, чтобы пригласить других."
-        table:
-          invite_link: "Ссылка"
-          used_by: "Использовано"
-          used_at: "Когда"
-          actions: "Действия"
-        not_used: "Не использовано"
-        copy_link: "Нажмите для копирования"
-        copied: "Скопировано!"

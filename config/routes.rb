@@ -50,13 +50,17 @@ Rails.application.routes.draw do
     resource :garmin, only: %i[show update], controller: "garmin" do
       post :sync
     end
-    resource :logs, only: %i[show], controller: "logs"
-    resource :invites, only: %i[show create], controller: "invites" do
-      delete ":id", action: :destroy, as: :invite, on: :collection
-    end
     resource :imports, only: %i[show create], controller: "imports" do
       get ":id/status", action: :status, as: :status, on: :collection
       delete ":id", action: :destroy, as: :import, on: :collection
+    end
+  end
+
+  namespace :admin do
+    get "/", to: redirect("/admin/logs")
+    resource :logs, only: %i[show], controller: "logs"
+    resource :invites, only: %i[show create], controller: "invites" do
+      delete ":id", action: :destroy, as: :invite, on: :collection
     end
   end
 

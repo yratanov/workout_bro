@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Settings
+module Admin
   class InvitesController < ApplicationController
     before_action :require_admin
     before_action :set_invite, only: :destroy
@@ -11,14 +11,14 @@ module Settings
 
     def create
       @invite = current_user.invites.create!
-      redirect_to settings_invites_path,
-                  notice: I18n.t("controllers.settings.invites.created")
+      redirect_to admin_invites_path,
+                  notice: I18n.t("controllers.admin.invites.created")
     end
 
     def destroy
       @invite.destroy!
-      redirect_to settings_invites_path,
-                  notice: I18n.t("controllers.settings.invites.destroyed")
+      redirect_to admin_invites_path,
+                  notice: I18n.t("controllers.admin.invites.destroyed")
     end
 
     private

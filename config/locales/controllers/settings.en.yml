@@ -8,9 +8,6 @@ en:
         sync_success: "Sync complete: %{imported} imported, %{skipped} skipped"
         sync_failed: "Sync failed: %{error}"
         missing_credentials: "Please configure your Garmin username and password first"
-      invites:
-        created: "Invite created successfully"
-        destroyed: "Invite deleted successfully"
       imports:
         started: "Import started. Your workouts will be imported in the background."
         reverted:

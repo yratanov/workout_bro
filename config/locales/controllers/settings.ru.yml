@@ -8,9 +8,6 @@ ru:
         sync_success: "Синхронизация завершена: %{imported} импортировано, %{skipped} пропущено"
         sync_failed: "Ошибка синхронизации: %{error}"
         missing_credentials: "Сначала настройте имя пользователя и пароль Garmin"
-      invites:
-        created: "Приглашение создано"
-        destroyed: "Приглашение удалено"
       imports:
         started: "Импорт запущен. Ваши тренировки будут импортированы в фоновом режиме."
         reverted:

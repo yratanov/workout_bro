@@ -1,4 +1,4 @@
-describe "Settings::Logs" do
+describe "Admin::Logs" do
   fixtures :all
 
   let(:admin_user) { users(:john) }
@@ -7,17 +7,15 @@ describe "Settings::Logs" do
   describe "as admin" do
     before { sign_in(admin_user) }
 
-    describe "GET /settings/logs" do
+    describe "GET /admin/logs" do
       it "returns success" do
-        get settings_logs_path
+        get admin_logs_path
         expect(response).to have_http_status(:success)
       end
 
       it "displays the error logs page" do
-        get settings_logs_path
-        expect(response.body).to include(
-          I18n.t("settings.logs.show.error_logs")
-        )
+        get admin_logs_path
+        expect(response.body).to include(I18n.t("admin.logs.show.error_logs"))
       end
 
       it "displays error logs when present" do
@@ -28,7 +26,7 @@ describe "Settings::Logs" do
           source: "test"
         )
 
-        get settings_logs_path
+        get admin_logs_path
         expect(response.body).to include("StandardError")
         expect(response.body).to include("Test error message")
       end
@@ -47,7 +45,7 @@ describe "Settings::Logs" do
           created_at: Time.current
         )
 
-        get settings_logs_path
+        get admin_logs_path
         expect(response.body.index("NewError")).to be <
           response.body.index("OldError")
       end
@@ -59,9 +57,9 @@ describe "Settings::Logs" do
           severity: :error
         )
 
-        get settings_logs_path
+        get admin_logs_path
         expect(response.body).to include(
-          I18n.t("settings.logs.show.severities.error")
+          I18n.t("admin.logs.show.severities.error")
         )
       end
 
@@ -73,7 +71,7 @@ describe "Settings::Logs" do
           source: "custom_source"
         )
 
-        get settings_logs_path
+        get admin_logs_path
         expect(response.body).to include("custom_source")
       end
 
@@ -85,16 +83,16 @@ describe "Settings::Logs" do
           backtrace: %w[/app/test.rb:1 /app/test.rb:2]
         )
 
-        get settings_logs_path
+        get admin_logs_path
         expect(response.body).to include(
-          I18n.t("settings.logs.show.show_backtrace")
+          I18n.t("admin.logs.show.show_backtrace")
         )
         expect(response.body).to include("/app/test.rb:1")
       end
 
       it "shows empty state when no logs" do
-        get settings_logs_path
-        expect(response.body).to include(I18n.t("settings.logs.show.no_logs"))
+        get admin_logs_path
+        expect(response.body).to include(I18n.t("admin.logs.show.no_logs"))
       end
 
       it "limits to 100 logs" do
@@ -106,7 +104,7 @@ describe "Settings::Logs" do
           )
         end
 
-        get settings_logs_path
+        get admin_logs_path
         # Should not include the oldest errors (0-4)
         expect(response.body).not_to include("Error0")
         # Should include the newest errors
@@ -118,13 +116,13 @@ describe "Settings::Logs" do
   describe "as regular user" do
     before { sign_in(regular_user) }
 
-    it "redirects from GET /settings/logs" do
-      get settings_logs_path
+    it "redirects from GET /admin/logs" do
+      get admin_logs_path
       expect(response).to redirect_to(root_path)
     end
 
     it "shows admin required flash message" do
-      get settings_logs_path
+      get admin_logs_path
       follow_redirect!
       expect(response.body).to include(
         I18n.t("controllers.application.admin_required")
@@ -134,7 +132,7 @@ describe "Settings::Logs" do
 
   describe "when not authenticated" do
     it "redirects to login" do
-      get settings_logs_path
+      get admin_logs_path
       expect(response).to redirect_to(new_session_path)
     end
   end

@@ -100,6 +100,13 @@
               <span data-mobile-menu-target="openIcon"><%= icon "menu", size: "w-5 h-5" %></span>
               <span data-mobile-menu-target="closeIcon" class="hidden"><%= icon "xmark", size: "w-5 h-5" %></span>
             </button>
+            <% if Current.user&.admin? %>
+              <%= link_to admin_logs_path,
+                class: "p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors",
+                title: t("shared.navigation.admin") do %>
+                <%= icon "shield" %>
+              <% end %>
+            <% end %>
             <%= link_to settings_profile_path,
               class: "p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors" do %>
               <%= icon "settings" %>

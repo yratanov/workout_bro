@@ -1,0 +1,12 @@
+<nav class="w-full sm:w-48 shrink-0">
+  <ul class="flex sm:flex-col gap-1 overflow-x-auto pb-2 sm:pb-0">
+    <% menu_items.each do |item| %>
+      <li class="shrink-0">
+        <%= link_to item[:path], class: item_classes(item[:key]) do %>
+          <%= icon(item[:icon], size: "w-5 h-5") %>
+          <span class="whitespace-nowrap"><%= t("admin.menu.#{item[:key]}") %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>

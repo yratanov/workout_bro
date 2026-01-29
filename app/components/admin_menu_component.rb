@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
-class SettingsMenuComponent < ViewComponent::Base
+class AdminMenuComponent < ViewComponent::Base
   include ApplicationHelper
 
-  def initialize(current_page:, current_user: nil)
+  def initialize(current_page:)
     @current_page = current_page
   end
 
   def menu_items
     [
-      { key: :profile, path: settings_profile_path, icon: "user" },
-      { key: :garmin, path: settings_garmin_path, icon: "activity" },
-      { key: :imports, path: settings_imports_path, icon: "upload" }
+      { key: :logs, path: admin_logs_path, icon: "logs" },
+      { key: :invites, path: admin_invites_path, icon: "plus" }
     ]
   end
 

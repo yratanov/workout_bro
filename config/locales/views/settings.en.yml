@@ -4,8 +4,6 @@ en:
       profile: "Profile"
       garmin: "Garmin"
       imports: "Import"
-      logs: "Error Logs"
-      invites: "Invites"
     profile:
       show:
         title: "Settings"
@@ -65,29 +63,3 @@ en:
           in_progress: "Processing"
           completed: "Completed"
           failed: "Failed"
-    logs:
-      show:
-        title: "Error Logs"
-        error_logs: "Error Logs"
-        description: "View application error logs."
-        no_logs: "No error logs yet."
-        severities:
-          error: "Error"
-          warning: "Warning"
-          info: "Info"
-        show_backtrace: "Show backtrace"
-        show_params: "Show params"
-    invites:
-      show:
-        title: "Invites"
-        description: "Create and manage invite links to share with others."
-        create_invite: "Create Invite"
-        no_invites: "No invites yet. Create one to invite others."
-        table:
-          invite_link: "Invite Link"
-          used_by: "Used By"
-          used_at: "Used At"
-          actions: "Actions"
-        not_used: "Not used"
-        copy_link: "Click to copy"
-        copied: "Copied!"
