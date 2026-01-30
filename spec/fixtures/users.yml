@@ -12,7 +12,7 @@
 #  locale          :string           default("en")
 #  password_digest :string           not null
 #  role            :integer          default("user"), not null
-#  setup_completed :boolean          default(FALSE)
+#  setup_completed :boolean          default(FALSE), not null
 #  weight_max      :float            default(100.0), not null
 #  weight_min      :float            default(2.5), not null
 #  weight_step     :float            default(2.5), not null

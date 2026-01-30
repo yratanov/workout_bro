@@ -8,13 +8,13 @@
 #  distance               :integer
 #  ended_at               :datetime
 #  paused_at              :datetime
-#  started_at             :datetime
+#  started_at             :datetime         not null
 #  time_in_seconds        :integer
 #  total_paused_seconds   :integer          default(0)
 #  workout_type           :integer          default("strength"), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  user_id                :integer
+#  user_id                :integer          not null
 #  workout_import_id      :integer
 #  workout_routine_day_id :integer
 #
@@ -27,8 +27,8 @@
 # Foreign Keys
 #
 #  user_id                 (user_id => users.id)
-#  workout_import_id       (workout_import_id => workout_imports.id)
-#  workout_routine_day_id  (workout_routine_day_id => workout_routine_days.id)
+#  workout_import_id       (workout_import_id => workout_imports.id) ON DELETE => nullify
+#  workout_routine_day_id  (workout_routine_day_id => workout_routine_days.id) ON DELETE => nullify
 #
 completed_workout:
   date: <%= Date.today - 1 %>

@@ -19,7 +19,7 @@
 #
 # Foreign Keys
 #
-#  used_by_user_id  (used_by_user_id => users.id)
+#  used_by_user_id  (used_by_user_id => users.id) ON DELETE => nullify
 #  user_id          (user_id => users.id)
 #
 require "rails_helper"

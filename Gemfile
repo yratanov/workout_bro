@@ -59,6 +59,7 @@ end
 
 group :development do
   gem "annotaterb"
+  gem "database_consistency", require: false
   gem "erb-formatter"
   gem "syntax_tree"
   gem "web-console"

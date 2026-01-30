@@ -19,7 +19,7 @@
 #
 # Foreign Keys
 #
-#  muscle_id  (muscle_id => muscles.id)
+#  muscle_id  (muscle_id => muscles.id) ON DELETE => nullify
 #  user_id    (user_id => users.id)
 #
 
@@ -28,4 +28,5 @@ class Exercise < ApplicationRecord
   belongs_to :user
 
   has_many :workout_routine_day_exercises, dependent: :destroy
+  has_many :workout_sets, dependent: :restrict_with_error
 end

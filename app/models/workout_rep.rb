@@ -5,7 +5,7 @@
 #
 #  id             :integer          not null, primary key
 #  band           :string
-#  reps           :integer
+#  reps           :integer          not null
 #  weight         :float
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null

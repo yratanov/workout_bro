@@ -20,7 +20,7 @@
 #
 # Foreign Keys
 #
-#  exercise_id  (exercise_id => exercises.id)
+#  exercise_id  (exercise_id => exercises.id) ON DELETE => restrict
 #  workout_id   (workout_id => workouts.id)
 #
 require "rails_helper"

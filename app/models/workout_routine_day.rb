@@ -4,7 +4,7 @@
 # Database name: primary
 #
 #  id                 :integer          not null, primary key
-#  name               :string
+#  name               :string           not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  workout_routine_id :integer          not null
@@ -22,6 +22,7 @@ class WorkoutRoutineDay < ApplicationRecord
   belongs_to :workout_routine
   has_many :workout_routine_day_exercises, dependent: :destroy
   has_many :exercises, through: :workout_routine_day_exercises
+  has_many :workouts, dependent: :nullify
 
   validates :name, presence: true
 end

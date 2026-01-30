@@ -10,7 +10,7 @@
 #  locale          :string           default("en")
 #  password_digest :string           not null
 #  role            :integer          default("user"), not null
-#  setup_completed :boolean          default(FALSE)
+#  setup_completed :boolean          default(FALSE), not null
 #  weight_max      :float            default(100.0), not null
 #  weight_min      :float            default(2.5), not null
 #  weight_step     :float            default(2.5), not null
@@ -49,6 +49,7 @@ class User < ApplicationRecord
   WEIGHT_UNITS = %w[kg lbs].freeze
 
   validates :email_address, presence: true, uniqueness: true
+  validates :password_digest, presence: true
   validates :locale, inclusion: { in: AVAILABLE_LOCALES }, allow_nil: true
   validates :weight_unit, inclusion: { in: WEIGHT_UNITS }
   validates :weight_min, numericality: { greater_than: 0 }

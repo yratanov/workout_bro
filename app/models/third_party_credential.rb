@@ -13,7 +13,6 @@
 #
 # Indexes
 #
-#  index_third_party_credentials_on_user_id               (user_id)
 #  index_third_party_credentials_on_user_id_and_provider  (user_id,provider) UNIQUE
 #
 # Foreign Keys

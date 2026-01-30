@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_30_213349) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -115,7 +115,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
     t.integer "user_id", null: false
     t.string "username"
     t.index ["user_id", "provider"], name: "index_third_party_credentials_on_user_id_and_provider", unique: true
-    t.index ["user_id"], name: "index_third_party_credentials_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -126,7 +125,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
     t.string "locale", default: "en"
     t.string "password_digest", null: false
     t.integer "role", default: 0, null: false
-    t.boolean "setup_completed", default: false
+    t.boolean "setup_completed", default: false, null: false
     t.datetime "updated_at", null: false
     t.float "weight_max", default: 100.0, null: false
     t.float "weight_min", default: 2.5, null: false
@@ -151,7 +150,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
   create_table "workout_reps", force: :cascade do |t|
     t.string "band"
     t.datetime "created_at", null: false
-    t.integer "reps"
+    t.integer "reps", null: false
     t.datetime "updated_at", null: false
     t.float "weight"
     t.integer "workout_set_id", null: false
@@ -170,7 +169,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
 
   create_table "workout_routine_days", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "name"
+    t.string "name", null: false
     t.datetime "updated_at", null: false
     t.integer "workout_routine_id", null: false
     t.index ["workout_routine_id"], name: "index_workout_routine_days_on_workout_routine_id"
@@ -180,7 +179,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
     t.datetime "created_at", null: false
     t.string "name"
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.integer "user_id", null: false
     t.index ["user_id"], name: "index_workout_routines_on_user_id"
   end
 
@@ -203,11 +202,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
     t.integer "distance"
     t.datetime "ended_at"
     t.datetime "paused_at"
-    t.datetime "started_at"
+    t.datetime "started_at", null: false
     t.integer "time_in_seconds"
     t.integer "total_paused_seconds", default: 0
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.integer "user_id", null: false
     t.integer "workout_import_id"
     t.integer "workout_routine_day_id"
     t.integer "workout_type", default: 0, null: false
@@ -218,10 +217,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "exercises", "muscles"
+  add_foreign_key "exercises", "muscles", on_delete: :nullify
   add_foreign_key "exercises", "users"
   add_foreign_key "invites", "users"
-  add_foreign_key "invites", "users", column: "used_by_user_id"
+  add_foreign_key "invites", "users", column: "used_by_user_id", on_delete: :nullify
   add_foreign_key "sessions", "users"
   add_foreign_key "sync_logs", "users"
   add_foreign_key "third_party_credentials", "users"
@@ -231,9 +230,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_223643) do
   add_foreign_key "workout_routine_day_exercises", "workout_routine_days"
   add_foreign_key "workout_routine_days", "workout_routines"
   add_foreign_key "workout_routines", "users"
-  add_foreign_key "workout_sets", "exercises"
+  add_foreign_key "workout_sets", "exercises", on_delete: :restrict
   add_foreign_key "workout_sets", "workouts"
   add_foreign_key "workouts", "users"
-  add_foreign_key "workouts", "workout_imports"
-  add_foreign_key "workouts", "workout_routine_days"
+  add_foreign_key "workouts", "workout_imports", on_delete: :nullify
+  add_foreign_key "workouts", "workout_routine_days", on_delete: :nullify
 end
