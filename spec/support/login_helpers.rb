@@ -4,6 +4,8 @@ module LoginHelpers
     fill_in "email_address", with: user.email_address
     fill_in "password", with: "password"
     click_button "Sign in"
+    # Wait for Turbo Drive navigation to complete
+    expect(page).to have_current_path(root_path)
   end
 end
 
