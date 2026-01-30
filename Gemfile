@@ -69,6 +69,7 @@ group :test do
   gem "selenium-webdriver"
   gem "shoulda-matchers"
   gem "simplecov", require: false
+  gem "parallel_tests"
 end
 
 gem "tailwindcss-ruby", "~> 4.1"

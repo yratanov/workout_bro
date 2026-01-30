@@ -32,18 +32,18 @@ development:
 test:
   primary:
     <<: *default
-    database: storage/test.sqlite3
+    database: storage/test<%= ENV["TEST_ENV_NUMBER"] %>.sqlite3
   cache:
     <<: *default
-    database: storage/test_cache.sqlite3
+    database: storage/test<%= ENV["TEST_ENV_NUMBER"] %>_cache.sqlite3
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    database: storage/test_queue.sqlite3
+    database: storage/test<%= ENV["TEST_ENV_NUMBER"] %>_queue.sqlite3
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: storage/test_cable.sqlite3
+    database: storage/test<%= ENV["TEST_ENV_NUMBER"] %>_cable.sqlite3
     migrations_paths: db/cable_migrate
 
 

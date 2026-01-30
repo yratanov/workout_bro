@@ -4,3 +4,9 @@
 require_relative "config/application"
 
 Rails.application.load_tasks
+
+begin
+  require "parallel_tests/tasks"
+rescue LoadError
+  # parallel_tests not available
+end
