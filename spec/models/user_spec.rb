@@ -1,3 +1,28 @@
+# == Schema Information
+#
+# Table name: users
+# Database name: primary
+#
+#  id              :integer          not null, primary key
+#  email_address   :string           not null
+#  first_name      :string
+#  last_name       :string
+#  locale          :string           default("en")
+#  password_digest :string           not null
+#  role            :integer          default("user"), not null
+#  setup_completed :boolean          default(FALSE)
+#  weight_max      :float            default(100.0), not null
+#  weight_min      :float            default(2.5), not null
+#  weight_step     :float            default(2.5), not null
+#  weight_unit     :string           default("kg"), not null
+#  wizard_step     :integer          default(0)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_email_address  (email_address) UNIQUE
+#
 describe User do
   fixtures :users
 

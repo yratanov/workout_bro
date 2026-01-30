@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: workout_imports
+# Database name: primary
+#
+#  id                :integer          not null, primary key
+#  error_details     :json
+#  imported_count    :integer          default(0), not null
+#  original_filename :string
+#  skipped_count     :integer          default(0), not null
+#  status            :integer          default("pending"), not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  user_id           :integer          not null
+#
+# Indexes
+#
+#  index_workout_imports_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
 pending_import:
   user: john
   status: 0
