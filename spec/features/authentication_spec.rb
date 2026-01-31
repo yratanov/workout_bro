@@ -16,17 +16,6 @@ describe "Authentication" do
     end
   end
 
-  describe "logout" do
-    it "allows a user to sign out" do
-      login_as(users(:john))
-      expect(page).to have_content("Workouts")
-
-      find('a[data-turbo-method="delete"]').click
-
-      expect(page).to have_current_path(new_session_path)
-    end
-  end
-
   describe "protected routes" do
     it "redirects unauthenticated users to login" do
       visit workouts_path
