@@ -150,3 +150,19 @@ config/locales/
 **Available styles:** `primary`, `success`, `danger`, `warning`, `default`, `outlined`, `link`, `link_danger`, `link_hover_danger`
 
 **Available sizes:** `default`, `lg`
+
+**Use `stat_card` for displaying labeled statistics (label + value):**
+
+```erb
+# Default size (for summary pages)
+<%= stat_card label: t(".total_volume") do %>
+  <%= format_volume(@summary.total_volume) %>
+<% end %>
+
+# Small size (for modals)
+<%= stat_card label: t(".sets"), size: :sm do %>
+  <%= @summary.total_sets %>
+<% end %>
+```
+
+**Available sizes:** `:lg` (default), `:sm`

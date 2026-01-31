@@ -4,7 +4,7 @@ module ApplicationHelper
 
   include ComponentsShorthand
 
-  components :button, :badge, :modal
+  components :button, :badge, :modal, :stat_card
 
   def icon(name, size: "w-4 h-4", **options)
     classes = "#{size} text-current #{options.delete(:class)}".strip

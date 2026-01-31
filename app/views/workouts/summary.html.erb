@@ -25,22 +25,15 @@
     </div>
     <!-- Stats Grid -->
     <div class="grid grid-cols-3 gap-4 mb-8">
-      <div class="bg-slate-800 rounded-lg p-4 text-center">
-        <div class="text-slate-400 text-sm mb-1"><%= t(".total_volume") %></div>
-        <div class="text-2xl font-bold text-white">
-          <%= format_volume(@summary.total_volume) %>
-        </div>
-      </div>
-      <div class="bg-slate-800 rounded-lg p-4 text-center">
-        <div class="text-slate-400 text-sm mb-1"><%= t(".sets") %></div>
-        <div class="text-2xl font-bold text-white"><%= @summary.total_sets %></div>
-      </div>
-      <div class="bg-slate-800 rounded-lg p-4 text-center">
-        <div class="text-slate-400 text-sm mb-1"><%= t(".duration") %></div>
-        <div class="text-2xl font-bold text-white">
-          <%= seconds_to_human(@summary.duration || 0) %>
-        </div>
-      </div>
+      <%= stat_card label: t(".total_volume") do %>
+        <%= format_volume(@summary.total_volume) %>
+      <% end %>
+      <%= stat_card label: t(".sets") do %>
+        <%= @summary.total_sets %>
+      <% end %>
+      <%= stat_card label: t(".duration") do %>
+        <%= seconds_to_human(@summary.duration || 0) %>
+      <% end %>
     </div>
     <!-- Muscles Worked -->
     <% if @summary.muscles_worked.any? %>
@@ -132,26 +125,17 @@
     </div>
     <!-- Run Stats Grid -->
     <div class="grid grid-cols-3 gap-4 mb-8">
-      <div class="bg-slate-800 rounded-lg p-4 text-center">
-        <div class="text-slate-400 text-sm mb-1"><%= t(".distance") %></div>
-        <div class="text-2xl font-bold text-white">
-          <%= (@summary.distance.to_f / 1000).round(2) %>
-          km
-        </div>
-      </div>
-      <div class="bg-slate-800 rounded-lg p-4 text-center">
-        <div class="text-slate-400 text-sm mb-1"><%= t(".duration") %></div>
-        <div class="text-2xl font-bold text-white">
-          <%= seconds_to_human(@summary.duration || 0) %>
-        </div>
-      </div>
-      <div class="bg-slate-800 rounded-lg p-4 text-center">
-        <div class="text-slate-400 text-sm mb-1"><%= t(".pace") %></div>
-        <div class="text-2xl font-bold text-white">
-          <%= format_pace(@summary.pace) %>
-        </div>
-        <div class="text-slate-500 text-xs"><%= t(".pace_unit") %></div>
-      </div>
+      <%= stat_card label: t(".distance") do %>
+        <%= (@summary.distance.to_f / 1000).round(2) %>
+        km
+      <% end %>
+      <%= stat_card label: t(".duration") do %>
+        <%= seconds_to_human(@summary.duration || 0) %>
+      <% end %>
+      <%= stat_card label: t(".pace") do %>
+        <%= format_pace(@summary.pace) %>
+        <div class="text-slate-500 text-xs font-normal"><%= t(".pace_unit") %></div>
+      <% end %>
     </div>
     <!-- Run PRs Section -->
     <% if @summary.new_prs.any? %>
