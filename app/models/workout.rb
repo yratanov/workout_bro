@@ -38,6 +38,7 @@ class Workout < ApplicationRecord
   belongs_to :workout_import, optional: true
 
   has_one :workout_routine, through: :workout_routine_day
+  has_many :personal_records, dependent: :destroy
 
   enum :workout_type, { strength: 0, run: 1 }
 

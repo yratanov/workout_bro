@@ -5,5 +5,8 @@ en:
       updated: "Workout was successfully updated."
       destroyed: "Workout was successfully destroyed."
       ended: "Workout was successfully ended."
+      ended_with_prs:
+        one: "Workout ended. You set 1 new PR!"
+        other: "Workout ended. You set %{count} new PRs!"
       active_exists: "You already have an active workout."
       active_exists_long: "You already have an active workout. Please stop it before starting a new one."

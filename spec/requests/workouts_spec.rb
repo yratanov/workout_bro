@@ -149,6 +149,43 @@ describe "Workouts" do
       workout_set.reload
       expect(workout_set.ended_at).to be_present
     end
+
+    context "with PR detection" do
+      before { user.personal_records.destroy_all }
+
+      it "creates personal records when workout ends" do
+        workout_set =
+          workout.workout_sets.create!(
+            exercise: exercises(:bench_press),
+            started_at: 30.minutes.ago
+          )
+        workout_set.workout_reps.create!(weight: 100, reps: 10)
+
+        expect { post stop_workout_path(workout) }.to change(
+          PersonalRecord,
+          :count
+        ).by(2)
+      end
+
+      it "shows PR count in flash message" do
+        workout_set =
+          workout.workout_sets.create!(
+            exercise: exercises(:bench_press),
+            started_at: 30.minutes.ago
+          )
+        workout_set.workout_reps.create!(weight: 100, reps: 10)
+
+        post stop_workout_path(workout)
+
+        expect(flash[:notice]).to include("2 new PRs")
+      end
+
+      it "shows regular message when no PRs set" do
+        post stop_workout_path(workout)
+
+        expect(flash[:notice]).to eq("Workout was successfully ended.")
+      end
+    end
   end
 
   describe "POST /workouts/:id/pause" do

@@ -4,6 +4,7 @@ ru:
     navigation:
       workouts: "Тренировки"
       routines: "Программы"
+      prs: "Рекорды"
       stats: "Статистика"
       exercises: "Упражнения"
       admin: "Админ"

@@ -22,6 +22,7 @@
 
 class WorkoutRep < ApplicationRecord
   belongs_to :workout_set
+  has_one :personal_record, dependent: :destroy
 
   BANDS = %w[lightest light medium heavy].freeze
   validates :reps,

@@ -111,10 +111,14 @@ class WorkoutsController < ApplicationController
         .where(ended_at: nil)
         .each { |workout_set| workout_set.update(ended_at: Time.current) }
       if @workout.update(ended_at: Time.current)
-        format.html do
-          redirect_to workouts_path,
-                      notice: I18n.t("controllers.workouts.ended")
-        end
+        @new_prs = PersonalRecordDetector.new(workout: @workout).call
+        notice =
+          if @new_prs.any?
+            I18n.t("controllers.workouts.ended_with_prs", count: @new_prs.count)
+          else
+            I18n.t("controllers.workouts.ended")
+          end
+        format.html { redirect_to workouts_path, notice: notice }
         format.json { render :show, status: :created, location: @workout }
       else
         format.html { render :new, status: :unprocessable_entity }

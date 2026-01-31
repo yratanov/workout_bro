@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_30_213349) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_31_223832) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -82,6 +82,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_30_213349) do
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_muscles_on_name", unique: true
+  end
+
+  create_table "personal_records", force: :cascade do |t|
+    t.date "achieved_on", null: false
+    t.string "band"
+    t.datetime "created_at", null: false
+    t.integer "exercise_id", null: false
+    t.integer "pr_type", default: 0, null: false
+    t.integer "reps", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.float "volume"
+    t.float "weight"
+    t.integer "workout_id", null: false
+    t.integer "workout_rep_id", null: false
+    t.index ["exercise_id"], name: "index_personal_records_on_exercise_id"
+    t.index ["user_id", "exercise_id", "pr_type", "band"], name: "index_prs_on_user_exercise_type_band"
+    t.index ["user_id"], name: "index_personal_records_on_user_id"
+    t.index ["workout_id"], name: "index_personal_records_on_workout_id"
+    t.index ["workout_rep_id"], name: "index_personal_records_on_workout_rep_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -221,6 +241,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_30_213349) do
   add_foreign_key "exercises", "users"
   add_foreign_key "invites", "users"
   add_foreign_key "invites", "users", column: "used_by_user_id", on_delete: :nullify
+  add_foreign_key "personal_records", "exercises", on_delete: :cascade
+  add_foreign_key "personal_records", "users"
+  add_foreign_key "personal_records", "workout_reps", on_delete: :cascade
+  add_foreign_key "personal_records", "workouts", on_delete: :cascade
   add_foreign_key "sessions", "users"
   add_foreign_key "sync_logs", "users"
   add_foreign_key "third_party_credentials", "users"

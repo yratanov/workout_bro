@@ -1,0 +1,18 @@
+en:
+  personal_records:
+    index:
+      title: "Personal Records"
+      no_records: "No personal records yet"
+      no_records_hint: "Complete workouts to start tracking your PRs"
+      max_weight_description: "%{weight} %{unit} x %{reps} reps"
+      max_volume_description: "%{volume} %{unit} total (%{weight} %{unit} x %{reps} reps)"
+      max_reps_description: "%{reps} reps"
+      pr_types:
+        max_weight: "Max Weight"
+        max_volume: "Max Volume"
+        max_reps: "Max Reps"
+      bands:
+        lightest: "Lightest Band"
+        light: "Light Band"
+        medium: "Medium Band"
+        heavy: "Heavy Band"

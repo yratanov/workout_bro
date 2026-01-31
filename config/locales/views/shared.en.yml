@@ -4,6 +4,7 @@ en:
     navigation:
       workouts: "Workouts"
       routines: "Routines"
+      prs: "PRs"
       stats: "Stats"
       exercises: "Exercises"
       admin: "Admin"

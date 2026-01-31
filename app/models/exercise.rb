@@ -29,4 +29,5 @@ class Exercise < ApplicationRecord
 
   has_many :workout_routine_day_exercises, dependent: :destroy
   has_many :workout_sets, dependent: :restrict_with_error
+  has_many :personal_records, dependent: :destroy
 end

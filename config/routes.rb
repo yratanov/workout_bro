@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "workouts#index"
   get "stats", to: "stats#index", as: :stats
+  get "personal_records", to: "personal_records#index", as: :personal_records
 
   namespace :settings do
     get "/", to: redirect("/settings/profile")

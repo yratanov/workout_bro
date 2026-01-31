@@ -44,6 +44,7 @@ class User < ApplicationRecord
            dependent: :nullify,
            inverse_of: :used_by_user
   has_many :workout_imports, dependent: :destroy
+  has_many :personal_records, dependent: :destroy
 
   AVAILABLE_LOCALES = %w[en ru].freeze
   WEIGHT_UNITS = %w[kg lbs].freeze

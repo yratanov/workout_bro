@@ -1,0 +1,57 @@
+# == Schema Information
+#
+# Table name: personal_records
+# Database name: primary
+#
+#  id             :integer          not null, primary key
+#  achieved_on    :date             not null
+#  band           :string
+#  pr_type        :integer          default("max_weight"), not null
+#  reps           :integer          not null
+#  volume         :float
+#  weight         :float
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  exercise_id    :integer          not null
+#  user_id        :integer          not null
+#  workout_id     :integer          not null
+#  workout_rep_id :integer          not null
+#
+# Indexes
+#
+#  index_personal_records_on_exercise_id     (exercise_id)
+#  index_personal_records_on_user_id         (user_id)
+#  index_personal_records_on_workout_id      (workout_id)
+#  index_personal_records_on_workout_rep_id  (workout_rep_id)
+#  index_prs_on_user_exercise_type_band      (user_id,exercise_id,pr_type,band)
+#
+# Foreign Keys
+#
+#  exercise_id     (exercise_id => exercises.id) ON DELETE => cascade
+#  user_id         (user_id => users.id)
+#  workout_id      (workout_id => workouts.id) ON DELETE => cascade
+#  workout_rep_id  (workout_rep_id => workout_reps.id) ON DELETE => cascade
+#
+bench_press_max_weight:
+  user: john
+  exercise: bench_press
+  workout: completed_workout
+  workout_rep: rep_two
+  pr_type: 0
+  weight: 65
+  reps: 8
+  volume:
+  band:
+  achieved_on: <%= Date.today - 1 %>
+
+bench_press_max_volume:
+  user: john
+  exercise: bench_press
+  workout: completed_workout
+  workout_rep: rep_one
+  pr_type: 1
+  weight: 60
+  reps: 10
+  volume: 600
+  band:
+  achieved_on: <%= Date.today - 1 %>
