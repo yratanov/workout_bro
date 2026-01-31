@@ -5,3 +5,9 @@ ru:
       reopen_prev: "Открыть пред."
     workout_set:
       complete_set: "Завершить подход"
+    previous_history:
+      title: "Предыдущий %{exercise}"
+      date: "Дата"
+      no_reps: "Нет записанных повторений"
+      no_previous: "Нет предыдущих тренировок для этого упражнения"
+      close: "Закрыть"

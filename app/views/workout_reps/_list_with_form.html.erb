@@ -39,6 +39,12 @@
           data-timer-date-value="<%= (persisted_reps.last&.updated_at || DateTime.now).iso8601 %>"
         ></div>
       </div>
+      <%= link_to previous_history_workout_set_path(workout_set),
+        class: "text-slate-400 hover:text-slate-200 transition-colors",
+        data: { turbo_frame: "previous_history_modal" },
+        title: t("workout_reps.list_with_form.show_previous") do %>
+        <%= icon "clock-rotate-left" %>
+      <% end %>
       <div class="flex-1">
         <%= render "workout_reps/form",
         workout_rep: workout_set.workout_reps.new(workout_set.default_rep_values) %>

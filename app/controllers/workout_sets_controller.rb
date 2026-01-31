@@ -22,6 +22,11 @@ class WorkoutSetsController < ApplicationController
     @workout = @workout_set.workout
   end
 
+  def previous_history
+    @workout_set = WorkoutSet.find(params[:id])
+    @previous_set = @workout_set.previous_workout_set
+  end
+
   def destroy
     @workout_set = WorkoutSet.find(params[:id])
     @workout = @workout_set.workout

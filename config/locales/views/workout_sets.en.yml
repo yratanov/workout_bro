@@ -5,3 +5,9 @@ en:
       reopen_prev: "Reopen prev"
     workout_set:
       complete_set: "Complete this set"
+    previous_history:
+      title: "Previous %{exercise}"
+      date: "Date"
+      no_reps: "No reps recorded"
+      no_previous: "No previous workout found for this exercise"
+      close: "Close"

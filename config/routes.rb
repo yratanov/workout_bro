@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     member do
       post :stop
       post :reopen
+      get :previous_history
     end
   end
 
