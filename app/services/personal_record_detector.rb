@@ -7,10 +7,14 @@ class PersonalRecordDetector
   end
 
   def call
-    return @new_prs unless @workout.strength? && @workout.ended?
+    return @new_prs unless @workout.ended?
 
-    collect_best_candidates
-    create_prs_for_improvements
+    if @workout.strength?
+      collect_best_candidates
+      create_prs_for_improvements
+    elsif @workout.run?
+      detect_run_prs
+    end
 
     @new_prs
   end
@@ -162,5 +166,59 @@ class PersonalRecordDetector
         achieved_on: @workout.started_at.to_date
       )
     @new_prs << pr
+  end
+
+  # Run PR detection
+  def detect_run_prs
+    return unless @workout.distance&.positive?
+
+    detect_longest_distance_pr
+    detect_fastest_pace_pr
+  end
+
+  def detect_longest_distance_pr
+    existing_pr =
+      @user
+        .personal_records
+        .where(pr_type: :longest_distance)
+        .where.not(workout: @workout)
+        .order(distance: :desc)
+        .first
+
+    if existing_pr.nil? || @workout.distance > existing_pr.distance
+      pr =
+        @user.personal_records.create!(
+          workout: @workout,
+          pr_type: :longest_distance,
+          distance: @workout.distance,
+          achieved_on: @workout.started_at.to_date
+        )
+      @new_prs << pr
+    end
+  end
+
+  def detect_fastest_pace_pr
+    current_pace = @workout.pace
+    return unless current_pace
+
+    existing_pr =
+      @user
+        .personal_records
+        .where(pr_type: :fastest_pace)
+        .where.not(workout: @workout)
+        .order(pace: :asc)
+        .first
+
+    if existing_pr.nil? || current_pace < existing_pr.pace
+      pr =
+        @user.personal_records.create!(
+          workout: @workout,
+          pr_type: :fastest_pace,
+          distance: @workout.distance,
+          pace: current_pace,
+          achieved_on: @workout.started_at.to_date
+        )
+      @new_prs << pr
+    end
   end
 end

@@ -235,18 +235,132 @@ describe PersonalRecordDetector do
     end
 
     context "with a run workout" do
+      let(:current_start) { 1.hour.ago }
+
       let(:workout) do
         user.workouts.create!(
           workout_type: :run,
-          started_at: 1.hour.ago,
-          ended_at: Time.current,
-          distance: 5000,
-          time_in_seconds: 1800
+          started_at: current_start,
+          ended_at: current_start + 30.minutes,
+          distance: 5000
         )
       end
 
-      it "does not create any PRs" do
+      before { user.personal_records.destroy_all }
+
+      it "creates longest_distance PR for first run" do
         prs = described_class.new(workout: workout).call
+
+        distance_pr = prs.find(&:longest_distance?)
+        expect(distance_pr).to be_present
+        expect(distance_pr.distance).to eq(5000)
+      end
+
+      it "creates fastest_pace PR for first run" do
+        prs = described_class.new(workout: workout).call
+
+        pace_pr = prs.find(&:fastest_pace?)
+        expect(pace_pr).to be_present
+        expect(pace_pr.pace).to eq(360.0) # 1800 sec / 5 km = 360 sec/km
+      end
+
+      it "creates longest_distance PR when beating previous record" do
+        previous_run =
+          user.workouts.create!(
+            workout_type: :run,
+            started_at: 1.week.ago,
+            ended_at: 1.week.ago + 25.minutes,
+            distance: 4000
+          )
+        user.personal_records.create!(
+          workout: previous_run,
+          pr_type: :longest_distance,
+          distance: 4000,
+          achieved_on: 1.week.ago.to_date
+        )
+
+        prs = described_class.new(workout: workout).call
+
+        distance_pr = prs.find(&:longest_distance?)
+        expect(distance_pr).to be_present
+        expect(distance_pr.distance).to eq(5000)
+      end
+
+      it "does not create longest_distance PR when below previous record" do
+        previous_run =
+          user.workouts.create!(
+            workout_type: :run,
+            started_at: 1.week.ago,
+            ended_at: 1.week.ago + 40.minutes,
+            distance: 10_000
+          )
+        user.personal_records.create!(
+          workout: previous_run,
+          pr_type: :longest_distance,
+          distance: 10_000,
+          achieved_on: 1.week.ago.to_date
+        )
+
+        prs = described_class.new(workout: workout).call
+
+        expect(prs.none?(&:longest_distance?)).to be true
+      end
+
+      it "creates fastest_pace PR when beating previous record" do
+        previous_run =
+          user.workouts.create!(
+            workout_type: :run,
+            started_at: 1.week.ago,
+            ended_at: 1.week.ago + 35.minutes,
+            distance: 5000
+          )
+        user.personal_records.create!(
+          workout: previous_run,
+          pr_type: :fastest_pace,
+          distance: 5000,
+          pace: 420.0, # 7 min/km = 420 sec/km
+          achieved_on: 1.week.ago.to_date
+        )
+
+        prs = described_class.new(workout: workout).call
+
+        pace_pr = prs.find(&:fastest_pace?)
+        expect(pace_pr).to be_present
+        expect(pace_pr.pace).to eq(360.0) # faster: 6 min/km = 360 sec/km
+      end
+
+      it "does not create fastest_pace PR when slower than previous record" do
+        previous_run =
+          user.workouts.create!(
+            workout_type: :run,
+            started_at: 1.week.ago,
+            ended_at: 1.week.ago + 25.minutes,
+            distance: 5000
+          )
+        user.personal_records.create!(
+          workout: previous_run,
+          pr_type: :fastest_pace,
+          distance: 5000,
+          pace: 300.0, # 5 min/km = 300 sec/km
+          achieved_on: 1.week.ago.to_date
+        )
+
+        prs = described_class.new(workout: workout).call
+
+        expect(prs.none?(&:fastest_pace?)).to be true
+      end
+
+      it "does not create any PRs when distance is zero" do
+        zero_distance_run =
+          user.workouts.create!(
+            workout_type: :run,
+            started_at: current_start,
+            ended_at: current_start + 30.minutes,
+            distance: 0
+          )
+
+        prs = described_class.new(workout: zero_distance_run).call
+
         expect(prs).to be_empty
       end
     end

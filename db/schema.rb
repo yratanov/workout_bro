@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_31_223832) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_31_231912) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -88,15 +88,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_223832) do
     t.date "achieved_on", null: false
     t.string "band"
     t.datetime "created_at", null: false
-    t.integer "exercise_id", null: false
+    t.integer "distance"
+    t.integer "exercise_id"
+    t.float "pace"
     t.integer "pr_type", default: 0, null: false
-    t.integer "reps", null: false
+    t.integer "reps"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.float "volume"
     t.float "weight"
     t.integer "workout_id", null: false
-    t.integer "workout_rep_id", null: false
+    t.integer "workout_rep_id"
     t.index ["exercise_id"], name: "index_personal_records_on_exercise_id"
     t.index ["user_id", "exercise_id", "pr_type", "band"], name: "index_prs_on_user_exercise_type_band"
     t.index ["user_id"], name: "index_personal_records_on_user_id"

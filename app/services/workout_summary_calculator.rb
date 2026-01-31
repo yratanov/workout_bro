@@ -163,29 +163,17 @@ class WorkoutSummaryCalculator
   end
 
   def calculate_pace
-    unless @workout.distance&.positive? && @workout.time_in_seconds&.positive?
-      return nil
-    end
-
-    @workout.time_in_seconds.to_f / (@workout.distance / 1000.0)
+    @workout.pace
   end
 
   def calculate_run_comparison(previous)
-    prev_pace = calculate_pace_for(previous)
-    current_pace = calculate_pace
+    prev_pace = previous.pace
+    current_pace = @workout.pace
 
     return nil unless prev_pace && current_pace
 
     pace_diff = prev_pace - current_pace # Negative means faster (improvement)
 
     Comparison.new(pace_diff: pace_diff.round(1))
-  end
-
-  def calculate_pace_for(workout)
-    unless workout.distance&.positive? && workout.time_in_seconds&.positive?
-      return nil
-    end
-
-    workout.time_in_seconds.to_f / (workout.distance / 1000.0)
   end
 end

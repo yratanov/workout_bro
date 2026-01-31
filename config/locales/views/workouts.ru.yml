@@ -77,3 +77,5 @@ ru:
         max_weight: "Макс. вес"
         max_volume: "Макс. объём"
         max_reps: "Макс. повторения"
+        longest_distance: "Макс. дистанция"
+        fastest_pace: "Лучший темп"

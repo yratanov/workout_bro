@@ -55,7 +55,7 @@ class Workout < ApplicationRecord
 
   validate :no_other_active_workout, on: :create
 
-  before_save :fill_in_time_in_seconds, if: :ended?
+  before_validation :fill_in_time_in_seconds, if: :ended?
 
   def running?
     !ended?
@@ -67,6 +67,13 @@ class Workout < ApplicationRecord
 
   def paused?
     paused_at.present?
+  end
+
+  # Pace in seconds per km
+  def pace
+    return nil unless distance&.positive? && time_in_seconds&.positive?
+
+    time_in_seconds.to_f / (distance / 1000.0)
   end
 
   def fill_in_time_in_seconds

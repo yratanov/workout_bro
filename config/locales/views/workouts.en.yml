@@ -77,3 +77,5 @@ en:
         max_weight: "Max Weight"
         max_volume: "Max Volume"
         max_reps: "Max Reps"
+        longest_distance: "Longest Distance"
+        fastest_pace: "Fastest Pace"

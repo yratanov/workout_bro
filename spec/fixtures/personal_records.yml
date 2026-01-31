@@ -6,16 +6,18 @@
 #  id             :integer          not null, primary key
 #  achieved_on    :date             not null
 #  band           :string
+#  distance       :integer
+#  pace           :float
 #  pr_type        :integer          default("max_weight"), not null
-#  reps           :integer          not null
+#  reps           :integer
 #  volume         :float
 #  weight         :float
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  exercise_id    :integer          not null
+#  exercise_id    :integer
 #  user_id        :integer          not null
 #  workout_id     :integer          not null
-#  workout_rep_id :integer          not null
+#  workout_rep_id :integer
 #
 # Indexes
 #

@@ -6,16 +6,18 @@
 #  id             :integer          not null, primary key
 #  achieved_on    :date             not null
 #  band           :string
+#  distance       :integer
+#  pace           :float
 #  pr_type        :integer          default("max_weight"), not null
-#  reps           :integer          not null
+#  reps           :integer
 #  volume         :float
 #  weight         :float
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  exercise_id    :integer          not null
+#  exercise_id    :integer
 #  user_id        :integer          not null
 #  workout_id     :integer          not null
-#  workout_rep_id :integer          not null
+#  workout_rep_id :integer
 #
 # Indexes
 #
@@ -68,7 +70,7 @@ describe PersonalRecord do
   end
 
   describe "validations" do
-    it "is valid with valid attributes" do
+    it "is valid with valid strength PR attributes" do
       pr =
         PersonalRecord.new(
           user: user,
@@ -83,22 +85,74 @@ describe PersonalRecord do
       expect(pr).to be_valid
     end
 
+    it "is valid with valid run PR attributes" do
+      run_workout =
+        user.workouts.create!(
+          workout_type: :run,
+          started_at: 1.hour.ago,
+          ended_at: Time.current,
+          distance: 5000,
+          time_in_seconds: 1800
+        )
+      pr =
+        PersonalRecord.new(
+          user: user,
+          workout: run_workout,
+          pr_type: :longest_distance,
+          distance: 5000,
+          achieved_on: Date.today
+        )
+      expect(pr).to be_valid
+    end
+
     it "requires pr_type" do
       pr = PersonalRecord.new(pr_type: nil)
       expect(pr).not_to be_valid
       expect(pr.errors[:pr_type]).to be_present
     end
 
-    it "requires reps" do
-      pr = PersonalRecord.new(reps: nil)
+    it "requires reps for strength PRs" do
+      pr = PersonalRecord.new(pr_type: :max_weight, reps: nil)
       expect(pr).not_to be_valid
       expect(pr.errors[:reps]).to be_present
     end
 
-    it "requires positive reps" do
-      pr = PersonalRecord.new(reps: 0)
+    it "requires positive reps for strength PRs" do
+      pr = PersonalRecord.new(pr_type: :max_weight, reps: 0)
       expect(pr).not_to be_valid
       expect(pr.errors[:reps]).to be_present
+    end
+
+    it "does not require reps for run PRs" do
+      run_workout =
+        user.workouts.create!(
+          workout_type: :run,
+          started_at: 1.hour.ago,
+          ended_at: Time.current,
+          distance: 5000,
+          time_in_seconds: 1800
+        )
+      pr =
+        PersonalRecord.new(
+          user: user,
+          workout: run_workout,
+          pr_type: :longest_distance,
+          distance: 5000,
+          achieved_on: Date.today
+        )
+      expect(pr).to be_valid
+    end
+
+    it "requires distance for run PRs" do
+      pr = PersonalRecord.new(pr_type: :longest_distance, distance: nil)
+      expect(pr).not_to be_valid
+      expect(pr.errors[:distance]).to be_present
+    end
+
+    it "requires pace for fastest_pace PRs" do
+      pr = PersonalRecord.new(pr_type: :fastest_pace, distance: 5000, pace: nil)
+      expect(pr).not_to be_valid
+      expect(pr.errors[:pace]).to be_present
     end
 
     it "requires achieved_on" do
@@ -164,7 +218,9 @@ describe PersonalRecord do
       expect(PersonalRecord.pr_types).to eq(
         "max_weight" => 0,
         "max_volume" => 1,
-        "max_reps" => 2
+        "max_reps" => 2,
+        "longest_distance" => 3,
+        "fastest_pace" => 4
       )
     end
 
@@ -176,6 +232,47 @@ describe PersonalRecord do
     it "allows max_volume type" do
       pr = personal_records(:bench_press_max_volume)
       expect(pr).to be_max_volume
+    end
+
+    it "allows longest_distance type" do
+      run_workout =
+        user.workouts.create!(
+          workout_type: :run,
+          started_at: 1.hour.ago,
+          ended_at: Time.current,
+          distance: 5000,
+          time_in_seconds: 1800
+        )
+      pr =
+        PersonalRecord.create!(
+          user: user,
+          workout: run_workout,
+          pr_type: :longest_distance,
+          distance: 5000,
+          achieved_on: Date.today
+        )
+      expect(pr).to be_longest_distance
+    end
+
+    it "allows fastest_pace type" do
+      run_workout =
+        user.workouts.create!(
+          workout_type: :run,
+          started_at: 1.hour.ago,
+          ended_at: Time.current,
+          distance: 5000,
+          time_in_seconds: 1800
+        )
+      pr =
+        PersonalRecord.create!(
+          user: user,
+          workout: run_workout,
+          pr_type: :fastest_pace,
+          distance: 5000,
+          pace: 6.0,
+          achieved_on: Date.today
+        )
+      expect(pr).to be_fastest_pace
     end
   end
 
