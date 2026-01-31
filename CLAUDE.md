@@ -127,3 +127,26 @@ config/locales/
 - Shared strings: Use `t("shared.buttons.save")`, `t("shared.confirmations.are_you_sure")`
 
 **Important: All translations must be added to both locales (en and ru).** When adding new translation keys, always create or update both the `.en.yml` and `.ru.yml` files.
+
+## UI Components
+
+**Always use the `button` helper instead of raw HTML `<button>` or `<a>` tags for buttons/links.**
+
+```erb
+# Button (default type)
+<%= button t(".save"), style: "primary" %>
+
+# Link styled as button
+<%= button t(".view"), type: "link", style: "primary", route: some_path %>
+
+# Delete button with confirmation
+<%= button t(".delete"), style: "danger", method: :delete, route: some_path,
+    data: { turbo_confirm: t(".confirm") } %>
+
+# Button with Stimulus action
+<%= button t(".close"), style: "outlined", data: { action: "click->modal#close" } %>
+```
+
+**Available styles:** `primary`, `success`, `danger`, `warning`, `default`, `outlined`, `link`, `link_danger`, `link_hover_danger`
+
+**Available sizes:** `default`, `lg`

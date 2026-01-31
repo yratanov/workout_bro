@@ -1,0 +1,190 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-xl mx-auto py-8">
+  <% if @workout.strength? %>
+    <!-- Strength Workout Summary -->
+    <div class="text-center mb-8">
+      <div
+        class="
+          inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full
+          bg-green-500/20
+        "
+      >
+        <%= icon "check", size: "w-8 h-8", class: "text-green-400" %>
+      </div>
+      <h1 class="text-2xl font-bold text-white mb-2"><%= t(".title") %></h1>
+      <p class="text-slate-400">
+        <% if @workout.workout_routine_day %>
+          <%= @workout.workout_routine.name %>
+          ·
+          <%= @workout.workout_routine_day.name %>
+        <% else %>
+          <%= t(".custom_workout") %>
+        <% end %>
+      </p>
+    </div>
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-3 gap-4 mb-8">
+      <div class="bg-slate-800 rounded-lg p-4 text-center">
+        <div class="text-slate-400 text-sm mb-1"><%= t(".total_volume") %></div>
+        <div class="text-2xl font-bold text-white">
+          <%= format_volume(@summary.total_volume) %>
+        </div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4 text-center">
+        <div class="text-slate-400 text-sm mb-1"><%= t(".sets") %></div>
+        <div class="text-2xl font-bold text-white"><%= @summary.total_sets %></div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4 text-center">
+        <div class="text-slate-400 text-sm mb-1"><%= t(".duration") %></div>
+        <div class="text-2xl font-bold text-white">
+          <%= seconds_to_human(@summary.duration || 0) %>
+        </div>
+      </div>
+    </div>
+    <!-- Muscles Worked -->
+    <% if @summary.muscles_worked.any? %>
+      <div class="bg-slate-800 rounded-lg p-4 mb-6">
+        <h3 class="text-slate-400 text-sm mb-3"><%= t(".muscles_worked") %></h3>
+        <div class="flex flex-wrap gap-3">
+          <% @summary.muscles_worked.each do |muscle| %>
+            <div class="flex items-center gap-2 bg-slate-700 rounded-full px-3 py-1.5">
+              <%= muscle_icon(muscle, size: "w-5 h-5") %>
+              <span class="text-white text-sm"><%= muscle.human_name %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <!-- PRs Section -->
+    <% if @summary.new_prs.any? %>
+      <div class=" bg-slate-800 rounded-lg p-4 mb-6 border-2 border-yellow-500/50 ">
+        <div class="flex items-center gap-2 mb-3">
+          <%= icon "trophy", size: "w-5 h-5", class: "text-yellow-400" %>
+          <h3 class="text-yellow-400 font-semibold"><%= t(".new_prs") %></h3>
+        </div>
+        <div class="space-y-2">
+          <% @summary.new_prs.each do |pr| %>
+            <div
+              class="
+                flex items-center justify-between bg-slate-700 rounded-lg px-3 py-2
+              "
+            >
+              <span class="text-white"><%= pr.exercise.name %></span>
+              <div class="flex items-center gap-2">
+                <span class="text-slate-400 text-sm"><%= pr_type_label(pr.pr_type) %></span>
+                <span class="text-yellow-400 font-semibold">
+                  <% if pr.max_weight? %>
+                    <%= pr.weight %>kg
+                  <% elsif pr.max_volume? %>
+                    <%= pr.volume.to_i %>kg
+                  <% else %>
+                    <%= pr.reps %>
+                    reps
+                  <% end %>
+                </span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <!-- Comparison Section -->
+    <% if @summary.previous_workout && @summary.comparison %>
+      <div class="bg-slate-800 rounded-lg p-4 mb-6">
+        <h3 class="text-slate-400 text-sm mb-3"><%= t(".comparison_title") %></h3>
+        <div class="flex items-center justify-between">
+          <span class="text-white"><%= t(".volume") %></span>
+          <div class="flex items-center gap-2">
+            <span class="<%= comparison_class(@summary.comparison.volume_diff) %>">
+              <%= icon comparison_arrow(@summary.comparison.volume_diff), size: "w-4 h-4" %>
+            </span>
+            <span
+              class="<%= comparison_class(@summary.comparison.volume_diff) %> font-semibold"
+            >
+              <% if @summary.comparison.volume_diff >= 0 %>+<% end %><%= format_volume(@summary.comparison.volume_diff) %>
+            </span>
+            <span class="text-slate-500 text-sm">
+              (<% if @summary.comparison.volume_diff_percent >= 0 %>+<% end %><%= @summary.comparison.volume_diff_percent %>%)
+            </span>
+          </div>
+        </div>
+      </div>
+    <% elsif @summary.previous_workout.nil? %>
+      <div class=" bg-slate-800 rounded-lg p-4 mb-6 text-center text-slate-400 ">
+        <%= t(".first_time") %>
+      </div>
+    <% end %>
+
+  <% else %>
+    <!-- Run Workout Summary -->
+    <div class="text-center mb-8">
+      <div
+        class="
+          inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full
+          bg-green-500/20
+        "
+      >
+        <%= icon "check", size: "w-8 h-8", class: "text-green-400" %>
+      </div>
+      <h1 class="text-2xl font-bold text-white mb-2"><%= t(".run_complete") %></h1>
+      <p class="text-slate-400"><%= @workout.started_at.strftime("%d %b %Y") %></p>
+    </div>
+    <!-- Run Stats Grid -->
+    <div class="grid grid-cols-3 gap-4 mb-8">
+      <div class="bg-slate-800 rounded-lg p-4 text-center">
+        <div class="text-slate-400 text-sm mb-1"><%= t(".distance") %></div>
+        <div class="text-2xl font-bold text-white">
+          <%= (@summary.distance.to_f / 1000).round(2) %>
+          km
+        </div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4 text-center">
+        <div class="text-slate-400 text-sm mb-1"><%= t(".duration") %></div>
+        <div class="text-2xl font-bold text-white">
+          <%= seconds_to_human(@summary.duration || 0) %>
+        </div>
+      </div>
+      <div class="bg-slate-800 rounded-lg p-4 text-center">
+        <div class="text-slate-400 text-sm mb-1"><%= t(".pace") %></div>
+        <div class="text-2xl font-bold text-white">
+          <%= format_pace(@summary.pace) %>
+        </div>
+        <div class="text-slate-500 text-xs"><%= t(".pace_unit") %></div>
+      </div>
+    </div>
+    <!-- Run Comparison -->
+    <% if @summary.previous_workout && @summary.comparison&.pace_diff %>
+      <div class="bg-slate-800 rounded-lg p-4 mb-6">
+        <h3 class="text-slate-400 text-sm mb-3"><%= t(".comparison_title") %></h3>
+        <div class="flex items-center justify-between">
+          <span class="text-white"><%= t(".pace") %></span>
+          <div class="flex items-center gap-2">
+            <% pace_improved = @summary.comparison.pace_diff > 0 %>
+            <span
+              class="<%= pace_improved ? 'text-green-400' : 'text-red-400' %> font-semibold"
+            >
+              <%= format_pace_diff(@summary.comparison.pace_diff) %>
+              <%= pace_improved ? t(".faster") : t(".slower") %>
+            </span>
+          </div>
+        </div>
+      </div>
+    <% elsif @summary.previous_workout.nil? %>
+      <div class=" bg-slate-800 rounded-lg p-4 mb-6 text-center text-slate-400 ">
+        <%= t(".first_time") %>
+      </div>
+    <% end %>
+  <% end %>
+  <!-- Action Buttons -->
+  <div class="flex gap-3 justify-center mt-8">
+    <%= button t(".view_details"),
+    type: "link",
+    style: "outlined",
+    route: workout_path(@workout) %>
+    <%= button t(".back_to_calendar"),
+    type: "link",
+    style: "primary",
+    route: workouts_path %>
+  </div>
+</div>

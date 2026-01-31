@@ -1,6 +1,6 @@
 class WorkoutsController < ApplicationController
   before_action :set_workout,
-                only: %i[modal edit update destroy stop pause resume]
+                only: %i[modal summary edit update destroy stop pause resume]
 
   # GET /workouts or /workouts.json
   def index
@@ -18,9 +18,30 @@ class WorkoutsController < ApplicationController
     @workout =
       current_user
         .workouts
-        .includes(workout_sets: %i[exercise workout_reps])
+        .includes(workout_sets: { exercise: :muscle, workout_reps: [] })
         .find(params[:id])
+    @summary = WorkoutSummaryCalculator.new(workout: @workout).call
     render layout: false
+  end
+
+  # GET /workouts/1/summary
+  def summary
+    unless @workout.ended?
+      redirect_to workouts_path
+      return
+    end
+
+    @workout =
+      current_user
+        .workouts
+        .includes(workout_sets: { exercise: :muscle, workout_reps: [] })
+        .find(params[:id])
+
+    pr_ids = session.delete(:workout_summary_prs) || []
+    @new_prs = PersonalRecord.where(id: pr_ids).includes(:exercise)
+
+    @summary =
+      WorkoutSummaryCalculator.new(workout: @workout, new_prs: @new_prs).call
   end
 
   # GET /workouts/new
@@ -112,13 +133,8 @@ class WorkoutsController < ApplicationController
         .each { |workout_set| workout_set.update(ended_at: Time.current) }
       if @workout.update(ended_at: Time.current)
         @new_prs = PersonalRecordDetector.new(workout: @workout).call
-        notice =
-          if @new_prs.any?
-            I18n.t("controllers.workouts.ended_with_prs", count: @new_prs.count)
-          else
-            I18n.t("controllers.workouts.ended")
-          end
-        format.html { redirect_to workouts_path, notice: notice }
+        session[:workout_summary_prs] = @new_prs.map(&:id)
+        format.html { redirect_to summary_workout_path(@workout) }
         format.json { render :show, status: :created, location: @workout }
       else
         format.html { render :new, status: :unprocessable_entity }

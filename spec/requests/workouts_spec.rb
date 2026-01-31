@@ -127,14 +127,14 @@ describe "Workouts" do
       )
     end
 
-    it "ends the workout" do
+    it "ends the workout and redirects to summary" do
       expect(workout.ended_at).to be_nil
 
       post stop_workout_path(workout)
 
       workout.reload
       expect(workout.ended_at).to be_present
-      expect(response).to redirect_to(workouts_path)
+      expect(response).to redirect_to(summary_workout_path(workout))
     end
 
     it "ends all active workout sets" do
@@ -167,7 +167,7 @@ describe "Workouts" do
         ).by(2)
       end
 
-      it "shows PR count in flash message" do
+      it "stores PR IDs in session for summary page" do
         workout_set =
           workout.workout_sets.create!(
             exercise: exercises(:bench_press),
@@ -177,14 +177,86 @@ describe "Workouts" do
 
         post stop_workout_path(workout)
 
-        expect(flash[:notice]).to include("2 new PRs")
+        expect(session[:workout_summary_prs]).to be_present
+        expect(session[:workout_summary_prs].size).to eq(2)
       end
+    end
+  end
 
-      it "shows regular message when no PRs set" do
-        post stop_workout_path(workout)
+  describe "GET /workouts/:id/summary" do
+    fixtures :muscles
 
-        expect(flash[:notice]).to eq("Workout was successfully ended.")
-      end
+    let!(:workout) do
+      Workout.create!(
+        user: user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+    end
+
+    it "returns success for completed workout" do
+      get summary_workout_path(workout)
+      expect(response).to have_http_status(:success)
+    end
+
+    it "redirects to workouts_path for incomplete workout" do
+      workout.update!(ended_at: nil)
+      get summary_workout_path(workout)
+      expect(response).to redirect_to(workouts_path)
+    end
+
+    it "returns 404 for another user's workout" do
+      other_workout =
+        Workout.create!(
+          user: users(:jane),
+          workout_type: :strength,
+          started_at: 1.hour.ago,
+          ended_at: Time.current
+        )
+      get summary_workout_path(other_workout)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "displays total volume" do
+      workout_set =
+        workout.workout_sets.create!(
+          exercise: exercises(:bench_press),
+          started_at: 30.minutes.ago
+        )
+      workout_set.workout_reps.create!(weight: 100, reps: 10)
+
+      get summary_workout_path(workout)
+
+      # The total volume of 1000 (100kg x 10 reps) should appear in the page
+      # Check for the formatted volume in the stats grid
+      expect(response.body).to include("Total Volume")
+      expect(response.body).to match(/1000|1t/)
+    end
+
+    it "displays muscles worked" do
+      workout.workout_sets.create!(
+        exercise: exercises(:bench_press),
+        started_at: 30.minutes.ago
+      )
+
+      get summary_workout_path(workout)
+
+      expect(response.body).to include("Chest")
+    end
+
+    it "displays workout complete title" do
+      get summary_workout_path(workout)
+
+      expect(response.body).to include("Workout Complete!")
+    end
+
+    it "displays routine information" do
+      get summary_workout_path(workout)
+
+      expect(response.body).to include("Push Day")
+      expect(response.body).to include("Push Pull Legs")
     end
   end
 

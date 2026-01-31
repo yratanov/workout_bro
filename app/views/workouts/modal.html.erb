@@ -6,70 +6,131 @@
   >
     <%= render ModalComponent.new(title: modal_title(@workout), size: "md") do %>
       <div class="p-6 overflow-y-auto min-h-0 flex-1">
-        <div class="mb-4 text-slate-300">
-          <%= t(".duration") %>:
-          <span class="font-semibold"><%= seconds_to_human(@workout.time_in_seconds) %></span>
-        </div>
-
         <% if @workout.strength? %>
-          <div class="space-y-3">
-            <% @workout.workout_sets.each do |set| %>
-              <div class="bg-slate-700 rounded p-3">
-                <div class="font-medium mb-2 flex items-center gap-2">
-                  <% if set.exercise.muscle.present? %>
-                    <span class="text-slate-400"><%= muscle_icon(set.exercise.muscle, size: "w-5 h-5") %></span>
-                  <% end %>
-                  <%= set.exercise.name %>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  <% set.workout_reps.each do |rep| %>
-                    <span class="text-sm bg-slate-600 px-2 py-1 rounded">
-                      <%= rep.reps %>
-                      x
-                      <%= rep.weight %>kg
-                      <% if rep.band.present? %>
-                        (<%= rep.band %>)
-                      <% end %>
-                    </span>
-                  <% end %>
-                </div>
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-3 gap-3 mb-4">
+            <div class="bg-slate-700 rounded-lg p-3 text-center">
+              <div class="text-slate-400 text-xs mb-1"><%= t(".total_volume") %></div>
+              <div class="text-lg font-bold text-white">
+                <%= format_volume(@summary.total_volume) %>
               </div>
-            <% end %>
-            <% if @workout.workout_sets.empty? %>
-              <p class="text-slate-400"><%= t(".no_exercises") %></p>
-            <% end %>
-          </div>
-        <% else %>
-          <div class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
-              <div class="bg-slate-700 rounded p-4">
-                <p class="text-slate-400 text-sm"><%= t(".distance") %></p>
-                <p class="text-2xl font-semibold"><%= (@workout.distance.to_f / 1000).round(2) %>
-                  km</p>
-              </div>
-              <div class="bg-slate-700 rounded p-4">
-                <p class="text-slate-400 text-sm"><%= t(".avg_pace") %></p>
-                <p class="text-2xl font-semibold"><%= run_pace(@workout) %></p>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-3 text-center">
+              <div class="text-slate-400 text-xs mb-1"><%= t(".sets") %></div>
+              <div class="text-lg font-bold text-white"><%= @summary.total_sets %></div>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-3 text-center">
+              <div class="text-slate-400 text-xs mb-1"><%= t(".duration") %></div>
+              <div class="text-lg font-bold text-white">
+                <%= seconds_to_human(@summary.duration || 0) %>
               </div>
             </div>
           </div>
+          <!-- Muscles Worked -->
+          <% if @summary.muscles_worked.any? %>
+            <div class="mb-4">
+              <div class="text-slate-400 text-xs mb-2"><%= t(".muscles_worked") %></div>
+              <div class="flex flex-wrap gap-2">
+                <% @summary.muscles_worked.each do |muscle| %>
+                  <div class=" flex items-center gap-1.5 bg-slate-700 rounded-full px-2.5 py-1 ">
+                    <%= muscle_icon(muscle, size: "w-4 h-4") %>
+                    <span class="text-white text-sm"><%= muscle.human_name %></span>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+          <!-- Comparison (if available) -->
+          <% if @summary.previous_workout && @summary.comparison %>
+            <div class="bg-slate-700 rounded-lg p-3 mb-4">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400 text-sm"><%= t(".vs_last") %></span>
+                <div class="flex items-center gap-2">
+                  <span class="<%= comparison_class(@summary.comparison.volume_diff) %>">
+                    <%= icon comparison_arrow(@summary.comparison.volume_diff), size: "w-4 h-4" %>
+                  </span>
+                  <span
+                    class="
+                      <%= comparison_class(@summary.comparison.volume_diff) %> font-semibold
+                    "
+                  >
+                    <% if @summary.comparison.volume_diff >= 0 %>+<% end %><%= format_volume(@summary.comparison.volume_diff) %>
+                  </span>
+                  <span class="text-slate-500 text-sm">
+                    (<% if @summary.comparison.volume_diff_percent >= 0 %>+<% end %><%= @summary.comparison.volume_diff_percent %>%)
+                  </span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <% if @workout.workout_sets.empty? %>
+            <p class="text-slate-400 text-center"><%= t(".no_exercises") %></p>
+          <% end %>
+        <% else %>
+          <!-- Run Workout Stats -->
+          <div class="grid grid-cols-3 gap-3 mb-4">
+            <div class="bg-slate-700 rounded-lg p-3 text-center">
+              <div class="text-slate-400 text-xs mb-1"><%= t(".distance") %></div>
+              <div class="text-lg font-bold text-white">
+                <%= (@summary.distance.to_f / 1000).round(2) %>
+                km
+              </div>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-3 text-center">
+              <div class="text-slate-400 text-xs mb-1"><%= t(".duration") %></div>
+              <div class="text-lg font-bold text-white">
+                <%= seconds_to_human(@summary.duration || 0) %>
+              </div>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-3 text-center">
+              <div class="text-slate-400 text-xs mb-1"><%= t(".pace") %></div>
+              <div class="text-lg font-bold text-white">
+                <%= format_pace(@summary.pace) %>
+              </div>
+            </div>
+          </div>
+          <!-- Run Comparison -->
+          <% if @summary.previous_workout && @summary.comparison&.pace_diff %>
+            <div class="bg-slate-700 rounded-lg p-3 mb-4">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400 text-sm"><%= t(".vs_last") %></span>
+                <div class="flex items-center gap-2">
+                  <% pace_improved = @summary.comparison.pace_diff > 0 %>
+                  <span
+                    class="
+                      <%= pace_improved ? 'text-green-400' : 'text-red-400' %> font-semibold
+                    "
+                  >
+                    <%= format_pace_diff(@summary.comparison.pace_diff) %>
+                    <%= pace_improved ? t(".faster") : t(".slower") %>
+                  </span>
+                </div>
+              </div>
+            </div>
+          <% end %>
         <% end %>
       </div>
 
       <div class="p-6 border-t border-slate-700 flex justify-between flex-shrink-0">
-        <button
-          type="button"
-          data-action="click->modal#close"
-          class="px-4 py-2 bg-slate-600 hover:bg-slate-500 rounded"
-        >
-          <%= t(".close") %>
-        </button>
-        <%= button_to workout_path(@workout),
-          method: :delete,
-          data: { turbo_confirm: t(".delete_confirm"), turbo_frame: "_top" },
-          class: "px-4 py-2 bg-red-600 hover:bg-red-500 rounded text-white cursor-pointer" do %>
-          <%= t(".delete") %>
-        <% end %>
+        <div class="flex gap-2">
+          <%= button t(".close"), style: "outlined", data: { action: "click->modal#close" } %>
+          <%= button t(".view_details"),
+          type: "link",
+          style: "primary",
+          route: workout_path(@workout),
+          data: {
+            turbo_frame: "_top",
+          } %>
+        </div>
+        <%= button t(".delete"),
+        style: "danger",
+        method: :delete,
+        route: workout_path(@workout),
+        data: {
+          turbo_confirm: t(".delete_confirm"),
+          turbo_frame: "_top",
+        } %>
       </div>
     <% end %>
   </div>

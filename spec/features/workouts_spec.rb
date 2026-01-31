@@ -36,15 +36,88 @@ describe "Workouts" do
   end
 
   describe "completing a workout" do
-    it "allows finishing an active workout" do
+    it "allows finishing an active workout and shows summary" do
       click_link "Start workout"
       click_button "Start Workout"
 
       accept_confirm { click_button "Finish" }
 
-      # After finishing, should redirect to workouts index
-      expect(page).to have_content("Workouts")
-      expect(page).to have_link("Start workout")
+      # After finishing, should show summary page
+      expect(page).to have_content("Workout Complete!")
+      expect(page).to have_link("Back to Calendar")
+    end
+  end
+
+  describe "workout summary" do
+    it "shows summary page after finishing a workout with stats" do
+      click_link "Start workout"
+      click_button "Start Workout"
+
+      # Add a set with reps
+      select "Bench Press", from: "workout_set[exercise_id]"
+      click_button "Start!"
+
+      select "10×", from: "workout_rep[reps]"
+      select "50.0kg", from: "workout_rep[weight]"
+      click_button "+"
+
+      click_button "Complete this set"
+
+      accept_confirm { click_button "Finish" }
+
+      # Should be on summary page with stats
+      expect(page).to have_content("Workout Complete!")
+      expect(page).to have_content("Total Volume")
+      expect(page).to have_content("500") # 50kg x 10 reps = 500kg
+      expect(page).to have_content("Sets")
+      expect(page).to have_content("1")
+    end
+
+    it "displays muscles worked with icons" do
+      click_link "Start workout"
+      click_button "Start Workout"
+
+      select "Bench Press", from: "workout_set[exercise_id]"
+      click_button "Start!"
+
+      select "10×", from: "workout_rep[reps]"
+      select "50.0kg", from: "workout_rep[weight]"
+      click_button "+"
+
+      click_button "Complete this set"
+      accept_confirm { click_button "Finish" }
+
+      expect(page).to have_content("Muscles Worked")
+      expect(page).to have_content("Chest")
+    end
+
+    it "navigates to workout details from summary" do
+      click_link "Start workout"
+      click_button "Start Workout"
+
+      accept_confirm { click_button "Finish" }
+
+      click_link "View Details"
+      expect(page).to have_current_path(workout_path(Workout.last))
+    end
+
+    it "navigates back to calendar from summary" do
+      click_link "Start workout"
+      click_button "Start Workout"
+
+      accept_confirm { click_button "Finish" }
+
+      click_link "Back to Calendar"
+      expect(page).to have_current_path(workouts_path)
+    end
+
+    it "shows first time message when no previous similar workout" do
+      click_link "Start workout"
+      click_button "Start Workout"
+
+      accept_confirm { click_button "Finish" }
+
+      expect(page).to have_content("First time doing this workout!")
     end
   end
 
