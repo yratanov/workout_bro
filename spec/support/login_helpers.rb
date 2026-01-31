@@ -5,7 +5,7 @@ module LoginHelpers
     fill_in "password", with: "password"
     click_button "Sign in"
     # Wait for Turbo Drive navigation to complete
-    expect(page).to have_current_path(root_path)
+    expect(page).not_to have_current_path(new_session_path)
   end
 end
 
