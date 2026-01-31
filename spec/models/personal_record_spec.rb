@@ -22,7 +22,6 @@
 # Indexes
 #
 #  index_personal_records_on_exercise_id     (exercise_id)
-#  index_personal_records_on_user_id         (user_id)
 #  index_personal_records_on_workout_id      (workout_id)
 #  index_personal_records_on_workout_rep_id  (workout_rep_id)
 #  index_prs_on_user_exercise_type_band      (user_id,exercise_id,pr_type,band)
@@ -45,7 +44,7 @@ describe PersonalRecord do
   let(:user) { users(:john) }
   let(:exercise) { exercises(:bench_press) }
   let(:workout) { workouts(:completed_workout) }
-  let(:workout_rep) { workout_reps(:rep_one) }
+  let(:workout_rep) { workout_reps(:rep_without_pr) }
 
   describe "associations" do
     it "belongs to user" do

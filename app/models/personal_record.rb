@@ -22,7 +22,6 @@
 # Indexes
 #
 #  index_personal_records_on_exercise_id     (exercise_id)
-#  index_personal_records_on_user_id         (user_id)
 #  index_personal_records_on_workout_id      (workout_id)
 #  index_personal_records_on_workout_rep_id  (workout_rep_id)
 #  index_prs_on_user_exercise_type_band      (user_id,exercise_id,pr_type,band)

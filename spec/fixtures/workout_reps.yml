@@ -33,3 +33,9 @@ active_rep:
   weight: 50
   reps: 12
   workout_set: active_set
+
+# Rep without an associated PR (for tests)
+rep_without_pr:
+  weight: 70
+  reps: 6
+  workout_set: completed_set

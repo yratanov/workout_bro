@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_31_231912) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_31_233323) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -101,7 +101,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_231912) do
     t.integer "workout_rep_id"
     t.index ["exercise_id"], name: "index_personal_records_on_exercise_id"
     t.index ["user_id", "exercise_id", "pr_type", "band"], name: "index_prs_on_user_exercise_type_band"
-    t.index ["user_id"], name: "index_personal_records_on_user_id"
     t.index ["workout_id"], name: "index_personal_records_on_workout_id"
     t.index ["workout_rep_id"], name: "index_personal_records_on_workout_rep_id"
   end

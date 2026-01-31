@@ -1,0 +1,9 @@
+# Database consistency checker configuration
+# See: https://github.com/djezzzl/database_consistency
+
+# WorkoutRep has_many :personal_records is intentional
+# (a rep can achieve multiple PR types: max_weight + max_volume)
+WorkoutRep:
+  personal_records:
+    MissingIndexChecker:
+      enabled: false
