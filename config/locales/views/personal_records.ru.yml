@@ -4,13 +4,18 @@ ru:
       title: "Личные рекорды"
       no_records: "Пока нет личных рекордов"
       no_records_hint: "Завершите тренировки, чтобы начать отслеживать рекорды"
+      run: "Пробежка"
       max_weight_description: "%{weight} %{unit} x %{reps} повторений"
       max_volume_description: "%{volume} %{unit} всего (%{weight} %{unit} x %{reps} повторений)"
       max_reps_description: "%{reps} повторений"
+      longest_distance_description: "%{distance} км"
+      fastest_pace_description: "%{pace} мин/км"
       pr_types:
         max_weight: "Макс. вес"
         max_volume: "Макс. объем"
         max_reps: "Макс. повторения"
+        longest_distance: "Макс. дистанция"
+        fastest_pace: "Лучший темп"
       bands:
         lightest: "Легчайшая резинка"
         light: "Легкая резинка"

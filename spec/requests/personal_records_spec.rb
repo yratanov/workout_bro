@@ -75,5 +75,49 @@ describe "PersonalRecords" do
         expect(response.body).to include("Heavy Band")
       end
     end
+
+    context "with run PRs" do
+      before do
+        run_workout =
+          user.workouts.create!(
+            workout_type: :run,
+            started_at: 1.hour.ago,
+            ended_at: Time.current,
+            distance: 5000
+          )
+
+        user.personal_records.create!(
+          workout: run_workout,
+          pr_type: :longest_distance,
+          distance: 5000,
+          achieved_on: Date.today
+        )
+
+        user.personal_records.create!(
+          workout: run_workout,
+          pr_type: :fastest_pace,
+          distance: 5000,
+          pace: 360.0,
+          achieved_on: Date.today
+        )
+      end
+
+      it "displays run PRs" do
+        get personal_records_path
+        expect(response.body).to include("Run")
+      end
+
+      it "displays longest distance PR" do
+        get personal_records_path
+        expect(response.body).to include("Longest Distance")
+        expect(response.body).to include("5.0 km")
+      end
+
+      it "displays fastest pace PR" do
+        get personal_records_path
+        expect(response.body).to include("Fastest Pace")
+        expect(response.body).to include("6:00")
+      end
+    end
   end
 end

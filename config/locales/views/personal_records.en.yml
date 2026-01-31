@@ -4,13 +4,18 @@ en:
       title: "Personal Records"
       no_records: "No personal records yet"
       no_records_hint: "Complete workouts to start tracking your PRs"
+      run: "Run"
       max_weight_description: "%{weight} %{unit} x %{reps} reps"
       max_volume_description: "%{volume} %{unit} total (%{weight} %{unit} x %{reps} reps)"
       max_reps_description: "%{reps} reps"
+      longest_distance_description: "%{distance} km"
+      fastest_pace_description: "%{pace} min/km"
       pr_types:
         max_weight: "Max Weight"
         max_volume: "Max Volume"
         max_reps: "Max Reps"
+        longest_distance: "Longest Distance"
+        fastest_pace: "Fastest Pace"
       bands:
         lightest: "Lightest Band"
         light: "Light Band"

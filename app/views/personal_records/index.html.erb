@@ -18,7 +18,9 @@
               <div class="bg-slate-800 rounded-lg p-4">
                 <div class="flex items-start justify-between">
                   <div>
-                    <h3 class="font-medium text-lg"><%= pr.exercise.name %></h3>
+                    <h3 class="font-medium text-lg">
+                      <%= pr.exercise&.name || t(".run") %>
+                    </h3>
                     <p class="text-slate-400 text-sm mt-1">
                       <% case pr.pr_type %>
                       <% when "max_weight" %>
@@ -38,6 +40,10 @@
                         ) %>
                       <% when "max_reps" %>
                         <%= t(".max_reps_description", reps: pr.reps) %>
+                      <% when "longest_distance" %>
+                        <%= t(".longest_distance_description", distance: (pr.distance.to_f / 1000).round(2)) %>
+                      <% when "fastest_pace" %>
+                        <%= t(".fastest_pace_description", pace: format_pace(pr.pace)) %>
                       <% end %>
                     </p>
                   </div>
