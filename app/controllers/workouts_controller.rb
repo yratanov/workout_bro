@@ -1,6 +1,17 @@
 class WorkoutsController < ApplicationController
   before_action :set_workout,
-                only: %i[modal summary edit update destroy stop pause resume]
+                only: %i[
+                  modal
+                  summary
+                  edit
+                  update
+                  destroy
+                  stop
+                  pause
+                  resume
+                  notes_modal
+                  update_notes
+                ]
 
   # GET /workouts or /workouts.json
   def index
@@ -182,6 +193,16 @@ class WorkoutsController < ApplicationController
     redirect_to @workout
   end
 
+  # GET /workouts/1/notes_modal
+  def notes_modal
+    render layout: false
+  end
+
+  # PATCH /workouts/1/update_notes
+  def update_notes
+    @workout.update(notes: params[:workout][:notes])
+  end
+
   # PATCH/PUT /workouts/1 or /workouts/1.json
   def update
     respond_to do |format|
@@ -246,7 +267,8 @@ class WorkoutsController < ApplicationController
       :workout_routine_day_id,
       :workout_type,
       :distance,
-      :started_at
+      :started_at,
+      :notes
     )
   end
 end

@@ -34,9 +34,19 @@ class WorkoutSetsController < ApplicationController
     render :stop
   end
 
+  def notes_modal
+    @workout_set = WorkoutSet.includes(:exercise).find(params[:id])
+    render layout: false
+  end
+
+  def update_notes
+    @workout_set = WorkoutSet.find(params[:id])
+    @workout_set.update(notes: params[:workout_set][:notes])
+  end
+
   private
 
   def workout_set_params
-    params.require(:workout_set).permit(:exercise_id, :workout_id)
+    params.require(:workout_set).permit(:exercise_id, :workout_id, :notes)
   end
 end

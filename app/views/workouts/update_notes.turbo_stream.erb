@@ -1,0 +1,6 @@
+<%= turbo_stream.replace "notes_modal" do %>
+  <%= turbo_frame_tag "notes_modal" %>
+<% end %>
+<%= turbo_stream.replace "workout_notes" do %>
+  <%= render partial: "workouts/notes", locals: { workout: @workout, edit_path: notes_modal_workout_path(@workout) } %>
+<% end %>

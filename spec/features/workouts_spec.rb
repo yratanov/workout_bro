@@ -286,4 +286,35 @@ describe "Workouts" do
       expect(page).to have_select("workout_rep[reps]")
     end
   end
+
+  describe "workout notes" do
+    it "shows notes section on summary page" do
+      click_link "Start workout"
+      click_button "Start Workout"
+      accept_confirm { click_button "Finish" }
+
+      # Should be on summary page with notes section
+      expect(page).to have_content("Workout Complete!")
+      expect(page).to have_content("Notes")
+      expect(page).to have_link("Add note")
+    end
+
+    it "displays existing notes on summary page" do
+      # Create a workout with notes
+      workout =
+        Workout.create!(
+          user: user,
+          workout_type: :strength,
+          started_at: 1.hour.ago,
+          ended_at: Time.current,
+          notes: "Great workout today!",
+          workout_routine_day: workout_routine_days(:push_day)
+        )
+
+      visit summary_workout_path(workout)
+
+      expect(page).to have_content("Notes")
+      expect(page).to have_content("Great workout today!")
+    end
+  end
 end

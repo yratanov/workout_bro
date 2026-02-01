@@ -1,9 +1,7 @@
 <% content_for :title, t(".title") %>
 
 <div class="w-full max-w-3xl">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="font-bold text-3xl"><%= t(".title") %></h1>
-  </div>
+  <%= page_header title: t(".title") %>
 
   <% if @personal_records.any? %>
     <div class="space-y-8">
@@ -75,10 +73,8 @@
       <% end %>
     </div>
   <% else %>
-    <div class="bg-slate-800 rounded-lg p-8 text-center">
-      <div class="text-4xl mb-3"><%= icon "trophy", size: "w-12 h-12 mx-auto text-slate-500" %></div>
-      <p class="text-slate-400"><%= t(".no_records") %></p>
-      <p class="text-slate-500 text-sm mt-2"><%= t(".no_records_hint") %></p>
-    </div>
+    <%= empty_state icon: "trophy",
+    message: t(".no_records"),
+    hint: t(".no_records_hint") %>
   <% end %>
 </div>

@@ -5,6 +5,7 @@
 #
 #  id                   :integer          not null, primary key
 #  ended_at             :datetime
+#  notes                :text
 #  paused_at            :datetime
 #  started_at           :datetime
 #  total_paused_seconds :integer          default(0)

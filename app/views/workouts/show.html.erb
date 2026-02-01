@@ -25,6 +25,13 @@
           total_paused_seconds: @workout.total_paused_seconds,
         ),
       ) %>
+      <span class="text-slate-500">|</span>
+      <%= link_to notes_modal_workout_path(@workout),
+        class: "p-1 text-slate-400 hover:text-blue-400 transition-colors",
+        data: { turbo_frame: "notes_modal" },
+        title: t("shared.buttons.add_note") do %>
+        <%= icon "note", size: "w-5 h-5" %>
+      <% end %>
     </div>
   </div>
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_31_233323) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_01_104703) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -208,6 +208,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_233323) do
     t.datetime "created_at", null: false
     t.datetime "ended_at"
     t.integer "exercise_id", null: false
+    t.text "notes"
     t.datetime "paused_at"
     t.datetime "started_at"
     t.integer "total_paused_seconds", default: 0
@@ -222,6 +223,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_233323) do
     t.date "date"
     t.integer "distance"
     t.datetime "ended_at"
+    t.text "notes"
     t.datetime "paused_at"
     t.datetime "started_at", null: false
     t.integer "time_in_seconds"

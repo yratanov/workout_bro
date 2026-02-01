@@ -7,6 +7,7 @@
 #  date                   :date
 #  distance               :integer
 #  ended_at               :datetime
+#  notes                  :text
 #  paused_at              :datetime
 #  started_at             :datetime         not null
 #  time_in_seconds        :integer

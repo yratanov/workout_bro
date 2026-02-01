@@ -1,0 +1,10 @@
+<%= turbo_frame_tag "workout_notes" do %>
+  <% if workout.notes.present? || local_assigns[:edit_path] %>
+    <div class="mb-6">
+      <%= section_header title: t("workouts.summary.notes"), icon: "note" %>
+      <%= notes_display notes: workout.notes,
+      edit_path: local_assigns[:edit_path],
+      empty_text: t("workouts.notes_modal.add_notes_prompt") %>
+    </div>
+  <% end %>
+<% end %>

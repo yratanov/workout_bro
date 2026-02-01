@@ -166,3 +166,53 @@ config/locales/
 ```
 
 **Available sizes:** `:lg` (default), `:sm`
+
+**Use `empty_state` for empty state messages with icon/emoji and optional action:**
+
+```erb
+# With emoji
+<%= empty_state emoji: "💪", message: t(".no_exercises") %>
+
+# With icon
+<%= empty_state icon: "trophy", message: t(".no_records"), hint: t(".hint") %>
+
+# With title and action button
+<%= empty_state icon: "dumbbell", message: t(".no_routines") do %>
+  <%= button t(".create"), route: new_path, style: "primary", type: "link" %>
+<% end %>
+```
+
+**Use `page_header` for page titles with optional action buttons:**
+
+```erb
+# Title only
+<%= page_header title: t(".title") %>
+
+# Title with action button
+<%= page_header title: t(".title") do %>
+  <%= button t(".new"), route: new_path, style: "primary", type: "link" %>
+<% end %>
+```
+
+**Use `section_header` for section headings with optional icons:**
+
+```erb
+<%= section_header title: t(".notes"), icon: "note" %>
+<%= section_header title: t(".new_prs"), icon: "trophy", icon_class: "text-yellow-400", title_class: "text-yellow-400 font-semibold" %>
+```
+
+**Use `notes_display` for displaying notes with edit functionality:**
+
+```erb
+<%= notes_display notes: @workout.notes, edit_path: notes_modal_workout_path(@workout), empty_text: t(".add_notes") %>
+```
+
+**Use `modal` for modal dialogs:**
+
+```erb
+<%= modal title: t(".title"), size: "md" do %>
+  <!-- Modal content -->
+<% end %>
+```
+
+**Available modal sizes:** `sm`, `md` (default), `lg`, `xl`

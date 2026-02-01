@@ -16,6 +16,7 @@ en:
       edit: "Edit"
       delete: "Delete"
       destroy: "Destroy"
+      add_note: "Add note"
     confirmations:
       are_you_sure: "Are you sure?"
       delete_confirm: "Delete?"

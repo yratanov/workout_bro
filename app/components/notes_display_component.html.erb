@@ -1,0 +1,20 @@
+<div class="<%= bg_class %> rounded-lg p-3">
+  <% if notes.present? %>
+    <p class="text-slate-300 text-sm whitespace-pre-wrap"><%= notes %></p>
+  <% elsif empty_text.present? %>
+    <p class="text-slate-500 text-sm italic"><%= empty_text %></p>
+  <% end %>
+  <% if edit_path.present? %>
+    <div class="mt-2 text-right">
+      <%= link_to edit_path,
+        class: "text-blue-400 hover:text-blue-300 text-sm",
+        data: { turbo_frame: "notes_modal" } do %>
+        <% if notes.present? %>
+          <%= helpers.icon "pencil", size: "w-4 h-4 inline" %>
+        <% else %>
+          <%= I18n.t("shared.buttons.add_note") %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

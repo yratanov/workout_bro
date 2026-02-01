@@ -16,6 +16,7 @@ ru:
       edit: "Редактировать"
       delete: "Удалить"
       destroy: "Удалить"
+      add_note: "Добавить заметку"
     confirmations:
       are_you_sure: "Вы уверены?"
       delete_confirm: "Удалить?"

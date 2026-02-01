@@ -1,0 +1,10 @@
+<%= turbo_frame_tag dom_id(workout_set, :notes) do %>
+  <% if workout_set.notes.present? || local_assigns[:edit_path] %>
+    <div class="mt-2">
+      <%= notes_display notes: workout_set.notes,
+      edit_path: local_assigns[:edit_path],
+      empty_text: t("workout_sets.notes_modal.add_notes_prompt"),
+      bg_class: "bg-slate-800" %>
+    </div>
+  <% end %>
+<% end %>

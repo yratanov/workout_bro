@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       post :stop
       post :pause
       post :resume
+      get :notes_modal
+      patch :update_notes
     end
   end
 
@@ -18,6 +20,8 @@ Rails.application.routes.draw do
       post :stop
       post :reopen
       get :previous_history
+      get :notes_modal
+      patch :update_notes
     end
   end
 

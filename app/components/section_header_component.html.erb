@@ -1,0 +1,6 @@
+<div class="flex items-center gap-2 mb-3">
+  <% if icon.present? %>
+    <%= helpers.icon icon, size: "w-5 h-5", class: icon_class %>
+  <% end %>
+  <h3 class="<%= title_class %>"><%= title %></h3>
+</div>

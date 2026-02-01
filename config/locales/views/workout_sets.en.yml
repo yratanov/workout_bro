@@ -11,3 +11,7 @@ en:
       no_reps: "No reps recorded"
       no_previous: "No previous workout found for this exercise"
       close: "Close"
+    notes_modal:
+      title: "Notes for %{exercise}"
+      placeholder: "Add notes about this set..."
+      add_notes_prompt: "Add notes about this set"

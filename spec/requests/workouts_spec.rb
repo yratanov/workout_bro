@@ -354,4 +354,61 @@ describe "Workouts" do
       expect(response.body).to include("Banded Squat")
     end
   end
+
+  describe "GET /workouts/:id/notes_modal" do
+    let!(:workout) do
+      Workout.create!(
+        user: user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+    end
+
+    it "returns the notes modal" do
+      get notes_modal_workout_path(workout)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Workout Notes")
+    end
+  end
+
+  describe "PATCH /workouts/:id/update_notes" do
+    let!(:workout) do
+      Workout.create!(
+        user: user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+    end
+
+    it "updates the workout notes" do
+      patch update_notes_workout_path(workout),
+            params: {
+              workout: {
+                notes: "Great workout today!"
+              }
+            }
+
+      workout.reload
+      expect(workout.notes).to eq("Great workout today!")
+    end
+
+    it "returns turbo stream response" do
+      patch update_notes_workout_path(workout),
+            params: {
+              workout: {
+                notes: "Test notes"
+              }
+            },
+            headers: {
+              "Accept" => "text/vnd.turbo-stream.html"
+            }
+
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+    end
+  end
 end

@@ -137,10 +137,8 @@
       <% end %>
     </div>
   <% else %>
-    <div class="bg-slate-800 rounded-lg p-8 text-center">
-      <div class="text-4xl mb-3">📊</div>
-      <h3 class="font-semibold text-lg mb-2"><%= t(".no_history_title") %></h3>
-      <p class="text-slate-400"><%= t(".no_history_description") %></p>
-    </div>
+    <%= empty_state emoji: "📊",
+    title: t(".no_history_title"),
+    message: t(".no_history_description") %>
   <% end %>
 </div>

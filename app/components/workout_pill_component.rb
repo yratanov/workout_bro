@@ -14,6 +14,10 @@ class WorkoutPillComponent < ViewComponent::Base
     @workout.run? ? "Run" : @workout.workout_routine_day&.name || "Strength"
   end
 
+  def has_notes?
+    @workout.notes.present? || @workout.workout_sets.any? { |s| s.notes.present? }
+  end
+
   def pill_classes
     base =
       if compact?

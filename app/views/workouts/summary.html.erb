@@ -108,6 +108,14 @@
         <%= t(".first_time") %>
       </div>
     <% end %>
+    <!-- Workout Notes Section -->
+    <%= render partial: "workouts/notes",
+    locals: {
+      workout: @workout,
+      edit_path: notes_modal_workout_path(@workout),
+    } %>
+    <!-- Set Notes Section -->
+    <%= render partial: "workouts/set_notes", locals: { workout: @workout } %>
 
   <% else %>
     <!-- Run Workout Summary -->
@@ -188,6 +196,12 @@
         <%= t(".first_time") %>
       </div>
     <% end %>
+    <!-- Notes Section -->
+    <%= render partial: "workouts/notes",
+    locals: {
+      workout: @workout,
+      edit_path: notes_modal_workout_path(@workout),
+    } %>
   <% end %>
   <!-- Action Buttons -->
   <div class="flex gap-3 justify-center mt-8">

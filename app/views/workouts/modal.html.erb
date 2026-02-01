@@ -4,7 +4,7 @@
     data-modal-auto-open-value="true"
     data-modal-turbo-frame-value="workout_modal"
   >
-    <%= render ModalComponent.new(title: modal_title(@workout), size: "md") do %>
+    <%= modal title: modal_title(@workout), size: "md" do %>
       <div class="p-6 overflow-y-auto min-h-0 flex-1">
         <% if @workout.strength? %>
           <!-- Stats Grid -->
@@ -60,6 +60,21 @@
           <% if @workout.workout_sets.empty? %>
             <p class="text-slate-400 text-center"><%= t(".no_exercises") %></p>
           <% end %>
+          <!-- Workout Notes -->
+          <% if @workout.notes.present? %>
+            <div class="mb-4">
+              <div class="text-slate-400 text-xs mb-2"><%= t(".notes") %></div>
+              <div class="bg-slate-700/50 rounded-lg p-3">
+                <p class="text-slate-300 text-sm whitespace-pre-wrap"><%= @workout.notes %></p>
+              </div>
+            </div>
+          <% end %>
+          <!-- Set Notes -->
+          <%= render partial: "workouts/set_notes",
+          locals: {
+            workout: @workout,
+            compact: true,
+          } %>
         <% else %>
           <!-- Run Workout Stats -->
           <div class="grid grid-cols-3 gap-3 mb-4">
@@ -90,6 +105,15 @@
                     <%= pace_improved ? t(".faster") : t(".slower") %>
                   </span>
                 </div>
+              </div>
+            </div>
+          <% end %>
+          <!-- Workout Notes (Run) -->
+          <% if @workout.notes.present? %>
+            <div class="mb-4">
+              <div class="text-slate-400 text-xs mb-2"><%= t(".notes") %></div>
+              <div class="bg-slate-700/50 rounded-lg p-3">
+                <p class="text-slate-300 text-sm whitespace-pre-wrap"><%= @workout.notes %></p>
               </div>
             </div>
           <% end %>
