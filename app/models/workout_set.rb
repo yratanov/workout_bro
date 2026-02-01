@@ -20,13 +20,12 @@
 #
 #  index_workout_sets_on_exercise_id                    (exercise_id)
 #  index_workout_sets_on_superset_id                    (superset_id)
-#  index_workout_sets_on_workout_id                     (workout_id)
 #  index_workout_sets_on_workout_id_and_superset_group  (workout_id,superset_group)
 #
 # Foreign Keys
 #
 #  exercise_id  (exercise_id => exercises.id) ON DELETE => restrict
-#  superset_id  (superset_id => supersets.id)
+#  superset_id  (superset_id => supersets.id) ON DELETE => nullify
 #  workout_id   (workout_id => workouts.id)
 #
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_01_121437) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_01_132509) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -121,8 +121,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_01_121437) do
     t.integer "superset_id", null: false
     t.datetime "updated_at", null: false
     t.index ["exercise_id"], name: "index_superset_exercises_on_exercise_id"
+    t.index ["superset_id", "exercise_id"], name: "index_superset_exercises_on_superset_id_and_exercise_id", unique: true
     t.index ["superset_id", "position"], name: "index_superset_exercises_on_superset_id_and_position"
-    t.index ["superset_id"], name: "index_superset_exercises_on_superset_id"
   end
 
   create_table "supersets", force: :cascade do |t|
@@ -240,7 +240,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_01_121437) do
     t.index ["exercise_id"], name: "index_workout_sets_on_exercise_id"
     t.index ["superset_id"], name: "index_workout_sets_on_superset_id"
     t.index ["workout_id", "superset_group"], name: "index_workout_sets_on_workout_id_and_superset_group"
-    t.index ["workout_id"], name: "index_workout_sets_on_workout_id"
   end
 
   create_table "workouts", force: :cascade do |t|
@@ -287,7 +286,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_01_121437) do
   add_foreign_key "workout_routine_days", "workout_routines"
   add_foreign_key "workout_routines", "users"
   add_foreign_key "workout_sets", "exercises", on_delete: :restrict
-  add_foreign_key "workout_sets", "supersets"
+  add_foreign_key "workout_sets", "supersets", on_delete: :nullify
   add_foreign_key "workout_sets", "workouts"
   add_foreign_key "workouts", "users"
   add_foreign_key "workouts", "workout_imports", on_delete: :nullify

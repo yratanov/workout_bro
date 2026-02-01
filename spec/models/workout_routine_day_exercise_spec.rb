@@ -1,3 +1,28 @@
+# == Schema Information
+#
+# Table name: workout_routine_day_exercises
+# Database name: primary
+#
+#  id                     :integer          not null, primary key
+#  position               :integer
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  exercise_id            :integer
+#  superset_id            :integer
+#  workout_routine_day_id :integer          not null
+#
+# Indexes
+#
+#  index_workout_routine_day_exercises_on_exercise_id             (exercise_id)
+#  index_workout_routine_day_exercises_on_superset_id             (superset_id)
+#  index_workout_routine_day_exercises_on_workout_routine_day_id  (workout_routine_day_id)
+#
+# Foreign Keys
+#
+#  exercise_id             (exercise_id => exercises.id)
+#  superset_id             (superset_id => supersets.id) ON DELETE => cascade
+#  workout_routine_day_id  (workout_routine_day_id => workout_routine_days.id)
+#
 describe WorkoutRoutineDayExercise do
   fixtures :users,
            :exercises,

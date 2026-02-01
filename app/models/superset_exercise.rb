@@ -12,9 +12,9 @@
 #
 # Indexes
 #
-#  index_superset_exercises_on_exercise_id               (exercise_id)
-#  index_superset_exercises_on_superset_id               (superset_id)
-#  index_superset_exercises_on_superset_id_and_position  (superset_id,position)
+#  index_superset_exercises_on_exercise_id                  (exercise_id)
+#  index_superset_exercises_on_superset_id_and_exercise_id  (superset_id,exercise_id) UNIQUE
+#  index_superset_exercises_on_superset_id_and_position     (superset_id,position)
 #
 # Foreign Keys
 #
