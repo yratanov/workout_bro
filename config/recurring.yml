@@ -15,4 +15,4 @@ production:
     schedule: every hour at minute 12
   garmin_sync:
     class: GarminSyncJob
-    schedule: every day at 6am
+    schedule: every day at 11am
