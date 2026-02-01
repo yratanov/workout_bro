@@ -1,12 +1,12 @@
-<% supersets =
-  Current
-    .user
-    .supersets
-    .includes(:superset_exercises)
-    .where.not(superset_exercises: { id: nil }) %>
+<% supersets = user_supersets %>
 <% has_running_set = workout_set.workout.workout_sets.any?(&:running?) %>
+<% next_item = next_routine_item_for_workout(workout_set.workout) %>
 
-<div data-controller="superset-form" class="space-y-3">
+<div
+  data-controller="superset-form"
+  data-superset-form-default-tab-value="<%= next_item.is_superset ? 'superset' : 'exercise' %>"
+  class="space-y-3"
+>
   <% if supersets.any? %>
     <div class="flex gap-2 mb-3">
       <button
@@ -45,19 +45,10 @@
       <%= form.hidden_field :workout_id %>
       <%= form.collection_select(
         :exercise_id,
-        (
-          if workout_set.workout.workout_routine_day
-            (
-              workout_set.workout.workout_routine_day.exercises +
-                ::Exercise.order(:name)
-            ).uniq.without(workout_set.workout.exercises)
-          else
-            Exercise.order(:name).where.not(id: workout_set.workout.exercise_ids)
-          end
-        ),
+        available_exercises_for_workout_set(workout_set),
         :id,
         :name,
-        {},
+        { selected: next_item.exercise_id },
         {
           class:
             "border flex-1 min-w-[200px] border-slate-500 bg-slate-600 text-white px-3 py-2 rounded",
@@ -82,7 +73,7 @@
           supersets,
           :id,
           :name,
-          {},
+          { selected: next_item.superset_id },
           {
             class:
               "border flex-1 min-w-[200px] border-slate-500 bg-slate-600 text-white px-3 py-2 rounded",
@@ -96,13 +87,7 @@
     </div>
   <% end %>
 
-  <% last_completed_set =
-    workout_set
-      .workout
-      .workout_sets
-      .where.not(ended_at: nil)
-      .order(:ended_at)
-      .last %>
+  <% last_completed_set = last_completed_workout_set(workout_set.workout) %>
   <% if last_completed_set %>
     <%= button t("workout_sets.form.reopen_prev"),
     style: "outlined",

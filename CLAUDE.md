@@ -236,3 +236,28 @@ config/locales/
 ```
 
 **Available modal sizes:** `sm`, `md` (default), `lg`, `xl`
+
+## View Guidelines
+
+**Keep views simple - avoid complex Ruby logic in ERB templates.** Views should only contain:
+- Simple conditionals (`if`/`else` for showing/hiding elements)
+- Iterating over collections
+- Calling helper methods
+- Rendering partials
+
+**Move complex logic to helpers or presenters:**
+- Data querying and filtering → helper methods
+- Business logic calculations → model methods or service objects
+- Complex conditionals → helper methods that return simple values
+
+```erb
+# Bad - complex logic in view
+<%
+  items = Model.where(complex: conditions).order(:position)
+  filtered = items.select { |i| i.some_condition? && !other_ids.include?(i.id) }
+  result = filtered.first&.some_method || default_value
+%>
+
+# Good - logic extracted to helper
+<% result = calculated_result_for(@model) %>
+```

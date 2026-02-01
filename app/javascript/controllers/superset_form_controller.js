@@ -9,8 +9,16 @@ export default class extends Controller {
     "supersetPane",
   ];
 
+  static values = {
+    defaultTab: { type: String, default: "exercise" },
+  };
+
   connect() {
-    this.showExercise();
+    if (this.defaultTabValue === "superset" && this.hasSupersetTabTarget) {
+      this.showSuperset();
+    } else {
+      this.showExercise();
+    }
   }
 
   showExercise() {

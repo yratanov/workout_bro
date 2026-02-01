@@ -31,13 +31,31 @@
             <% end %>
           </div>
 
-          <% if day.exercises.any? %>
+          <% routine_items =
+            day
+              .workout_routine_day_exercises
+              .includes(superset: :exercises)
+              .order(:position) %>
+          <% if routine_items.any? %>
             <div class="space-y-2">
-              <% day.exercises.each do |exercise| %>
-                <div class="flex items-center gap-2 text-slate-300 pl-9">
-                  <span class="text-slate-500">&bull;</span>
-                  <span><%= exercise.name %></span>
-                </div>
+              <% routine_items.each do |item| %>
+                <% if item.superset? %>
+                  <div class="flex items-center gap-2 text-slate-300 pl-9">
+                    <%= icon "superset", size: "w-4 h-4", class: "text-slate-500" %>
+                    <span><%= item.superset.name %></span>
+                  </div>
+                  <% item.superset.exercises.each do |exercise| %>
+                    <div class="flex items-center gap-2 text-slate-400 text-sm pl-14">
+                      <span class="text-slate-600">&bull;</span>
+                      <span><%= exercise.name %></span>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <div class="flex items-center gap-2 text-slate-300 pl-9">
+                    <span class="text-slate-500">&bull;</span>
+                    <span><%= item.exercise.name %></span>
+                  </div>
+                <% end %>
               <% end %>
             </div>
           <% else %>
