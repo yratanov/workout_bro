@@ -10,5 +10,6 @@ ru:
       name_placeholder: "Название дня (напр., День груди, День ног)"
       exercises_title: "Упражнения"
       add_exercise: "Добавить упражнение"
+      add_superset: "Добавить суперсет"
       no_exercises: "Упражнения пока не добавлены"
       select_exercise: "Выберите упражнение..."

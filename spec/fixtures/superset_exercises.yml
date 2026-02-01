@@ -1,0 +1,42 @@
+# == Schema Information
+#
+# Table name: superset_exercises
+# Database name: primary
+#
+#  id          :integer          not null, primary key
+#  position    :integer          not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  exercise_id :integer          not null
+#  superset_id :integer          not null
+#
+# Indexes
+#
+#  index_superset_exercises_on_exercise_id               (exercise_id)
+#  index_superset_exercises_on_superset_id               (superset_id)
+#  index_superset_exercises_on_superset_id_and_position  (superset_id,position)
+#
+# Foreign Keys
+#
+#  exercise_id  (exercise_id => exercises.id)
+#  superset_id  (superset_id => supersets.id) ON DELETE => cascade
+#
+push_pull_bench:
+  superset: push_pull
+  exercise: bench_press
+  position: 1
+
+push_pull_pullup:
+  superset: push_pull
+  exercise: pull_up
+  position: 2
+
+arm_circuit_squat:
+  superset: arm_circuit
+  exercise: squat
+  position: 1
+
+arm_circuit_deadlift:
+  superset: arm_circuit
+  exercise: deadlift
+  position: 2

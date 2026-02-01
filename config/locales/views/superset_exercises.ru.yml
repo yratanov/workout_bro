@@ -1,0 +1,6 @@
+ru:
+  superset_exercises:
+    form:
+      select_exercise: "Выберите упражнение..."
+    exercises:
+      no_exercises: "Упражнения еще не добавлены."

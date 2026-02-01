@@ -1,0 +1,50 @@
+<% exercises = superset.superset_exercises.order(:position) %>
+<% if exercises.any? %>
+  <div
+    class="space-y-2"
+    data-controller="sortable"
+    data-sortable-url-value="<%= move_superset_superset_exercise_path(superset, ":id") %>"
+  >
+    <% exercises.each do |superset_exercise| %>
+      <div
+        class="
+          group flex items-center gap-3 bg-slate-700/50 rounded-lg px-4 py-3
+          hover:bg-slate-700 transition-colors
+        "
+        data-sortable-id="<%= superset_exercise.id %>"
+      >
+        <div
+          class="
+            cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300
+          "
+          data-sortable-handle
+        >
+          <%= icon "grip_vertical" %>
+        </div>
+        <span class="text-slate-400 text-sm font-mono w-6"><%= superset_exercise.position %></span>
+        <% if superset_exercise.exercise.muscle.present? %>
+          <span class="text-slate-400"><%= muscle_icon(superset_exercise.exercise.muscle, size: "w-5 h-5") %></span>
+        <% end %>
+        <span class="flex-1 font-medium"><%= superset_exercise.exercise.name %></span>
+        <% if superset_exercise.exercise.muscle.present? %>
+          <span class="text-slate-400 text-sm hidden sm:block"><%= superset_exercise.exercise.muscle.human_name %></span>
+        <% end %>
+        <%= button style: "link_hover_danger",
+            type: "link",
+            route: superset_superset_exercise_path(superset, superset_exercise),
+            method: :delete,
+            data: {
+              turbo_prefetch: false,
+              turbo_confirm: t("shared.confirmations.delete_confirm"),
+              turbo_method: :delete,
+            } do %>
+          <span class="opacity-0 group-hover:opacity-100 transition-opacity">
+            <%= icon "xmark" %>
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="text-slate-500 text-sm italic py-4"><%= t("superset_exercises.exercises.no_exercises") %></div>
+<% end %>

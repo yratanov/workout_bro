@@ -15,6 +15,11 @@ Rails.application.routes.draw do
   end
 
   resources :exercises
+  resources :supersets do
+    resources :superset_exercises, only: %i[new create destroy] do
+      member { patch :move }
+    end
+  end
   resources :workout_sets, only: %i[new create show edit update destroy] do
     member do
       post :stop
@@ -23,6 +28,7 @@ Rails.application.routes.draw do
       get :notes_modal
       patch :update_notes
     end
+    collection { post :start_superset }
   end
 
   resources :workout_reps, only: %i[new create show edit update destroy]
@@ -32,6 +38,7 @@ Rails.application.routes.draw do
               only: %i[index new create show edit update destroy] do
       resources :workout_routine_day_exercises, only: %i[destroy new create] do
         member { patch :move }
+        collection { get :new_superset }
       end
     end
   end

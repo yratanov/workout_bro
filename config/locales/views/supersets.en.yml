@@ -1,0 +1,27 @@
+en:
+  supersets:
+    index:
+      title: "Supersets"
+      new_superset: "New superset"
+      no_supersets: "No supersets found."
+      create_first: "Create your first superset"
+      exercise_count:
+        zero: "No exercises"
+        one: "1 exercise"
+        other: "%{count} exercises"
+    new:
+      title: "New superset"
+      back_to_supersets: "Back"
+    edit:
+      title: "Edit superset"
+      back_to_superset: "Back"
+    show:
+      back_to_supersets: "Back to supersets"
+      exercises: "Exercises"
+      add_exercise: "Add exercise"
+      exercise_count:
+        zero: "No exercises"
+        one: "1 exercise"
+        other: "%{count} exercises"
+    form:
+      name_placeholder: "Superset name"

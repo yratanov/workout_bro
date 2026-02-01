@@ -1,0 +1,6 @@
+en:
+  superset_exercises:
+    form:
+      select_exercise: "Select exercise..."
+    exercises:
+      no_exercises: "No exercises added yet."

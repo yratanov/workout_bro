@@ -21,12 +21,22 @@
         >
           <%= icon "grip_vertical" %>
         </div>
-        <% if workout_routine_day_exercise.exercise.muscle.present? %>
-          <span class="text-slate-400"><%= muscle_icon(workout_routine_day_exercise.exercise.muscle, size: "w-5 h-5") %></span>
-        <% end %>
-        <span class="flex-1 font-medium"><%= workout_routine_day_exercise.exercise.name %></span>
-        <% if workout_routine_day_exercise.exercise.muscle.present? %>
-          <span class="text-slate-400 text-sm hidden sm:block"><%= workout_routine_day_exercise.exercise.muscle.human_name %></span>
+        <% if workout_routine_day_exercise.superset? %>
+          <span class="text-blue-400"><%= icon "superset", size: "w-5 h-5" %></span>
+          <div class="flex-1">
+            <span class="font-medium"><%= workout_routine_day_exercise.superset.name %></span>
+            <div class="text-slate-400 text-xs mt-1">
+              <%= workout_routine_day_exercise.superset.exercises.map(&:name).join(" + ") %>
+            </div>
+          </div>
+        <% else %>
+          <% if workout_routine_day_exercise.exercise.muscle.present? %>
+            <span class="text-slate-400"><%= muscle_icon(workout_routine_day_exercise.exercise.muscle, size: "w-5 h-5") %></span>
+          <% end %>
+          <span class="flex-1 font-medium"><%= workout_routine_day_exercise.exercise.name %></span>
+          <% if workout_routine_day_exercise.exercise.muscle.present? %>
+            <span class="text-slate-400 text-sm hidden sm:block"><%= workout_routine_day_exercise.exercise.muscle.human_name %></span>
+          <% end %>
         <% end %>
         <%= button style: "link_hover_danger",
             type: "link",

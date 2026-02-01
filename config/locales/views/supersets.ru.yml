@@ -1,0 +1,31 @@
+ru:
+  supersets:
+    index:
+      title: "Суперсеты"
+      new_superset: "Новый суперсет"
+      no_supersets: "Суперсеты не найдены."
+      create_first: "Создать первый суперсет"
+      exercise_count:
+        zero: "Нет упражнений"
+        one: "1 упражнение"
+        few: "%{count} упражнения"
+        many: "%{count} упражнений"
+        other: "%{count} упражнений"
+    new:
+      title: "Новый суперсет"
+      back_to_supersets: "Назад"
+    edit:
+      title: "Редактировать суперсет"
+      back_to_superset: "Назад"
+    show:
+      back_to_supersets: "Назад к суперсетам"
+      exercises: "Упражнения"
+      add_exercise: "Добавить упражнение"
+      exercise_count:
+        zero: "Нет упражнений"
+        one: "1 упражнение"
+        few: "%{count} упражнения"
+        many: "%{count} упражнений"
+        other: "%{count} упражнений"
+    form:
+      name_placeholder: "Название суперсета"

@@ -1,0 +1,7 @@
+<%= app_form_with(model: superset, class: "contents") do |form| %>
+  <%= form.input :name %>
+
+  <div class="mt-6">
+    <%= form.submit t("shared.buttons.save") %>
+  </div>
+<% end %>

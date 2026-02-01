@@ -7,6 +7,10 @@ en:
     formats:
       short: "%b %d"
       long: "%B %d, %Y"
+  errors:
+    messages:
+      exercise_or_superset_required: "must have either an exercise or a superset"
+      exercise_xor_superset: "cannot have both an exercise and a superset"
   activerecord:
     attributes:
       workout:

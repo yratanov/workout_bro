@@ -1,0 +1,15 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-3xl">
+  <div class="mb-6">
+    <%= link_to superset_path(@superset), class: "text-slate-400 hover:text-slate-300 flex items-center gap-2" do %>
+      <%= icon "back", size: "w-5 h-5" %>
+      <%= t(".back_to_superset") %>
+    <% end %>
+  </div>
+
+  <div class="bg-slate-800 rounded-lg p-6">
+    <h1 class="font-bold text-2xl mb-2"><%= t(".title") %></h1>
+    <%= render "form", superset: @superset %>
+  </div>
+</div>

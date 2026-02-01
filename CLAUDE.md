@@ -53,6 +53,26 @@ bundle exec annotaterb # Add schema annotations to models
 
 **After editing ERB files, always run `bundle exec erb-format --write <changed_files>` to format.**
 
+## JavaScript Conventions
+
+**Always prefer async/await over .then() chains for asynchronous code.** This improves readability and error handling.
+
+```javascript
+// Preferred
+async onSubmit(event) {
+  const response = await fetch(url, { method: "POST" });
+  const html = await response.text();
+  // process response
+}
+
+// Avoid
+onSubmit(event) {
+  fetch(url, { method: "POST" })
+    .then((response) => response.text())
+    .then((html) => { /* process response */ });
+}
+```
+
 ## Database
 
 SQLite3 databases stored in `storage/`. Seeds create a test user (`user@example.com` / `password`) with sample workouts.

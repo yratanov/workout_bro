@@ -1,0 +1,45 @@
+<% content_for :title, @superset.name %>
+
+<div class="w-full max-w-3xl">
+  <div class="flex items-center justify-between mb-6">
+    <%= link_to supersets_path, class: "text-slate-400 hover:text-slate-300 flex items-center gap-2" do %>
+      <%= icon "back", size: "w-5 h-5" %>
+      <%= t(".back_to_supersets") %>
+    <% end %>
+    <div class="flex items-center gap-4">
+      <%= link_to t("shared.buttons.edit"),
+      edit_superset_path(@superset),
+      class: "text-blue-400 hover:text-blue-300" %>
+      <%= button t("shared.buttons.delete"),
+      route: superset_path(@superset),
+      method: :delete,
+      style: "link_danger",
+      data: {
+        turbo_confirm: t("shared.confirmations.are_you_sure"),
+      } %>
+    </div>
+  </div>
+
+  <div class="bg-slate-800 rounded-lg p-6 mb-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-blue-400"><%= icon "superset", size: "w-8 h-8" %></span>
+      <h1 class="font-bold text-3xl"><%= @superset.name %></h1>
+    </div>
+    <p class="text-slate-400" id="superset_exercise_count">
+      <%= t(".exercise_count", count: @superset.superset_exercises.count) %>
+    </p>
+  </div>
+
+  <div class="bg-slate-800 rounded-lg p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold"><%= t(".exercises") %></h2>
+      <%= turbo_frame_tag "new_superset_exercise_form" do %>
+        <%= render "superset_exercises/add_exercise_link", superset: @superset %>
+      <% end %>
+    </div>
+
+    <div id="superset_exercises">
+      <%= render "superset_exercises/exercises", superset: @superset %>
+    </div>
+  </div>
+</div>

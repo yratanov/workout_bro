@@ -8,28 +8,36 @@
 #  notes                :text
 #  paused_at            :datetime
 #  started_at           :datetime
+#  superset_group       :integer
 #  total_paused_seconds :integer          default(0)
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  exercise_id          :integer          not null
+#  superset_id          :integer
 #  workout_id           :integer          not null
 #
 # Indexes
 #
-#  index_workout_sets_on_exercise_id  (exercise_id)
-#  index_workout_sets_on_workout_id   (workout_id)
+#  index_workout_sets_on_exercise_id                    (exercise_id)
+#  index_workout_sets_on_superset_id                    (superset_id)
+#  index_workout_sets_on_workout_id                     (workout_id)
+#  index_workout_sets_on_workout_id_and_superset_group  (workout_id,superset_group)
 #
 # Foreign Keys
 #
 #  exercise_id  (exercise_id => exercises.id) ON DELETE => restrict
+#  superset_id  (superset_id => supersets.id)
 #  workout_id   (workout_id => workouts.id)
 #
 
 class WorkoutSet < ApplicationRecord
   belongs_to :workout
   belongs_to :exercise
+  belongs_to :superset, optional: true
 
   has_many :workout_reps, dependent: :destroy
+
+  scope :in_superset_group, ->(group) { where(superset_group: group) }
 
   def running?
     !ended?
@@ -41,6 +49,20 @@ class WorkoutSet < ApplicationRecord
 
   def paused?
     paused_at.present?
+  end
+
+  def in_superset?
+    superset_id.present? && superset_group.present?
+  end
+
+  def superset_sibling_sets
+    return WorkoutSet.none unless in_superset?
+    workout.workout_sets.in_superset_group(superset_group).where.not(id: id)
+  end
+
+  def all_superset_sets
+    return WorkoutSet.none unless in_superset?
+    workout.workout_sets.in_superset_group(superset_group)
   end
 
   def previous_workout_set

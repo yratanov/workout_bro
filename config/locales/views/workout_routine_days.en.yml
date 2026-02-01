@@ -10,5 +10,6 @@ en:
       name_placeholder: "Day name (e.g., Push Day, Leg Day)"
       exercises_title: "Exercises"
       add_exercise: "Add exercise"
+      add_superset: "Add superset"
       no_exercises: "No exercises added yet"
       select_exercise: "Select an exercise..."

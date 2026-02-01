@@ -1,0 +1,18 @@
+<%= turbo_stream.update(
+  "superset_exercises",
+  partial: "superset_exercises/exercises",
+  locals: {
+    superset: @superset,
+  },
+) %>
+<%= turbo_stream.update(
+  "new_superset_exercise_form",
+  partial: "superset_exercises/add_exercise_link",
+  locals: {
+    superset: @superset,
+  },
+) %>
+<%= turbo_stream.update(
+  "superset_exercise_count",
+  t("supersets.show.exercise_count", count: @superset.superset_exercises.reload.count),
+) %>

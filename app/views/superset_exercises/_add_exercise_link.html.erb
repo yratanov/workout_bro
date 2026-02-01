@@ -1,0 +1,6 @@
+<%= link_to new_superset_superset_exercise_path(superset),
+class: "text-blue-400 hover:text-blue-300 text-sm",
+data: { turbo_frame: "new_superset_exercise_form" } do %>
+  <%= icon "plus", size: "w-4 h-4", class: "inline-block" %>
+  <%= t("supersets.show.add_exercise") %>
+<% end %>

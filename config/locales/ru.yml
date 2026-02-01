@@ -7,6 +7,10 @@ ru:
     formats:
       short: "%d %b"
       long: "%d %B %Y"
+  errors:
+    messages:
+      exercise_or_superset_required: "необходимо указать упражнение или суперсет"
+      exercise_xor_superset: "нельзя указать одновременно упражнение и суперсет"
   activerecord:
     attributes:
       workout:

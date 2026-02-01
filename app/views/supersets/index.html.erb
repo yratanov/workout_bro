@@ -1,0 +1,38 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-3xl">
+  <%= page_header title: t(".title") do %>
+    <%= button t(".new_superset"),
+    route: new_superset_path,
+    style: "primary",
+    type: "link" %>
+  <% end %>
+
+  <% if @supersets.any? %>
+    <div id="supersets" class="space-y-3">
+      <% @supersets.each do |superset| %>
+        <%= link_to superset, class: "block bg-slate-800 rounded-lg p-4 hover:bg-slate-700/80 transition-colors" do %>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-blue-400"><%= icon "superset", size: "w-6 h-6" %></span>
+              <div>
+                <h3 class="font-medium text-lg"><%= superset.name %></h3>
+                <p class="text-slate-400 text-sm">
+                  <%= t(".exercise_count", count: superset.superset_exercises.count) %>
+                </p>
+              </div>
+            </div>
+            <%= icon "chevron_right", size: "w-5 h-5", class: "text-slate-500" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <%= empty_state icon: "superset", message: t(".no_supersets") do %>
+      <%= button t(".create_first"),
+      route: new_superset_path,
+      style: "primary",
+      type: "link" %>
+    <% end %>
+  <% end %>
+</div>

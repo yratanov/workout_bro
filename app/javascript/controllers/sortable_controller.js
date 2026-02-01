@@ -19,7 +19,7 @@ export default class extends Controller {
     this.sortable.destroy();
   }
 
-  onEnd(event) {
+  async onEnd(event) {
     const { oldIndex, newIndex } = event;
     if (oldIndex === newIndex) return;
 
@@ -27,16 +27,20 @@ export default class extends Controller {
     const id = item.dataset.sortableId;
     const url = this.urlValue.replace("%3Aid", id).replace(":id", id);
 
-    fetch(url, {
+    const response = await fetch(url, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Accept: "text/vnd.turbo-stream.html",
         "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]')
           .content,
       },
-      body: JSON.stringify({
-        position: newIndex + 1,
-      }),
+      body: JSON.stringify({ position: newIndex + 1 }),
     });
+
+    const html = await response.text();
+    if (html && window.Turbo) {
+      window.Turbo.renderStreamMessage(html);
+    }
   }
 }

@@ -10,10 +10,38 @@ class WorkoutSetsController < ApplicationController
     @workout_set.save!
   end
 
+  def start_superset
+    @workout = Workout.find(params[:workout_id])
+    @superset = Current.user.supersets.find(params[:superset_id])
+
+    superset_group = next_superset_group(@workout)
+
+    @workout_sets =
+      @superset
+        .superset_exercises
+        .order(:position)
+        .map do |se|
+          WorkoutSet.create!(
+            workout: @workout,
+            exercise: se.exercise,
+            superset: @superset,
+            superset_group: superset_group,
+            started_at: Time.current
+          )
+        end
+
+    @active_workout_set = @workout_sets.first
+  end
+
   def stop
     @workout_set = WorkoutSet.find(params[:id])
-    @workout_set.update(ended_at: Time.current)
     @workout = @workout_set.workout
+
+    if @workout_set.in_superset?
+      @workout_set.all_superset_sets.update_all(ended_at: Time.current)
+    else
+      @workout_set.update(ended_at: Time.current)
+    end
   end
 
   def reopen
@@ -48,5 +76,9 @@ class WorkoutSetsController < ApplicationController
 
   def workout_set_params
     params.require(:workout_set).permit(:exercise_id, :workout_id, :notes)
+  end
+
+  def next_superset_group(workout)
+    (workout.workout_sets.maximum(:superset_group) || 0) + 1
   end
 end

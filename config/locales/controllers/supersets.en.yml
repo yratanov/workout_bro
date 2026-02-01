@@ -1,0 +1,6 @@
+en:
+  controllers:
+    supersets:
+      created: "Superset was successfully created."
+      updated: "Superset was successfully updated."
+      destroyed: "Superset was successfully destroyed."

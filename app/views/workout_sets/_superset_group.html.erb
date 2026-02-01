@@ -1,0 +1,87 @@
+<div class="bg-slate-700 rounded" data-controller="superset-tabs accordion">
+  <div
+    class="
+      flex bg-slate-800 items-center rounded-t justify-between px-4 py-3 gap-2
+    "
+  >
+    <button
+      data-action="click->accordion#toggle"
+      data-accordion-target="trigger"
+      class="w-full cursor-pointer transition flex items-center gap-3"
+      aria-expanded="true"
+    >
+      <div data-accordion-target="icon" class="text-slate-400">
+        <%= icon "chevron_down" %>
+      </div>
+      <span class="text-blue-400"><%= icon "superset", size: "w-5 h-5" %></span>
+      <span class="font-semibold text-lg"><%= superset.name %></span>
+      <%= badge do %>
+        <div class="flex gap-1 items-center">
+          <%= icon "stopwatch" %>
+          <%= render(
+            TimerComponent.new(
+              started_at: workout_sets.first.started_at,
+              ended_at: nil,
+              paused_at: nil,
+              total_paused_seconds: 0,
+            ),
+          ) %>
+        </div>
+      <% end %>
+    </button>
+  </div>
+
+  <div
+    class="overflow-hidden transition-all duration-200 ease-in-out"
+    data-accordion-target="content"
+  >
+    <div class="flex gap-1 px-4 py-2 bg-slate-800/50 border-b border-slate-700">
+      <% workout_sets.each_with_index do |ws, index| %>
+        <button
+          type="button"
+          class="px-3 py-1 rounded text-sm transition-colors"
+          data-superset-tabs-target="tab"
+          data-action="click->superset-tabs#switch"
+          data-index="<%= index %>"
+        >
+          <%= ws.exercise.name %>
+        </button>
+      <% end %>
+    </div>
+
+    <% workout_sets.each_with_index do |ws, index| %>
+      <div
+        class="py-3 px-4 hidden"
+        data-superset-tabs-target="pane"
+        data-index="<%= index %>"
+      >
+        <%= turbo_frame_tag ws, "reps" do %>
+          <%= render partial: "workout_reps/list_with_form",
+          locals: {
+            workout_set: ws,
+            workout_rep: ws.workout_reps.new(ws.default_rep_values),
+          } %>
+        <% end %>
+        <%= render partial: "workout_sets/notes",
+        locals: {
+          workout_set: ws,
+          edit_path: notes_modal_workout_set_path(ws),
+        } %>
+      </div>
+    <% end %>
+
+    <% first_running_set = workout_sets.find { |ws| !ws.ended? } %>
+    <% if first_running_set %>
+      <div class="px-4 py-3 flex rounded-b justify-center bg-slate-800">
+        <%= button t("workout_sets.superset_group.complete_superset"),
+        type: "button",
+        style: "success",
+        method: :post,
+        route: stop_workout_set_path(first_running_set),
+        data: {
+          turbo_method: :post,
+        } %>
+      </div>
+    <% end %>
+  </div>
+</div>

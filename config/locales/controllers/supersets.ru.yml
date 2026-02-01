@@ -1,0 +1,6 @@
+ru:
+  controllers:
+    supersets:
+      created: "Суперсет успешно создан."
+      updated: "Суперсет успешно обновлен."
+      destroyed: "Суперсет успешно удален."

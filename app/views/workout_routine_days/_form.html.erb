@@ -25,7 +25,7 @@
     <%= turbo_frame_tag 'new_exercise_form' do %>
     <% end %>
 
-    <div class="mt-3">
+    <div class="mt-3 flex gap-4">
       <%= button t("workout_routine_days.form.add_exercise"),
         type: "link",
         style: "link",
@@ -42,6 +42,24 @@
         <span class="flex items-center gap-2">
           <%= icon "plus" %>
           <%= t("workout_routine_days.form.add_exercise") %>
+        </span>
+      <% end %>
+      <%= button t("workout_routine_days.form.add_superset"),
+        type: "link",
+        style: "link",
+        method: :get,
+        route: new_superset_workout_routine_workout_routine_day_workout_routine_day_exercises_path(
+          workout_routine_day.workout_routine,
+          workout_routine_day,
+        ),
+        data: {
+          turbo_method: :get,
+          turbo_prefetch: false,
+          turbo_frame: "new_exercise_form",
+        } do %>
+        <span class="flex items-center gap-2">
+          <%= icon "superset" %>
+          <%= t("workout_routine_days.form.add_superset") %>
         </span>
       <% end %>
     </div>

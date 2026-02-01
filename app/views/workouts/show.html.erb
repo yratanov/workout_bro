@@ -55,11 +55,7 @@
       <% end %>
 
       <%= turbo_frame_tag ["workout_sets"] do %>
-        <div class="space-y-3">
-          <% @workout.workout_sets.each do |set| %>
-            <%= render set %>
-          <% end %>
-        </div>
+        <%= render "workout_sets/list", workout: @workout %>
       <% end %>
 
       <% unless @workout.ended? %>

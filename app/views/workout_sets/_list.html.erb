@@ -1,5 +1,18 @@
-<% workout.workout_sets.each do |set| %>
-  <div class="mb-5">
-    <%= render set %>
-  </div>
+<% rendered_superset_groups = Set.new %>
+<% workout.workout_sets.order(:created_at).each do |set| %>
+  <% if set.in_superset? %>
+    <% unless rendered_superset_groups.include?(set.superset_group) %>
+      <% rendered_superset_groups.add(set.superset_group) %>
+      <div class="mb-5">
+        <%= render "workout_sets/superset_group",
+            workout_sets: set.all_superset_sets.order(:created_at),
+            superset: set.superset,
+            active_workout_set: set.all_superset_sets.find { |s| !s.ended? } %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="mb-5">
+      <%= render set %>
+    </div>
+  <% end %>
 <% end %>

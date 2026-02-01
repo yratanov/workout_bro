@@ -8,26 +8,34 @@
 #  notes                :text
 #  paused_at            :datetime
 #  started_at           :datetime
+#  superset_group       :integer
 #  total_paused_seconds :integer          default(0)
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  exercise_id          :integer          not null
+#  superset_id          :integer
 #  workout_id           :integer          not null
 #
 # Indexes
 #
-#  index_workout_sets_on_exercise_id  (exercise_id)
-#  index_workout_sets_on_workout_id   (workout_id)
+#  index_workout_sets_on_exercise_id                    (exercise_id)
+#  index_workout_sets_on_superset_id                    (superset_id)
+#  index_workout_sets_on_workout_id                     (workout_id)
+#  index_workout_sets_on_workout_id_and_superset_group  (workout_id,superset_group)
 #
 # Foreign Keys
 #
 #  exercise_id  (exercise_id => exercises.id) ON DELETE => restrict
+#  superset_id  (superset_id => supersets.id)
 #  workout_id   (workout_id => workouts.id)
 #
-require "rails_helper"
-
 describe WorkoutSet do
-  fixtures :users, :workouts, :exercises, :workout_sets, :workout_reps
+  fixtures :users,
+           :workouts,
+           :exercises,
+           :workout_sets,
+           :workout_reps,
+           :supersets
 
   describe "#default_rep_values" do
     let(:user) { users(:john) }
@@ -142,6 +150,147 @@ describe WorkoutSet do
         expect(defaults[:weight]).to eq(10)
         expect(defaults[:band]).to be_nil
       end
+    end
+  end
+
+  describe "#in_superset?" do
+    let(:user) { users(:john) }
+    let(:workout) do
+      Workout.create!(
+        user: user,
+        workout_type: "strength",
+        started_at: 1.hour.ago
+      )
+    end
+
+    it "returns true when has both superset_id and superset_group" do
+      set =
+        WorkoutSet.new(
+          workout: workout,
+          exercise: exercises(:bench_press),
+          superset: supersets(:push_pull),
+          superset_group: 1
+        )
+      expect(set.in_superset?).to be true
+    end
+
+    it "returns false when only has superset_id" do
+      set =
+        WorkoutSet.new(
+          workout: workout,
+          exercise: exercises(:bench_press),
+          superset: supersets(:push_pull)
+        )
+      expect(set.in_superset?).to be false
+    end
+
+    it "returns false when only has superset_group" do
+      set =
+        WorkoutSet.new(
+          workout: workout,
+          exercise: exercises(:bench_press),
+          superset_group: 1
+        )
+      expect(set.in_superset?).to be false
+    end
+
+    it "returns false when has neither" do
+      set = WorkoutSet.new(workout: workout, exercise: exercises(:bench_press))
+      expect(set.in_superset?).to be false
+    end
+  end
+
+  describe "#superset_sibling_sets" do
+    let(:user) { users(:john) }
+    let(:workout) do
+      Workout.create!(
+        user: user,
+        workout_type: "strength",
+        started_at: 1.hour.ago
+      )
+    end
+    let(:superset) { supersets(:push_pull) }
+
+    it "returns other sets in the same superset group" do
+      set1 =
+        WorkoutSet.create!(
+          workout: workout,
+          exercise: exercises(:bench_press),
+          superset: superset,
+          superset_group: 1
+        )
+      set2 =
+        WorkoutSet.create!(
+          workout: workout,
+          exercise: exercises(:pull_up),
+          superset: superset,
+          superset_group: 1
+        )
+
+      expect(set1.superset_sibling_sets).to include(set2)
+      expect(set1.superset_sibling_sets).not_to include(set1)
+    end
+
+    it "excludes sets from different superset groups" do
+      set1 =
+        WorkoutSet.create!(
+          workout: workout,
+          exercise: exercises(:bench_press),
+          superset: superset,
+          superset_group: 1
+        )
+      set2 =
+        WorkoutSet.create!(
+          workout: workout,
+          exercise: exercises(:pull_up),
+          superset: superset,
+          superset_group: 2
+        )
+
+      expect(set1.superset_sibling_sets).not_to include(set2)
+    end
+
+    it "returns empty when not in a superset" do
+      set =
+        WorkoutSet.create!(workout: workout, exercise: exercises(:bench_press))
+      expect(set.superset_sibling_sets).to be_empty
+    end
+  end
+
+  describe "#all_superset_sets" do
+    let(:user) { users(:john) }
+    let(:workout) do
+      Workout.create!(
+        user: user,
+        workout_type: "strength",
+        started_at: 1.hour.ago
+      )
+    end
+    let(:superset) { supersets(:push_pull) }
+
+    it "returns all sets in the same superset group including self" do
+      set1 =
+        WorkoutSet.create!(
+          workout: workout,
+          exercise: exercises(:bench_press),
+          superset: superset,
+          superset_group: 1
+        )
+      set2 =
+        WorkoutSet.create!(
+          workout: workout,
+          exercise: exercises(:pull_up),
+          superset: superset,
+          superset_group: 1
+        )
+
+      expect(set1.all_superset_sets).to include(set1, set2)
+    end
+
+    it "returns empty when not in a superset" do
+      set =
+        WorkoutSet.create!(workout: workout, exercise: exercises(:bench_press))
+      expect(set.all_superset_sets).to be_empty
     end
   end
 end

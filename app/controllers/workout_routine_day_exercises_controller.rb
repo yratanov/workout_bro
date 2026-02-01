@@ -12,6 +12,14 @@ class WorkoutRoutineDayExercisesController < ApplicationController
       WorkoutRoutineDayExercise.new(workout_routine_day: @workout_routine_day)
   end
 
+  def new_superset
+    @workout_routine_day =
+      WorkoutRoutineDay.find(params[:workout_routine_day_id])
+    @workout_routine_day_exercise =
+      WorkoutRoutineDayExercise.new(workout_routine_day: @workout_routine_day)
+    @supersets = Current.user.supersets.order(name: :asc)
+  end
+
   def create
     @workout_routine_day_exercise =
       WorkoutRoutineDayExercise.new(workout_routine_day_exercise_params)
@@ -35,7 +43,19 @@ class WorkoutRoutineDayExercisesController < ApplicationController
 
     reorder_exercises(@exercise, new_position)
 
-    head :ok
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream:
+                 turbo_stream.update(
+                   "exercises",
+                   partial: "workout_routine_days/exercises",
+                   locals: {
+                     workout_routine_day: @workout_routine_day
+                   }
+                 )
+      end
+      format.html { head :ok }
+    end
   end
 
   private
@@ -43,6 +63,7 @@ class WorkoutRoutineDayExercisesController < ApplicationController
   def workout_routine_day_exercise_params
     params.require(:workout_routine_day_exercise).permit(
       :exercise_id,
+      :superset_id,
       :workout_routine_day_id
     )
   end

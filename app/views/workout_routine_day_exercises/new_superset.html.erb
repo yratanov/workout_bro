@@ -1,0 +1,33 @@
+<%= turbo_frame_tag "new_exercise_form" do %>
+  <div class="bg-slate-700/50 rounded-lg px-4 py-3 mt-2">
+    <%= app_form_with(model: @workout_routine_day_exercise, url: workout_routine_workout_routine_day_workout_routine_day_exercises_path(@workout_routine_day.workout_routine, @workout_routine_day), class: "contents") do |form| %>
+      <%= form.hidden_field :workout_routine_day_id %>
+      <div class="flex gap-3 items-center">
+        <div class="flex-1">
+          <%= form.collection_select(
+            :superset_id,
+            @supersets,
+            :id,
+            :name,
+            { prompt: t(".select_superset") },
+            {
+              class:
+                "w-full bg-slate-800 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
+            },
+          ) %>
+        </div>
+        <%= button text: t("shared.buttons.add"),
+        type: "submit",
+        style: "primary",
+        class: "px-4 py-2 text-sm" %>
+        <%= button route: edit_workout_routine_workout_routine_day_path(@workout_routine_day.workout_routine, @workout_routine_day),
+            type: "link",
+            style: "link",
+            class: "text-sm",
+            data: { turbo_frame: "new_exercise_form" } do %>
+          <%= t("shared.buttons.cancel") %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

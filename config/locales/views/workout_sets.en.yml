@@ -2,9 +2,14 @@ en:
   workout_sets:
     form:
       start: "Start!"
+      start_superset: "Start superset"
       reopen_prev: "Reopen prev"
+      single_exercise: "Exercise"
+      superset: "Superset"
     workout_set:
       complete_set: "Complete this set"
+    superset_group:
+      complete_superset: "Complete superset"
     previous_history:
       title: "Previous %{exercise}"
       date: "Date"
