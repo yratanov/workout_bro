@@ -56,3 +56,17 @@ banded_squat:
   with_weights: false
   with_band: true
   user: john
+
+bicep_curl:
+  name: Bicep Curl
+  muscle: biceps
+  with_weights: true
+  with_band: false
+  user: john
+
+tricep_extension:
+  name: Tricep Extension
+  muscle: triceps
+  with_weights: true
+  with_band: false
+  user: john

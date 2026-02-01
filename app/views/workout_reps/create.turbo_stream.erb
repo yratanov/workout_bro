@@ -6,3 +6,11 @@
     workout_rep: @workout_rep,
   },
 ) %>
+
+<%= turbo_stream.update(
+  "rest-timer-container",
+  partial: "workout_reps/rest_timer",
+  locals: {
+    duration: @rest_duration,
+  },
+) %>

@@ -3,6 +3,10 @@ class WorkoutRepsController < ApplicationController
     @workout_rep = WorkoutRep.new(workout_rep_params)
     @workout_set = @workout_rep.workout_set
     @workout_rep.save!
+    @rest_duration = RestTimeCalculator.new(
+      workout_set: @workout_set,
+      user: Current.user
+    ).recommended_seconds
   end
 
   def destroy

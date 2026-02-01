@@ -31,14 +31,6 @@
   <%# Form for adding reps %>
   <% unless workout_set.ended? %>
     <div class="flex items-center gap-3 pt-3 border-t border-slate-600">
-      <div class="flex items-center gap-1 text-slate-400 text-sm tabular-nums">
-        <%= icon "stopwatch" %>
-        <div
-          data-controller="timer"
-          data-timer-show-hours-value="false"
-          data-timer-date-value="<%= (persisted_reps.last&.updated_at || DateTime.now).iso8601 %>"
-        ></div>
-      </div>
       <%= link_to previous_history_workout_set_path(workout_set),
         class: "text-slate-400 hover:text-slate-200 transition-colors",
         data: { turbo_frame: "previous_history_modal" },
