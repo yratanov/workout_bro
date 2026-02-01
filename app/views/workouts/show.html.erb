@@ -86,6 +86,11 @@
         </div>
       </div>
     </div>
+    <%= render partial: "workouts/notes",
+    locals: {
+      workout: @workout,
+      edit_path: notes_modal_workout_path(@workout),
+    } %>
   <% end %>
 
   <div class="h-20"></div>
