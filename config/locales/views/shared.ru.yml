@@ -21,3 +21,7 @@ ru:
     confirmations:
       are_you_sure: "Вы уверены?"
       delete_confirm: "Удалить?"
+    pagination:
+      previous: "Назад"
+      next: "Вперёд"
+      aria_label: "Навигация по страницам"

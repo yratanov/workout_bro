@@ -40,6 +40,11 @@ ru:
           info: "Информация"
         show_backtrace: "Показать стек вызовов"
         show_params: "Показать параметры"
+        showing_logs:
+          one: "%{count} лог ошибки"
+          few: "%{count} лога ошибок"
+          many: "%{count} логов ошибок"
+          other: "%{count} логов ошибок"
     invites:
       show:
         title: "Админ"

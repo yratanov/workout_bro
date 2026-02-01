@@ -1,0 +1,43 @@
+<nav
+  class="flex items-center justify-center gap-1"
+  aria-label="<%= t("shared.pagination.aria_label") %>"
+>
+  <% if show_previous? %>
+    <%= link_to page_path(@current_page - 1),
+        class: "px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition" do %>
+      <span aria-hidden="true">&larr;</span>
+      <span class="sr-only"><%= t("shared.pagination.previous") %></span>
+    <% end %>
+  <% else %>
+    <span class="px-3 py-2 text-sm text-slate-600 cursor-not-allowed">
+      <span aria-hidden="true">&larr;</span>
+    </span>
+  <% end %>
+
+  <% page_numbers.each do |page| %>
+    <% if page == :ellipsis %>
+      <span class="px-2 py-2 text-sm text-slate-500">&hellip;</span>
+    <% elsif page == @current_page %>
+      <span class="px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg">
+        <%= page %>
+      </span>
+    <% else %>
+      <%= link_to page,
+      page_path(page),
+      class:
+        "px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition" %>
+    <% end %>
+  <% end %>
+
+  <% if show_next? %>
+    <%= link_to page_path(@current_page + 1),
+        class: "px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition" do %>
+      <span class="sr-only"><%= t("shared.pagination.next") %></span>
+      <span aria-hidden="true">&rarr;</span>
+    <% end %>
+  <% else %>
+    <span class="px-3 py-2 text-sm text-slate-600 cursor-not-allowed">
+      <span aria-hidden="true">&rarr;</span>
+    </span>
+  <% end %>
+</nav>

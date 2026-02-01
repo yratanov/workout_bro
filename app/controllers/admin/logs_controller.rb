@@ -5,7 +5,7 @@ module Admin
     before_action :require_admin
 
     def show
-      @error_logs = ErrorLog.recent.limit(100)
+      @pagination = paginate(ErrorLog.recent)
     end
   end
 end

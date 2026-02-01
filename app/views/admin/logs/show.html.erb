@@ -11,9 +11,19 @@
         <h2 class="font-semibold text-lg mb-4"><%= t(".error_logs") %></h2>
         <p class="text-slate-400 text-sm mb-6"><%= t(".description") %></p>
 
-        <% if @error_logs.any? %>
+        <% if @pagination.records.any? %>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm text-slate-400">
+              <%= t(".showing_logs", count: @pagination.total_count) %>
+            </p>
+            <%= render PaginationComponent.new(
+              pagination: @pagination,
+              path_proc: ->(page) { admin_logs_path(page: page) },
+            ) %>
+          </div>
+
           <div class="space-y-3">
-            <% @error_logs.each do |log| %>
+            <% @pagination.records.each do |log| %>
               <% ctx = log.context || {} %>
               <div class="bg-slate-700/50 rounded-lg p-3 sm:p-4">
                 <div class="flex flex-col gap-2">
@@ -86,6 +96,13 @@
                 </div>
               </div>
             <% end %>
+          </div>
+
+          <div class="mt-6">
+            <%= render PaginationComponent.new(
+              pagination: @pagination,
+              path_proc: ->(page) { admin_logs_path(page: page) },
+            ) %>
           </div>
         <% else %>
           <p class="text-slate-500 text-center py-8"><%= t(".no_logs") %></p>

@@ -40,6 +40,9 @@ en:
           info: "Info"
         show_backtrace: "Show backtrace"
         show_params: "Show params"
+        showing_logs:
+          one: "%{count} error log"
+          other: "%{count} error logs"
     invites:
       show:
         title: "Admin"

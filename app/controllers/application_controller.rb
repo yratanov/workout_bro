@@ -25,4 +25,19 @@ class ApplicationController < ActionController::Base
                   alert: I18n.t("controllers.application.admin_required")
     end
   end
+
+  def paginate(scope, per_page: 25)
+    total_count = scope.count
+    total_pages = (total_count.to_f / per_page).ceil
+    total_pages = 1 if total_pages.zero?
+
+    current_page = [[params[:page].to_i, 1].max, total_pages].min
+
+    offset = (current_page - 1) * per_page
+    records = scope.offset(offset).limit(per_page)
+
+    Pagination.new(records:, current_page:, total_pages:, total_count:)
+  end
+
+  Pagination = Data.define(:records, :current_page, :total_pages, :total_count)
 end
