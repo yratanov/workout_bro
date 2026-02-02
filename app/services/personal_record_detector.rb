@@ -9,6 +9,8 @@ class PersonalRecordDetector
   def call
     return @new_prs unless @workout.ended?
 
+    @workout.personal_records.destroy_all
+
     if @workout.strength?
       collect_best_candidates
       create_prs_for_improvements

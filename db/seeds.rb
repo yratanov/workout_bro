@@ -81,9 +81,9 @@ day_2.exercises << Exercise.all
       )
     end
   end
-
-  Workout
-    .where.not(ended_at: nil)
-    .order(:started_at)
-    .find_each { |workout| PersonalRecordDetector.new(workout: workout).call }
 end
+
+Workout
+  .where.not(ended_at: nil)
+  .order(:started_at)
+  .find_each { |workout| PersonalRecordDetector.new(workout: workout).call }
