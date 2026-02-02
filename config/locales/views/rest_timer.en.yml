@@ -1,2 +1,5 @@
 en:
-  rest_timer: {}
+  workout_reps:
+    rest_timer:
+      notification_title: "Rest Complete"
+      notification_body: "Time for your next set!"

@@ -5,6 +5,8 @@ export default class extends Controller {
   static values = {
     duration: { type: Number, default: 60 },
     running: { type: Boolean, default: false },
+    notificationTitle: { type: String, default: "Rest Complete" },
+    notificationBody: { type: String, default: "Time for your next set!" },
   };
 
   connect() {
@@ -13,6 +15,7 @@ export default class extends Controller {
     this.beepedAt = new Set();
     this.initAudio();
     this.requestWakeLock();
+    this.requestNotificationPermission();
     this.start();
   }
 
@@ -110,6 +113,7 @@ export default class extends Controller {
     this.displayTarget.textContent = "0:00";
     this.progressBarTarget.style.width = "0%";
     this.playBeep(1200, 300);
+    this.showNotification();
   }
 
   dismiss() {
@@ -130,6 +134,23 @@ export default class extends Controller {
     if (this.wakeLock) {
       this.wakeLock.release();
       this.wakeLock = null;
+    }
+  }
+
+  async requestNotificationPermission() {
+    if ("Notification" in window && Notification.permission === "default") {
+      await Notification.requestPermission();
+    }
+  }
+
+  showNotification() {
+    if ("Notification" in window && Notification.permission === "granted") {
+      new Notification(this.notificationTitleValue, {
+        body: this.notificationBodyValue,
+        icon: "/icon2.png",
+        tag: "rest-timer",
+        requireInteraction: false,
+      });
     }
   }
 }

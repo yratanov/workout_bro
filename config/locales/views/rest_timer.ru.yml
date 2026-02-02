@@ -1,2 +1,5 @@
 ru:
-  rest_timer: {}
+  workout_reps:
+    rest_timer:
+      notification_title: "Отдых завершён"
+      notification_body: "Время для следующего подхода!"
