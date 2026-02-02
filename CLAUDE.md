@@ -17,6 +17,7 @@ bin/rails server       # Start Rails server only
 ## Testing
 
 Uses RSpec with Capybara for feature tests.
+Always add test for code you are adding.
 
 ```bash
 bundle exec rspec                        # Run all tests
