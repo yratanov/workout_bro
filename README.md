@@ -1,6 +1,7 @@
-# Workout Bro
+## [Workout Bro](https://yratanov.github.io/workout_bro/)
 
 A self-hosted workout tracking app for strength training and running. Own your fitness data.
+
 
 - Track strength workouts with sets, reps, and weights
 - Log running sessions
