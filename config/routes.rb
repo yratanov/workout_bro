@@ -69,6 +69,7 @@ Rails.application.routes.draw do
       get ":id/status", action: :status, as: :status, on: :collection
       delete ":id", action: :destroy, as: :import, on: :collection
     end
+    resource :exports, only: %i[show create], controller: "exports"
   end
 
   namespace :admin do
