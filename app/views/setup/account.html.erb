@@ -37,22 +37,27 @@
                    autocomplete: "username",
                    placeholder: t(".email_placeholder"),
                  } %>
-      <%= form.input :password,
-                 as: :password,
-                 label: t(".password_label"),
-                 margin: "",
-                 input_html: {
-                   required: true,
-                   autocomplete: "new-password",
-                   placeholder: t(".password_placeholder"),
-                   maxlength: 72,
-                 } %>
+      <div>
+        <%= form.input :password,
+                   as: :password,
+                   label: t(".password_label"),
+                   margin: "",
+                   input_html: {
+                     required: !@user&.persisted?,
+                     autocomplete: "new-password",
+                     placeholder: t(".password_placeholder"),
+                     maxlength: 72,
+                   } %>
+        <% if @user&.persisted? %>
+          <p class="text-slate-500 text-xs mt-1"><%= t(".password_hint") %></p>
+        <% end %>
+      </div>
       <%= form.input :password_confirmation,
                  as: :password,
                  label: t(".password_confirmation_label"),
                  margin: "",
                  input_html: {
-                   required: true,
+                   required: !@user&.persisted?,
                    autocomplete: "new-password",
                    placeholder: t(".password_confirmation_placeholder"),
                    maxlength: 72,

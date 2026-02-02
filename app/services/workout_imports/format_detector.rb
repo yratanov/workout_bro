@@ -1,6 +1,19 @@
 module WorkoutImports
   class FormatDetector
     FORMATS = {
+      workout_bro: {
+        headers: %w[
+          date
+          workout_type
+          exercise_name
+          muscle_group
+          set_number
+          rep_number
+          reps
+          weight
+        ],
+        parser: "WorkoutImports::Parsers::WorkoutBroParser"
+      },
       strong_app: {
         headers: %w[Date Workout\ Name Exercise\ Name Set\ Order Weight Reps],
         parser: "WorkoutImports::Parsers::StrongAppParser"

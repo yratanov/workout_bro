@@ -11,6 +11,7 @@ ru:
       email_placeholder: "вы@example.com"
       password_label: "Пароль"
       password_placeholder: "Выберите пароль"
+      password_hint: "Оставьте пустым, чтобы сохранить текущий пароль"
       password_confirmation_label: "Подтверждение пароля"
       password_confirmation_placeholder: "Подтвердите ваш пароль"
       next: "Далее"

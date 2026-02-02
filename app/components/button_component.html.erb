@@ -3,7 +3,7 @@
     <%= content %>
   <% end %>
 <% elsif @options[:method] %>
-  <%= button_to @route, method: @options[:method], type: @type, data: @data, class: classes, form_class: 'flex' do %>
+  <%= button_to @route, method: @options[:method], type: @type, data: @data, class: classes, form_class: 'flex', disabled: @disabled do %>
     <%= content %>
   <% end %>
 <% elsif @type == 'submit' %>

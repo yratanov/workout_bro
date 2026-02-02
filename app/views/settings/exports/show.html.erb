@@ -20,12 +20,14 @@
           <% end %>
         </div>
 
-        <%= button_to settings_exports_path,
-            method: :post,
-            class: "inline-flex",
-            disabled: @completed_workouts_count.zero? do %>
-          <%= button text: t(".download_button"), style: "primary", tag: :span %>
-        <% end %>
+        <%= button t(".download_button"),
+        style: "primary",
+        route: settings_exports_path,
+        method: :post,
+        data: {
+          turbo: false,
+        },
+        disabled: @completed_workouts_count.zero? %>
 
         <% if @completed_workouts_count.zero? %>
           <p class="text-slate-500 text-sm mt-4"><%= t(".no_workouts_hint") %></p>

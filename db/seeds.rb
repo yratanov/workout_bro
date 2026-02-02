@@ -50,6 +50,7 @@ MusclesSeeder.new.call
   }
 ].each { |exercise_data| Exercise.create!(exercise_data.merge(user:)) }
 
+workout_day = WorkoutRoutine.last
 day = workout_day.workout_routine_days.create!(name: "Day 1")
 day.exercises << Exercise.all
 day_2 = workout_day.workout_routine_days.create!(name: "Day 2")
@@ -80,4 +81,9 @@ day_2.exercises << Exercise.all
       )
     end
   end
+
+  Workout
+    .where.not(ended_at: nil)
+    .order(:started_at)
+    .find_each { |workout| PersonalRecordDetector.new(workout: workout).call }
 end

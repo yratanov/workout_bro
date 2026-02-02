@@ -28,6 +28,7 @@ class ButtonComponent < ViewComponent::Base
     text: "",
     route: nil,
     data: {},
+    disabled: false,
     **options
   )
     @style = style
@@ -36,6 +37,7 @@ class ButtonComponent < ViewComponent::Base
     @text = text
     @route = route
     @data = data
+    @disabled = disabled
     @options = options
   end
 

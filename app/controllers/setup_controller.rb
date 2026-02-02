@@ -6,6 +6,7 @@ class SetupController < ApplicationController
   before_action :set_current_step
 
   def show
+    @user = Current.user if authenticated? && @current_step == "account"
     render current_step_template
   end
 
@@ -52,14 +53,24 @@ class SetupController < ApplicationController
   end
 
   def handle_account_step
-    @user = User.new(account_params)
-    @user.role = :admin if User.count == 0
-    if @user.save
-      start_new_session_for(@user)
-      advance_to_step(1)
-      redirect_to setup_path
+    if authenticated?
+      @user = Current.user
+      if @user.update(account_update_params)
+        advance_to_step(1)
+        redirect_to setup_path
+      else
+        render :account, status: :unprocessable_entity
+      end
     else
-      render :account, status: :unprocessable_entity
+      @user = User.new(account_params)
+      @user.role = :admin if User.count == 0
+      if @user.save
+        start_new_session_for(@user)
+        advance_to_step(1)
+        redirect_to setup_path
+      else
+        render :account, status: :unprocessable_entity
+      end
     end
   end
 
@@ -125,6 +136,15 @@ class SetupController < ApplicationController
       :password,
       :password_confirmation
     )
+  end
+
+  def account_update_params
+    permitted = account_params
+    if permitted[:password].blank?
+      permitted.except(:password, :password_confirmation)
+    else
+      permitted
+    end
   end
 
   def garmin_params

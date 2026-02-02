@@ -11,6 +11,7 @@ en:
       email_placeholder: "you@example.com"
       password_label: "Password"
       password_placeholder: "Choose a password"
+      password_hint: "Leave blank to keep current password"
       password_confirmation_label: "Confirm Password"
       password_confirmation_placeholder: "Confirm your password"
       next: "Next"
