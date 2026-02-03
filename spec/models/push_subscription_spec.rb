@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: push_subscriptions
+# Database name: primary
+#
+#  id           :integer          not null, primary key
+#  auth         :string           not null
+#  endpoint     :string           not null
+#  last_used_at :datetime
+#  p256dh       :string           not null
+#  user_agent   :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  user_id      :integer          not null
+#
+# Indexes
+#
+#  index_push_subscriptions_on_user_id_and_endpoint  (user_id,endpoint) UNIQUE
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
 describe PushSubscription do
   fixtures :users
 

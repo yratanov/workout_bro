@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: scheduled_push_notifications
+# Database name: primary
+#
+#  id                :integer          not null, primary key
+#  notification_type :string           not null
+#  scheduled_for     :datetime         not null
+#  status            :string           default("pending"), not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  job_id            :string           not null
+#  user_id           :integer          not null
+#
+# Indexes
+#
+#  index_scheduled_push_notifications_on_job_id   (job_id) UNIQUE
+#  index_scheduled_push_notifications_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
 describe ScheduledPushNotification do
   fixtures :users
 

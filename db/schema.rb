@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_214305) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_220501) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -115,7 +115,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_214305) do
     t.string "user_agent"
     t.integer "user_id", null: false
     t.index ["user_id", "endpoint"], name: "index_push_subscriptions_on_user_id_and_endpoint", unique: true
-    t.index ["user_id"], name: "index_push_subscriptions_on_user_id"
   end
 
   create_table "scheduled_push_notifications", force: :cascade do |t|

@@ -15,7 +15,6 @@
 #
 # Indexes
 #
-#  index_push_subscriptions_on_user_id               (user_id)
 #  index_push_subscriptions_on_user_id_and_endpoint  (user_id,endpoint) UNIQUE
 #
 # Foreign Keys
