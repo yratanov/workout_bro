@@ -68,7 +68,7 @@ if [ -z "${VAPID_PUBLIC_KEY}" ] || [ -z "${VAPID_PRIVATE_KEY}" ]; then
   else
     # Web container: generate new VAPID keys using Ruby
     echo "Generating VAPID keys for Web Push notifications..."
-    VAPID_KEYS=$(ruby -e "require 'web-push'; keys = WebPush.generate_key; puts \"export VAPID_PUBLIC_KEY='#{keys.public_key}'\nexport VAPID_PRIVATE_KEY='#{keys.private_key}'\"")
+    VAPID_KEYS=$(bundle exec ruby -e "require 'web-push'; keys = WebPush.generate_key; puts \"export VAPID_PUBLIC_KEY='#{keys.public_key}'\nexport VAPID_PRIVATE_KEY='#{keys.private_key}'\"")
     echo "$VAPID_KEYS" > "$STORED_VAPID_PATH"
     echo "export VAPID_SUBJECT='mailto:admin@workout-bro.com'" >> "$STORED_VAPID_PATH"
     chmod 600 "$STORED_VAPID_PATH"
