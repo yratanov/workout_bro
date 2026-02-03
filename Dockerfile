@@ -35,7 +35,9 @@ RUN apt-get update -qq && \
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
+RUN bundle config set force_ruby_platform false && \
+    bundle lock --add-platform x86_64-linux && \
+    bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
@@ -45,8 +47,10 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Build Tailwind CSS
-RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails tailwindcss:build
+# Tailwind CSS is pre-built before Docker build (see publish_docker.sh)
+# This is required because the tailwindcss binary doesn't run under QEMU emulation
+# when cross-compiling for linux/amd64 on ARM Macs
+RUN test -s app/assets/builds/tailwind.css || (echo "ERROR: tailwind.css missing! Run 'bundle exec rails tailwindcss:build' before docker build" && exit 1)
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
