@@ -153,5 +153,35 @@
       </div>
     </main>
     <%= turbo_frame_tag "notes_modal" %>
+    <!-- iOS Install Prompt -->
+    <div data-controller="ios-install-prompt">
+      <div
+        data-ios-install-prompt-target="banner"
+        class="
+          hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-800 border-t border-slate-600
+          p-4 shadow-lg transition-all duration-300 ease-in-out
+        "
+      >
+        <div class="max-w-lg mx-auto flex items-start gap-3">
+          <%= image_tag "icon.png", class: "w-12 h-12 rounded-xl flex-shrink-0" %>
+          <div class="flex-1 min-w-0">
+            <p class="font-semibold text-white text-sm">
+              <%= t("shared.ios_install_prompt.title") %>
+            </p>
+            <p class="text-slate-300 text-xs mt-1">
+              <%= t("shared.ios_install_prompt.instructions_html") %>
+            </p>
+          </div>
+          <button
+            type="button"
+            data-action="ios-install-prompt#dismiss"
+            class="text-slate-400 hover:text-white p-1 flex-shrink-0"
+            aria-label="<%= t("shared.buttons.cancel") %>"
+          >
+            <%= icon "xmark", size: "w-5 h-5" %>
+          </button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

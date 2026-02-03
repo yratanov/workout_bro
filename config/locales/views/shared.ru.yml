@@ -25,3 +25,6 @@ ru:
       previous: "Назад"
       next: "Вперёд"
       aria_label: "Навигация по страницам"
+    ios_install_prompt:
+      title: "Установить Workout Bro"
+      instructions_html: "Нажмите <strong>Поделиться</strong>, затем <strong>На экран «Домой»</strong> для push-уведомлений."
