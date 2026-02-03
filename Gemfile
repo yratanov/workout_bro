@@ -81,3 +81,5 @@ gem "view_component"
 gem "pry-rails"
 
 gem "inline_svg", "~> 1.10"
+
+gem "web-push"

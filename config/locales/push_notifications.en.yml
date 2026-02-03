@@ -1,0 +1,5 @@
+en:
+  push_notifications:
+    rest_timer:
+      title: "Rest Complete"
+      body: "Time for your next set!"

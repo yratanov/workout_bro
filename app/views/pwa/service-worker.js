@@ -65,24 +65,43 @@ function shouldCache(request) {
   );
 }
 
-// Push notification support (optional - uncomment to enable)
-// self.addEventListener("push", async (event) => {
-//   const { title, options } = await event.data.json();
-//   event.waitUntil(self.registration.showNotification(title, options));
-// });
+// Push notification support
+self.addEventListener("push", (event) => {
+  if (!event.data) return;
 
-// self.addEventListener("notificationclick", (event) => {
-//   event.notification.close();
-//   event.waitUntil(
-//     clients.matchAll({ type: "window" }).then((clientList) => {
-//       for (const client of clientList) {
-//         if (new URL(client.url).pathname === event.notification.data.path && "focus" in client) {
-//           return client.focus();
-//         }
-//       }
-//       if (clients.openWindow) {
-//         return clients.openWindow(event.notification.data.path);
-//       }
-//     })
-//   );
-// });
+  const payload = event.data.json();
+  const { title, options } = payload;
+
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      ...options,
+      vibrate: [200, 100, 200],
+    }),
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  const path = event.notification.data?.path || "/";
+
+  event.waitUntil(
+    clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then((clientList) => {
+        // Try to focus an existing window
+        for (const client of clientList) {
+          if (
+            new URL(client.url).origin === self.location.origin &&
+            "focus" in client
+          ) {
+            return client.focus();
+          }
+        }
+        // Open a new window if none exists
+        if (clients.openWindow) {
+          return clients.openWindow(path);
+        }
+      }),
+  );
+});

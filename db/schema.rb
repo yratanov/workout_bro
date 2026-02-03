@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_01_132509) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_214305) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -103,6 +103,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_01_132509) do
     t.index ["user_id", "exercise_id", "pr_type", "band"], name: "index_prs_on_user_exercise_type_band"
     t.index ["workout_id"], name: "index_personal_records_on_workout_id"
     t.index ["workout_rep_id"], name: "index_personal_records_on_workout_rep_id"
+  end
+
+  create_table "push_subscriptions", force: :cascade do |t|
+    t.string "auth", null: false
+    t.datetime "created_at", null: false
+    t.string "endpoint", null: false
+    t.datetime "last_used_at"
+    t.string "p256dh", null: false
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.integer "user_id", null: false
+    t.index ["user_id", "endpoint"], name: "index_push_subscriptions_on_user_id_and_endpoint", unique: true
+    t.index ["user_id"], name: "index_push_subscriptions_on_user_id"
+  end
+
+  create_table "scheduled_push_notifications", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "job_id", null: false
+    t.string "notification_type", null: false
+    t.datetime "scheduled_for", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["job_id"], name: "index_scheduled_push_notifications_on_job_id", unique: true
+    t.index ["user_id"], name: "index_scheduled_push_notifications_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -272,6 +297,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_01_132509) do
   add_foreign_key "personal_records", "users"
   add_foreign_key "personal_records", "workout_reps", on_delete: :cascade
   add_foreign_key "personal_records", "workouts", on_delete: :cascade
+  add_foreign_key "push_subscriptions", "users"
+  add_foreign_key "scheduled_push_notifications", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "superset_exercises", "exercises"
   add_foreign_key "superset_exercises", "supersets", on_delete: :cascade

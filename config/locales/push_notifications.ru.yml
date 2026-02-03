@@ -1,0 +1,5 @@
+ru:
+  push_notifications:
+    rest_timer:
+      title: "Отдых завершен"
+      body: "Время следующего подхода!"

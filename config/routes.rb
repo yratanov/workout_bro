@@ -58,6 +58,17 @@ Rails.application.routes.draw do
   get "stats", to: "stats#index", as: :stats
   get "personal_records", to: "personal_records#index", as: :personal_records
 
+  resources :push_subscriptions, only: %i[create] do
+    collection do
+      delete :destroy, action: :destroy
+      get :vapid_public_key
+    end
+  end
+
+  resources :scheduled_push_notifications, only: %i[create destroy] do
+    collection { delete :cancel_all }
+  end
+
   namespace :settings do
     get "/", to: redirect("/settings/profile")
     resource :profile, only: %i[show update], controller: "profile"
