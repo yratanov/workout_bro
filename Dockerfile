@@ -47,10 +47,10 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Tailwind CSS is pre-built before Docker build (see publish_docker.sh)
-# This is required because the tailwindcss binary doesn't run under QEMU emulation
-# when cross-compiling for linux/amd64 on ARM Macs
-RUN test -s app/assets/builds/tailwind.css || (echo "ERROR: tailwind.css missing! Run 'bundle exec rails tailwindcss:build' before docker build" && exit 1)
+# Build Tailwind CSS if not pre-built
+# On CI (native linux/amd64), this builds successfully inside Docker
+# On ARM Macs cross-compiling via QEMU, pre-build with publish_docker.sh
+RUN test -s app/assets/builds/tailwind.css || bundle exec rails tailwindcss:build
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
