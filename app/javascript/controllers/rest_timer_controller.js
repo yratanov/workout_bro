@@ -23,7 +23,7 @@ export default class extends Controller {
   disconnect() {
     this.stop();
     this.releaseWakeLock();
-    this.cancelServerPush();
+    // Don't cancel server push here - we want it to fire when app is backgrounded
   }
 
   start() {
