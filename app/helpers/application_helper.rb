@@ -45,6 +45,20 @@ module ApplicationHelper
     parts.join(" ")
   end
 
+  def render_markdown(text)
+    return "" if text.blank?
+
+    renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: true)
+    markdown =
+      Redcarpet::Markdown.new(
+        renderer,
+        autolink: true,
+        tables: true,
+        fenced_code_blocks: true
+      )
+    markdown.render(text).html_safe
+  end
+
   def render_step_indicator(current_step, total_steps)
     content_tag(:div, class: "flex items-center gap-2") do
       (1..total_steps)

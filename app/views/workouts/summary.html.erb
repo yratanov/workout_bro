@@ -218,7 +218,7 @@
       </div>
       <% if @workout.ai_summary.present? %>
         <div class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">
-          <%= simple_format(@workout.ai_summary) %>
+          <%= render_markdown(@workout.ai_summary) %>
         </div>
       <% else %>
         <div data-ai-feedback-target="loading">
