@@ -52,6 +52,7 @@ class User < ApplicationRecord
   has_many :supersets, dependent: :destroy
   has_many :push_subscriptions, dependent: :destroy
   has_many :scheduled_push_notifications, dependent: :destroy
+  has_one :ai_trainer, dependent: :destroy
 
   AVAILABLE_LOCALES = %w[en ru].freeze
   WEIGHT_UNITS = %w[kg lbs].freeze
@@ -68,6 +69,10 @@ class User < ApplicationRecord
 
   def setup_completed?
     setup_completed
+  end
+
+  def ai_configured?
+    ai_provider.present? && ai_model.present? && ai_api_key.present?
   end
 
   def garmin_credential

@@ -11,6 +11,7 @@ class WorkoutsController < ApplicationController
                   resume
                   notes_modal
                   update_notes
+                  ai_feedback_status
                 ]
 
   # GET /workouts or /workouts.json
@@ -145,6 +146,7 @@ class WorkoutsController < ApplicationController
       if @workout.update(ended_at: Time.current)
         @new_prs = PersonalRecordDetector.new(workout: @workout).call
         session[:workout_summary_prs] = @new_prs.map(&:id)
+        enqueue_ai_feedback if current_user.ai_trainer&.configured?
         format.html { redirect_to summary_workout_path(@workout) }
         format.json { render :show, status: :created, location: @workout }
       else
@@ -203,6 +205,21 @@ class WorkoutsController < ApplicationController
     @workout.update(notes: params[:workout][:notes])
   end
 
+  # GET /workouts/1/ai_feedback_status
+  def ai_feedback_status
+    render json: {
+             status: @workout.ai_summary.present? ? "completed" : "pending",
+             ai_summary:
+               (
+                 if @workout.ai_summary.present?
+                   helpers.simple_format(@workout.ai_summary)
+                 else
+                   nil
+                 end
+               )
+           }
+  end
+
   # PATCH/PUT /workouts/1 or /workouts/1.json
   def update
     respond_to do |format|
@@ -259,6 +276,10 @@ class WorkoutsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_workout
     @workout = current_user.workouts.find(params.expect(:id))
+  end
+
+  def enqueue_ai_feedback
+    GenerateAiWorkoutFeedbackJob.perform_later(workout: @workout)
   end
 
   # Only allow a list of trusted parameters through.

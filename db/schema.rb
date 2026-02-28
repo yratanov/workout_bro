@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_28_144722) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_28_154222) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -37,6 +37,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_144722) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "ai_trainers", force: :cascade do |t|
+    t.integer "approach", default: 2, null: false
+    t.integer "communication_style", default: 2, null: false
+    t.datetime "created_at", null: false
+    t.string "custom_instructions"
+    t.json "error_details"
+    t.boolean "goal_build_muscle", default: false, null: false
+    t.boolean "goal_general_fitness", default: true, null: false
+    t.boolean "goal_improve_endurance", default: false, null: false
+    t.boolean "goal_increase_strength", default: false, null: false
+    t.boolean "goal_lose_weight", default: false, null: false
+    t.integer "status", default: 0, null: false
+    t.text "summary"
+    t.text "system_prompt"
+    t.boolean "train_on_existing_data", default: true, null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_ai_trainers_on_user_id", unique: true
   end
 
   create_table "error_logs", force: :cascade do |t|
@@ -270,6 +290,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_144722) do
   end
 
   create_table "workouts", force: :cascade do |t|
+    t.text "ai_summary"
     t.datetime "created_at", null: false
     t.date "date"
     t.integer "distance"
@@ -291,6 +312,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_144722) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "ai_trainers", "users", on_delete: :cascade
   add_foreign_key "exercises", "muscles", on_delete: :nullify
   add_foreign_key "exercises", "users"
   add_foreign_key "invites", "users"

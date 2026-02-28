@@ -1,0 +1,38 @@
+# == Schema Information
+#
+# Table name: ai_trainers
+# Database name: primary
+#
+#  id                     :integer          not null, primary key
+#  approach               :integer          default("balanced"), not null
+#  communication_style    :integer          default("motivational"), not null
+#  custom_instructions    :string
+#  error_details          :json
+#  goal_build_muscle      :boolean          default(FALSE), not null
+#  goal_general_fitness   :boolean          default(TRUE), not null
+#  goal_improve_endurance :boolean          default(FALSE), not null
+#  goal_increase_strength :boolean          default(FALSE), not null
+#  goal_lose_weight       :boolean          default(FALSE), not null
+#  status                 :integer          default("pending"), not null
+#  summary                :text
+#  system_prompt          :text
+#  train_on_existing_data :boolean          default(TRUE), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  user_id                :integer          not null
+#
+# Indexes
+#
+#  index_ai_trainers_on_user_id  (user_id) UNIQUE
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id) ON DELETE => cascade
+#
+johns_trainer:
+  user: john
+  approach: 2
+  communication_style: 2
+  goal_general_fitness: true
+  train_on_existing_data: true
+  status: 0

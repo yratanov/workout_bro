@@ -75,6 +75,8 @@ en:
       pace_unit: "min/km"
       faster: "faster"
       slower: "slower"
+      ai_feedback_title: "AI Trainer Feedback"
+      ai_feedback_loading: "Your trainer is analyzing your workout..."
       notes: "Notes"
       set_notes: "Set Notes"
       pr_types:

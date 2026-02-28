@@ -203,6 +203,42 @@
       edit_path: notes_modal_workout_path(@workout),
     } %>
   <% end %>
+  <!-- AI Trainer Feedback -->
+  <% if current_user.ai_trainer&.configured? %>
+    <div
+      class="bg-slate-800 rounded-lg p-4 mb-6"
+      data-controller="ai-feedback"
+      data-ai-feedback-url-value="<%= ai_feedback_status_workout_path(@workout) %>"
+    >
+      <div class="flex items-center gap-2 mb-3">
+        <%= icon "sparkles", size: "w-5 h-5", class: "text-purple-400" %>
+        <h3 class="text-purple-400 font-semibold">
+          <%= t(".ai_feedback_title") %>
+        </h3>
+      </div>
+      <% if @workout.ai_summary.present? %>
+        <div class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">
+          <%= simple_format(@workout.ai_summary) %>
+        </div>
+      <% else %>
+        <div data-ai-feedback-target="loading">
+          <div class="flex items-center gap-2 text-slate-400 text-sm">
+            <div
+              class="
+                w-4 h-4 border-2 border-purple-400 border-t-transparent rounded-full
+                animate-spin
+              "
+            ></div>
+            <span><%= t(".ai_feedback_loading") %></span>
+          </div>
+        </div>
+        <div
+          data-ai-feedback-target="content"
+          class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none"
+        ></div>
+      <% end %>
+    </div>
+  <% end %>
   <!-- Action Buttons -->
   <div class="flex gap-3 justify-center mt-8">
     <%= button t(".view_details"),

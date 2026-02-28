@@ -75,6 +75,8 @@ ru:
       pace_unit: "мин/км"
       faster: "быстрее"
       slower: "медленнее"
+      ai_feedback_title: "Отзыв ИИ тренера"
+      ai_feedback_loading: "Ваш тренер анализирует тренировку..."
       notes: "Заметки"
       set_notes: "Заметки к подходам"
       pr_types:

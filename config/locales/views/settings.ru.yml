@@ -97,6 +97,33 @@ ru:
         api_key_placeholder: "Введите ваш API ключ"
         api_key_hint: "API ключ сохранён. Оставьте пустым, чтобы сохранить текущий."
         save: "Сохранить изменения"
+        trainer_title: "ИИ Тренер"
+        trainer_warning: "Пожалуйста, настройте провайдера ИИ, модель и API ключ выше перед созданием тренера."
+        trainer_processing: "Создаём вашего персонального тренера... Это может занять минуту."
+        trainer_error: "Не удалось создать тренера: %{error}"
+        trainer_confirm: "Это использует ваш API ключ для генерации профиля ИИ тренера. Будет использовано количество токенов. Продолжить?"
+        approach_label: "Подход"
+        approaches:
+          supportive: "Поддерживающий"
+          tough_love: "Жёсткий"
+          balanced: "Сбалансированный"
+        communication_style_label: "Стиль общения"
+        communication_styles:
+          concise: "Краткий"
+          detailed: "Подробный"
+          motivational: "Мотивирующий"
+        custom_instructions_label: "Пользовательские инструкции"
+        custom_instructions_placeholder: "Особые предпочтения для вашего тренера..."
+        goals_label: "Фитнес-цели"
+        goals:
+          goal_build_muscle: "Набрать мышечную массу"
+          goal_lose_weight: "Похудеть"
+          goal_improve_endurance: "Улучшить выносливость"
+          goal_increase_strength: "Увеличить силу"
+          goal_general_fitness: "Общая физическая подготовка"
+        train_on_existing_data: "Обучить на ваших данных в Workout Bro"
+        create_trainer: "Создать ИИ тренера"
+        recreate_trainer: "Пересоздать ИИ тренера"
     exports:
       show:
         title: "Экспорт тренировок"

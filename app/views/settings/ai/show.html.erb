@@ -6,7 +6,7 @@
   <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
     <%= render SettingsMenuComponent.new(current_page: :ai) %>
 
-    <div class="flex-1 min-w-0">
+    <div class="flex-1 min-w-0 space-y-6">
       <div class="bg-slate-800 rounded-lg p-4 sm:p-6">
         <h2 class="font-semibold text-lg mb-4"><%= t(".ai_configuration") %></h2>
 
@@ -63,6 +63,123 @@
 
           <div class="pt-2">
             <%= button text: t(".save"), type: "submit", style: "primary" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div
+        class="bg-slate-800 rounded-lg p-4 sm:p-6"
+        data-controller="ai-trainer"
+        data-ai-trainer-url-value="<%= trainer_status_settings_ai_path %>"
+        data-ai-trainer-processing-value="<%= @ai_trainer.in_progress? %>"
+        data-ai-trainer-configured-value="<%= @user.ai_configured? %>"
+      >
+        <h2 class="font-semibold text-lg mb-4"><%= t(".trainer_title") %></h2>
+
+        <% unless @user.ai_configured? %>
+          <div
+            class="
+              rounded-lg bg-yellow-900/30 border border-yellow-700 p-4 mb-4
+            "
+            data-ai-trainer-target="warning"
+          >
+            <p class="text-yellow-300 text-sm"><%= t(".trainer_warning") %></p>
+          </div>
+        <% end %>
+
+        <% if @ai_trainer.in_progress? %>
+          <div
+            class="
+              rounded-lg bg-blue-900/30 border border-blue-700 p-4 mb-4 animate-pulse
+            "
+            data-ai-trainer-target="processingBanner"
+          >
+            <p class="text-blue-300 text-sm"><%= t(".trainer_processing") %></p>
+          </div>
+        <% end %>
+
+        <% if @ai_trainer.failed? %>
+          <div class="rounded-lg bg-red-900/30 border border-red-700 p-4 mb-4">
+            <p class="text-red-300 text-sm"><%= t(".trainer_error", error: @ai_trainer.error_details&.dig("message")) %></p>
+          </div>
+        <% end %>
+
+        <% if @ai_trainer.configured? %>
+          <div
+            class="
+              prose prose-invert prose-sm max-w-none mb-6 p-4 bg-slate-700/50 rounded-lg
+            "
+          >
+            <%= simple_format(@ai_trainer.summary) %>
+          </div>
+        <% end %>
+
+        <%= app_form_with model: @ai_trainer,
+                          url: create_trainer_settings_ai_path,
+                          method: :post,
+                          class: "space-y-6",
+                          data: { ai_trainer_target: "form" } do |form| %>
+          <%= form.input :approach,
+                     as: :select,
+                     label: t(".approach_label"),
+                     margin: "",
+                     collection:
+                       AiTrainer.approaches.keys.map { |k| [t(".approaches.#{k}"), k] },
+                     input_html: {
+                       disabled: !@user.ai_configured? || @ai_trainer.in_progress?,
+                     } %>
+
+          <%= form.input :communication_style,
+                     as: :select,
+                     label: t(".communication_style_label"),
+                     margin: "",
+                     collection:
+                       AiTrainer.communication_styles.keys.map { |k|
+                         [t(".communication_styles.#{k}"), k]
+                       },
+                     input_html: {
+                       disabled: !@user.ai_configured? || @ai_trainer.in_progress?,
+                     } %>
+
+          <%= form.input :custom_instructions,
+                     as: :text,
+                     label: t(".custom_instructions_label"),
+                     margin: "",
+                     input_html: {
+                       rows: 3,
+                       placeholder: t(".custom_instructions_placeholder"),
+                       disabled: !@user.ai_configured? || @ai_trainer.in_progress?,
+                     } %>
+
+          <div class="space-y-3">
+            <label class="block text-sm font-medium text-slate-300"><%= t(".goals_label") %></label>
+            <% AiTrainer::GOALS.each do |goal| %>
+              <%= form.toggle goal, t(".goals.#{goal}") %>
+            <% end %>
+          </div>
+
+          <div>
+            <%= form.toggle :train_on_existing_data, t(".train_on_existing_data") %>
+          </div>
+
+          <div class="pt-2">
+            <% if @ai_trainer.configured? %>
+              <%= button text: t(".recreate_trainer"),
+              type: "submit",
+              style: "warning",
+              disabled: !@user.ai_configured? || @ai_trainer.in_progress?,
+              data: {
+                turbo_confirm: t(".trainer_confirm"),
+              } %>
+            <% else %>
+              <%= button text: t(".create_trainer"),
+              type: "submit",
+              style: "primary",
+              disabled: !@user.ai_configured? || @ai_trainer.in_progress?,
+              data: {
+                turbo_confirm: t(".trainer_confirm"),
+              } %>
+            <% end %>
           </div>
         <% end %>
       </div>

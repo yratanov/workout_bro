@@ -260,6 +260,91 @@ describe "Workouts" do
     end
   end
 
+  describe "POST /workouts/:id/stop with AI trainer" do
+    fixtures :ai_trainers
+
+    let!(:workout) do
+      Workout.create!(
+        user: user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+    end
+
+    context "when user has a configured AI trainer" do
+      before do
+        user.update!(ai_provider: "gemini", ai_model: "gemini-2.0-flash", ai_api_key: "test-key")
+        user.ai_trainer.update!(
+          status: :completed,
+          summary: "Trainer profile.",
+          system_prompt: "You are a trainer."
+        )
+      end
+
+      it "enqueues GenerateAiWorkoutFeedbackJob" do
+        expect {
+          post stop_workout_path(workout)
+        }.to have_enqueued_job(GenerateAiWorkoutFeedbackJob)
+      end
+    end
+
+    context "when user has no AI trainer" do
+      before { user.ai_trainer&.destroy }
+
+      it "does not enqueue GenerateAiWorkoutFeedbackJob" do
+        expect {
+          post stop_workout_path(workout)
+        }.not_to have_enqueued_job(GenerateAiWorkoutFeedbackJob)
+      end
+    end
+  end
+
+  describe "GET /workouts/:id/ai_feedback_status" do
+    let!(:workout) do
+      Workout.create!(
+        user: user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+    end
+
+    it "returns pending when no ai_summary" do
+      get ai_feedback_status_workout_path(workout), as: :json
+
+      expect(response).to have_http_status(:success)
+      json = JSON.parse(response.body)
+      expect(json["status"]).to eq("pending")
+      expect(json["ai_summary"]).to be_nil
+    end
+
+    it "returns completed with ai_summary when present" do
+      workout.update!(ai_summary: "Great workout!")
+
+      get ai_feedback_status_workout_path(workout), as: :json
+
+      expect(response).to have_http_status(:success)
+      json = JSON.parse(response.body)
+      expect(json["status"]).to eq("completed")
+      expect(json["ai_summary"]).to include("Great workout!")
+    end
+
+    it "returns 404 for another user's workout" do
+      other_workout = Workout.create!(
+        user: users(:jane),
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current
+      )
+
+      get ai_feedback_status_workout_path(other_workout), as: :json
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "POST /workouts/:id/pause" do
     let!(:workout) do
       Workout.create!(

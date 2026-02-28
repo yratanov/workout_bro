@@ -95,6 +95,33 @@ en:
         api_key_placeholder: "Enter your API key"
         api_key_hint: "API key is saved. Leave blank to keep current key."
         save: "Save Changes"
+        trainer_title: "AI Trainer"
+        trainer_warning: "Please configure your AI provider, model, and API key above before creating a trainer."
+        trainer_processing: "Creating your personal trainer... This may take a minute."
+        trainer_error: "Failed to create trainer: %{error}"
+        trainer_confirm: "This will use your API key to generate an AI trainer profile. Token usage will apply. Continue?"
+        approach_label: "Approach"
+        approaches:
+          supportive: "Supportive"
+          tough_love: "Tough Love"
+          balanced: "Balanced"
+        communication_style_label: "Communication Style"
+        communication_styles:
+          concise: "Concise"
+          detailed: "Detailed"
+          motivational: "Motivational"
+        custom_instructions_label: "Custom Instructions"
+        custom_instructions_placeholder: "Any specific preferences for your trainer persona..."
+        goals_label: "Fitness Goals"
+        goals:
+          goal_build_muscle: "Build muscle"
+          goal_lose_weight: "Lose weight"
+          goal_improve_endurance: "Improve endurance"
+          goal_increase_strength: "Increase strength"
+          goal_general_fitness: "General fitness"
+        train_on_existing_data: "Train on your existing data in Workout Bro"
+        create_trainer: "Create AI Trainer"
+        recreate_trainer: "Recreate AI Trainer"
     exports:
       show:
         title: "Export Workouts"

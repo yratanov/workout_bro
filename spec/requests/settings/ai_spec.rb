@@ -15,6 +15,22 @@ describe "Settings::Ai" do
       get settings_ai_path
       expect(response.body).to include("AI Settings")
     end
+
+    it "displays the AI trainer section" do
+      get settings_ai_path
+      expect(response.body).to include("AI Trainer")
+    end
+
+    it "shows warning when AI is not configured" do
+      get settings_ai_path
+      expect(response.body).to include("configure your AI provider")
+    end
+
+    it "does not show warning when AI is configured" do
+      user.update!(ai_provider: "gemini", ai_model: "gemini-2.5-flash", ai_api_key: "test-key")
+      get settings_ai_path
+      expect(response.body).not_to include("configure your AI provider")
+    end
   end
 
   describe "PATCH /settings/ai" do
@@ -91,6 +107,68 @@ describe "Settings::Ai" do
         follow_redirect!
         expect(response.body).to include("AI settings updated successfully")
       end
+    end
+  end
+
+  describe "POST /settings/ai/create_trainer" do
+    it "creates an ai_trainer and enqueues job" do
+      expect {
+        post create_trainer_settings_ai_path,
+             params: {
+               ai_trainer: {
+                 approach: "balanced",
+                 communication_style: "motivational",
+                 goal_general_fitness: "1",
+                 train_on_existing_data: "1"
+               }
+             }
+      }.to have_enqueued_job(CreateAiTrainerJob)
+
+      expect(response).to redirect_to(settings_ai_path)
+      expect(user.reload.ai_trainer).to be_present
+      expect(user.ai_trainer.balanced?).to be true
+      expect(user.ai_trainer.motivational?).to be true
+    end
+
+    it "updates existing ai_trainer" do
+      post create_trainer_settings_ai_path,
+           params: {
+             ai_trainer: {
+               approach: "tough_love",
+               communication_style: "detailed"
+             }
+           }
+
+      user.ai_trainer.reload
+      expect(user.ai_trainer.tough_love?).to be true
+      expect(user.ai_trainer.detailed?).to be true
+    end
+  end
+
+  describe "GET /settings/ai/trainer_status" do
+    it "returns trainer status as JSON" do
+      user.ai_trainer.update!(status: :in_progress)
+
+      get trainer_status_settings_ai_path, as: :json
+      expect(response).to have_http_status(:success)
+
+      data = response.parsed_body
+      expect(data["status"]).to eq("in_progress")
+    end
+
+    it "returns pending status for default trainer" do
+      get trainer_status_settings_ai_path, as: :json
+      data = response.parsed_body
+      expect(data["status"]).to eq("pending")
+    end
+
+    it "returns error_details on failure" do
+      user.ai_trainer.update!(status: :failed, error_details: { message: "API key invalid" })
+
+      get trainer_status_settings_ai_path, as: :json
+      data = response.parsed_body
+      expect(data["status"]).to eq("failed")
+      expect(data["error_details"]["message"]).to eq("API key invalid")
     end
   end
 

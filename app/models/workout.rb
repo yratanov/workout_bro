@@ -4,6 +4,7 @@
 # Database name: primary
 #
 #  id                     :integer          not null, primary key
+#  ai_summary             :text
 #  date                   :date
 #  distance               :integer
 #  ended_at               :datetime

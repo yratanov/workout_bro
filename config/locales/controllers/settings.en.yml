@@ -12,6 +12,8 @@ en:
         missing_credentials: "Please configure your Garmin username and password first"
       ai:
         updated: "AI settings updated successfully"
+        trainer_created: "AI trainer creation started. This may take a minute."
+        trainer_failed: "Failed to start AI trainer creation. Please try again."
       imports:
         started: "Import started. Your workouts will be imported in the background."
         reverted:
