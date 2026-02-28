@@ -88,6 +88,35 @@
             <%= stat_card label: t(".pace"), size: :sm do %>
               <%= format_pace(@summary.pace) %>
             <% end %>
+            <% if @workout.avg_heart_rate.present? %>
+              <%= stat_card label: t(".avg_hr"), size: :sm do %>
+                <%= @workout.avg_heart_rate %>
+                bpm
+              <% end %>
+            <% end %>
+            <% if @workout.max_heart_rate.present? %>
+              <%= stat_card label: t(".max_hr"), size: :sm do %>
+                <%= @workout.max_heart_rate %>
+                bpm
+              <% end %>
+            <% end %>
+            <% if @workout.avg_cadence.present? %>
+              <%= stat_card label: t(".cadence"), size: :sm do %>
+                <%= @workout.avg_cadence %>
+                spm
+              <% end %>
+            <% end %>
+            <% if @workout.elevation_gain.present? %>
+              <%= stat_card label: t(".elevation"), size: :sm do %>
+                <%= @workout.elevation_gain.round(0) %>
+                m
+              <% end %>
+            <% end %>
+            <% if @workout.vo2max.present? %>
+              <%= stat_card label: t(".vo2max"), size: :sm do %>
+                <%= @workout.vo2max.round(1) %>
+              <% end %>
+            <% end %>
           </div>
           <!-- Run Comparison -->
           <% if @summary.previous_workout && @summary.comparison&.pace_diff %>
@@ -117,6 +146,20 @@
               </div>
             </div>
           <% end %>
+        <% end %>
+        <!-- AI Trainer Feedback -->
+        <% if @workout.ai_summary.present? %>
+          <div class="mb-4">
+            <div class="flex items-center gap-2 mb-2">
+              <%= icon "sparkles", size: "w-4 h-4", class: "text-purple-400" %>
+              <div class="text-purple-400 text-xs font-semibold"><%= t(".ai_feedback_title") %></div>
+            </div>
+            <div class="bg-slate-700/50 rounded-lg p-3">
+              <div class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">
+                <%= render_markdown(@workout.ai_summary) %>
+              </div>
+            </div>
+          </div>
         <% end %>
       </div>
 
