@@ -50,6 +50,35 @@ describe "Settings::Ai" do
         expect(user.ai_model).to eq("")
       end
 
+      it "saves the API key" do
+        patch settings_ai_path,
+              params: {
+                user: {
+                  ai_provider: "gemini",
+                  ai_model: "gemini-2.5-pro",
+                  ai_api_key: "test-api-key-123"
+                }
+              }
+
+        user.reload
+        expect(user.ai_api_key).to eq("test-api-key-123")
+      end
+
+      it "does not overwrite API key when blank" do
+        user.update!(ai_api_key: "existing-key")
+
+        patch settings_ai_path,
+              params: {
+                user: {
+                  ai_provider: "gemini",
+                  ai_api_key: ""
+                }
+              }
+
+        user.reload
+        expect(user.ai_api_key).to eq("existing-key")
+      end
+
       it "displays success message" do
         patch settings_ai_path,
               params: {

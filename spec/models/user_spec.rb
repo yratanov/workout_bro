@@ -4,6 +4,7 @@
 # Database name: primary
 #
 #  id              :integer          not null, primary key
+#  ai_api_key      :string
 #  ai_model        :string
 #  ai_provider     :string
 #  email_address   :string           not null

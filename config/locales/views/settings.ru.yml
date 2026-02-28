@@ -93,6 +93,9 @@ ru:
         provider_label: "Провайдер ИИ"
         select_provider: "Выберите провайдера..."
         model_label: "Модель"
+        api_key_label: "API ключ"
+        api_key_placeholder: "Введите ваш API ключ"
+        api_key_hint: "API ключ сохранён. Оставьте пустым, чтобы сохранить текущий."
         save: "Сохранить изменения"
     exports:
       show:

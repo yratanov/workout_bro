@@ -91,6 +91,9 @@ en:
         provider_label: "AI Provider"
         select_provider: "Select a provider..."
         model_label: "Model"
+        api_key_label: "API Key"
+        api_key_placeholder: "Enter your API key"
+        api_key_hint: "API key is saved. Leave blank to keep current key."
         save: "Save Changes"
     exports:
       show:

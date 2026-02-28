@@ -33,7 +33,7 @@
 
           <div
             data-ai-settings-target="modelContainer"
-            class="<%= "hidden" unless @user.ai_provider.present? %>"
+            class="space-y-6 <%= "hidden" unless @user.ai_provider.present? %>"
           >
             <%= form.input :ai_model,
                        as: :select,
@@ -45,6 +45,20 @@
                            ai_settings_target: "modelSelect",
                          },
                        } %>
+
+            <div>
+              <%= form.input :ai_api_key,
+                         as: :password,
+                         label: t(".api_key_label"),
+                         margin: "",
+                         input_html: {
+                           autocomplete: "off",
+                           placeholder: t(".api_key_placeholder"),
+                         } %>
+              <% if @user.ai_api_key.present? %>
+                <p class="mt-1 text-sm text-slate-400"><%= t(".api_key_hint") %></p>
+              <% end %>
+            </div>
           </div>
 
           <div class="pt-2">

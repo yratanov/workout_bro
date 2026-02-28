@@ -31,7 +31,10 @@ module Settings
     end
 
     def ai_params
-      params.require(:user).permit(:ai_provider, :ai_model)
+      permitted =
+        params.require(:user).permit(:ai_provider, :ai_model, :ai_api_key)
+      permitted.delete(:ai_api_key) if permitted[:ai_api_key].blank?
+      permitted
     end
   end
 end

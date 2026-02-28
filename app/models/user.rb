@@ -4,6 +4,7 @@
 # Database name: primary
 #
 #  id              :integer          not null, primary key
+#  ai_api_key      :string
 #  ai_model        :string
 #  ai_provider     :string
 #  email_address   :string           not null
@@ -28,6 +29,7 @@
 
 class User < ApplicationRecord
   has_secure_password
+  encrypts :ai_api_key
 
   enum :role, { user: 0, admin: 1 }
 
