@@ -1,0 +1,54 @@
+<% content_for :title, activity_type_label(@activity) %>
+
+<div class="w-full max-w-2xl">
+  <%= page_header title: activity_type_label(@activity) %>
+
+  <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+    <div class="flex items-center gap-2 mb-4">
+      <%= icon activity_icon(@activity),
+      size: "w-5 h-5",
+      class: activity_color_class(@activity) %>
+      <span class="<%= activity_color_class(@activity) %> font-semibold">
+        <%= activity_type_label(@activity) %>
+      </span>
+      <span class="text-slate-500 text-sm ml-auto">
+        <%= @activity.created_at.strftime("%-d %b %Y, %H:%M") %>
+      </span>
+    </div>
+
+    <% if @activity.weekly_report? && @activity.week_start %>
+      <div class="text-slate-400 text-sm mb-4">
+        <%= @activity.week_start.strftime("%-d %b") %>
+        –
+        <%= (@activity.week_start + 6.days).strftime("%-d %b, %Y") %>
+      </div>
+    <% end %>
+
+    <% if @activity.completed? && @activity.content.present? %>
+      <div class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">
+        <%= render_markdown(@activity.content) %>
+      </div>
+    <% elsif @activity.failed? %>
+      <div class="text-red-400 text-sm">
+        <p><%= t(".failed") %></p>
+        <% if @activity.error_message.present? %>
+          <p class="mt-2 text-slate-500 text-xs"><%= @activity.error_message %></p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-4 flex items-center gap-3">
+    <%= button t("shared.buttons.back"),
+    type: "link",
+    style: "outlined",
+    route: ai_trainer_activities_path %>
+
+    <% if @activity.workout_review? && @activity.workout %>
+      <%= button t(".view_workout"),
+      type: "link",
+      style: "primary",
+      route: workout_path(@activity.workout) %>
+    <% end %>
+  </div>
+</div>

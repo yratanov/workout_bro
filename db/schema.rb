@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_28_203257) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_28_210002) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -53,6 +53,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_203257) do
     t.index ["user_id"], name: "index_ai_logs_on_user_id"
   end
 
+  create_table "ai_trainer_activities", force: :cascade do |t|
+    t.integer "activity_type", null: false
+    t.integer "ai_trainer_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.text "error_message"
+    t.integer "status", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.datetime "viewed_at"
+    t.date "week_start"
+    t.integer "workout_id"
+    t.index ["ai_trainer_id", "activity_type", "created_at"], name: "idx_activities_trainer_type_created"
+    t.index ["ai_trainer_id"], name: "index_ai_trainer_activities_on_ai_trainer_id"
+    t.index ["user_id", "activity_type"], name: "index_ai_trainer_activities_on_user_id_and_activity_type"
+    t.index ["user_id", "created_at"], name: "index_ai_trainer_activities_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_ai_trainer_activities_on_user_id"
+    t.index ["workout_id"], name: "index_ai_trainer_activities_on_workout_id"
+  end
+
   create_table "ai_trainers", force: :cascade do |t|
     t.integer "approach", default: 2, null: false
     t.integer "communication_style", default: 2, null: false
@@ -68,6 +88,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_203257) do
     t.text "summary"
     t.text "system_prompt"
     t.boolean "train_on_existing_data", default: true, null: false
+    t.text "trainer_profile"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["user_id"], name: "index_ai_trainers_on_user_id", unique: true
@@ -345,6 +366,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_203257) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "ai_logs", "users"
+  add_foreign_key "ai_trainer_activities", "ai_trainers", on_delete: :cascade
+  add_foreign_key "ai_trainer_activities", "users"
+  add_foreign_key "ai_trainer_activities", "workouts", on_delete: :nullify
   add_foreign_key "ai_trainers", "users", on_delete: :cascade
   add_foreign_key "exercises", "muscles", on_delete: :nullify
   add_foreign_key "exercises", "users"

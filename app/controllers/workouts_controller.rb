@@ -207,16 +207,11 @@ class WorkoutsController < ApplicationController
 
   # GET /workouts/1/ai_feedback_status
   def ai_feedback_status
+    activity = @workout.ai_trainer_activity
+    completed = activity&.completed? && activity.content.present?
     render json: {
-             status: @workout.ai_summary.present? ? "completed" : "pending",
-             ai_summary:
-               (
-                 if @workout.ai_summary.present?
-                   helpers.simple_format(@workout.ai_summary)
-                 else
-                   nil
-                 end
-               )
+             status: completed ? "completed" : "pending",
+             ai_summary: completed ? helpers.simple_format(activity.content) : nil
            }
   end
 

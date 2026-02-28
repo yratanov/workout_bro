@@ -46,6 +46,7 @@ class Workout < ApplicationRecord
 
   has_one :workout_routine, through: :workout_routine_day
   has_many :personal_records, dependent: :destroy
+  has_one :ai_trainer_activity, dependent: :nullify
 
   enum :workout_type, { strength: 0, run: 1 }
 

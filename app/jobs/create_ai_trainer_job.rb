@@ -7,16 +7,14 @@ class CreateAiTrainerJob < ApplicationJob
 
     prompt = AiTrainerPromptBuilder.new(ai_trainer).call
     client = GeminiClient.new(api_key: user.ai_api_key, model: user.ai_model)
-    summary =
+    trainer_profile =
       client.generate(prompt, log_context: { user:, action: "create_trainer" })
-    system_prompt = AiTrainerSystemPromptCompiler.new(ai_trainer, summary).call
 
-    ai_trainer.update!(
-      summary:,
-      system_prompt:,
-      status: :completed,
-      error_details: nil
-    )
+    ai_trainer.update!(trainer_profile:, status: :completed, error_details: nil)
+
+    if ai_trainer.train_on_existing_data
+      GenerateFullReviewJob.perform_later(ai_trainer:)
+    end
   rescue => e
     ai_trainer.update!(status: :failed, error_details: { message: e.message })
     raise

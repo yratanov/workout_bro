@@ -17,6 +17,7 @@
 #  summary                :text
 #  system_prompt          :text
 #  train_on_existing_data :boolean          default(TRUE), not null
+#  trainer_profile        :text
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  user_id                :integer          not null
@@ -35,4 +36,6 @@ johns_trainer:
   communication_style: 2
   goal_general_fitness: true
   train_on_existing_data: true
-  status: 0
+  status: 2
+  trainer_profile: "A balanced, motivational fitness trainer focused on general fitness."
+  summary: "A balanced, motivational fitness trainer focused on general fitness."

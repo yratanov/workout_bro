@@ -3,39 +3,43 @@
 class GenerateWeeklyReportJob < ApplicationJob
   queue_as :default
 
+  COMPACTION_THRESHOLD = 4
+
   def perform(user:, week_start:)
+    ai_trainer = user.ai_trainer
+    return unless ai_trainer
+
+    # Keep legacy weekly_reports in sync during transition
     report = user.weekly_reports.find_or_create_by!(week_start: week_start)
     return if report.completed?
 
     report.pending!
 
+    activity =
+      ai_trainer.ai_trainer_activities.create!(
+        user:,
+        activity_type: :weekly_report,
+        week_start: week_start,
+        status: :pending
+      )
+
     response = AiWeeklyReportService.new(user, week_start).call
 
+    activity.update!(content: response, status: :completed)
     report.update!(ai_summary: response, status: :completed)
 
-    append_recommendations(user, response)
+    trigger_compaction_if_needed(ai_trainer)
   rescue => e
+    activity&.update(status: :failed, error_message: e.message)
     report&.update(status: :failed, error_message: e.message)
     Rails.logger.error("Weekly report failed for user #{user.id}: #{e.message}")
   end
 
   private
 
-  def append_recommendations(user, response)
-    ai_trainer = user.ai_trainer
-    return unless ai_trainer
-
-    recommendations = extract_recommendations(response)
-    return if recommendations.blank?
-
-    updated_prompt = [ai_trainer.system_prompt, recommendations].compact.join(
-      "\n\n"
-    )
-    ai_trainer.update!(system_prompt: updated_prompt)
-  end
-
-  def extract_recommendations(response)
-    match = response.match(/^(## Week .+)/m)
-    match&.[](1)
+  def trigger_compaction_if_needed(ai_trainer)
+    if ai_trainer.weekly_reports_since_last_review_count >= COMPACTION_THRESHOLD
+      GenerateFullReviewJob.perform_later(ai_trainer:)
+    end
   end
 end

@@ -1,0 +1,82 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-2xl">
+  <%= page_header title: t(".title") %>
+
+  <% if @activities.any? %>
+    <div class="relative">
+      <!-- Timeline line -->
+      <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-slate-700"></div>
+
+      <div class="space-y-4">
+        <% @activities.each do |activity| %>
+          <%= link_to ai_trainer_activity_path(activity),
+            class: "block relative pl-10" do %>
+            <!-- Timeline dot -->
+            <div
+              class="
+                absolute left-2.5 top-4 w-3 h-3 rounded-full ring-2 ring-slate-800
+                <%= activity_dot_class(activity) %>
+              "
+            ></div>
+
+            <div
+              class="
+                bg-slate-800 rounded-lg p-4 hover:bg-slate-750 transition-colors border
+                border-slate-700
+              "
+            >
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <% unless activity.viewed? %>
+                    <span class="w-2 h-2 bg-red-500 rounded-full flex-shrink-0"></span>
+                  <% end %>
+                  <%= icon activity_icon(activity),
+                  size: "w-4 h-4",
+                  class: activity_color_class(activity) %>
+                  <span class="<%= activity_color_class(activity) %> text-sm font-semibold">
+                    <%= activity_type_label(activity) %>
+                  </span>
+                </div>
+                <span class="text-slate-500 text-xs">
+                  <%= activity.created_at.strftime("%-d %b %Y") %>
+                </span>
+              </div>
+
+              <% if activity.content.present? %>
+                <p class="text-slate-400 text-sm line-clamp-2">
+                  <%= strip_tags(render_markdown(activity.content.truncate(200))) %>
+                </p>
+              <% end %>
+
+              <% if activity.workout_review? && activity.workout %>
+                <div class="mt-2 flex items-center gap-1 text-slate-500 text-xs">
+                  <%= icon "dumbbell", size: "w-3 h-3" %>
+                  <span>
+                    <% if activity.workout.workout_routine_day %>
+                      <%= activity.workout.workout_routine&.name %>
+                      ·
+                      <%= activity.workout.workout_routine_day.name %>
+                    <% else %>
+                      <%= activity.workout.strength? ? t(".strength") : t(".run") %>
+                    <% end %>
+                  </span>
+                </div>
+              <% end %>
+
+              <% if activity.weekly_report? && activity.week_start %>
+                <div class="mt-2 text-slate-500 text-xs">
+                  <%= activity.week_start.strftime("%-d %b") %>
+                  –
+                  <%= (activity.week_start + 6.days).strftime("%-d %b") %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <%= empty_state icon: "sparkles", message: t(".empty") %>
+  <% end %>
+</div>

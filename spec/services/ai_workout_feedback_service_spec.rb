@@ -3,7 +3,11 @@ describe AiWorkoutFeedbackService do
 
   let(:user) do
     users(:john).tap do |u|
-      u.update!(ai_provider: "gemini", ai_model: "gemini-2.0-flash", ai_api_key: "test-key")
+      u.update!(
+        ai_provider: "gemini",
+        ai_model: "gemini-2.0-flash",
+        ai_api_key: "test-key"
+      )
     end
   end
 
@@ -11,8 +15,7 @@ describe AiWorkoutFeedbackService do
     user.ai_trainer.tap do |t|
       t.update!(
         status: :completed,
-        summary: "A motivational trainer profile.",
-        system_prompt: "You are a supportive fitness trainer."
+        trainer_profile: "A motivational trainer profile."
       )
     end
   end
@@ -31,16 +34,18 @@ describe AiWorkoutFeedbackService do
 
   describe "#call" do
     it "calls GeminiClient with a prompt containing workout data" do
-      workout_set = workout.workout_sets.create!(
-        exercise: exercises(:bench_press),
-        started_at: 30.minutes.ago
-      )
+      workout_set =
+        workout.workout_sets.create!(
+          exercise: exercises(:bench_press),
+          started_at: 30.minutes.ago
+        )
       workout_set.workout_reps.create!(weight: 100, reps: 10)
 
       mock_client = instance_double(GeminiClient)
-      allow(GeminiClient).to receive(:new)
-        .with(api_key: "test-key", model: "gemini-2.0-flash")
-        .and_return(mock_client)
+      allow(GeminiClient).to receive(:new).with(
+        api_key: "test-key",
+        model: "gemini-2.0-flash"
+      ).and_return(mock_client)
       allow(mock_client).to receive(:generate).and_return("Great workout!")
 
       result = described_class.new(workout).call
@@ -53,7 +58,7 @@ describe AiWorkoutFeedbackService do
       end
     end
 
-    it "includes system prompt from ai_trainer" do
+    it "includes trainer profile in prompt context" do
       mock_client = instance_double(GeminiClient)
       allow(GeminiClient).to receive(:new).and_return(mock_client)
       allow(mock_client).to receive(:generate).and_return("Feedback")
@@ -61,7 +66,7 @@ describe AiWorkoutFeedbackService do
       described_class.new(workout).call
 
       expect(mock_client).to have_received(:generate) do |prompt|
-        expect(prompt).to include("You are a supportive fitness trainer.")
+        expect(prompt).to include("A motivational trainer profile.")
       end
     end
 

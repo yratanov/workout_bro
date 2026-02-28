@@ -17,6 +17,7 @@
 #  summary                :text
 #  system_prompt          :text
 #  train_on_existing_data :boolean          default(TRUE), not null
+#  trainer_profile        :text
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  user_id                :integer          not null
@@ -36,15 +37,28 @@ describe AiTrainer do
 
   describe "enums" do
     it "defines approach enum" do
-      expect(AiTrainer.approaches).to eq("supportive" => 0, "tough_love" => 1, "balanced" => 2)
+      expect(AiTrainer.approaches).to eq(
+        "supportive" => 0,
+        "tough_love" => 1,
+        "balanced" => 2
+      )
     end
 
     it "defines communication_style enum" do
-      expect(AiTrainer.communication_styles).to eq("concise" => 0, "detailed" => 1, "motivational" => 2)
+      expect(AiTrainer.communication_styles).to eq(
+        "concise" => 0,
+        "detailed" => 1,
+        "motivational" => 2
+      )
     end
 
     it "defines status enum" do
-      expect(AiTrainer.statuses).to eq("pending" => 0, "in_progress" => 1, "completed" => 2, "failed" => 3)
+      expect(AiTrainer.statuses).to eq(
+        "pending" => 0,
+        "in_progress" => 1,
+        "completed" => 2,
+        "failed" => 3
+      )
     end
   end
 
@@ -71,21 +85,21 @@ describe AiTrainer do
   end
 
   describe "#configured?" do
-    it "returns true when completed with summary" do
+    it "returns true when completed with trainer_profile" do
       ai_trainer.status = :completed
-      ai_trainer.summary = "A trainer summary"
+      ai_trainer.trainer_profile = "A trainer profile"
       expect(ai_trainer.configured?).to be true
     end
 
     it "returns false when not completed" do
       ai_trainer.status = :pending
-      ai_trainer.summary = "A trainer summary"
+      ai_trainer.trainer_profile = "A trainer profile"
       expect(ai_trainer.configured?).to be false
     end
 
-    it "returns false when summary is blank" do
+    it "returns false when trainer_profile is blank" do
       ai_trainer.status = :completed
-      ai_trainer.summary = nil
+      ai_trainer.trainer_profile = nil
       expect(ai_trainer.configured?).to be false
     end
   end
@@ -98,7 +112,10 @@ describe AiTrainer do
       ai_trainer.goal_improve_endurance = false
       ai_trainer.goal_increase_strength = false
 
-      expect(ai_trainer.goals).to contain_exactly(:goal_build_muscle, :goal_general_fitness)
+      expect(ai_trainer.goals).to contain_exactly(
+        :goal_build_muscle,
+        :goal_general_fitness
+      )
     end
 
     it "returns empty array when no goals are set" do

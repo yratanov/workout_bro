@@ -274,18 +274,21 @@ describe "Workouts" do
 
     context "when user has a configured AI trainer" do
       before do
-        user.update!(ai_provider: "gemini", ai_model: "gemini-2.0-flash", ai_api_key: "test-key")
+        user.update!(
+          ai_provider: "gemini",
+          ai_model: "gemini-2.0-flash",
+          ai_api_key: "test-key"
+        )
         user.ai_trainer.update!(
           status: :completed,
-          summary: "Trainer profile.",
-          system_prompt: "You are a trainer."
+          trainer_profile: "Trainer profile."
         )
       end
 
       it "enqueues GenerateAiWorkoutFeedbackJob" do
-        expect {
-          post stop_workout_path(workout)
-        }.to have_enqueued_job(GenerateAiWorkoutFeedbackJob)
+        expect { post stop_workout_path(workout) }.to have_enqueued_job(
+          GenerateAiWorkoutFeedbackJob
+        )
       end
     end
 
@@ -293,9 +296,9 @@ describe "Workouts" do
       before { user.ai_trainer&.destroy }
 
       it "does not enqueue GenerateAiWorkoutFeedbackJob" do
-        expect {
-          post stop_workout_path(workout)
-        }.not_to have_enqueued_job(GenerateAiWorkoutFeedbackJob)
+        expect { post stop_workout_path(workout) }.not_to have_enqueued_job(
+          GenerateAiWorkoutFeedbackJob
+        )
       end
     end
   end
@@ -311,7 +314,7 @@ describe "Workouts" do
       )
     end
 
-    it "returns pending when no ai_summary" do
+    it "returns pending when no activity" do
       get ai_feedback_status_workout_path(workout), as: :json
 
       expect(response).to have_http_status(:success)
@@ -320,8 +323,21 @@ describe "Workouts" do
       expect(json["ai_summary"]).to be_nil
     end
 
-    it "returns completed with ai_summary when present" do
-      workout.update!(ai_summary: "Great workout!")
+    it "returns completed with content when activity is completed" do
+      ai_trainer =
+        user.ai_trainer ||
+          user.create_ai_trainer!(
+            status: :completed,
+            trainer_profile: "Profile"
+          )
+      AiTrainerActivity.create!(
+        user: user,
+        ai_trainer: ai_trainer,
+        workout: workout,
+        activity_type: :workout_review,
+        content: "Great workout!",
+        status: :completed
+      )
 
       get ai_feedback_status_workout_path(workout), as: :json
 
@@ -332,12 +348,13 @@ describe "Workouts" do
     end
 
     it "returns 404 for another user's workout" do
-      other_workout = Workout.create!(
-        user: users(:jane),
-        workout_type: :strength,
-        started_at: 1.hour.ago,
-        ended_at: Time.current
-      )
+      other_workout =
+        Workout.create!(
+          user: users(:jane),
+          workout_type: :strength,
+          started_at: 1.hour.ago,
+          ended_at: Time.current
+        )
 
       get ai_feedback_status_workout_path(other_workout), as: :json
 

@@ -245,9 +245,10 @@
           <%= t(".ai_feedback_title") %>
         </h3>
       </div>
-      <% if @workout.ai_summary.present? %>
+      <% activity = @workout.ai_trainer_activity %>
+      <% if activity&.completed? && activity.content.present? %>
         <div class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">
-          <%= render_markdown(@workout.ai_summary) %>
+          <%= render_markdown(activity.content) %>
         </div>
       <% else %>
         <div data-ai-feedback-target="loading">

@@ -68,10 +68,10 @@
           current: controller_name == "stats",
         },
         {
-          name: t("shared.navigation.weekly"),
-          path: weekly_reports_path,
-          current: controller_name == "weekly_reports",
-          badge: Current.user.weekly_reports.unviewed.exists?,
+          name: t("shared.navigation.ai"),
+          path: ai_trainer_activities_path,
+          current: controller_name == "ai_trainer_activities",
+          badge: Current.user.ai_trainer_activities.unviewed.exists?,
         },
         {
           name: t("shared.navigation.exercises"),

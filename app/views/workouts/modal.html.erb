@@ -148,7 +148,8 @@
           <% end %>
         <% end %>
         <!-- AI Trainer Feedback -->
-        <% if @workout.ai_summary.present? %>
+        <% activity = @workout.ai_trainer_activity %>
+        <% if activity&.completed? && activity.content.present? %>
           <div class="mb-4">
             <div class="flex items-center gap-2 mb-2">
               <%= icon "sparkles", size: "w-4 h-4", class: "text-purple-400" %>
@@ -156,7 +157,7 @@
             </div>
             <div class="bg-slate-700/50 rounded-lg p-3">
               <div class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">
-                <%= render_markdown(@workout.ai_summary) %>
+                <%= render_markdown(activity.content) %>
               </div>
             </div>
           </div>

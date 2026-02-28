@@ -19,6 +19,7 @@
 #  summary                :text
 #  system_prompt          :text
 #  train_on_existing_data :boolean          default(TRUE), not null
+#  trainer_profile        :text
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  user_id                :integer          not null
@@ -33,6 +34,7 @@
 #
 class AiTrainer < ApplicationRecord
   belongs_to :user
+  has_many :ai_trainer_activities, dependent: :destroy
 
   enum :approach, { supportive: 0, tough_love: 1, balanced: 2 }
   enum :communication_style, { concise: 0, detailed: 1, motivational: 2 }
@@ -51,10 +53,28 @@ class AiTrainer < ApplicationRecord
   end
 
   def configured?
-    completed? && summary.present?
+    completed? && trainer_profile.present?
   end
 
   def goals
     GOALS.select { |g| send(g) }
+  end
+
+  def latest_full_review
+    ai_trainer_activities.full_review.completed.order(created_at: :desc).first
+  end
+
+  def activities_since_last_review
+    review = latest_full_review
+    scope = ai_trainer_activities.completed.order(:created_at)
+    scope = scope.where("created_at > ?", review.created_at) if review
+    scope
+  end
+
+  def weekly_reports_since_last_review_count
+    review = latest_full_review
+    scope = ai_trainer_activities.weekly_report.completed
+    scope = scope.where("created_at > ?", review.created_at) if review
+    scope.count
   end
 end

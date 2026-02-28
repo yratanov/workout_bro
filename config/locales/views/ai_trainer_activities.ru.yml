@@ -1,0 +1,14 @@
+ru:
+  ai_trainer_activities:
+    types:
+      full_review: "Обзор тренировок"
+      workout_review: "Отзыв о тренировке"
+      weekly_report: "Недельный отчёт"
+    index:
+      title: "ИИ Тренер"
+      empty: "Пока нет активности. Завершите тренировки, чтобы получить отзыв тренера."
+      strength: "Силовая"
+      run: "Бег"
+    show:
+      failed: "Ошибка генерации."
+      view_workout: "Перейти к тренировке"

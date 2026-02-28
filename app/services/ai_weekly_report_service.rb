@@ -28,11 +28,11 @@ class AiWeeklyReportService
   end
 
   def system_context
-    return nil if @ai_trainer&.system_prompt.blank?
+    return nil unless @ai_trainer
 
     <<~PROMPT.strip
       ## Your Role
-      #{@ai_trainer.system_prompt}
+      #{AiPromptContextBuilder.new(@ai_trainer).call}
     PROMPT
   end
 
@@ -48,8 +48,7 @@ class AiWeeklyReportService
       ## Task
       Provide a weekly overview analyzing this training week.
       Assess the overall direction and progression.
-      Update personal recommendations based on the past week.
-      Format your recommendations as a `## Week #{@week_start}/#{week_end}` section at the end.
+      Include personalized recommendations based on the past week.
       Keep your response under 400 words. Use markdown formatting.
       Respond in #{@user.locale == "ru" ? "Russian" : "English"}.
     PROMPT

@@ -156,10 +156,10 @@ describe "Settings::Ai" do
       expect(data["status"]).to eq("in_progress")
     end
 
-    it "returns pending status for default trainer" do
+    it "returns completed status for default trainer" do
       get trainer_status_settings_ai_path, as: :json
       data = response.parsed_body
-      expect(data["status"]).to eq("pending")
+      expect(data["status"]).to eq("completed")
     end
 
     it "returns error_details on failure" do

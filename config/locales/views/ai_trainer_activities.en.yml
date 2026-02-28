@@ -1,0 +1,14 @@
+en:
+  ai_trainer_activities:
+    types:
+      full_review: "Training Review"
+      workout_review: "Workout Feedback"
+      weekly_report: "Weekly Report"
+    index:
+      title: "AI Trainer"
+      empty: "No AI activity yet. Complete workouts to get trainer feedback."
+      strength: "Strength"
+      run: "Run"
+    show:
+      failed: "Generation failed."
+      view_workout: "View Workout"

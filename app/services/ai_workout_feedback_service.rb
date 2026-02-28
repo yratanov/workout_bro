@@ -28,11 +28,11 @@ class AiWorkoutFeedbackService
   end
 
   def system_context
-    return nil if @ai_trainer&.system_prompt.blank?
+    return nil unless @ai_trainer
 
     <<~PROMPT.strip
       ## Your Role
-      #{@ai_trainer.system_prompt}
+      #{AiPromptContextBuilder.new(@ai_trainer).call}
     PROMPT
   end
 
