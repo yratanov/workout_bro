@@ -20,9 +20,9 @@ Uses RSpec with Capybara for feature tests.
 Always add test for code you are adding.
 
 ```bash
-bundle exec rspec                        # Run all tests
-bundle exec rspec spec/features          # Run feature tests only
-bundle exec rspec spec/requests          # Run request specs only
+bundle exec parallel_rspec spec/                        # Run all tests
+bundle exec parallel_rspec spec/features          # Run feature tests only
+bundle exec parallel_rspec spec/requests          # Run request specs only
 bundle exec rspec spec/features/workouts_spec.rb  # Run a single test file
 ```
 
