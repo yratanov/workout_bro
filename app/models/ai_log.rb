@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: ai_logs
+# Database name: primary
 #
 #  id          :integer          not null, primary key
 #  action      :string           not null

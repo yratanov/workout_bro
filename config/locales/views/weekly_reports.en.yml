@@ -1,0 +1,17 @@
+en:
+  weekly_reports:
+    index:
+      title: "Weekly Reports"
+      empty: "No weekly reports yet. Reports are generated automatically every Monday."
+      workouts_count:
+        one: "%{count} workout"
+        other: "%{count} workouts"
+      status:
+        completed: "Completed"
+        pending: "Pending"
+        failed: "Failed"
+    show:
+      title: "Weekly Report"
+      ai_summary_title: "AI Weekly Summary"
+      generating: "Generating report..."
+      failed: "Report generation failed."

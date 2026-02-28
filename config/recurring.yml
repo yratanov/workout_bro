@@ -16,3 +16,6 @@ production:
   garmin_sync:
     class: GarminSyncJob
     schedule: every day at 11am
+  weekly_reports:
+    class: GenerateAllWeeklyReportsJob
+    schedule: every Monday at 9am

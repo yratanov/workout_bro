@@ -1,0 +1,19 @@
+ru:
+  weekly_reports:
+    index:
+      title: "Еженедельные отчёты"
+      empty: "Отчётов пока нет. Они генерируются автоматически каждый понедельник."
+      workouts_count:
+        one: "%{count} тренировка"
+        few: "%{count} тренировки"
+        many: "%{count} тренировок"
+        other: "%{count} тренировок"
+      status:
+        completed: "Готов"
+        pending: "В обработке"
+        failed: "Ошибка"
+    show:
+      title: "Еженедельный отчёт"
+      ai_summary_title: "AI Итоги недели"
+      generating: "Генерация отчёта..."
+      failed: "Ошибка генерации отчёта."

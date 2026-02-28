@@ -1,0 +1,75 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-2xl">
+  <%= page_header title: t(".title") %>
+
+  <% if @weekly_reports.any? %>
+    <div class="space-y-3">
+      <% @weekly_reports.each do |report| %>
+        <%= link_to weekly_report_path(report),
+          class: "block bg-slate-800 rounded-lg p-4 hover:bg-slate-750 transition-colors border border-slate-700" do %>
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-semibold text-white flex items-center gap-2">
+                <% unless report.viewed? %>
+                  <span class="w-2 h-2 bg-red-500 rounded-full flex-shrink-0"></span>
+                <% end %>
+                <%= report.week_start.strftime("%-d %b") %>
+                –
+                <%= (report.week_start + 6.days).strftime("%-d %b, %Y") %>
+              </h3>
+              <p class="text-sm text-slate-400 mt-1">
+                <%= t(
+                  ".workouts_count",
+                  count:
+                    report
+                      .user
+                      .workouts
+                      .where(
+                        ended_at:
+                          report.week_start.beginning_of_day..(
+                            report.week_start + 6.days
+                          ).end_of_day,
+                      )
+                      .count,
+                ) %>
+              </p>
+            </div>
+            <div>
+              <% if report.completed? %>
+                <span
+                  class="
+                    inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                    bg-green-900 text-green-300
+                  "
+                >
+                  <%= t(".status.completed") %>
+                </span>
+              <% elsif report.pending? %>
+                <span
+                  class="
+                    inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                    bg-yellow-900 text-yellow-300
+                  "
+                >
+                  <%= t(".status.pending") %>
+                </span>
+              <% else %>
+                <span
+                  class="
+                    inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                    bg-red-900 text-red-300
+                  "
+                >
+                  <%= t(".status.failed") %>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <%= empty_state icon: "sparkles", message: t(".empty") %>
+  <% end %>
+</div>

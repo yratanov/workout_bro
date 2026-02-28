@@ -54,6 +54,7 @@ class User < ApplicationRecord
   has_many :scheduled_push_notifications, dependent: :destroy
   has_many :ai_logs, dependent: :destroy
   has_one :ai_trainer, dependent: :destroy
+  has_many :weekly_reports, dependent: :destroy
 
   AVAILABLE_LOCALES = %w[en ru].freeze
   WEIGHT_UNITS = %w[kg lbs].freeze

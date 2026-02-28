@@ -68,6 +68,12 @@
           current: controller_name == "stats",
         },
         {
+          name: t("shared.navigation.weekly"),
+          path: weekly_reports_path,
+          current: controller_name == "weekly_reports",
+          badge: Current.user.weekly_reports.unviewed.exists?,
+        },
+        {
           name: t("shared.navigation.exercises"),
           path: exercises_path,
           current: controller_name == "exercises",
@@ -90,10 +96,14 @@
             <% end %>
             <div class="hidden sm:flex items-center gap-1">
               <% nav_items.each do |item| %>
-                <%= link_to item[:name],
-                item[:path],
+                <%= link_to item[:path],
                 class:
-                  "px-3 py-2 rounded-md text-sm font-medium transition-colors #{item[:current] ? "bg-slate-700 text-white" : "text-slate-300 hover:bg-slate-700 hover:text-white"}" %>
+                  "relative px-3 py-2 rounded-md text-sm font-medium transition-colors #{item[:current] ? "bg-slate-700 text-white" : "text-slate-300 hover:bg-slate-700 hover:text-white"}" do %>
+                  <%= item[:name] %>
+                  <% if item[:badge] %>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                  <% end %>
+                <% end %>
               <% end %>
             </div>
           </div>
@@ -135,13 +145,17 @@
         >
           <div class="px-2 py-3 space-y-1">
             <% nav_items.each do |item| %>
-              <%= link_to item[:name],
-              item[:path],
+              <%= link_to item[:path],
               data: {
                 action: "mobile-menu#close",
               },
               class:
-                "block px-3 py-2 rounded-md text-base font-medium transition-colors #{item[:current] ? "bg-slate-700 text-white" : "text-slate-300 hover:bg-slate-700 hover:text-white"}" %>
+                "relative flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium transition-colors #{item[:current] ? "bg-slate-700 text-white" : "text-slate-300 hover:bg-slate-700 hover:text-white"}" do %>
+                <%= item[:name] %>
+                <% if item[:badge] %>
+                  <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                <% end %>
+              <% end %>
             <% end %>
           </div>
         </div>

@@ -1,0 +1,42 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-2xl">
+  <%= page_header title:
+    "#{@weekly_report.week_start.strftime("%-d %b")} – #{(@weekly_report.week_start + 6.days).strftime("%-d %b, %Y")}" %>
+
+  <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+    <% if @weekly_report.completed? && @weekly_report.ai_summary.present? %>
+      <div class="flex items-center gap-2 mb-4">
+        <%= icon "sparkles", size: "w-5 h-5", class: "text-purple-400" %>
+        <h3 class="text-purple-400 font-semibold"><%= t(".ai_summary_title") %></h3>
+      </div>
+      <div class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">
+        <%= render_markdown(@weekly_report.ai_summary) %>
+      </div>
+    <% elsif @weekly_report.pending? %>
+      <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <div
+          class="
+            w-4 h-4 border-2 border-purple-400 border-t-transparent rounded-full
+            animate-spin
+          "
+        ></div>
+        <span><%= t(".generating") %></span>
+      </div>
+    <% elsif @weekly_report.failed? %>
+      <div class="text-red-400 text-sm">
+        <p><%= t(".failed") %></p>
+        <% if @weekly_report.error_message.present? %>
+          <p class="mt-2 text-slate-500 text-xs"><%= @weekly_report.error_message %></p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-4">
+    <%= button t("shared.buttons.back"),
+    type: "link",
+    style: "outlined",
+    route: weekly_reports_path %>
+  </div>
+</div>
