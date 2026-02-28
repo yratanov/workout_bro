@@ -144,6 +144,35 @@
         <%= format_pace(@summary.pace) %>
         <div class="text-slate-500 text-xs font-normal"><%= t(".pace_unit") %></div>
       <% end %>
+      <% if @workout.avg_heart_rate.present? %>
+        <%= stat_card label: t(".avg_hr") do %>
+          <%= @workout.avg_heart_rate %>
+          <span class="text-sm text-slate-400">bpm</span>
+        <% end %>
+      <% end %>
+      <% if @workout.max_heart_rate.present? %>
+        <%= stat_card label: t(".max_hr") do %>
+          <%= @workout.max_heart_rate %>
+          <span class="text-sm text-slate-400">bpm</span>
+        <% end %>
+      <% end %>
+      <% if @workout.avg_cadence.present? %>
+        <%= stat_card label: t(".cadence") do %>
+          <%= @workout.avg_cadence %>
+          <span class="text-sm text-slate-400">spm</span>
+        <% end %>
+      <% end %>
+      <% if @workout.elevation_gain.present? %>
+        <%= stat_card label: t(".elevation") do %>
+          <%= @workout.elevation_gain.round(0) %>
+          <span class="text-sm text-slate-400">m</span>
+        <% end %>
+      <% end %>
+      <% if @workout.vo2max.present? %>
+        <%= stat_card label: t(".vo2max") do %>
+          <%= @workout.vo2max.round(1) %>
+        <% end %>
+      <% end %>
     </div>
     <!-- Run PRs Section -->
     <% if @summary.new_prs.any? %>

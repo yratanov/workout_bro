@@ -44,6 +44,38 @@ describe WorkoutExporter do
       expect(run_row["pace_per_km"]).to eq("6:00")
     end
 
+    it "includes garmin metrics for run workouts" do
+      workouts(:run_workout).update!(
+        avg_heart_rate: 155,
+        max_heart_rate: 178,
+        avg_cadence: 170,
+        elevation_gain: 120.5,
+        vo2max: 48.3
+      )
+
+      result = described_class.new(user: user).call
+      csv = CSV.parse(result, headers: true)
+
+      run_row = csv.find { |row| row["workout_type"] == "run" }
+      expect(run_row["avg_heart_rate"]).to eq("155")
+      expect(run_row["max_heart_rate"]).to eq("178")
+      expect(run_row["avg_cadence"]).to eq("170")
+      expect(run_row["elevation_gain"]).to eq("120.5")
+      expect(run_row["vo2max"]).to eq("48.3")
+    end
+
+    it "has nil garmin metrics for strength workouts" do
+      result = described_class.new(user: user).call
+      csv = CSV.parse(result, headers: true)
+
+      strength_row = csv.find { |row| row["workout_type"] == "strength" }
+      expect(strength_row["avg_heart_rate"]).to be_nil
+      expect(strength_row["max_heart_rate"]).to be_nil
+      expect(strength_row["avg_cadence"]).to be_nil
+      expect(strength_row["elevation_gain"]).to be_nil
+      expect(strength_row["vo2max"]).to be_nil
+    end
+
     it "excludes incomplete workouts" do
       result = described_class.new(user: user).call
       csv = CSV.parse(result, headers: true)

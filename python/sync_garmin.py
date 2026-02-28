@@ -38,6 +38,11 @@ def fetch_garmin_activities(username, password, days=7):
             "started_at": started_at_str.replace(" ", "T"),
             "distance_meters": distance_meters,
             "duration_seconds": duration_seconds,
+            "avg_heart_rate": activity.get("averageHR"),
+            "max_heart_rate": activity.get("maxHR"),
+            "avg_cadence": activity.get("averageRunningCadenceInStepsPerMinute"),
+            "elevation_gain": activity.get("elevationGain"),
+            "vo2max": activity.get("vO2MaxValue"),
         })
 
     return result

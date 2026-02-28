@@ -88,7 +88,12 @@ class GarminSyncService
       started_at: started_at,
       ended_at: ended_at,
       distance: activity["distance_meters"].to_i,
-      time_in_seconds: duration_seconds
+      time_in_seconds: duration_seconds,
+      avg_heart_rate: activity["avg_heart_rate"]&.to_i,
+      max_heart_rate: activity["max_heart_rate"]&.to_i,
+      avg_cadence: activity["avg_cadence"]&.to_i,
+      elevation_gain: activity["elevation_gain"]&.to_f,
+      vo2max: activity["vo2max"]&.to_f
     )
   end
 

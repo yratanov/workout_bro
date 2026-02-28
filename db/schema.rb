@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_28_202247) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_28_203257) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -318,10 +318,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_202247) do
 
   create_table "workouts", force: :cascade do |t|
     t.text "ai_summary"
+    t.integer "avg_cadence"
+    t.integer "avg_heart_rate"
     t.datetime "created_at", null: false
     t.date "date"
     t.integer "distance"
+    t.float "elevation_gain"
     t.datetime "ended_at"
+    t.integer "max_heart_rate"
     t.text "notes"
     t.datetime "paused_at"
     t.datetime "started_at", null: false
@@ -329,6 +333,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_202247) do
     t.integer "total_paused_seconds", default: 0
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.float "vo2max"
     t.integer "workout_import_id"
     t.integer "workout_routine_day_id"
     t.integer "workout_type", default: 0, null: false

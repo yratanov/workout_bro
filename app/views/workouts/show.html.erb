@@ -80,6 +80,40 @@
           <div class="text-slate-400 text-sm"><%= t(".avg_pace") %></div>
           <div class="text-xl font-semibold"><%= run_pace @workout %></div>
         </div>
+        <% if @workout.avg_heart_rate.present? %>
+          <div>
+            <div class="text-slate-400 text-sm"><%= t(".avg_hr") %></div>
+            <div class="text-xl font-semibold"><%= @workout.avg_heart_rate %>
+              <span class="text-sm text-slate-400">bpm</span></div>
+          </div>
+        <% end %>
+        <% if @workout.max_heart_rate.present? %>
+          <div>
+            <div class="text-slate-400 text-sm"><%= t(".max_hr") %></div>
+            <div class="text-xl font-semibold"><%= @workout.max_heart_rate %>
+              <span class="text-sm text-slate-400">bpm</span></div>
+          </div>
+        <% end %>
+        <% if @workout.avg_cadence.present? %>
+          <div>
+            <div class="text-slate-400 text-sm"><%= t(".cadence") %></div>
+            <div class="text-xl font-semibold"><%= @workout.avg_cadence %>
+              <span class="text-sm text-slate-400">spm</span></div>
+          </div>
+        <% end %>
+        <% if @workout.elevation_gain.present? %>
+          <div>
+            <div class="text-slate-400 text-sm"><%= t(".elevation") %></div>
+            <div class="text-xl font-semibold"><%= @workout.elevation_gain.round(0) %>
+              <span class="text-sm text-slate-400">m</span></div>
+          </div>
+        <% end %>
+        <% if @workout.vo2max.present? %>
+          <div>
+            <div class="text-slate-400 text-sm"><%= t(".vo2max") %></div>
+            <div class="text-xl font-semibold"><%= @workout.vo2max.round(1) %></div>
+          </div>
+        <% end %>
       </div>
     </div>
     <%= render partial: "workouts/notes",

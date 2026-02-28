@@ -17,6 +17,11 @@ class WorkoutExporter
     distance_meters
     time_seconds
     pace_per_km
+    avg_heart_rate
+    max_heart_rate
+    avg_cadence
+    elevation_gain
+    vo2max
     workout_notes
     set_notes
   ].freeze
@@ -85,6 +90,11 @@ class WorkoutExporter
       nil,
       nil,
       nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
       workout.notes,
       workout_set.notes
     ]
@@ -105,6 +115,11 @@ class WorkoutExporter
       workout.distance,
       workout.time_in_seconds,
       format_pace(workout.pace),
+      workout.avg_heart_rate,
+      workout.max_heart_rate,
+      workout.avg_cadence,
+      workout.elevation_gain,
+      workout.vo2max,
       workout.notes,
       nil
     ]

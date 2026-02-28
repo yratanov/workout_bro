@@ -5,14 +5,19 @@
 #
 #  id                     :integer          not null, primary key
 #  ai_summary             :text
+#  avg_cadence            :integer
+#  avg_heart_rate         :integer
 #  date                   :date
 #  distance               :integer
+#  elevation_gain         :float
 #  ended_at               :datetime
+#  max_heart_rate         :integer
 #  notes                  :text
 #  paused_at              :datetime
 #  started_at             :datetime         not null
 #  time_in_seconds        :integer
 #  total_paused_seconds   :integer          default(0)
+#  vo2max                 :float
 #  workout_type           :integer          default("strength"), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
@@ -54,6 +59,16 @@ class Workout < ApplicationRecord
               greater_than_or_equal_to: 0
             },
             if: :run?
+
+  validates :avg_heart_rate, numericality: { greater_than: 0 }, allow_nil: true
+  validates :max_heart_rate, numericality: { greater_than: 0 }, allow_nil: true
+  validates :avg_cadence, numericality: { greater_than: 0 }, allow_nil: true
+  validates :elevation_gain,
+            numericality: {
+              greater_than_or_equal_to: 0
+            },
+            allow_nil: true
+  validates :vo2max, numericality: { greater_than: 0 }, allow_nil: true
 
   validate :no_other_active_workout, on: :create
 
