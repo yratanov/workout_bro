@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_28_154222) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_28_182623) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -37,6 +37,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_154222) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "ai_logs", force: :cascade do |t|
+    t.string "action", null: false
+    t.datetime "created_at", null: false
+    t.integer "duration_ms"
+    t.text "error"
+    t.string "model"
+    t.text "prompt"
+    t.text "response"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["created_at"], name: "index_ai_logs_on_created_at"
+    t.index ["user_id"], name: "index_ai_logs_on_user_id"
   end
 
   create_table "ai_trainers", force: :cascade do |t|
@@ -312,6 +326,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_28_154222) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "ai_logs", "users"
   add_foreign_key "ai_trainers", "users", on_delete: :cascade
   add_foreign_key "exercises", "muscles", on_delete: :nullify
   add_foreign_key "exercises", "users"

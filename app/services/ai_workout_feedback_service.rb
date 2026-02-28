@@ -9,7 +9,13 @@ class AiWorkoutFeedbackService
 
   def call
     client = GeminiClient.new(api_key: @user.ai_api_key, model: @user.ai_model)
-    client.generate(build_prompt)
+    client.generate(
+      build_prompt,
+      log_context: {
+        user: @user,
+        action: "workout_feedback"
+      }
+    )
   end
 
   private

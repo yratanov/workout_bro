@@ -11,6 +11,7 @@ class AdminMenuComponent < ViewComponent::Base
     [
       { key: :users, path: admin_users_path, icon: "user" },
       { key: :logs, path: admin_logs_path, icon: "logs" },
+      { key: :ai_logs, path: admin_ai_logs_path, icon: "sparkles" },
       { key: :invites, path: admin_invites_path, icon: "plus" }
     ]
   end

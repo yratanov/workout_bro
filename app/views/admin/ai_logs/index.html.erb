@@ -1,0 +1,92 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-4xl">
+  <h1 class="font-bold text-2xl mb-4 sm:mb-6"><%= t(".title") %></h1>
+
+  <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
+    <%= render AdminMenuComponent.new(current_page: :ai_logs) %>
+
+    <div class="flex-1 min-w-0">
+      <div class="bg-slate-800 rounded-lg p-4 sm:p-6">
+        <h2 class="font-semibold text-lg mb-4"><%= t(".ai_logs") %></h2>
+        <p class="text-slate-400 text-sm mb-6"><%= t(".description") %></p>
+
+        <% if @pagination.records.any? %>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm text-slate-400">
+              <%= t(".showing_logs", count: @pagination.total_count) %>
+            </p>
+            <%= render PaginationComponent.new(
+              pagination: @pagination,
+              path_proc: ->(page) { admin_ai_logs_path(page: page) },
+            ) %>
+          </div>
+
+          <div class="space-y-3">
+            <% @pagination.records.each do |log| %>
+              <div class="bg-slate-700/50 rounded-lg p-3 sm:p-4">
+                <div class="flex flex-col gap-2">
+                  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                    <div class="flex-1 min-w-0">
+                      <div class="flex flex-wrap items-center gap-2 mb-1">
+                        <span class="font-medium text-slate-200"><%= log.action %></span>
+                        <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded"><%= log.model %></span>
+                        <% if log.duration_ms.present? %>
+                          <span class="text-xs bg-slate-600/50 text-slate-400 px-2 py-0.5 rounded"><%= log.duration_ms %>ms</span>
+                        <% end %>
+                        <% if log.error.present? %>
+                          <span class="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded"><%= t(".failed") %></span>
+                        <% end %>
+                      </div>
+                      <p class="text-sm text-slate-400"><%= log.user.email_address %></p>
+                    </div>
+                    <span class="text-xs text-slate-500 whitespace-nowrap">
+                      <%= l(log.created_at, format: :short) %>
+                    </span>
+                  </div>
+
+                  <% if log.error.present? %>
+                    <div class="text-sm text-red-400 break-words"><%= log.error %></div>
+                  <% end %>
+
+                  <% if log.prompt.present? %>
+                    <details>
+                      <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-400"><%= t(".show_prompt") %></summary>
+                      <pre
+                        class="
+                          mt-2 text-xs text-slate-500 max-w-full overflow-auto bg-slate-800 p-2 rounded
+                          max-h-48
+                        "
+                      ><%= log.prompt %></pre>
+                    </details>
+                  <% end %>
+
+                  <% if log.response.present? %>
+                    <details>
+                      <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-400"><%= t(".show_response") %></summary>
+                      <pre
+                        class="
+                          mt-2 text-xs text-slate-500 max-w-full overflow-auto bg-slate-800 p-2 rounded
+                          max-h-48
+                        "
+                      ><%= log.response %></pre>
+                    </details>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="mt-6">
+            <%= render PaginationComponent.new(
+              pagination: @pagination,
+              path_proc: ->(page) { admin_ai_logs_path(page: page) },
+            ) %>
+          </div>
+        <% else %>
+          <p class="text-slate-500 text-center py-8"><%= t(".no_logs") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

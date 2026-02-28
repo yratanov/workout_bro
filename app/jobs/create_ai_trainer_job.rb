@@ -7,7 +7,8 @@ class CreateAiTrainerJob < ApplicationJob
 
     prompt = AiTrainerPromptBuilder.new(ai_trainer).call
     client = GeminiClient.new(api_key: user.ai_api_key, model: user.ai_model)
-    summary = client.generate(prompt)
+    summary =
+      client.generate(prompt, log_context: { user:, action: "create_trainer" })
     system_prompt = AiTrainerSystemPromptCompiler.new(ai_trainer, summary).call
 
     ai_trainer.update!(

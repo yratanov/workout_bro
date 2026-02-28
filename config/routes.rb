@@ -92,6 +92,7 @@ Rails.application.routes.draw do
     get "/", to: redirect("/admin/users")
     resources :users, only: %i[index edit update destroy]
     resource :logs, only: %i[show], controller: "logs"
+    resources :ai_logs, only: %i[index]
     resource :invites, only: %i[show create], controller: "invites" do
       delete ":id", action: :destroy, as: :invite, on: :collection
     end

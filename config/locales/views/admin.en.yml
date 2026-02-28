@@ -3,6 +3,7 @@ en:
     menu:
       users: "Users"
       logs: "Error Logs"
+      ai_logs: "AI Logs"
       invites: "Invites"
     users:
       index:
@@ -43,6 +44,18 @@ en:
         showing_logs:
           one: "%{count} error log"
           other: "%{count} error logs"
+    ai_logs:
+      index:
+        title: "Admin"
+        ai_logs: "AI Logs"
+        description: "View AI request and response logs."
+        no_logs: "No AI logs yet."
+        failed: "Failed"
+        show_prompt: "Show prompt"
+        show_response: "Show response"
+        showing_logs:
+          one: "%{count} AI log"
+          other: "%{count} AI logs"
     invites:
       show:
         title: "Admin"

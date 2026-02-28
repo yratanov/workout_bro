@@ -3,6 +3,7 @@ ru:
     menu:
       users: "Пользователи"
       logs: "Логи ошибок"
+      ai_logs: "AI логи"
       invites: "Приглашения"
     users:
       index:
@@ -45,6 +46,20 @@ ru:
           few: "%{count} лога ошибок"
           many: "%{count} логов ошибок"
           other: "%{count} логов ошибок"
+    ai_logs:
+      index:
+        title: "Админ"
+        ai_logs: "AI логи"
+        description: "Просмотр логов AI запросов и ответов."
+        no_logs: "AI логов пока нет."
+        failed: "Ошибка"
+        show_prompt: "Показать промпт"
+        show_response: "Показать ответ"
+        showing_logs:
+          one: "%{count} AI лог"
+          few: "%{count} AI лога"
+          many: "%{count} AI логов"
+          other: "%{count} AI логов"
     invites:
       show:
         title: "Админ"

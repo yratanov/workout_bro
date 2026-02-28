@@ -52,6 +52,7 @@ class User < ApplicationRecord
   has_many :supersets, dependent: :destroy
   has_many :push_subscriptions, dependent: :destroy
   has_many :scheduled_push_notifications, dependent: :destroy
+  has_many :ai_logs, dependent: :destroy
   has_one :ai_trainer, dependent: :destroy
 
   AVAILABLE_LOCALES = %w[en ru].freeze

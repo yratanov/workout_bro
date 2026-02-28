@@ -15,12 +15,36 @@ class GeminiClient
     @model = model
   end
 
-  def generate(prompt)
+  def generate(prompt, log_context: nil)
     uri = URI("#{BASE_URL}/models/#{@model}:generateContent?key=#{@api_key}")
     body = { contents: [{ parts: [{ text: prompt }] }] }
 
+    start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     response = post(uri, body)
-    parse_response(response)
+    result = parse_response(response)
+    duration_ms =
+      (
+        (Process.clock_gettime(Process::CLOCK_MONOTONIC) - start_time) * 1000
+      ).round
+
+    if log_context
+      log_request(
+        prompt:,
+        response_text: result,
+        duration_ms:,
+        context: log_context
+      )
+    end
+    result
+  rescue => e
+    duration_ms =
+      (
+        (Process.clock_gettime(Process::CLOCK_MONOTONIC) - start_time) * 1000
+      ).round if start_time
+    if log_context
+      log_request(prompt:, error: e.message, duration_ms:, context: log_context)
+    end
+    raise
   end
 
   private
@@ -55,5 +79,27 @@ class GeminiClient
   def extract_text(data)
     data.dig("candidates", 0, "content", "parts", 0, "text") ||
       raise(Error, "Unexpected response format: no text content found")
+  end
+
+  def log_request(
+    prompt:,
+    response_text: nil,
+    error: nil,
+    duration_ms: nil,
+    context: nil
+  )
+    return unless context&.dig(:user) && context&.dig(:action)
+
+    AiLog.create!(
+      user: context[:user],
+      action: context[:action],
+      model: @model,
+      prompt:,
+      response: response_text,
+      error:,
+      duration_ms:
+    )
+  rescue => e
+    Rails.logger.error("Failed to log AI request: #{e.message}")
   end
 end
