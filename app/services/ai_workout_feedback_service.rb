@@ -63,6 +63,7 @@ class AiWorkoutFeedbackService
     lines << "Duration: #{format_duration(summary.duration)}"
     lines << "Total sets: #{summary.total_sets}"
     lines << "Total reps: #{summary.total_reps}"
+    lines << "Notes: #{@workout.notes}" if @workout.notes.present?
 
     lines << ""
     lines << "Exercises:"
@@ -79,6 +80,7 @@ class AiWorkoutFeedbackService
           ws
         )
         lines << set_line
+        lines << "  Notes: #{ws.notes}" if ws.notes.present?
 
         previous_sets_info(ws).each { |prev_line| lines << prev_line }
       end
@@ -100,6 +102,7 @@ class AiWorkoutFeedbackService
     lines << "Distance: #{(@workout.distance.to_f / 1000).round(2)}km"
     lines << "Duration: #{format_duration(summary.duration)}"
     lines << "Pace: #{format_pace(summary.pace)}" if summary.pace
+    lines << "Notes: #{@workout.notes}" if @workout.notes.present?
 
     if summary.comparison&.pace_diff
       lines << "Pace change vs last time: #{summary.comparison.pace_diff.round(1)}s/km"
