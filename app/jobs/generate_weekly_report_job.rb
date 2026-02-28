@@ -28,7 +28,7 @@ class GenerateWeeklyReportJob < ApplicationJob
     activity.update!(content: response, status: :completed)
     report.update!(ai_summary: response, status: :completed)
 
-    trigger_compaction_if_needed(ai_trainer)
+    append_recommendations(user, response)
   rescue => e
     activity&.update(status: :failed, error_message: e.message)
     report&.update(status: :failed, error_message: e.message)
@@ -41,5 +41,12 @@ class GenerateWeeklyReportJob < ApplicationJob
     if ai_trainer.weekly_reports_since_last_review_count >= COMPACTION_THRESHOLD
       GenerateFullReviewJob.perform_later(ai_trainer:)
     end
+  end
+
+  def compact_prompt_if_needed(user)
+    ai_trainer = user.ai_trainer
+    return unless ai_trainer
+
+    AiTrainerPromptCompactor.new(ai_trainer).call
   end
 end
