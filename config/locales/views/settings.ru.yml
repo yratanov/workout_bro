@@ -6,6 +6,7 @@ ru:
       garmin: "Garmin"
       imports: "Импорт"
       exports: "Экспорт"
+      ai: "ИИ"
     profile:
       show:
         title: "Настройки"
@@ -85,6 +86,14 @@ ru:
           in_progress: "Обработка"
           completed: "Завершено"
           failed: "Ошибка"
+    ai:
+      show:
+        title: "Настройки ИИ"
+        ai_configuration: "Конфигурация ИИ"
+        provider_label: "Провайдер ИИ"
+        select_provider: "Выберите провайдера..."
+        model_label: "Модель"
+        save: "Сохранить изменения"
     exports:
       show:
         title: "Экспорт тренировок"

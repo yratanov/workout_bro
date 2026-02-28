@@ -81,6 +81,7 @@ Rails.application.routes.draw do
       delete ":id", action: :destroy, as: :import, on: :collection
     end
     resource :exports, only: %i[show create], controller: "exports"
+    resource :ai, only: %i[show update], controller: "ai"
   end
 
   namespace :admin do

@@ -6,6 +6,7 @@ en:
       garmin: "Garmin"
       imports: "Import"
       exports: "Export"
+      ai: "AI"
     profile:
       show:
         title: "Settings"
@@ -83,6 +84,14 @@ en:
           in_progress: "Processing"
           completed: "Completed"
           failed: "Failed"
+    ai:
+      show:
+        title: "AI Settings"
+        ai_configuration: "AI Configuration"
+        provider_label: "AI Provider"
+        select_provider: "Select a provider..."
+        model_label: "Model"
+        save: "Save Changes"
     exports:
       show:
         title: "Export Workouts"
