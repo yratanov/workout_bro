@@ -44,7 +44,9 @@ class AiWorkoutFeedbackService
   def instruction_section
     <<~PROMPT.strip
       ## Task
-      Provide brief feedback on this workout. Include what was done well and 1-2 tips for improvement.
+      Provide brief, specific feedback on this training session and the exercises performed.
+      Focus on the actual numbers, progression compared to previous sessions, and exercise-specific observations.
+      Do not give general training advice.
       Keep your response under 200 words. Use markdown formatting. Do not use headers.
       Respond in #{@user.locale == "ru" ? "Russian" : "English"}.
     PROMPT
@@ -59,17 +61,8 @@ class AiWorkoutFeedbackService
     lines = []
     lines << "Type: Strength"
     lines << "Duration: #{format_duration(summary.duration)}"
-    lines << "Total volume: #{summary.total_volume}kg"
     lines << "Total sets: #{summary.total_sets}"
     lines << "Total reps: #{summary.total_reps}"
-
-    if summary.muscles_worked.any?
-      lines << "Muscles worked: #{summary.muscles_worked.map(&:human_name).join(", ")}"
-    end
-
-    if summary.comparison
-      lines << "Volume change vs last time: #{summary.comparison.volume_diff}kg (#{summary.comparison.volume_diff_percent}%)"
-    end
 
     lines << ""
     lines << "Exercises:"
@@ -86,6 +79,8 @@ class AiWorkoutFeedbackService
           ws
         )
         lines << set_line
+
+        previous_sets_info(ws).each { |prev_line| lines << prev_line }
       end
 
     prs = @workout.personal_records.includes(:exercise)
@@ -111,6 +106,27 @@ class AiWorkoutFeedbackService
     end
 
     lines.join("\n")
+  end
+
+  def previous_sets_info(workout_set)
+    previous_sets =
+      @user
+        .workout_sets
+        .where(exercise: workout_set.exercise)
+        .where.not(id: workout_set.id)
+        .where.not(ended_at: nil)
+        .includes(:workout_reps)
+        .order(created_at: :desc)
+        .limit(2)
+
+    previous_sets.each_with_index.filter_map do |prev_set, i|
+      reps =
+        prev_set.workout_reps.map { |r| "#{r.weight}kg x #{r.reps}" }.join(", ")
+      next if reps.blank?
+
+      label = i.zero? ? "Previous" : "2 sessions ago"
+      "  #{label}: #{reps}"
+    end
   end
 
   def set_duration(workout_set)
