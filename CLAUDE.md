@@ -105,14 +105,39 @@ bin/rails db:prepare   # Create + migrate + seed
 
 ## Deployment
 
-Docker via Kamal. Requires `RAILS_MASTER_KEY` environment variable.
+Docker-based. Build and publish the image, then pull and restart the container on the server.
 
 ```bash
-docker build -t workout_bro .
-docker run -d -p 80:80 -e RAILS_MASTER_KEY=<key> workout_bro
+./deploy.sh           # Runs Ansible playbook to deploy
 ```
 
-Alternative: `./deploy.sh` runs Ansible playbook.
+## Running Rails Commands on Production
+
+The production Docker setup uses `SECRET_KEY_BASE` (auto-generated, stored in `/rails/storage/.docker-env`) instead of `RAILS_MASTER_KEY`. You must source this env file before running any Rails commands.
+
+**For inline Ruby:**
+
+```bash
+ssh <server> "cd <app_path> && docker compose exec -T web bash -c 'source /rails/storage/.docker-env && bin/rails runner \"puts User.count\"'"
+```
+
+**For multi-line scripts (recommended):** Write a script to the mounted `storage/` volume, then execute it:
+
+```bash
+# Write script to storage (mounted into container at /rails/storage)
+ssh <server> "cat > <app_path>/storage/task.rb << 'RUBY'
+puts User.count
+RUBY
+cd <app_path> && docker compose exec -T web bash -c 'source /rails/storage/.docker-env && bin/rails runner /rails/storage/task.rb'"
+
+# Clean up after
+ssh <server> "rm -f <app_path>/storage/task.rb"
+```
+
+**Key details:**
+- Two containers: `web` (Rails server) and `jobs` (Solid Queue worker)
+- `storage/` directory is mounted as a volume at `/rails/storage` in both containers
+- The `image_processing` gem warning in output is harmless and can be ignored
 
 ## Internationalization (I18n)
 
