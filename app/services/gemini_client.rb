@@ -6,9 +6,12 @@ require "json"
 class GeminiClient
   BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
 
+  DAILY_REQUEST_LIMIT = 10
+
   Error = Class.new(StandardError)
   AuthenticationError = Class.new(Error)
   RateLimitError = Class.new(Error)
+  DailyRequestLimitError = Class.new(Error)
 
   def initialize(api_key:, model:)
     @api_key = api_key
@@ -16,6 +19,7 @@ class GeminiClient
   end
 
   def generate(prompt, log_context: nil)
+    enforce_daily_limit!(log_context)
     uri = URI("#{BASE_URL}/models/#{@model}:generateContent?key=#{@api_key}")
     body = { contents: [{ parts: [{ text: prompt }] }] }
 
@@ -79,6 +83,17 @@ class GeminiClient
   def extract_text(data)
     data.dig("candidates", 0, "content", "parts", 0, "text") ||
       raise(Error, "Unexpected response format: no text content found")
+  end
+
+  def enforce_daily_limit!(log_context)
+    user = log_context&.dig(:user)
+    return unless user
+
+    count = AiLog.where(user: user, created_at: Date.current.all_day).count
+    return unless count >= DAILY_REQUEST_LIMIT
+
+    raise DailyRequestLimitError,
+          "Daily AI request limit (#{DAILY_REQUEST_LIMIT}) reached. Try again tomorrow."
   end
 
   def log_request(
