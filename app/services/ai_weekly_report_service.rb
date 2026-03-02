@@ -3,7 +3,7 @@
 class AiWeeklyReportService
   include AiWorkoutPromptHelpers
 
-  GENERATION_CONFIG = { temperature: 0.7, maxOutputTokens: 600 }.freeze
+  GENERATION_CONFIG = { temperature: 0.7, maxOutputTokens: 1024 }.freeze
 
   def initialize(user, week_start)
     @user = user

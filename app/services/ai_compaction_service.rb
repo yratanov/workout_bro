@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AiCompactionService
-  GENERATION_CONFIG = { temperature: 0.5, maxOutputTokens: 750 }.freeze
+  GENERATION_CONFIG = { temperature: 0.5, maxOutputTokens: 2048 }.freeze
 
   def initialize(ai_trainer)
     @ai_trainer = ai_trainer
