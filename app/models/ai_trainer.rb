@@ -72,11 +72,4 @@ class AiTrainer < ApplicationRecord
     scope = scope.where("created_at > ?", review.created_at) if review
     scope
   end
-
-  def weekly_reports_since_last_review_count
-    review = latest_full_review
-    scope = ai_trainer_activities.weekly_report.completed
-    scope = scope.where("created_at > ?", review.created_at) if review
-    scope.count
-  end
 end

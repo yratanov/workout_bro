@@ -11,29 +11,36 @@ class AiWorkoutFeedbackService
 
   def call
     client = GeminiClient.new(api_key: @user.ai_api_key, model: @user.ai_model)
-    client.generate(
-      build_prompt,
-      log_context: {
-        user: @user,
-        action: "workout_feedback"
-      }
-    )
+
+    if @ai_trainer&.configured?
+      messages = AiConversationBuilder.new(@ai_trainer).build
+      messages << { role: "user", text: request_message }
+      client.generate_chat(
+        messages,
+        log_context: {
+          user: @user,
+          action: "workout_feedback"
+        }
+      )
+    else
+      client.generate(
+        build_prompt,
+        log_context: {
+          user: @user,
+          action: "workout_feedback"
+        }
+      )
+    end
   end
 
   private
 
-  def build_prompt
-    sections = [system_context, workout_data_section, instruction_section]
-    sections.compact.join("\n\n")
+  def request_message
+    [workout_data_section, instruction_section].join("\n\n")
   end
 
-  def system_context
-    return nil unless @ai_trainer
-
-    <<~PROMPT.strip
-      ## Your Role
-      #{AiPromptContextBuilder.new(@ai_trainer).call}
-    PROMPT
+  def build_prompt
+    [workout_data_section, instruction_section].join("\n\n")
   end
 
   def workout_data_section

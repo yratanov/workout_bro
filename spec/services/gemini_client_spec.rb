@@ -112,4 +112,75 @@ describe GeminiClient do
       end
     end
   end
+
+  describe "#generate_chat" do
+    let(:messages) do
+      [
+        { role: "user", text: "Hello" },
+        { role: "model", text: "Hi there!" },
+        { role: "user", text: "How are you?" }
+      ]
+    end
+
+    it "returns text from successful response" do
+      body = {
+        candidates: [{ content: { parts: [{ text: "I'm great!" }] } }]
+      }.to_json
+
+      mock_response(200, body)
+      expect(client.generate_chat(messages)).to eq("I'm great!")
+    end
+
+    it "sends multi-turn contents in request body" do
+      body = {
+        candidates: [{ content: { parts: [{ text: "Response" }] } }]
+      }.to_json
+
+      http = instance_double(Net::HTTP)
+      allow(Net::HTTP).to receive(:new).and_return(http)
+      allow(http).to receive(:use_ssl=)
+      allow(http).to receive(:open_timeout=)
+      allow(http).to receive(:read_timeout=)
+
+      response = instance_double(Net::HTTPResponse, code: "200", body:)
+      allow(http).to receive(:request) do |req|
+        parsed = JSON.parse(req.body)
+        expect(parsed["contents"]).to eq(
+          [
+            { "role" => "user", "parts" => [{ "text" => "Hello" }] },
+            { "role" => "model", "parts" => [{ "text" => "Hi there!" }] },
+            { "role" => "user", "parts" => [{ "text" => "How are you?" }] }
+          ]
+        )
+        response
+      end
+
+      client.generate_chat(messages)
+    end
+
+    context "with logging" do
+      fixtures :users
+
+      it "logs prompt as JSON" do
+        user = users(:john)
+
+        body =
+          { candidates: [{ content: { parts: [{ text: "OK" }] } }] }.to_json
+
+        mock_response(200, body)
+
+        client.generate_chat(
+          messages,
+          log_context: {
+            user: user,
+            action: "test_chat"
+          }
+        )
+
+        log = AiLog.last
+        expect(log.action).to eq("test_chat")
+        expect(JSON.parse(log.prompt)).to be_an(Array)
+      end
+    end
+  end
 end

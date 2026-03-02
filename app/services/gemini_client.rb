@@ -51,6 +51,46 @@ class GeminiClient
     raise
   end
 
+  def generate_chat(messages, log_context: nil)
+    enforce_daily_limit!(log_context)
+    uri = URI("#{BASE_URL}/models/#{@model}:generateContent?key=#{@api_key}")
+    contents =
+      messages.map { |msg| { role: msg[:role], parts: [{ text: msg[:text] }] } }
+    body = { contents: }
+
+    start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    response = post(uri, body)
+    result = parse_response(response)
+    duration_ms =
+      (
+        (Process.clock_gettime(Process::CLOCK_MONOTONIC) - start_time) * 1000
+      ).round
+
+    if log_context
+      log_request(
+        prompt: messages.to_json,
+        response_text: result,
+        duration_ms:,
+        context: log_context
+      )
+    end
+    result
+  rescue => e
+    duration_ms =
+      (
+        (Process.clock_gettime(Process::CLOCK_MONOTONIC) - start_time) * 1000
+      ).round if start_time
+    if log_context
+      log_request(
+        prompt: messages.to_json,
+        error: e.message,
+        duration_ms:,
+        context: log_context
+      )
+    end
+    raise
+  end
+
   private
 
   def post(uri, body)

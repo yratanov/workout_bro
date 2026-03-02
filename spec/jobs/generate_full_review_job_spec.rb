@@ -22,7 +22,7 @@ describe GenerateFullReviewJob do
 
   describe "#perform" do
     it "creates a full_review activity" do
-      allow_any_instance_of(GeminiClient).to receive(:generate).and_return(
+      allow_any_instance_of(GeminiClient).to receive(:generate_chat).and_return(
         "Full review content"
       )
 
@@ -38,7 +38,7 @@ describe GenerateFullReviewJob do
     end
 
     it "uses AiCompactionService when recent activities exist" do
-      allow_any_instance_of(GeminiClient).to receive(:generate).and_return(
+      allow_any_instance_of(GeminiClient).to receive(:generate_chat).and_return(
         "Compacted"
       )
 
@@ -48,8 +48,22 @@ describe GenerateFullReviewJob do
       expect(activity.content).to eq("Compacted")
     end
 
+    it "skips when a full_review was created within the last hour" do
+      ai_trainer.ai_trainer_activities.create!(
+        user:,
+        activity_type: :full_review,
+        status: :completed,
+        content: "Recent review"
+      )
+
+      expect { described_class.new.perform(ai_trainer:) }.not_to change(
+        AiTrainerActivity.full_review,
+        :count
+      )
+    end
+
     it "handles errors gracefully" do
-      allow_any_instance_of(GeminiClient).to receive(:generate).and_raise(
+      allow_any_instance_of(GeminiClient).to receive(:generate_chat).and_raise(
         StandardError,
         "API error"
       )

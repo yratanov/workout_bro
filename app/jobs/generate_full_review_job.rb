@@ -2,6 +2,8 @@ class GenerateFullReviewJob < ApplicationJob
   queue_as :default
 
   def perform(ai_trainer:)
+    return if recent_review_exists?(ai_trainer)
+
     user = ai_trainer.user
 
     activity =
@@ -26,5 +28,16 @@ class GenerateFullReviewJob < ApplicationJob
     Rails.logger.error(
       "Full review failed for trainer ##{ai_trainer.id}: #{e.message}"
     )
+  end
+
+  private
+
+  def recent_review_exists?(ai_trainer)
+    ai_trainer
+      .ai_trainer_activities
+      .full_review
+      .completed
+      .where(created_at: 1.hour.ago..)
+      .exists?
   end
 end

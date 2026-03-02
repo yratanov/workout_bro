@@ -1,4 +1,6 @@
 class GenerateAiWorkoutFeedbackJob < ApplicationJob
+  include AiCompactionTrigger
+
   queue_as :default
 
   def perform(workout:)
@@ -23,6 +25,8 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
 
     # Also write to workout.ai_summary during transition
     workout.update!(ai_summary: result)
+
+    trigger_compaction_if_needed(ai_trainer)
   rescue => e
     if activity&.persisted?
       activity&.update(status: :failed, error_message: e.message)

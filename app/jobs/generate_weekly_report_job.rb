@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class GenerateWeeklyReportJob < ApplicationJob
-  queue_as :default
+  include AiCompactionTrigger
 
-  COMPACTION_THRESHOLD = 4
+  queue_as :default
 
   def perform(user:, week_start:)
     ai_trainer = user.ai_trainer
@@ -21,32 +21,9 @@ class GenerateWeeklyReportJob < ApplicationJob
 
     activity.update!(content: response, status: :completed)
 
-    append_recommendations(user, response)
+    trigger_compaction_if_needed(ai_trainer)
   rescue => e
     activity&.update(status: :failed, error_message: e.message)
     Rails.logger.error("Weekly report failed for user #{user.id}: #{e.message}")
-  end
-
-  private
-
-  def append_recommendations(user, response)
-    week_section = response[/## Week of .*/m]
-    return unless week_section
-
-    ai_trainer = user.ai_trainer
-    return unless ai_trainer
-
-    ai_trainer.update!(
-      system_prompt: "#{ai_trainer.system_prompt}\n\n#{week_section}"
-    )
-
-    compact_prompt_if_needed(ai_trainer)
-  end
-
-  def compact_prompt_if_needed(ai_trainer)
-    weekly_sections = ai_trainer.system_prompt.scan(/## Week /).size
-    return unless weekly_sections >= COMPACTION_THRESHOLD
-
-    AiTrainerPromptCompactor.new(ai_trainer).call
   end
 end

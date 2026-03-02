@@ -21,45 +21,39 @@ describe AiCompactionService do
   end
 
   describe "#call" do
-    it "calls GeminiClient and returns result" do
+    it "calls generate_chat with conversation messages and returns result" do
       mock_client = instance_double(GeminiClient)
       allow(GeminiClient).to receive(:new).with(
         api_key: "test-key",
         model: "gemini-2.0-flash"
       ).and_return(mock_client)
-      allow(mock_client).to receive(:generate).and_return("Compacted review")
+      allow(mock_client).to receive(:generate_chat).and_return(
+        "Compacted review"
+      )
 
       result = described_class.new(ai_trainer).call
 
       expect(result).to eq("Compacted review")
-      expect(mock_client).to have_received(:generate) do |prompt|
-        expect(prompt).to include("Trainer Profile")
-        expect(prompt).to include("updated comprehensive training review")
+      expect(mock_client).to have_received(:generate_chat) do |messages, **|
+        expect(messages).to be_an(Array)
+        last_msg = messages.last
+        expect(last_msg[:role]).to eq("user")
+        expect(last_msg[:text]).to include(
+          "updated comprehensive training review"
+        )
       end
     end
 
-    it "includes previous full review in prompt" do
+    it "includes trainer context in conversation" do
       mock_client = instance_double(GeminiClient)
       allow(GeminiClient).to receive(:new).and_return(mock_client)
-      allow(mock_client).to receive(:generate).and_return("Review")
+      allow(mock_client).to receive(:generate_chat).and_return("Review")
 
       described_class.new(ai_trainer).call
 
-      expect(mock_client).to have_received(:generate) do |prompt|
-        expect(prompt).to include("Previous Training Review")
-        expect(prompt).to include("Comprehensive review")
-      end
-    end
-
-    it "includes recent activities in prompt" do
-      mock_client = instance_double(GeminiClient)
-      allow(GeminiClient).to receive(:new).and_return(mock_client)
-      allow(mock_client).to receive(:generate).and_return("Review")
-
-      described_class.new(ai_trainer).call
-
-      expect(mock_client).to have_received(:generate) do |prompt|
-        expect(prompt).to include("Activities Since Last Review")
+      expect(mock_client).to have_received(:generate_chat) do |messages, **|
+        system_msg = messages.first
+        expect(system_msg[:text]).to include("A balanced fitness trainer.")
       end
     end
   end
