@@ -26,7 +26,7 @@
 #
 # Foreign Keys
 #
-#  user_id  (user_id => users.id) ON DELETE => cascade
+#  user_id  (user_id => users.id)
 #
 johns_trainer:
   user: john

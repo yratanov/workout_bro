@@ -28,10 +28,10 @@
 #
 # Foreign Keys
 #
-#  exercise_id     (exercise_id => exercises.id) ON DELETE => cascade
+#  exercise_id     (exercise_id => exercises.id)
 #  user_id         (user_id => users.id)
-#  workout_id      (workout_id => workouts.id) ON DELETE => cascade
-#  workout_rep_id  (workout_rep_id => workout_reps.id) ON DELETE => cascade
+#  workout_id      (workout_id => workouts.id)
+#  workout_rep_id  (workout_rep_id => workout_reps.id)
 #
 bench_press_max_weight:
   user: john

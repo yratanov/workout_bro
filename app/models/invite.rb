@@ -19,7 +19,7 @@
 #
 # Foreign Keys
 #
-#  used_by_user_id  (used_by_user_id => users.id) ON DELETE => nullify
+#  used_by_user_id  (used_by_user_id => users.id)
 #  user_id          (user_id => users.id)
 #
 class Invite < ApplicationRecord

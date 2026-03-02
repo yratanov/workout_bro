@@ -80,6 +80,8 @@ onSubmit(event) {
 
 SQLite3 databases stored in `storage/`. Seeds create a test user (`user@example.com` / `password`) with sample workouts.
 
+**Foreign keys must always use the default RESTRICT behavior.** Never use `on_delete: :cascade` or `on_delete: :nullify` at the database level. Let Rails handle deletions via `dependent:` on associations instead. SQLite silently ignores `PRAGMA foreign_keys = OFF` inside transactions, so CASCADE/NULLIFY FKs fire during table rebuilds caused by `remove_column` migrations, destroying or orphaning data.
+
 ```bash
 bin/rails db:seed      # Load sample data
 bin/rails db:prepare   # Create + migrate + seed

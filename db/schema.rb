@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_02_113000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_02_143448) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -348,37 +348,37 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_113000) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "ai_logs", "users"
-  add_foreign_key "ai_trainer_activities", "ai_trainers", on_delete: :nullify
+  add_foreign_key "ai_trainer_activities", "ai_trainers"
   add_foreign_key "ai_trainer_activities", "users"
-  add_foreign_key "ai_trainer_activities", "workouts", on_delete: :nullify
-  add_foreign_key "ai_trainers", "users", on_delete: :cascade
-  add_foreign_key "exercises", "muscles", on_delete: :nullify
+  add_foreign_key "ai_trainer_activities", "workouts"
+  add_foreign_key "ai_trainers", "users"
+  add_foreign_key "exercises", "muscles"
   add_foreign_key "exercises", "users"
   add_foreign_key "invites", "users"
-  add_foreign_key "invites", "users", column: "used_by_user_id", on_delete: :nullify
-  add_foreign_key "personal_records", "exercises", on_delete: :cascade
+  add_foreign_key "invites", "users", column: "used_by_user_id"
+  add_foreign_key "personal_records", "exercises"
   add_foreign_key "personal_records", "users"
-  add_foreign_key "personal_records", "workout_reps", on_delete: :cascade
-  add_foreign_key "personal_records", "workouts", on_delete: :cascade
+  add_foreign_key "personal_records", "workout_reps"
+  add_foreign_key "personal_records", "workouts"
   add_foreign_key "push_subscriptions", "users"
   add_foreign_key "scheduled_push_notifications", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "superset_exercises", "exercises"
-  add_foreign_key "superset_exercises", "supersets", on_delete: :cascade
+  add_foreign_key "superset_exercises", "supersets"
   add_foreign_key "supersets", "users"
   add_foreign_key "sync_logs", "users"
   add_foreign_key "third_party_credentials", "users"
   add_foreign_key "workout_imports", "users"
   add_foreign_key "workout_reps", "workout_sets"
   add_foreign_key "workout_routine_day_exercises", "exercises"
-  add_foreign_key "workout_routine_day_exercises", "supersets", on_delete: :cascade
+  add_foreign_key "workout_routine_day_exercises", "supersets"
   add_foreign_key "workout_routine_day_exercises", "workout_routine_days"
   add_foreign_key "workout_routine_days", "workout_routines"
   add_foreign_key "workout_routines", "users"
   add_foreign_key "workout_sets", "exercises", on_delete: :restrict
-  add_foreign_key "workout_sets", "supersets", on_delete: :nullify
+  add_foreign_key "workout_sets", "supersets"
   add_foreign_key "workout_sets", "workouts"
   add_foreign_key "workouts", "users"
-  add_foreign_key "workouts", "workout_imports", on_delete: :nullify
-  add_foreign_key "workouts", "workout_routine_days", on_delete: :nullify
+  add_foreign_key "workouts", "workout_imports"
+  add_foreign_key "workouts", "workout_routine_days"
 end

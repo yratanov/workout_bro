@@ -20,7 +20,7 @@
 # Foreign Keys
 #
 #  exercise_id             (exercise_id => exercises.id)
-#  superset_id             (superset_id => supersets.id) ON DELETE => cascade
+#  superset_id             (superset_id => supersets.id)
 #  workout_routine_day_id  (workout_routine_day_id => workout_routine_days.id)
 #
 push_day_bench:

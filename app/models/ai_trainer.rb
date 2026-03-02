@@ -28,7 +28,7 @@
 #
 # Foreign Keys
 #
-#  user_id  (user_id => users.id) ON DELETE => cascade
+#  user_id  (user_id => users.id)
 #
 class AiTrainer < ApplicationRecord
   belongs_to :user

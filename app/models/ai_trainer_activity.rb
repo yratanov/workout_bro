@@ -27,9 +27,9 @@
 #
 # Foreign Keys
 #
-#  ai_trainer_id  (ai_trainer_id => ai_trainers.id) ON DELETE => nullify
+#  ai_trainer_id  (ai_trainer_id => ai_trainers.id)
 #  user_id        (user_id => users.id)
-#  workout_id     (workout_id => workouts.id) ON DELETE => nullify
+#  workout_id     (workout_id => workouts.id)
 #
 class AiTrainerActivity < ApplicationRecord
   belongs_to :user

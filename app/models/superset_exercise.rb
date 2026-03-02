@@ -19,7 +19,7 @@
 # Foreign Keys
 #
 #  exercise_id  (exercise_id => exercises.id)
-#  superset_id  (superset_id => supersets.id) ON DELETE => cascade
+#  superset_id  (superset_id => supersets.id)
 #
 class SupersetExercise < ApplicationRecord
   belongs_to :superset

@@ -19,7 +19,7 @@
 #
 # Foreign Keys
 #
-#  muscle_id  (muscle_id => muscles.id) ON DELETE => nullify
+#  muscle_id  (muscle_id => muscles.id)
 #  user_id    (user_id => users.id)
 #
 
