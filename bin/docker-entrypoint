@@ -93,9 +93,10 @@ fi
 
 # If running jobs, wait for database to be ready
 if [ "${1}" == "bin/jobs" ]; then
+  DB_FILE="/rails/storage/production.sqlite3"
   echo "Waiting for database to be ready..."
-  for i in {1..60}; do
-    if ./bin/rails runner "ActiveRecord::Base.connection.tables.any?" 2>/dev/null | grep -q "true"; then
+  for i in {1..30}; do
+    if [ -f "$DB_FILE" ] && sqlite3 "$DB_FILE" "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';" 2>/dev/null | grep -qv "^0$"; then
       echo "Database ready."
       break
     fi
