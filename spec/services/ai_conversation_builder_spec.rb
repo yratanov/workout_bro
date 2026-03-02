@@ -21,28 +21,35 @@ describe AiConversationBuilder do
   end
 
   describe "#build" do
-    it "starts with system turn containing static instructions and trainer profile" do
-      messages = described_class.new(ai_trainer).build
+    it "returns a hash with system_instruction and messages" do
+      result = described_class.new(ai_trainer).build
 
-      expect(messages.first[:role]).to eq("user")
-      expect(messages.first[:text]).to include(
+      expect(result).to be_a(Hash)
+      expect(result).to have_key(:system_instruction)
+      expect(result).to have_key(:messages)
+    end
+
+    it "includes static instructions and trainer profile in system_instruction" do
+      result = described_class.new(ai_trainer).build
+
+      expect(result[:system_instruction]).to include(
         "personal fitness trainer AI assistant"
       )
-      expect(messages.first[:text]).to include("A balanced fitness trainer.")
-
-      expect(messages[1][:role]).to eq("model")
-      expect(messages[1][:text]).to include("Understood")
+      expect(result[:system_instruction]).to include(
+        "A balanced fitness trainer."
+      )
     end
 
-    it "includes latest full review in system turn" do
-      messages = described_class.new(ai_trainer).build
+    it "includes latest full review in system_instruction" do
+      result = described_class.new(ai_trainer).build
 
-      expect(messages.first[:text]).to include("Latest Training Review")
-      expect(messages.first[:text]).to include("Comprehensive review")
+      expect(result[:system_instruction]).to include("Latest Training Review")
+      expect(result[:system_instruction]).to include("Comprehensive review")
     end
 
-    it "includes workout review activities as user/model pairs" do
-      messages = described_class.new(ai_trainer).build
+    it "includes workout review activities as user/model pairs in messages" do
+      result = described_class.new(ai_trainer).build
+      messages = result[:messages]
 
       workout_user_msg =
         messages.find do |m|
@@ -57,8 +64,9 @@ describe AiConversationBuilder do
       )
     end
 
-    it "includes weekly report activities as user/model pairs" do
-      messages = described_class.new(ai_trainer).build
+    it "includes weekly report activities as user/model pairs in messages" do
+      result = described_class.new(ai_trainer).build
+      messages = result[:messages]
 
       weekly_user_msg =
         messages.find do |m|
@@ -68,7 +76,8 @@ describe AiConversationBuilder do
     end
 
     it "uses condensed workout data (no rep details)" do
-      messages = described_class.new(ai_trainer).build
+      result = described_class.new(ai_trainer).build
+      messages = result[:messages]
 
       workout_msgs =
         messages.select do |m|
@@ -84,7 +93,8 @@ describe AiConversationBuilder do
       activity = ai_trainer_activities(:johns_workout_review)
       activity.update_column(:workout_id, nil)
 
-      messages = described_class.new(ai_trainer).build
+      result = described_class.new(ai_trainer).build
+      messages = result[:messages]
 
       workout_msgs =
         messages.select do |m|
@@ -93,8 +103,20 @@ describe AiConversationBuilder do
       expect(workout_msgs).to be_empty
     end
 
+    it "does not include fake 'Understood' model turn" do
+      result = described_class.new(ai_trainer).build
+      messages = result[:messages]
+
+      understood_msgs =
+        messages.select do |m|
+          m[:role] == "model" && m[:text].include?("Understood")
+        end
+      expect(understood_msgs).to be_empty
+    end
+
     it "excludes pending activities" do
-      messages = described_class.new(ai_trainer).build
+      result = described_class.new(ai_trainer).build
+      messages = result[:messages]
 
       model_msgs = messages.select { |m| m[:role] == "model" }
       model_texts = model_msgs.map { |m| m[:text] }

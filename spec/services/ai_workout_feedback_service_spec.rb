@@ -41,18 +41,18 @@ describe AiWorkoutFeedbackService do
         )
       workout_set.workout_reps.create!(weight: 100, reps: 10)
 
-      mock_client = instance_double(GeminiClient)
-      allow(GeminiClient).to receive(:new).with(
-        api_key: "test-key",
-        model: "gemini-2.0-flash"
-      ).and_return(mock_client)
+      mock_client = instance_double(AiClients::Gemini)
+      allow(AiClient).to receive(:for).with(user).and_return(mock_client)
       allow(mock_client).to receive(:generate_chat).and_return("Great workout!")
 
       result = described_class.new(workout).call
 
       expect(result).to eq("Great workout!")
-      expect(mock_client).to have_received(:generate_chat) do |messages, **|
+      expect(mock_client).to have_received(:generate_chat) do |messages, **opts|
         expect(messages).to be_an(Array)
+        expect(opts[:system_instruction]).to include(
+          "A motivational trainer profile."
+        )
         last_msg = messages.last
         expect(last_msg[:role]).to eq("user")
         expect(last_msg[:text]).to include("Strength")
@@ -61,24 +61,27 @@ describe AiWorkoutFeedbackService do
       end
     end
 
-    it "includes trainer context in conversation messages" do
-      mock_client = instance_double(GeminiClient)
-      allow(GeminiClient).to receive(:new).and_return(mock_client)
+    it "includes trainer context in system_instruction" do
+      mock_client = instance_double(AiClients::Gemini)
+      allow(AiClient).to receive(:for).and_return(mock_client)
       allow(mock_client).to receive(:generate_chat).and_return("Feedback")
 
       described_class.new(workout).call
 
-      expect(mock_client).to have_received(:generate_chat) do |messages, **|
-        system_msg = messages.first
-        expect(system_msg[:text]).to include("A motivational trainer profile.")
+      expect(mock_client).to have_received(
+        :generate_chat
+      ) do |_messages, **opts|
+        expect(opts[:system_instruction]).to include(
+          "A motivational trainer profile."
+        )
       end
     end
 
     it "falls back to generate for unconfigured trainer" do
       ai_trainer.update!(status: :pending)
 
-      mock_client = instance_double(GeminiClient)
-      allow(GeminiClient).to receive(:new).and_return(mock_client)
+      mock_client = instance_double(AiClients::Gemini)
+      allow(AiClient).to receive(:for).and_return(mock_client)
       allow(mock_client).to receive(:generate).and_return("Basic feedback")
 
       result = described_class.new(workout).call
@@ -100,8 +103,8 @@ describe AiWorkoutFeedbackService do
       end
 
       it "includes run details in the last message" do
-        mock_client = instance_double(GeminiClient)
-        allow(GeminiClient).to receive(:new).and_return(mock_client)
+        mock_client = instance_double(AiClients::Gemini)
+        allow(AiClient).to receive(:for).and_return(mock_client)
         allow(mock_client).to receive(:generate_chat).and_return("Nice run!")
 
         result = described_class.new(run_workout).call

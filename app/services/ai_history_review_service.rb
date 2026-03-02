@@ -4,6 +4,7 @@ class AiHistoryReviewService
   include AiWorkoutPromptHelpers
 
   MAX_DATA_MONTHS = 6
+  GENERATION_CONFIG = { temperature: 0.5, maxOutputTokens: 750 }.freeze
 
   def initialize(ai_trainer)
     @ai_trainer = ai_trainer
@@ -11,9 +12,10 @@ class AiHistoryReviewService
   end
 
   def call
-    client = GeminiClient.new(api_key: @user.ai_api_key, model: @user.ai_model)
+    client = AiClient.for(@user)
     client.generate(
       build_prompt,
+      generation_config: GENERATION_CONFIG,
       log_context: {
         user: @user,
         action: "full_review_initial"

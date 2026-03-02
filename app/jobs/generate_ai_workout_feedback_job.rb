@@ -1,6 +1,8 @@
 class GenerateAiWorkoutFeedbackJob < ApplicationJob
   include AiCompactionTrigger
 
+  BROADCAST_THROTTLE_MS = 150
+
   queue_as :default
 
   def perform(workout:)
@@ -19,12 +21,14 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
           activity_type: :workout_review
         )
 
-    result = AiWorkoutFeedbackService.new(workout).call
+    if ai_trainer.configured?
+      result = generate_with_streaming(workout, user)
+    else
+      result = AiWorkoutFeedbackService.new(workout).call
+      broadcast_feedback(workout, result)
+    end
 
     activity.update!(content: result, status: :completed)
-
-    # Also write to workout.ai_summary during transition
-    workout.update!(ai_summary: result)
 
     trigger_compaction_if_needed(ai_trainer)
   rescue => e
@@ -33,6 +37,48 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
     end
     Rails.logger.error(
       "AI workout feedback failed for workout ##{workout.id}: #{e.message}"
+    )
+  end
+
+  private
+
+  def generate_with_streaming(workout, user)
+    service = AiWorkoutFeedbackService.new(workout)
+    client = AiClient.for(user)
+    conversation = AiConversationBuilder.new(user.ai_trainer).build
+    messages =
+      conversation[:messages] +
+        [{ role: "user", text: service.send(:request_message) }]
+
+    last_broadcast = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
+    client.generate_chat_stream(
+      messages,
+      system_instruction: conversation[:system_instruction],
+      generation_config: AiWorkoutFeedbackService::GENERATION_CONFIG,
+      log_context: {
+        user:,
+        action: "workout_feedback"
+      }
+    ) do |accumulated|
+      now = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      if (now - last_broadcast) * 1000 >= BROADCAST_THROTTLE_MS
+        broadcast_feedback(workout, accumulated)
+        last_broadcast = now
+      end
+    end
+  end
+
+  def broadcast_feedback(workout, text)
+    target = "ai_feedback_content_#{workout.id}"
+    html = ApplicationController.helpers.render_markdown(text)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      [workout, :ai_feedback],
+      target:,
+      html:
+        "<div id=\"#{target}\" " \
+          'class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">' \
+          "#{html}</div>"
     )
   end
 end

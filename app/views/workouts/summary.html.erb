@@ -234,11 +234,7 @@
   <% end %>
   <!-- AI Trainer Feedback -->
   <% if current_user.ai_trainer&.configured? %>
-    <div
-      class="bg-slate-800 rounded-lg p-4 mb-6"
-      data-controller="ai-feedback"
-      data-ai-feedback-url-value="<%= ai_feedback_status_workout_path(@workout) %>"
-    >
+    <div class="bg-slate-800 rounded-lg p-4 mb-6">
       <div class="flex items-center gap-2 mb-3">
         <%= icon "sparkles", size: "w-5 h-5", class: "text-purple-400" %>
         <h3 class="text-purple-400 font-semibold">
@@ -247,11 +243,18 @@
       </div>
       <% activity = @workout.ai_trainer_activity %>
       <% if activity&.completed? && activity.content.present? %>
-        <div class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">
+        <div
+          id="ai_feedback_content_<%= @workout.id %>"
+          class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none"
+        >
           <%= render_markdown(activity.content) %>
         </div>
       <% else %>
-        <div data-ai-feedback-target="loading">
+        <%= turbo_stream_from @workout, :ai_feedback %>
+        <div
+          id="ai_feedback_content_<%= @workout.id %>"
+          class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none"
+        >
           <div class="flex items-center gap-2 text-slate-400 text-sm">
             <div
               class="
@@ -262,10 +265,6 @@
             <span><%= t(".ai_feedback_loading") %></span>
           </div>
         </div>
-        <div
-          data-ai-feedback-target="content"
-          class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none"
-        ></div>
       <% end %>
     </div>
   <% end %>

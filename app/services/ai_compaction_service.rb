@@ -1,17 +1,22 @@
 # frozen_string_literal: true
 
 class AiCompactionService
+  GENERATION_CONFIG = { temperature: 0.5, maxOutputTokens: 750 }.freeze
+
   def initialize(ai_trainer)
     @ai_trainer = ai_trainer
     @user = ai_trainer.user
   end
 
   def call
-    client = GeminiClient.new(api_key: @user.ai_api_key, model: @user.ai_model)
-    messages = AiConversationBuilder.new(@ai_trainer).build
-    messages << { role: "user", text: instruction_text }
+    client = AiClient.for(@user)
+    conversation = AiConversationBuilder.new(@ai_trainer).build
+    messages =
+      conversation[:messages] + [{ role: "user", text: instruction_text }]
     client.generate_chat(
       messages,
+      system_instruction: conversation[:system_instruction],
+      generation_config: GENERATION_CONFIG,
       log_context: {
         user: @user,
         action: "full_review_compaction"

@@ -303,65 +303,6 @@ describe "Workouts" do
     end
   end
 
-  describe "GET /workouts/:id/ai_feedback_status" do
-    let!(:workout) do
-      Workout.create!(
-        user: user,
-        workout_type: :strength,
-        started_at: 1.hour.ago,
-        ended_at: Time.current,
-        workout_routine_day: workout_routine_days(:push_day)
-      )
-    end
-
-    it "returns pending when no activity" do
-      get ai_feedback_status_workout_path(workout), as: :json
-
-      expect(response).to have_http_status(:success)
-      json = JSON.parse(response.body)
-      expect(json["status"]).to eq("pending")
-      expect(json["ai_summary"]).to be_nil
-    end
-
-    it "returns completed with content when activity is completed" do
-      ai_trainer =
-        user.ai_trainer ||
-          user.create_ai_trainer!(
-            status: :completed,
-            trainer_profile: "Profile"
-          )
-      AiTrainerActivity.create!(
-        user: user,
-        ai_trainer: ai_trainer,
-        workout: workout,
-        activity_type: :workout_review,
-        content: "Great workout!",
-        status: :completed
-      )
-
-      get ai_feedback_status_workout_path(workout), as: :json
-
-      expect(response).to have_http_status(:success)
-      json = JSON.parse(response.body)
-      expect(json["status"]).to eq("completed")
-      expect(json["ai_summary"]).to include("Great workout!")
-    end
-
-    it "returns 404 for another user's workout" do
-      other_workout =
-        Workout.create!(
-          user: users(:jane),
-          workout_type: :strength,
-          started_at: 1.hour.ago,
-          ended_at: Time.current
-        )
-
-      get ai_feedback_status_workout_path(other_workout), as: :json
-
-      expect(response).to have_http_status(:not_found)
-    end
-  end
-
   describe "POST /workouts/:id/pause" do
     let!(:workout) do
       Workout.create!(

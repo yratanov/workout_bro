@@ -13,11 +13,7 @@ describe GenerateWeeklyReportJob do
 
   let(:ai_trainer) do
     user.ai_trainer.tap do |t|
-      t.update!(
-        status: :completed,
-        summary: "A motivational trainer.",
-        system_prompt: "You are a fitness trainer."
-      )
+      t.update!(status: :completed, trainer_profile: "A motivational trainer.")
     end
   end
 

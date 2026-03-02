@@ -14,8 +14,6 @@
 #  goal_increase_strength :boolean          default(FALSE), not null
 #  goal_lose_weight       :boolean          default(FALSE), not null
 #  status                 :integer          default("pending"), not null
-#  summary                :text
-#  system_prompt          :text
 #  train_on_existing_data :boolean          default(TRUE), not null
 #  trainer_profile        :text
 #  created_at             :datetime         not null

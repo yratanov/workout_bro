@@ -20,12 +20,17 @@ describe GenerateFullReviewJob do
     end
   end
 
+  let(:mock_client) do
+    instance_double(AiClients::Gemini).tap do |client|
+      allow(client).to receive(:generate).and_return("Full review content")
+      allow(client).to receive(:generate_chat).and_return("Full review content")
+    end
+  end
+
+  before { allow(AiClient).to receive(:for).and_return(mock_client) }
+
   describe "#perform" do
     it "creates a full_review activity" do
-      allow_any_instance_of(GeminiClient).to receive(:generate_chat).and_return(
-        "Full review content"
-      )
-
       expect { described_class.new.perform(ai_trainer:) }.to change(
         AiTrainerActivity.full_review,
         :count
@@ -38,9 +43,7 @@ describe GenerateFullReviewJob do
     end
 
     it "uses AiCompactionService when recent activities exist" do
-      allow_any_instance_of(GeminiClient).to receive(:generate_chat).and_return(
-        "Compacted"
-      )
+      allow(mock_client).to receive(:generate_chat).and_return("Compacted")
 
       described_class.new.perform(ai_trainer:)
 
@@ -63,7 +66,11 @@ describe GenerateFullReviewJob do
     end
 
     it "handles errors gracefully" do
-      allow_any_instance_of(GeminiClient).to receive(:generate_chat).and_raise(
+      allow(mock_client).to receive(:generate_chat).and_raise(
+        StandardError,
+        "API error"
+      )
+      allow(mock_client).to receive(:generate).and_raise(
         StandardError,
         "API error"
       )

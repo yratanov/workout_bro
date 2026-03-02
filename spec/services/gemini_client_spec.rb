@@ -37,8 +37,9 @@ describe GeminiClient do
       )
     end
 
-    it "raises RateLimitError on 429" do
+    it "raises RateLimitError on 429 after retries" do
       mock_response(429, "Too many requests")
+      allow(client).to receive(:sleep)
       expect { client.generate("Test") }.to raise_error(
         GeminiClient::RateLimitError
       )
@@ -111,6 +112,54 @@ describe GeminiClient do
         expect(client.generate("Test")).to eq("OK")
       end
     end
+
+    context "retry with backoff" do
+      it "retries and succeeds after transient failure" do
+        success_body = {
+          candidates: [{ content: { parts: [{ text: "OK" }] } }]
+        }.to_json
+
+        http = instance_double(Net::HTTP)
+        allow(Net::HTTP).to receive(:new).and_return(http)
+        allow(http).to receive(:use_ssl=)
+        allow(http).to receive(:open_timeout=)
+        allow(http).to receive(:read_timeout=)
+
+        call_count = 0
+        allow(http).to receive(:request) do
+          call_count += 1
+          raise Net::OpenTimeout, "execution expired" if call_count == 1
+          instance_double(Net::HTTPResponse, code: "200", body: success_body)
+        end
+        allow(client).to receive(:sleep)
+
+        expect(client.generate("Test")).to eq("OK")
+        expect(call_count).to eq(2)
+      end
+
+      it "raises after exhausting retries" do
+        http = instance_double(Net::HTTP)
+        allow(Net::HTTP).to receive(:new).and_return(http)
+        allow(http).to receive(:use_ssl=)
+        allow(http).to receive(:open_timeout=)
+        allow(http).to receive(:read_timeout=)
+        allow(http).to receive(:request).and_raise(
+          Net::ReadTimeout,
+          "read timeout"
+        )
+        allow(client).to receive(:sleep)
+
+        expect { client.generate("Test") }.to raise_error(Net::ReadTimeout)
+      end
+
+      it "does not retry authentication errors" do
+        mock_response(403, "Forbidden")
+
+        expect { client.generate("Test") }.to raise_error(
+          GeminiClient::AuthenticationError
+        )
+      end
+    end
   end
 
   describe "#generate_chat" do
@@ -158,14 +207,59 @@ describe GeminiClient do
       client.generate_chat(messages)
     end
 
+    it "includes system_instruction in request body when provided" do
+      body = {
+        candidates: [{ content: { parts: [{ text: "Response" }] } }]
+      }.to_json
+
+      http = instance_double(Net::HTTP)
+      allow(Net::HTTP).to receive(:new).and_return(http)
+      allow(http).to receive(:use_ssl=)
+      allow(http).to receive(:open_timeout=)
+      allow(http).to receive(:read_timeout=)
+
+      response = instance_double(Net::HTTPResponse, code: "200", body:)
+      allow(http).to receive(:request) do |req|
+        parsed = JSON.parse(req.body)
+        expect(parsed["system_instruction"]).to eq(
+          { "parts" => [{ "text" => "You are a trainer." }] }
+        )
+        response
+      end
+
+      client.generate_chat(messages, system_instruction: "You are a trainer.")
+    end
+
+    it "omits system_instruction from request body when not provided" do
+      body = {
+        candidates: [{ content: { parts: [{ text: "Response" }] } }]
+      }.to_json
+
+      http = instance_double(Net::HTTP)
+      allow(Net::HTTP).to receive(:new).and_return(http)
+      allow(http).to receive(:use_ssl=)
+      allow(http).to receive(:open_timeout=)
+      allow(http).to receive(:read_timeout=)
+
+      response = instance_double(Net::HTTPResponse, code: "200", body:)
+      allow(http).to receive(:request) do |req|
+        parsed = JSON.parse(req.body)
+        expect(parsed).not_to have_key("system_instruction")
+        response
+      end
+
+      client.generate_chat(messages)
+    end
+
     context "with logging" do
       fixtures :users
 
       it "logs prompt as JSON" do
         user = users(:john)
 
-        body =
-          { candidates: [{ content: { parts: [{ text: "OK" }] } }] }.to_json
+        body = {
+          candidates: [{ content: { parts: [{ text: "OK" }] } }]
+        }.to_json
 
         mock_response(200, body)
 

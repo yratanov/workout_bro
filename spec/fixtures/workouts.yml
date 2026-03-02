@@ -4,7 +4,6 @@
 # Database name: primary
 #
 #  id                     :integer          not null, primary key
-#  ai_summary             :text
 #  avg_cadence            :integer
 #  avg_heart_rate         :integer
 #  date                   :date

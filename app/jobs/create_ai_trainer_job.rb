@@ -1,4 +1,6 @@
 class CreateAiTrainerJob < ApplicationJob
+  GENERATION_CONFIG = { temperature: 0.8, maxOutputTokens: 750 }.freeze
+
   queue_as :default
 
   def perform(ai_trainer:)
@@ -6,9 +8,16 @@ class CreateAiTrainerJob < ApplicationJob
     user = ai_trainer.user
 
     prompt = AiTrainerPromptBuilder.new(ai_trainer).call
-    client = GeminiClient.new(api_key: user.ai_api_key, model: user.ai_model)
+    client = AiClient.for(user)
     trainer_profile =
-      client.generate(prompt, log_context: { user:, action: "create_trainer" })
+      client.generate(
+        prompt,
+        generation_config: GENERATION_CONFIG,
+        log_context: {
+          user:,
+          action: "create_trainer"
+        }
+      )
 
     ai_trainer.update!(trainer_profile:, status: :completed, error_details: nil)
 

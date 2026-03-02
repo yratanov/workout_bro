@@ -23,15 +23,16 @@ describe AiWeeklyReportService do
 
   describe "#call" do
     it "calls generate_chat with conversation messages when trainer is configured" do
-      mock_client = instance_double(GeminiClient)
-      allow(GeminiClient).to receive(:new).and_return(mock_client)
+      mock_client = instance_double(AiClients::Gemini)
+      allow(AiClient).to receive(:for).and_return(mock_client)
       allow(mock_client).to receive(:generate_chat).and_return("Weekly report")
 
       result = described_class.new(user, week_start).call
 
       expect(result).to eq("Weekly report")
-      expect(mock_client).to have_received(:generate_chat) do |messages, **|
+      expect(mock_client).to have_received(:generate_chat) do |messages, **opts|
         expect(messages).to be_an(Array)
+        expect(opts[:system_instruction]).to include("A motivational trainer.")
         last_msg = messages.last
         expect(last_msg[:role]).to eq("user")
         expect(last_msg[:text]).to include("Training Week")
@@ -42,8 +43,8 @@ describe AiWeeklyReportService do
     it "falls back to generate for unconfigured trainer" do
       ai_trainer.update!(status: :pending)
 
-      mock_client = instance_double(GeminiClient)
-      allow(GeminiClient).to receive(:new).and_return(mock_client)
+      mock_client = instance_double(AiClients::Gemini)
+      allow(AiClient).to receive(:for).and_return(mock_client)
       allow(mock_client).to receive(:generate).and_return("Basic report")
 
       result = described_class.new(user, week_start).call

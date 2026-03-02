@@ -11,7 +11,6 @@ class WorkoutsController < ApplicationController
                   resume
                   notes_modal
                   update_notes
-                  ai_feedback_status
                 ]
 
   # GET /workouts or /workouts.json
@@ -203,16 +202,6 @@ class WorkoutsController < ApplicationController
   # PATCH /workouts/1/update_notes
   def update_notes
     @workout.update(notes: params[:workout][:notes])
-  end
-
-  # GET /workouts/1/ai_feedback_status
-  def ai_feedback_status
-    activity = @workout.ai_trainer_activity
-    completed = activity&.completed? && activity.content.present?
-    render json: {
-             status: completed ? "completed" : "pending",
-             ai_summary: completed ? helpers.simple_format(activity.content) : nil
-           }
   end
 
   # PATCH/PUT /workouts/1 or /workouts/1.json

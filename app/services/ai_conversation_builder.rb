@@ -10,14 +10,14 @@ class AiConversationBuilder
   end
 
   def build
-    messages = []
-    messages.concat(system_turn)
-    messages.concat(activity_turns)
-    messages
+    { system_instruction: build_system_instruction, messages: activity_turns }
   end
 
   def estimated_token_count
-    build.sum { |msg| estimate_tokens(msg[:text]) }
+    conversation = build
+    tokens = estimate_tokens(conversation[:system_instruction])
+    tokens += conversation[:messages].sum { |msg| estimate_tokens(msg[:text]) }
+    tokens
   end
 
   def compaction_needed?
@@ -26,21 +26,13 @@ class AiConversationBuilder
 
   private
 
-  def system_turn
+  def build_system_instruction
     sections = [
       static_instructions,
       trainer_profile_section,
       full_review_section
     ]
-    text = sections.compact.join("\n\n")
-
-    [
-      { role: "user", text: },
-      {
-        role: "model",
-        text: "Understood. I have reviewed the training context and history."
-      }
-    ]
+    sections.compact.join("\n\n")
   end
 
   def static_instructions

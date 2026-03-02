@@ -11,7 +11,6 @@ Rails.application.routes.draw do
       post :resume
       get :notes_modal
       patch :update_notes
-      get :ai_feedback_status
     end
   end
 

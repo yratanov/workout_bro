@@ -22,11 +22,8 @@ describe AiHistoryReviewService do
 
   describe "#call" do
     it "calls GeminiClient and returns result" do
-      mock_client = instance_double(GeminiClient)
-      allow(GeminiClient).to receive(:new).with(
-        api_key: "test-key",
-        model: "gemini-2.0-flash"
-      ).and_return(mock_client)
+      mock_client = instance_double(AiClients::Gemini)
+      allow(AiClient).to receive(:for).and_return(mock_client)
       allow(mock_client).to receive(:generate).and_return(
         "Training review content"
       )
@@ -59,8 +56,8 @@ describe AiHistoryReviewService do
         )
       ws.workout_reps.create!(reps: 10, weight: 60)
 
-      mock_client = instance_double(GeminiClient)
-      allow(GeminiClient).to receive(:new).and_return(mock_client)
+      mock_client = instance_double(AiClients::Gemini)
+      allow(AiClient).to receive(:for).and_return(mock_client)
       allow(mock_client).to receive(:generate).and_return("Review")
 
       described_class.new(ai_trainer).call

@@ -3,6 +3,8 @@
 class AiWorkoutFeedbackService
   include AiWorkoutPromptHelpers
 
+  GENERATION_CONFIG = { temperature: 0.7, maxOutputTokens: 300 }.freeze
+
   def initialize(workout)
     @workout = workout
     @user = workout.user
@@ -10,13 +12,16 @@ class AiWorkoutFeedbackService
   end
 
   def call
-    client = GeminiClient.new(api_key: @user.ai_api_key, model: @user.ai_model)
+    client = AiClient.for(@user)
 
     if @ai_trainer&.configured?
-      messages = AiConversationBuilder.new(@ai_trainer).build
-      messages << { role: "user", text: request_message }
+      conversation = AiConversationBuilder.new(@ai_trainer).build
+      messages =
+        conversation[:messages] + [{ role: "user", text: request_message }]
       client.generate_chat(
         messages,
+        system_instruction: conversation[:system_instruction],
+        generation_config: GENERATION_CONFIG,
         log_context: {
           user: @user,
           action: "workout_feedback"
@@ -25,6 +30,7 @@ class AiWorkoutFeedbackService
     else
       client.generate(
         build_prompt,
+        generation_config: GENERATION_CONFIG,
         log_context: {
           user: @user,
           action: "workout_feedback"
