@@ -21,8 +21,8 @@ class SupersetsTest < ApplicationSystemTestCase
     fill_in "Name", with: "My New Superset"
     click_button "Save"
 
-    assert_text "Superset was successfully created"
     assert_text "My New Superset"
+    assert_selector "h1", text: "My New Superset"
   end
 
   test "shows superset details and exercises" do

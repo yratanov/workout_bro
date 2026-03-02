@@ -20,7 +20,7 @@ class ExercisesTest < ApplicationSystemTestCase
     assert_text "Test Exercise for Deletion"
     click_link "Edit"
 
-    assert_text "Edit exercise"
+    assert_selector "h1", text: "Edit exercise"
 
     initial_count = Exercise.count
 
