@@ -87,6 +87,7 @@ Rails.application.routes.draw do
       post :create_trainer
       patch :update_trainer
       get :trainer_status
+      get :trainer_profile_modal
     end
   end
 

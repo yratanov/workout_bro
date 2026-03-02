@@ -105,22 +105,20 @@
         <% end %>
 
         <% if @ai_trainer.configured? %>
-          <%= app_form_with model: @ai_trainer,
-                            url: update_trainer_settings_ai_path,
-                            method: :patch,
-                            class: "mb-6 space-y-3" do |form| %>
-            <%= form.input :trainer_profile,
-                       as: :text,
-                       label: t(".trainer_profile_label"),
-                       margin: "",
-                       input_html: {
-                         rows: 12,
-                         class: "font-mono text-sm w-full",
-                       } %>
-            <div>
-              <%= button text: t(".save_profile"), type: "submit", style: "primary" %>
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-sm font-medium text-slate-300"><%= t(".trainer_profile_label") %></label>
+              <%= link_to trainer_profile_modal_settings_ai_path,
+                class: "text-blue-400 hover:text-blue-300 text-sm",
+                data: { turbo_frame: "trainer_profile_modal" } do %>
+                <%= icon "pencil", size: "w-4 h-4 inline" %>
+                <%= t(".edit_profile") %>
+              <% end %>
             </div>
-          <% end %>
+            <div class="bg-slate-700/50 rounded-lg p-4 max-h-64 overflow-y-auto">
+              <p class="text-slate-300 text-sm whitespace-pre-wrap font-mono"><%= @ai_trainer.trainer_profile %></p>
+            </div>
+          </div>
         <% end %>
 
         <%= app_form_with model: @ai_trainer,

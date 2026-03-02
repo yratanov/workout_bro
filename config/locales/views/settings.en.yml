@@ -123,7 +123,10 @@ en:
         create_trainer: "Create AI Trainer"
         recreate_trainer: "Recreate AI Trainer"
         trainer_profile_label: "Trainer Profile"
+        edit_profile: "Edit"
         save_profile: "Save Profile"
+      trainer_profile_modal:
+        title: "Edit Trainer Profile"
     exports:
       show:
         title: "Export Workouts"

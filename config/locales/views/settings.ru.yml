@@ -125,7 +125,10 @@ ru:
         create_trainer: "Создать ИИ тренера"
         recreate_trainer: "Пересоздать ИИ тренера"
         trainer_profile_label: "Профиль тренера"
+        edit_profile: "Редактировать"
         save_profile: "Сохранить профиль"
+      trainer_profile_modal:
+        title: "Редактировать профиль тренера"
     exports:
       show:
         title: "Экспорт тренировок"

@@ -58,6 +58,11 @@ module Settings
       end
     end
 
+    def trainer_profile_modal
+      @ai_trainer = @user.ai_trainer
+      render layout: false
+    end
+
     def trainer_status
       ai_trainer = @user.ai_trainer
       if ai_trainer
