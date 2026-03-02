@@ -12,7 +12,7 @@ module AiTrainerActivitiesHelper
     when "workout_review"
       "dumbbell"
     when "weekly_report"
-      "chart"
+      "activity"
     end
   end
 
