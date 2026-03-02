@@ -66,11 +66,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_072611) do
     t.date "week_start"
     t.integer "workout_id"
     t.index ["ai_trainer_id", "activity_type", "created_at"], name: "idx_activities_trainer_type_created"
-    t.index ["ai_trainer_id"], name: "index_ai_trainer_activities_on_ai_trainer_id"
     t.index ["user_id", "activity_type"], name: "index_ai_trainer_activities_on_user_id_and_activity_type"
     t.index ["user_id", "created_at"], name: "index_ai_trainer_activities_on_user_id_and_created_at"
-    t.index ["user_id"], name: "index_ai_trainer_activities_on_user_id"
-    t.index ["workout_id"], name: "index_ai_trainer_activities_on_workout_id"
+    t.index ["workout_id"], name: "index_ai_trainer_activities_on_workout_id", unique: true
   end
 
   create_table "ai_trainers", force: :cascade do |t|
@@ -267,7 +265,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_072611) do
     t.datetime "viewed_at"
     t.date "week_start", null: false
     t.index ["user_id", "week_start"], name: "index_weekly_reports_on_user_id_and_week_start", unique: true
-    t.index ["user_id"], name: "index_weekly_reports_on_user_id"
   end
 
   create_table "workout_imports", force: :cascade do |t|
