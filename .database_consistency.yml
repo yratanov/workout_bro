@@ -1,6 +1,12 @@
 # Database consistency checker configuration
 # See: https://github.com/djezzzl/database_consistency
 
+# Disabled globally: we intentionally keep all FK constraints as RESTRICT
+# and let Rails handle nullification via dependent: :nullify.
+DatabaseConsistencyCheckers:
+  ForeignKeyCascadeChecker:
+    enabled: false
+
 # WorkoutRep has_many :personal_records is intentional
 # (a rep can achieve multiple PR types: max_weight + max_volume)
 WorkoutRep:

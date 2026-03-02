@@ -2,3 +2,6 @@ ru:
   workout_routine_day_exercises:
     new_superset:
       select_superset: "Выберите суперсет..."
+    comment_modal:
+      title: "Комментарий — %{exercise}"
+      placeholder: "Добавьте комментарий или совет к упражнению..."

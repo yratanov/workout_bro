@@ -67,6 +67,23 @@ module WorkoutSetsHelper
     end
   end
 
+  def routine_comment_for_set(workout_set)
+    workout_set
+      .workout
+      .workout_routine_day
+      &.workout_routine_day_exercises
+      &.find_by(
+        (
+          if workout_set.superset_id?
+            { superset_id: workout_set.superset_id }
+          else
+            { exercise_id: workout_set.exercise_id }
+          end
+        )
+      )
+      &.comment
+  end
+
   def last_completed_workout_set(workout)
     workout.workout_sets.where.not(ended_at: nil).order(:ended_at).last
   end

@@ -18,6 +18,8 @@
   <div class="mb-4">
     <h2 class="text-lg font-medium text-slate-300 mb-3"><%= t("workout_routine_days.form.exercises_title") %></h2>
 
+    <%= turbo_frame_tag "comment_modal" %>
+
     <%= turbo_frame_tag 'exercises' do %>
       <%= render "exercises", workout_routine_day: %>
     <% end %>

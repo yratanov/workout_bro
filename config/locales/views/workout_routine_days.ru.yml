@@ -13,3 +13,5 @@ ru:
       add_superset: "Добавить суперсет"
       no_exercises: "Упражнения пока не добавлены"
       select_exercise: "Выберите упражнение..."
+    exercises:
+      comment: "Комментарий"

@@ -2,3 +2,6 @@ en:
   workout_routine_day_exercises:
     new_superset:
       select_superset: "Select superset..."
+    comment_modal:
+      title: "Comment — %{exercise}"
+      placeholder: "Add a comment or tip for this exercise..."

@@ -90,6 +90,55 @@ describe "WorkoutRoutineDayExercises" do
     end
   end
 
+  describe "GET comment_modal" do
+    it "returns success" do
+      get comment_modal_workout_routine_workout_routine_day_workout_routine_day_exercise_path(
+            workout_routine,
+            workout_routine_day,
+            workout_routine_day_exercise
+          )
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "PATCH update_comment" do
+    it "updates the comment" do
+      patch update_comment_workout_routine_workout_routine_day_workout_routine_day_exercise_path(
+              workout_routine,
+              workout_routine_day,
+              workout_routine_day_exercise
+            ),
+            params: {
+              workout_routine_day_exercise: {
+                comment: "focus on form"
+              }
+            },
+            as: :turbo_stream
+
+      expect(response).to have_http_status(:success)
+      expect(workout_routine_day_exercise.reload.comment).to eq("focus on form")
+    end
+
+    it "clears the comment when blank" do
+      workout_routine_day_exercise.update!(comment: "old comment")
+
+      patch update_comment_workout_routine_workout_routine_day_workout_routine_day_exercise_path(
+              workout_routine,
+              workout_routine_day,
+              workout_routine_day_exercise
+            ),
+            params: {
+              workout_routine_day_exercise: {
+                comment: ""
+              }
+            },
+            as: :turbo_stream
+
+      expect(response).to have_http_status(:success)
+      expect(workout_routine_day_exercise.reload.comment).to eq("")
+    end
+  end
+
   describe "PATCH move" do
     let(:second_exercise) do
       WorkoutRoutineDayExercise.create!(

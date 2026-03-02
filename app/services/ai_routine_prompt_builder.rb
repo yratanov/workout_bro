@@ -13,6 +13,8 @@ class AiRoutinePromptBuilder
       task_instructions,
       user_preferences_section,
       exercise_list_section,
+      superset_list_section,
+      muscle_list_section,
       output_format_section
     ]
     sections.compact.join("\n\n")
@@ -23,8 +25,9 @@ class AiRoutinePromptBuilder
   def task_instructions
     <<~PROMPT.strip
       You are a fitness trainer creating a workout routine. Based on the user's preferences and available exercises,
-      create a structured workout routine. You MUST only use exercise names exactly as they appear in the provided list.
-      Do not invent or modify exercise names.
+      create a structured workout routine. Prefer using exercises from the provided list, but you may suggest new exercises
+      if needed — just provide a valid muscle group name. You may also suggest supersets (groups of exercises performed back-to-back).
+      Prefer reusing existing supersets when they fit.
     PROMPT
   end
 
@@ -45,11 +48,35 @@ class AiRoutinePromptBuilder
     exercises = @user.exercises.includes(:muscle).order(:name)
     lines = []
     lines << "## Available Exercises"
-    lines << "Use ONLY these exact exercise names:"
+    lines << "Prefer using these existing exercises:"
     exercises.each do |exercise|
       muscle = exercise.muscle&.name || "unspecified"
       lines << "- #{exercise.name} (#{muscle})"
     end
+    lines.join("\n")
+  end
+
+  def superset_list_section
+    supersets =
+      @user.supersets.includes(superset_exercises: :exercise).order(:name)
+    return nil if supersets.empty?
+
+    lines = []
+    lines << "## Available Supersets"
+    lines << "You can reuse these existing supersets:"
+    supersets.each do |superset|
+      exercise_names = superset.exercises.map(&:name).join(", ")
+      lines << "- #{superset.name} (#{exercise_names})"
+    end
+    lines.join("\n")
+  end
+
+  def muscle_list_section
+    muscle_names = Muscle.order(:name).pluck(:name)
+    lines = []
+    lines << "## Valid Muscle Groups"
+    lines << "When suggesting new exercises, use one of these muscle group names:"
+    lines << muscle_names.join(", ")
     lines.join("\n")
   end
 
@@ -62,7 +89,13 @@ class AiRoutinePromptBuilder
         "days": [
           {
             "name": "Day name (e.g., Push Day, Upper Body A)",
-            "exercises": ["Exact Exercise Name 1", "Exact Exercise Name 2"]
+            "exercises": [
+              { "name": "Exercise Name", "muscle": "chest", "comment": "optional tip or note" },
+              { "superset": "Superset Name", "exercises": [
+                { "name": "Exercise A", "muscle": "biceps", "comment": "optional tip" },
+                { "name": "Exercise B", "muscle": "triceps" }
+              ]}
+            ]
           }
         ]
       }
@@ -70,9 +103,13 @@ class AiRoutinePromptBuilder
       Rules:
       - The number of days MUST equal #{@frequency}
       - Each day should have 4-8 exercises
-      - Use exercise names EXACTLY as listed above
+      - Each exercise item is either a solo exercise object with "name" and "muscle" keys, or a superset object with "superset" and "exercises" keys
+      - For existing exercises, use the exact name from the list above
+      - For new exercises, provide the exercise name and a valid muscle group from the list above
+      - For supersets, reuse existing superset names when they fit, or create new ones
       - Give each day a descriptive name matching the split type
       - Order exercises logically (compound movements first, isolation last)
+      - You may include a concise "comment" with tips or notes for each exercise (e.g., "focus on form", "use close grip")
       - Respond in #{@user.locale == "ru" ? "Russian" : "English"} for the routine name and day names
     PROMPT
   end

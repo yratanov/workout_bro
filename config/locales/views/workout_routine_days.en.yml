@@ -13,3 +13,5 @@ en:
       add_superset: "Add superset"
       no_exercises: "No exercises added yet"
       select_exercise: "Select an exercise..."
+    exercises:
+      comment: "Comment"

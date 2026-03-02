@@ -34,6 +34,19 @@ class WorkoutRoutineDayExercisesController < ApplicationController
     end
   end
 
+  def comment_modal
+    @workout_routine_day_exercise = WorkoutRoutineDayExercise.find(params[:id])
+    render layout: false
+  end
+
+  def update_comment
+    @workout_routine_day_exercise = WorkoutRoutineDayExercise.find(params[:id])
+    @workout_routine_day = @workout_routine_day_exercise.workout_routine_day
+    @workout_routine_day_exercise.update!(
+      comment: params[:workout_routine_day_exercise][:comment]
+    )
+  end
+
   def move
     @workout_routine_day =
       WorkoutRoutineDay.find(params[:workout_routine_day_id])

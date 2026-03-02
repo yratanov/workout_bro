@@ -38,6 +38,12 @@
             <span class="text-slate-400 text-sm hidden sm:block"><%= workout_routine_day_exercise.exercise.muscle.human_name %></span>
           <% end %>
         <% end %>
+        <%= link_to comment_modal_workout_routine_workout_routine_day_workout_routine_day_exercise_path(workout_routine_day.workout_routine, workout_routine_day, workout_routine_day_exercise),
+            class: "p-1 transition-all #{workout_routine_day_exercise.comment.present? ? 'text-blue-400' : 'opacity-0 group-hover:opacity-100 text-slate-500 hover:text-blue-400'}",
+            data: { turbo_frame: "comment_modal" },
+            title: t(".comment") do %>
+          <%= icon "note", size: "w-4 h-4" %>
+        <% end %>
         <%= button style: "link_hover_danger",
             type: "link",
             route: workout_routine_workout_routine_day_workout_routine_day_exercise_path(workout_routine_day.workout_routine, workout_routine_day, workout_routine_day_exercise),

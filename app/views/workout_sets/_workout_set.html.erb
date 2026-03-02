@@ -62,6 +62,9 @@
           workout_rep: workout_set.workout_reps.new(workout_set.default_rep_values),
         } %>
       <% end %>
+      <% if (routine_comment = routine_comment_for_set(workout_set)) %>
+        <div class="text-blue-400 text-sm mt-2"><%= routine_comment %></div>
+      <% end %>
       <%= render partial: "workout_sets/notes",
       locals: {
         workout_set: workout_set,

@@ -4,6 +4,7 @@
 # Database name: primary
 #
 #  id                     :integer          not null, primary key
+#  comment                :text
 #  position               :integer
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
