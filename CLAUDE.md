@@ -16,28 +16,39 @@ bin/rails server       # Start Rails server only
 
 ## Testing
 
-Uses RSpec with Capybara for feature tests.
+Uses Minitest (Rails default) with Capybara for system tests and mocha for mocking.
 Always add test for code you are adding.
 
 ```bash
-bundle exec parallel_rspec spec/                        # Run all tests
-bundle exec parallel_rspec spec/features          # Run feature tests only
-bundle exec parallel_rspec spec/requests          # Run request specs only
-bundle exec rspec spec/features/workouts_spec.rb  # Run a single test file
+bin/rails test                                    # Run all tests (except system)
+bin/rails test:system                             # Run system tests only
+bin/rails test test/models/                       # Run model tests only
+bin/rails test test/requests/                     # Run request tests only
+bin/rails test test/system/workouts_test.rb       # Run a single test file
+bin/rails test test/models/user_test.rb:10        # Run a single test by line
 ```
 
 **Test Structure:**
-- `spec/features/` - Capybara feature tests (browser-based integration tests)
-- `spec/requests/` - Controller/request specs
-- `spec/support/` - Shared helpers (login_helpers.rb, capybara.rb)
-- `spec/fixtures/` - Test data fixtures
 
-**Spec file conventions:**
-- Do NOT include `require "rails_helper"` - it's loaded automatically
-- Use `describe` not `RSpec.describe`
-- Do NOT use `type:` declarations (e.g., `type: :request`) - spec type is inferred from directory
-- Use `fixtures :all` to load all fixtures
+- `test/system/` - Capybara system tests (browser-based integration tests)
+- `test/requests/` - Controller/request tests
+- `test/models/` - Model unit tests
+- `test/services/` - Service object tests
+- `test/helpers/` - View helper tests
+- `test/jobs/` - Background job tests
+- `test/mailers/` - Mailer tests
+- `test/support/` - Shared helpers (login_helpers.rb, request_helpers.rb)
+- `test/fixtures/` - Test data fixtures
+
+**Test file conventions:**
+
+- Always include `require "test_helper"` (or `require "application_system_test_case"` for system tests) at the top
+- Use classic Minitest style: `class FooTest < ActiveSupport::TestCase`
+- Use `test "description" do ... end` blocks
+- Base classes by type: `ActiveSupport::TestCase` (models/services), `ActionDispatch::IntegrationTest` (requests), `ApplicationSystemTestCase` (system), `ActiveJob::TestCase` (jobs), `ActionMailer::TestCase` (mailers), `ActionView::TestCase` (helpers)
+- `fixtures :all` is set globally - no need to declare in individual tests
 - Use descriptive fixture names (e.g., `users(:john)`, not `users(:one)`)
+- Use mocha for mocking: `X.stubs(:method).returns(value)`, `X.expects(:method)`
 
 ## Code Quality
 
@@ -54,7 +65,7 @@ bundle exec annotaterb # Add schema annotations to models
 
 **After editing ERB files, always run `bundle exec erb-format --write <changed_files>` to format.**
 
-**Before commit check database_consistency
+\*\*Before commit check database_consistency
 
 ## JavaScript Conventions
 
@@ -90,18 +101,21 @@ bin/rails db:prepare   # Create + migrate + seed
 ## Architecture
 
 **Domain Model:**
+
 - User has many Workouts (strength or run type) and WorkoutRoutines
 - WorkoutRoutine has many WorkoutRoutineDays, each with WorkoutRoutineDayExercises
 - Workout has many WorkoutSets, each with WorkoutReps tracking weight/reps/band
 - Exercises have muscles targeted and equipment flags (with_weights, with_band)
 
 **Tech Stack:**
+
 - Frontend: Hotwire (Turbo + Stimulus), Tailwind CSS v4, ViewComponent
 - Auth: Session-based with bcrypt (no Devise)
 - Assets: Propshaft with ImportMap
 - Background: Solid Queue (no Redis)
 
 **Key Routes:**
+
 - `root` → workouts#index
 - `POST /workouts/:id/stop` → end a workout
 - `POST /workout_sets/:id/stop` → end a set
@@ -139,6 +153,7 @@ ssh <server> "rm -f <app_path>/storage/task.rb"
 ```
 
 **Key details:**
+
 - Two containers: `web` (Rails server) and `jobs` (Solid Queue worker)
 - `storage/` directory is mounted as a volume at `/rails/storage` in both containers
 - The `image_processing` gem warning in output is harmless and can be ignored
@@ -148,6 +163,7 @@ ssh <server> "rm -f <app_path>/storage/task.rb"
 **All user-facing strings must use I18n translations.** Never hardcode text in views or controllers.
 
 **Locale file structure:**
+
 ```
 config/locales/
 ├── en.yml                           # ActiveRecord and shared translations
@@ -172,6 +188,7 @@ config/locales/
 ```
 
 **Usage:**
+
 - Views: Use `t(".key")` for relative keys or `t("namespace.key")` for absolute keys
 - Controllers: Use `I18n.t("controllers.controller_name.key")`
 - Shared strings: Use `t("shared.buttons.save")`, `t("shared.confirmations.are_you_sure")`
@@ -270,12 +287,14 @@ config/locales/
 ## View Guidelines
 
 **Keep views simple - avoid complex Ruby logic in ERB templates.** Views should only contain:
+
 - Simple conditionals (`if`/`else` for showing/hiding elements)
 - Iterating over collections
 - Calling helper methods
 - Rendering partials
 
 **Move complex logic to helpers or presenters:**
+
 - Data querying and filtering → helper methods
 - Business logic calculations → model methods or service objects
 - Complex conditionals → helper methods that return simple values

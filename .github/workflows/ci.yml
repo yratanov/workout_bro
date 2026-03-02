@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
@@ -97,7 +97,7 @@ jobs:
         env:
           RAILS_ENV: test
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare && bundle exec rspec
+        run: bin/rails db:test:prepare && bin/rails test && bin/rails test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v6
