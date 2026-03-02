@@ -122,6 +122,8 @@ en:
         train_on_existing_data: "Train on your existing data in Workout Bro"
         create_trainer: "Create AI Trainer"
         recreate_trainer: "Recreate AI Trainer"
+        trainer_profile_label: "Trainer Profile"
+        save_profile: "Save Profile"
     exports:
       show:
         title: "Export Workouts"

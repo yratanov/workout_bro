@@ -124,6 +124,8 @@ ru:
         train_on_existing_data: "Обучить на ваших данных в Workout Bro"
         create_trainer: "Создать ИИ тренера"
         recreate_trainer: "Пересоздать ИИ тренера"
+        trainer_profile_label: "Профиль тренера"
+        save_profile: "Сохранить профиль"
     exports:
       show:
         title: "Экспорт тренировок"

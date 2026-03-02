@@ -85,6 +85,7 @@ Rails.application.routes.draw do
     resource :exports, only: %i[show create], controller: "exports"
     resource :ai, only: %i[show update], controller: "ai" do
       post :create_trainer
+      patch :update_trainer
       get :trainer_status
     end
   end

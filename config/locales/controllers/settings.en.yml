@@ -14,6 +14,8 @@ en:
         updated: "AI settings updated successfully"
         trainer_created: "AI trainer creation started. This may take a minute."
         trainer_failed: "Failed to start AI trainer creation. Please try again."
+        trainer_updated: "Trainer profile updated successfully"
+        trainer_update_failed: "Failed to update trainer profile"
       imports:
         started: "Import started. Your workouts will be imported in the background."
         reverted:

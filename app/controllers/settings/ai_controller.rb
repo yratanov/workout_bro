@@ -40,6 +40,24 @@ module Settings
       end
     end
 
+    def update_trainer
+      @ai_trainer = @user.ai_trainer
+
+      if @ai_trainer&.update(
+           trainer_profile:
+             params.require(:ai_trainer).permit(:trainer_profile)[
+               :trainer_profile
+             ]
+         )
+        redirect_to settings_ai_path,
+                    notice: I18n.t("controllers.settings.ai.trainer_updated")
+      else
+        redirect_to settings_ai_path,
+                    alert:
+                      I18n.t("controllers.settings.ai.trainer_update_failed")
+      end
+    end
+
     def trainer_status
       ai_trainer = @user.ai_trainer
       if ai_trainer

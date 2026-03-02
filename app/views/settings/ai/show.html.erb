@@ -105,13 +105,22 @@
         <% end %>
 
         <% if @ai_trainer.configured? %>
-          <div
-            class="
-              prose prose-invert prose-sm max-w-none mb-6 p-4 bg-slate-700/50 rounded-lg
-            "
-          >
-            <%= render_markdown(@ai_trainer.trainer_profile) %>
-          </div>
+          <%= app_form_with model: @ai_trainer,
+                            url: update_trainer_settings_ai_path,
+                            method: :patch,
+                            class: "mb-6 space-y-3" do |form| %>
+            <%= form.input :trainer_profile,
+                       as: :text,
+                       label: t(".trainer_profile_label"),
+                       margin: "",
+                       input_html: {
+                         rows: 12,
+                         class: "font-mono text-sm",
+                       } %>
+            <div>
+              <%= button text: t(".save_profile"), type: "submit", style: "primary" %>
+            </div>
+          <% end %>
         <% end %>
 
         <%= app_form_with model: @ai_trainer,
