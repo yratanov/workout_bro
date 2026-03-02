@@ -34,6 +34,11 @@ Rails.application.routes.draw do
   resources :workout_reps, only: %i[new create show edit update destroy]
   resources :workout_routines,
             only: %i[index new create show edit update destroy] do
+    collection do
+      get :ai_new
+      post :ai_create
+    end
+    member { get :ai_status }
     resources :workout_routine_days,
               only: %i[index new create show edit update destroy] do
       resources :workout_routine_day_exercises, only: %i[destroy new create] do

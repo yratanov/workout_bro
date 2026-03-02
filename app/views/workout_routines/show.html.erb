@@ -8,6 +8,56 @@
     <h1 class="font-bold text-3xl"><%= @workout_routine.name %></h1>
   </div>
 
+  <% if @workout_routine.ai_generating? %>
+    <div
+      class="bg-slate-800 rounded-lg p-8 text-center mb-6"
+      data-controller="ai-routine-status"
+      data-ai-routine-status-url-value="<%= ai_status_workout_routine_path(@workout_routine) %>"
+      data-ai-routine-status-processing-value="true"
+    >
+      <div class="flex flex-col items-center gap-3">
+        <svg
+          class="animate-spin h-8 w-8 text-blue-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          ></path>
+        </svg>
+        <p class="text-slate-300 font-medium"><%= t(".ai_generating") %></p>
+        <p class="text-slate-500 text-sm"><%= t(".ai_generating_hint") %></p>
+      </div>
+    </div>
+  <% elsif @workout_routine.ai_failed? %>
+    <div class="bg-red-900/30 border border-red-800 rounded-lg p-5 mb-6">
+      <div class="flex flex-col gap-3">
+        <p class="text-red-300 font-medium"><%= t(".ai_failed") %></p>
+        <p class="text-red-400 text-sm"><%= @workout_routine.ai_generation_error %></p>
+        <div>
+          <%= button t(".ai_retry"),
+          style: "danger",
+          method: :delete,
+          route: workout_routine_path(@workout_routine),
+          data: {
+            turbo_confirm: t("shared.confirmations.are_you_sure"),
+          } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
   <% if @workout_routine.workout_routine_days.any? %>
     <div class="space-y-4 mb-6">
       <% @workout_routine.workout_routine_days.each_with_index do |day, index| %>

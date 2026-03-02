@@ -1,0 +1,165 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-3xl">
+  <div class="flex items-center gap-3 mb-6">
+    <%= button route: workout_routines_path, type: "link", style: "link" do %>
+      <%= icon "arrow_left" %>
+    <% end %>
+    <h1 class="font-bold text-3xl"><%= t(".title") %></h1>
+  </div>
+
+  <p class="text-slate-400 mb-6"><%= t(".description") %></p>
+
+  <%= form_with url: ai_create_workout_routines_path,
+    method: :post,
+    data: {
+      controller: "ai-routine-form",
+      action: "submit->ai-routine-form#submit"
+    } do |f| %>
+
+    <div class="space-y-5">
+      <%# Training frequency %>
+      <div class="bg-slate-800 rounded-lg p-5">
+        <h2 class="font-semibold text-lg mb-3"><%= t(".frequency_label") %></h2>
+        <div class="flex flex-wrap gap-3">
+          <% (2..6).each do |n| %>
+            <label class="cursor-pointer">
+              <input
+                type="radio"
+                name="frequency"
+                value="<%= n %>"
+                <%= "checked" if n == 3 %>
+                class="peer sr-only"
+              >
+              <span
+                class="
+                  inline-flex items-center px-4 py-2 rounded-lg bg-slate-700 text-slate-300
+                  peer-checked:bg-blue-600 peer-checked:text-white transition-colors
+                "
+              >
+                <%= t(".days_per_week", count: n) %>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Split type %>
+      <div class="bg-slate-800 rounded-lg p-5">
+        <h2 class="font-semibold text-lg mb-3"><%= t(".split_type_label") %></h2>
+        <select
+          name="split_type"
+          class="
+            w-full bg-slate-700 text-slate-200 rounded-lg px-4 py-2.5 border
+            border-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+            outline-none
+          "
+        >
+          <option value="Push/Pull/Legs" selected><%= t(".split_ppl") %></option>
+          <option value="Full Body"><%= t(".split_full_body") %></option>
+          <option value="Upper/Lower"><%= t(".split_upper_lower") %></option>
+          <option value="Custom"><%= t(".split_custom") %></option>
+        </select>
+      </div>
+
+      <%# Focus areas %>
+      <div class="bg-slate-800 rounded-lg p-5">
+        <h2 class="font-semibold text-lg mb-3"><%= t(".focus_areas_label") %></h2>
+        <p class="text-slate-400 text-sm mb-3"><%= t(".focus_areas_hint") %></p>
+        <div class="flex flex-wrap gap-2">
+          <% @muscles.each do |muscle| %>
+            <label class="cursor-pointer">
+              <input
+                type="checkbox"
+                name="focus_areas[]"
+                value="<%= muscle.name %>"
+                class="peer sr-only"
+              >
+              <span
+                class="
+                  inline-flex items-center px-3 py-1.5 rounded-lg bg-slate-700 text-slate-300
+                  text-sm peer-checked:bg-blue-600 peer-checked:text-white transition-colors
+                "
+              >
+                <%= muscle.human_name %>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Experience level %>
+      <div class="bg-slate-800 rounded-lg p-5">
+        <h2 class="font-semibold text-lg mb-3"><%= t(".experience_label") %></h2>
+        <select
+          name="experience_level"
+          class="
+            w-full bg-slate-700 text-slate-200 rounded-lg px-4 py-2.5 border
+            border-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+            outline-none
+          "
+        >
+          <option value="Beginner"><%= t(".experience_beginner") %></option>
+          <option value="Intermediate" selected><%= t(".experience_intermediate") %></option>
+          <option value="Advanced"><%= t(".experience_advanced") %></option>
+        </select>
+      </div>
+
+      <%# Additional context %>
+      <div class="bg-slate-800 rounded-lg p-5">
+        <h2 class="font-semibold text-lg mb-3"><%= t(".context_label") %></h2>
+        <textarea
+          name="additional_context"
+          maxlength="500"
+          rows="3"
+          placeholder="<%= t(".context_placeholder") %>"
+          data-ai-routine-form-target="context"
+          data-action="input->ai-routine-form#updateCharCount"
+          class="
+            w-full bg-slate-700 text-slate-200 rounded-lg px-4 py-2.5 border
+            border-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+            outline-none resize-none
+          "
+        ></textarea>
+        <p class="text-slate-500 text-sm mt-1">
+          <span data-ai-routine-form-target="charCount">0</span>/500
+        </p>
+      </div>
+
+      <%# Submit %>
+      <div class="flex gap-3">
+        <%= button t(".generate"),
+        style: "primary",
+        data: {
+          "ai-routine-form-target": "submitButton",
+        } %>
+        <div
+          data-ai-routine-form-target="loading"
+          class="hidden items-center gap-2 text-slate-400"
+        >
+          <svg
+            class="animate-spin h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+            ></path>
+          </svg>
+          <span><%= t(".generating") %></span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

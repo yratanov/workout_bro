@@ -3,3 +3,6 @@ en:
     workout_routines:
       created: "Workout routine was successfully created."
       destroyed: "Workout routine was successfully deleted."
+      ai_not_configured: "Please configure your AI trainer first."
+      ai_generating_name: "AI Routine (generating...)"
+      ai_generation_started: "Your routine is being generated. This page will update when it's ready."

@@ -3,11 +3,13 @@
 # Table name: workout_routines
 # Database name: primary
 #
-#  id         :integer          not null, primary key
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :integer          not null
+#  id                  :integer          not null, primary key
+#  ai_generation_error :string
+#  ai_status           :integer
+#  name                :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  user_id             :integer          not null
 #
 # Indexes
 #
