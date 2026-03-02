@@ -53,6 +53,18 @@ class WorkoutRoutinesController < ApplicationController
       return
     end
 
+    if AiLog.where(
+         user: current_user,
+         created_at: Date.current.all_day
+       ).count >= AiClients::Gemini::DAILY_REQUEST_LIMIT
+      redirect_to workout_routines_path,
+                  alert:
+                    I18n.t(
+                      "controllers.workout_routines.ai_daily_limit_reached"
+                    )
+      return
+    end
+
     @workout_routine =
       current_user.workout_routines.create!(
         name: I18n.t("controllers.workout_routines.ai_generating_name"),

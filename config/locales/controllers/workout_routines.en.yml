@@ -6,3 +6,4 @@ en:
       ai_not_configured: "Please configure your AI trainer first."
       ai_generating_name: "AI Routine (generating...)"
       ai_generation_started: "Your routine is being generated. This page will update when it's ready."
+      ai_daily_limit_reached: "Daily AI request limit reached. Try again tomorrow."

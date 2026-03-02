@@ -7,7 +7,7 @@ module AiClients
   class Gemini < Base
     BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
 
-    DAILY_REQUEST_LIMIT = 10
+    DAILY_REQUEST_LIMIT = 20
     MAX_RETRIES = 2
     RETRY_BASE_DELAY = 2
 
