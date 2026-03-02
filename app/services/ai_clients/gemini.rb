@@ -36,7 +36,11 @@ module AiClients
       log_context: nil
     )
       body = build_chat_body(messages, system_instruction:, generation_config:)
-      execute_request(body, prompt_for_log: messages.to_json, log_context:)
+      execute_request(
+        body,
+        prompt_for_log: chat_prompt_for_log(messages, system_instruction),
+        log_context:
+      )
     end
 
     def generate_chat_stream(
@@ -58,7 +62,7 @@ module AiClients
 
       if log_context
         log_request(
-          prompt: messages.to_json,
+          prompt: chat_prompt_for_log(messages, system_instruction),
           response_text: result,
           duration_ms: elapsed_ms(start_time),
           context: log_context
@@ -68,7 +72,7 @@ module AiClients
     rescue => e
       if log_context
         log_request(
-          prompt: messages.to_json,
+          prompt: chat_prompt_for_log(messages, system_instruction),
           error: e.message,
           duration_ms: (elapsed_ms(start_time) if start_time),
           context: log_context
@@ -78,6 +82,12 @@ module AiClients
     end
 
     private
+
+    def chat_prompt_for_log(messages, system_instruction)
+      log = []
+      log << { system_instruction: system_instruction } if system_instruction
+      (log + messages).to_json
+    end
 
     def build_chat_body(
       messages,
