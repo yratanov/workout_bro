@@ -101,6 +101,17 @@ module AiWorkoutPromptHelpers
     lines << "Distance: #{(workout.distance.to_f / 1000).round(2)}km"
     lines << "Duration: #{format_duration(summary.duration)}"
     lines << "Pace: #{format_pace(summary.pace)}" if summary.pace
+    if workout.avg_heart_rate
+      lines << "Avg Heart Rate: #{workout.avg_heart_rate} bpm"
+    end
+    if workout.max_heart_rate
+      lines << "Max Heart Rate: #{workout.max_heart_rate} bpm"
+    end
+    lines << "Avg Cadence: #{workout.avg_cadence} spm" if workout.avg_cadence
+    if workout.elevation_gain
+      lines << "Elevation Gain: #{workout.elevation_gain.round(1)}m"
+    end
+    lines << "VO2max: #{workout.vo2max.round(1)}" if workout.vo2max
     lines << "Notes: #{workout.notes}" if workout.notes.present?
 
     if summary.comparison&.pace_diff

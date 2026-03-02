@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe GarminSyncService do
-  fixtures :users
+  fixtures :all
 
   let(:user) { users(:john) }
   let(:username) { "test@example.com" }
@@ -182,6 +182,53 @@ describe GarminSyncService do
       it "returns zero imports" do
         result = service.call
         expect(result).to eq(imported: 0, skipped: 0)
+      end
+    end
+  end
+
+  describe "AI feedback" do
+    let(:activities_json) do
+      {
+        activities: [
+          {
+            started_at: "2024-01-15T08:30:00",
+            distance_meters: 5000,
+            duration_seconds: 1800
+          }
+        ]
+      }.to_json
+    end
+
+    before do
+      allow(Open3).to receive(:capture2).and_return(
+        [
+          activities_json,
+          instance_double(Process::Status, success?: true, exitstatus: 0)
+        ]
+      )
+    end
+
+    context "when user has AI configured with trainer" do
+      before do
+        user.update!(
+          ai_provider: "gemini",
+          ai_model: "gemini-2.0-flash",
+          ai_api_key: "test-key"
+        )
+      end
+
+      it "enqueues AI feedback job for imported workouts" do
+        expect { service.call }.to have_enqueued_job(
+          GenerateAiWorkoutFeedbackJob
+        )
+      end
+    end
+
+    context "when user has no AI configured" do
+      it "does not enqueue AI feedback job" do
+        expect { service.call }.not_to have_enqueued_job(
+          GenerateAiWorkoutFeedbackJob
+        )
       end
     end
   end

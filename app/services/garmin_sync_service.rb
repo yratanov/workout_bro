@@ -55,6 +55,7 @@ class GarminSyncService
   def import_activities(activities)
     imported = 0
     skipped = 0
+    new_workouts = []
 
     activities.each do |activity|
       started_at = Time.zone.parse(activity["started_at"])
@@ -65,9 +66,12 @@ class GarminSyncService
         next
       end
 
-      create_workout(activity, started_at)
+      workout = create_workout(activity, started_at)
+      new_workouts << workout
       imported += 1
     end
+
+    enqueue_ai_feedback(new_workouts)
 
     { imported: imported, skipped: skipped }
   end
@@ -95,6 +99,14 @@ class GarminSyncService
       elevation_gain: activity["elevation_gain"]&.to_f,
       vo2max: activity["vo2max"]&.to_f
     )
+  end
+
+  def enqueue_ai_feedback(workouts)
+    return unless @user.ai_configured? && @user.ai_trainer
+
+    workouts.each do |workout|
+      GenerateAiWorkoutFeedbackJob.perform_later(workout: workout)
+    end
   end
 
   def log_success(result)
