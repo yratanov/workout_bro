@@ -54,6 +54,8 @@ bundle exec annotaterb # Add schema annotations to models
 
 **After editing ERB files, always run `bundle exec erb-format --write <changed_files>` to format.**
 
+**Before commit check database_consistency
+
 ## JavaScript Conventions
 
 **Always prefer async/await over .then() chains for asynchronous code.** This improves readability and error handling.

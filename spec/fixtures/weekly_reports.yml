@@ -15,7 +15,6 @@
 #
 # Indexes
 #
-#  index_weekly_reports_on_user_id                 (user_id)
 #  index_weekly_reports_on_user_id_and_week_start  (user_id,week_start) UNIQUE
 #
 # Foreign Keys

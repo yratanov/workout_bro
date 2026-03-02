@@ -17,7 +17,6 @@
 #
 # Indexes
 #
-#  index_weekly_reports_on_user_id                 (user_id)
 #  index_weekly_reports_on_user_id_and_week_start  (user_id,week_start) UNIQUE
 #
 # Foreign Keys
@@ -28,6 +27,9 @@ class WeeklyReport < ApplicationRecord
   belongs_to :user
 
   enum :status, { pending: 0, completed: 1, failed: 2 }
+
+  validates :week_start, presence: true
+  validates :user_id, uniqueness: { scope: :week_start }
 
   scope :recent, -> { order(week_start: :desc) }
   scope :unviewed, -> { completed.where(viewed_at: nil) }

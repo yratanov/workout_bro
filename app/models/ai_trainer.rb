@@ -40,6 +40,8 @@ class AiTrainer < ApplicationRecord
   enum :communication_style, { concise: 0, detailed: 1, motivational: 2 }
   enum :status, { pending: 0, in_progress: 1, completed: 2, failed: 3 }
 
+  validates :user_id, uniqueness: true
+
   GOALS = %i[
     goal_build_muscle
     goal_lose_weight

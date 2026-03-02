@@ -19,11 +19,9 @@
 # Indexes
 #
 #  idx_activities_trainer_type_created                       (ai_trainer_id,activity_type,created_at)
-#  index_ai_trainer_activities_on_ai_trainer_id              (ai_trainer_id)
-#  index_ai_trainer_activities_on_user_id                    (user_id)
 #  index_ai_trainer_activities_on_user_id_and_activity_type  (user_id,activity_type)
 #  index_ai_trainer_activities_on_user_id_and_created_at     (user_id,created_at)
-#  index_ai_trainer_activities_on_workout_id                 (workout_id)
+#  index_ai_trainer_activities_on_workout_id                 (workout_id) UNIQUE
 #
 # Foreign Keys
 #
