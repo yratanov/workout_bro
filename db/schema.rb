@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_02_072611) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_02_073814) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -255,18 +255,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_072611) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
-  create_table "weekly_reports", force: :cascade do |t|
-    t.text "ai_summary"
-    t.datetime "created_at", null: false
-    t.text "error_message"
-    t.integer "status", default: 0, null: false
-    t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
-    t.datetime "viewed_at"
-    t.date "week_start", null: false
-    t.index ["user_id", "week_start"], name: "index_weekly_reports_on_user_id_and_week_start", unique: true
-  end
-
   create_table "workout_imports", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.json "error_details"
@@ -383,7 +371,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_072611) do
   add_foreign_key "supersets", "users"
   add_foreign_key "sync_logs", "users"
   add_foreign_key "third_party_credentials", "users"
-  add_foreign_key "weekly_reports", "users"
   add_foreign_key "workout_imports", "users"
   add_foreign_key "workout_reps", "workout_sets"
   add_foreign_key "workout_routine_day_exercises", "exercises"

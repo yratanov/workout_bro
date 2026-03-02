@@ -1,5 +1,5 @@
 describe GenerateWeeklyReportJob do
-  fixtures :users, :ai_trainers
+  fixtures :all
 
   let(:user) do
     users(:john).tap do |u|
@@ -29,16 +29,22 @@ describe GenerateWeeklyReportJob do
   before { ai_trainer }
 
   describe "#perform" do
-    it "creates a completed weekly report" do
+    it "creates a completed ai_trainer_activity" do
       mock_service =
         instance_double(AiWeeklyReportService, call: report_response)
       allow(AiWeeklyReportService).to receive(:new).and_return(mock_service)
 
       described_class.new.perform(user: user, week_start: week_start)
 
-      report = user.weekly_reports.find_by(week_start: week_start)
-      expect(report).to be_completed
-      expect(report.ai_summary).to eq(report_response)
+      activity =
+        user
+          .ai_trainer_activities
+          .weekly_report
+          .order(created_at: :desc)
+          .first
+      expect(activity).to be_completed
+      expect(activity.content).to eq(report_response)
+      expect(activity.week_start).to eq(week_start)
     end
 
     it "appends weekly recommendations to ai_trainer system_prompt" do
@@ -97,7 +103,7 @@ describe GenerateWeeklyReportJob do
       expect(updated_prompt).to include("## Week of Jan 1")
     end
 
-    it "marks report as failed on error" do
+    it "marks activity as failed on error" do
       allow(AiWeeklyReportService).to receive(:new).and_raise(
         StandardError,
         "API error"
@@ -105,9 +111,9 @@ describe GenerateWeeklyReportJob do
 
       described_class.new.perform(user: user, week_start: week_start)
 
-      report = user.weekly_reports.find_by(week_start: week_start)
-      expect(report).to be_failed
-      expect(report.error_message).to eq("API error")
+      activity = user.ai_trainer_activities.weekly_report.last
+      expect(activity).to be_failed
+      expect(activity.error_message).to eq("API error")
     end
   end
 end
