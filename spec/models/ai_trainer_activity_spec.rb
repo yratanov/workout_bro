@@ -12,7 +12,7 @@
 #  week_start    :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  ai_trainer_id :integer          not null
+#  ai_trainer_id :integer
 #  user_id       :integer          not null
 #  workout_id    :integer
 #
@@ -25,7 +25,7 @@
 #
 # Foreign Keys
 #
-#  ai_trainer_id  (ai_trainer_id => ai_trainers.id) ON DELETE => cascade
+#  ai_trainer_id  (ai_trainer_id => ai_trainers.id) ON DELETE => nullify
 #  user_id        (user_id => users.id)
 #  workout_id     (workout_id => workouts.id) ON DELETE => nullify
 #

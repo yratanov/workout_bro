@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_02_101523) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_02_113000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -55,7 +55,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_101523) do
 
   create_table "ai_trainer_activities", force: :cascade do |t|
     t.integer "activity_type", null: false
-    t.integer "ai_trainer_id", null: false
+    t.integer "ai_trainer_id"
     t.text "content"
     t.datetime "created_at", null: false
     t.text "error_message"
@@ -348,7 +348,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_101523) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "ai_logs", "users"
-  add_foreign_key "ai_trainer_activities", "ai_trainers", on_delete: :cascade
+  add_foreign_key "ai_trainer_activities", "ai_trainers", on_delete: :nullify
   add_foreign_key "ai_trainer_activities", "users"
   add_foreign_key "ai_trainer_activities", "workouts", on_delete: :nullify
   add_foreign_key "ai_trainers", "users", on_delete: :cascade
