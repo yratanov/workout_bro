@@ -53,6 +53,7 @@ en:
         failed: "Failed"
         show_prompt: "Show prompt"
         show_response: "Show response"
+        tokens: "tokens"
         showing_logs:
           one: "%{count} AI log"
           other: "%{count} AI logs"

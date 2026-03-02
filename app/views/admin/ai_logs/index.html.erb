@@ -34,6 +34,10 @@
                         <% if log.duration_ms.present? %>
                           <span class="text-xs bg-slate-600/50 text-slate-400 px-2 py-0.5 rounded"><%= log.duration_ms %>ms</span>
                         <% end %>
+                        <% if log.total_tokens.present? %>
+                          <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded"><%= log.total_tokens %>
+                            <%= t(".tokens") %></span>
+                        <% end %>
                         <% if log.error.present? %>
                           <span class="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded"><%= t(".failed") %></span>
                         <% end %>

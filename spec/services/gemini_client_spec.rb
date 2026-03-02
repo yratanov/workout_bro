@@ -16,7 +16,12 @@ describe GeminiClient do
   describe "#generate" do
     it "returns text from successful response" do
       body = {
-        candidates: [{ content: { parts: [{ text: "Generated response" }] } }]
+        candidates: [{ content: { parts: [{ text: "Generated response" }] } }],
+        usageMetadata: {
+          promptTokenCount: 10,
+          candidatesTokenCount: 20,
+          totalTokenCount: 30
+        }
       }.to_json
 
       mock_response(200, body)
@@ -59,6 +64,46 @@ describe GeminiClient do
         GeminiClient::Error,
         /no text content/
       )
+    end
+
+    context "token logging" do
+      fixtures :users
+
+      let(:user) { users(:john) }
+      let(:log_context) { { user: user, action: "test" } }
+
+      it "logs token counts from usageMetadata" do
+        body = {
+          candidates: [{ content: { parts: [{ text: "OK" }] } }],
+          usageMetadata: {
+            promptTokenCount: 100,
+            candidatesTokenCount: 50,
+            totalTokenCount: 150
+          }
+        }.to_json
+
+        mock_response(200, body)
+        client.generate("Test", log_context: log_context)
+
+        log = AiLog.last
+        expect(log.input_tokens).to eq(100)
+        expect(log.output_tokens).to eq(50)
+        expect(log.total_tokens).to eq(150)
+      end
+
+      it "handles missing usageMetadata gracefully" do
+        body = {
+          candidates: [{ content: { parts: [{ text: "OK" }] } }]
+        }.to_json
+
+        mock_response(200, body)
+        client.generate("Test", log_context: log_context)
+
+        log = AiLog.last
+        expect(log.input_tokens).to be_nil
+        expect(log.output_tokens).to be_nil
+        expect(log.total_tokens).to be_nil
+      end
     end
 
     context "daily request limit" do

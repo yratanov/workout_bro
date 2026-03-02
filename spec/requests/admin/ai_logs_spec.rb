@@ -34,6 +34,19 @@ describe "Admin::AiLogs" do
         expect(response.body).to include("1234ms")
       end
 
+      it "displays token count badge when present" do
+        AiLog.create!(
+          user: admin_user,
+          action: "create_trainer",
+          model: "gemini-2.0-flash",
+          total_tokens: 450
+        )
+
+        get admin_ai_logs_path
+        expect(response.body).to include("450")
+        expect(response.body).to include(I18n.t("admin.ai_logs.index.tokens"))
+      end
+
       it "displays AI logs in descending order by created_at" do
         AiLog.create!(
           user: admin_user,

@@ -55,6 +55,7 @@ ru:
         failed: "Ошибка"
         show_prompt: "Показать промпт"
         show_response: "Показать ответ"
+        tokens: "токенов"
         showing_logs:
           one: "%{count} AI лог"
           few: "%{count} AI лога"

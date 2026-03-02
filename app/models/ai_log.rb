@@ -5,16 +5,19 @@
 # Table name: ai_logs
 # Database name: primary
 #
-#  id          :integer          not null, primary key
-#  action      :string           not null
-#  duration_ms :integer
-#  error       :text
-#  model       :string
-#  prompt      :text
-#  response    :text
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  user_id     :integer          not null
+#  id            :integer          not null, primary key
+#  action        :string           not null
+#  duration_ms   :integer
+#  error         :text
+#  input_tokens  :integer
+#  model         :string
+#  output_tokens :integer
+#  prompt        :text
+#  response      :text
+#  total_tokens  :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  user_id       :integer          not null
 #
 # Indexes
 #

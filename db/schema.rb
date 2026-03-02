@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_02_161247) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_02_164448) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -44,9 +44,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_161247) do
     t.datetime "created_at", null: false
     t.integer "duration_ms"
     t.text "error"
+    t.integer "input_tokens"
     t.string "model"
+    t.integer "output_tokens"
     t.text "prompt"
     t.text "response"
+    t.integer "total_tokens"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["created_at"], name: "index_ai_logs_on_created_at"

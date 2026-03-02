@@ -63,12 +63,13 @@ module AiClients
       if log_context
         log_request(
           prompt: chat_prompt_for_log(messages, system_instruction),
-          response_text: result,
+          response_text: result[:text],
           duration_ms: elapsed_ms(start_time),
-          context: log_context
+          context: log_context,
+          tokens: result[:tokens]
         )
       end
-      result
+      result[:text]
     rescue => e
       if log_context
         log_request(
@@ -114,7 +115,7 @@ module AiClients
       start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       begin
         response = post(uri, body)
-        result = parse_response(response)
+        parsed = parse_response(response)
       rescue *RETRYABLE_ERRORS
         if retries < MAX_RETRIES
           retries += 1
@@ -127,12 +128,13 @@ module AiClients
       if log_context
         log_request(
           prompt: prompt_for_log,
-          response_text: result,
+          response_text: parsed[:text],
           duration_ms: elapsed_ms(start_time),
-          context: log_context
+          context: log_context,
+          tokens: parsed[:tokens]
         )
       end
-      result
+      parsed[:text]
     rescue => e
       if log_context
         log_request(
@@ -180,6 +182,7 @@ module AiClients
       request.body = body.to_json
 
       accumulated = +""
+      tokens = {}
 
       http.request(request) do |response|
         case response.code.to_i
@@ -199,6 +202,9 @@ module AiClients
                   accumulated << text
                   yield accumulated if block_given?
                 end
+                tokens = extract_token_counts(data) if data.key?(
+                  "usageMetadata"
+                )
               rescue JSON::ParserError
                 next
               end
@@ -219,14 +225,16 @@ module AiClients
         raise Error, "Unexpected response format: no text content found"
       end
 
-      accumulated
+      { text: accumulated, tokens: }
     end
 
     def parse_response(response)
       case response.code.to_i
       when 200
         data = JSON.parse(response.body)
-        extract_text(data)
+        text = extract_text(data)
+        tokens = extract_token_counts(data)
+        { text:, tokens: }
       when 401, 403
         raise AuthenticationError, "Invalid API key or unauthorized access"
       when 429
@@ -239,6 +247,17 @@ module AiClients
     def extract_text(data)
       data.dig("candidates", 0, "content", "parts", 0, "text") ||
         raise(Error, "Unexpected response format: no text content found")
+    end
+
+    def extract_token_counts(data)
+      metadata = data["usageMetadata"]
+      return {} unless metadata
+
+      {
+        input_tokens: metadata["promptTokenCount"],
+        output_tokens: metadata["candidatesTokenCount"],
+        total_tokens: metadata["totalTokenCount"]
+      }
     end
 
     def enforce_daily_limit!(log_context)
@@ -257,7 +276,8 @@ module AiClients
       response_text: nil,
       error: nil,
       duration_ms: nil,
-      context: nil
+      context: nil,
+      tokens: nil
     )
       return unless context&.dig(:user) && context&.dig(:action)
 
@@ -268,7 +288,10 @@ module AiClients
         prompt:,
         response: response_text,
         error:,
-        duration_ms:
+        duration_ms:,
+        input_tokens: tokens&.dig(:input_tokens),
+        output_tokens: tokens&.dig(:output_tokens),
+        total_tokens: tokens&.dig(:total_tokens)
       )
     rescue => e
       Rails.logger.error("Failed to log AI request: #{e.message}")
