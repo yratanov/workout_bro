@@ -58,16 +58,17 @@ describe User do
         expect(user).to be_valid
       end
 
-      it "is invalid with zero" do
+      it "is valid with zero" do
         user.weight_min = 0
-        expect(user).not_to be_valid
-        expect(user.errors[:weight_min]).to include("must be greater than 0")
+        expect(user).to be_valid
       end
 
       it "is invalid with negative values" do
         user.weight_min = -1
         expect(user).not_to be_valid
-        expect(user.errors[:weight_min]).to include("must be greater than 0")
+        expect(user.errors[:weight_min]).to include(
+          "must be greater than or equal to 0"
+        )
       end
     end
 

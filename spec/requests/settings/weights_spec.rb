@@ -70,8 +70,16 @@ describe "Settings::Weights" do
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it "does not update with zero weight_min" do
+      it "updates weight_min to zero" do
         patch settings_weights_path, params: { user: { weight_min: 0 } }
+
+        user.reload
+        expect(user.weight_min).to eq(0)
+        expect(response).to redirect_to(settings_weights_path)
+      end
+
+      it "does not update with negative weight_min" do
+        patch settings_weights_path, params: { user: { weight_min: -1 } }
 
         user.reload
         expect(user.weight_min).to eq(2.5)

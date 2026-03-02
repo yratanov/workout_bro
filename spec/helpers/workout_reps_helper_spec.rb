@@ -30,6 +30,18 @@ describe WorkoutRepsHelper do
       )
     end
 
+    it "starts from zero when weight_min is 0" do
+      user = users(:john)
+      user.weight_min = 0
+      user.weight_max = 10
+      user.weight_step = 5
+      user.weight_unit = "kg"
+
+      options = helper.weight_options(user)
+
+      expect(options).to eq([["0.0kg", 0.0], ["5.0kg", 5.0], ["10.0kg", 10.0]])
+    end
+
     it "handles decimal steps" do
       user = users(:john)
       user.weight_min = 2.5

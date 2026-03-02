@@ -64,7 +64,7 @@ class User < ApplicationRecord
   validates :password_digest, presence: true
   validates :locale, inclusion: { in: AVAILABLE_LOCALES }, allow_nil: true
   validates :weight_unit, inclusion: { in: WEIGHT_UNITS }
-  validates :weight_min, numericality: { greater_than: 0 }
+  validates :weight_min, numericality: { greater_than_or_equal_to: 0 }
   validates :weight_max, numericality: { greater_than: :weight_min }
   validates :weight_step, numericality: { greater_than: 0 }
 
