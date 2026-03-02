@@ -68,24 +68,6 @@ class WorkoutRoutinesAiTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "GET /workout_routines/:id/ai_status returns pending status when generating" do
-    routine = @user.workout_routines.create!(name: "Test", ai_status: :pending)
-    get ai_status_workout_routine_path(routine)
-    assert_equal "pending", response.parsed_body["status"]
-  end
-
-  test "GET /workout_routines/:id/ai_status returns completed status when completed" do
-    routine = @user.workout_routines.create!(name: "Test", ai_status: nil)
-    get ai_status_workout_routine_path(routine)
-    assert_equal "completed", response.parsed_body["status"]
-  end
-
-  test "GET /workout_routines/:id/ai_status returns failed status when failed" do
-    routine = @user.workout_routines.create!(name: "Test", ai_status: :failed)
-    get ai_status_workout_routine_path(routine)
-    assert_equal "failed", response.parsed_body["status"]
-  end
-
   private
 
   def setup_ai_trainer

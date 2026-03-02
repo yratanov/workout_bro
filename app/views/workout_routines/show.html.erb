@@ -9,11 +9,10 @@
   </div>
 
   <% if @workout_routine.ai_generating? %>
+    <%= turbo_stream_from @workout_routine, :ai_generation %>
     <div
+      id="ai_generation_status"
       class="bg-slate-800 rounded-lg p-8 text-center mb-6"
-      data-controller="ai-routine-status"
-      data-ai-routine-status-url-value="<%= ai_status_workout_routine_path(@workout_routine) %>"
-      data-ai-routine-status-processing-value="true"
     >
       <div class="flex flex-col items-center gap-3">
         <svg

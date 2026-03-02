@@ -327,6 +327,44 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
     assert_equal "API error", @workout_routine.ai_generation_error
   end
 
+  test "broadcasts turbo stream reload on success" do
+    @mock_client.stubs(:generate_chat).returns(@ai_response)
+
+    Turbo::StreamsChannel
+      .expects(:broadcast_replace_to)
+      .with(
+        [@workout_routine, :ai_generation],
+        target: "ai_generation_status",
+        html:
+          '<div id="ai_generation_status" data-controller="page-reload"></div>'
+      )
+
+    AiRoutineSuggestionJob.new.perform(
+      workout_routine: @workout_routine,
+      params: @params
+    )
+  end
+
+  test "broadcasts turbo stream reload on failure" do
+    @mock_client.stubs(:generate_chat).raises(StandardError.new("API error"))
+
+    Turbo::StreamsChannel
+      .expects(:broadcast_replace_to)
+      .with(
+        [@workout_routine, :ai_generation],
+        target: "ai_generation_status",
+        html:
+          '<div id="ai_generation_status" data-controller="page-reload"></div>'
+      )
+
+    assert_raises(StandardError) do
+      AiRoutineSuggestionJob.new.perform(
+        workout_routine: @workout_routine,
+        params: @params
+      )
+    end
+  end
+
   test "uses simple generate when trainer not configured" do
     @ai_trainer.update!(status: :pending, trainer_profile: nil)
     @mock_client.expects(:generate).returns(@ai_response)

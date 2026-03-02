@@ -40,12 +40,23 @@ class AiRoutineSuggestionJob < ApplicationJob
     parsed = JSON.parse(response)
     build_routine(workout_routine, parsed, user)
     workout_routine.update!(ai_status: nil, ai_generation_error: nil)
+    broadcast_reload(workout_routine)
   rescue => e
     workout_routine.update!(ai_status: :failed, ai_generation_error: e.message)
+    broadcast_reload(workout_routine)
     raise
   end
 
   private
+
+  def broadcast_reload(workout_routine)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      [workout_routine, :ai_generation],
+      target: "ai_generation_status",
+      html:
+        '<div id="ai_generation_status" data-controller="page-reload"></div>'
+    )
+  end
 
   def build_routine(workout_routine, data, user)
     @exercises_by_name = user.exercises.index_by { |e| e.name.downcase }

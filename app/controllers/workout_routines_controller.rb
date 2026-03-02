@@ -81,11 +81,6 @@ class WorkoutRoutinesController < ApplicationController
                   I18n.t("controllers.workout_routines.ai_generation_started")
   end
 
-  def ai_status
-    @workout_routine = current_user.workout_routines.find(params[:id])
-    render json: { status: @workout_routine.ai_status || "completed" }
-  end
-
   private
 
   def workout_routine_params
