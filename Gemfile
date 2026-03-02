@@ -74,7 +74,7 @@ group :test do
   gem "simplecov", require: false
 end
 
-gem "tailwindcss-ruby", "~> 4.1"
+gem "tailwindcss-ruby", "~> 4.2"
 gem "tailwindcss-rails", "~> 4.2"
 
 gem "view_component"
