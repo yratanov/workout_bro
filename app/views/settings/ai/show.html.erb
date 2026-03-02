@@ -115,8 +115,13 @@
                 <%= t(".edit_profile") %>
               <% end %>
             </div>
-            <div class="bg-slate-700/50 rounded-lg p-4 max-h-64 overflow-y-auto">
-              <p class="text-slate-300 text-sm whitespace-pre-wrap font-mono"><%= @ai_trainer.trainer_profile %></p>
+            <div
+              class="
+                bg-slate-700/50 rounded-lg p-4 max-h-64 overflow-y-auto prose prose-invert
+                prose-sm max-w-none
+              "
+            >
+              <%= render_markdown(@ai_trainer.trainer_profile) %>
             </div>
           </div>
         <% end %>
