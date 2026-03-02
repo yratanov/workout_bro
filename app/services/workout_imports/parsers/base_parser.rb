@@ -16,6 +16,24 @@ module WorkoutImports
 
       protected
 
+      def import_workouts(workouts_by_date)
+        imported = 0
+        skipped = 0
+
+        workouts_by_date.each do |date, exercises|
+          exercises_data =
+            exercises.map { |name, reps_data| { name: name, reps: reps_data } }
+
+          if create_workout(date: date, exercises_data: exercises_data)
+            imported += 1
+          else
+            skipped += 1
+          end
+        end
+
+        { imported: imported, skipped: skipped }
+      end
+
       def parse_weight(value)
         return nil if value.blank?
 

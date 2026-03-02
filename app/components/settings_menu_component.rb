@@ -3,31 +3,22 @@
 class SettingsMenuComponent < ViewComponent::Base
   include ApplicationHelper
 
-  def initialize(current_page:, current_user: nil)
+  def initialize(current_page:)
     @current_page = current_page
   end
 
-  def menu_items
-    [
-      { key: :profile, path: settings_profile_path, icon: "user" },
-      { key: :weights, path: settings_weights_path, icon: "dumbbell" },
-      { key: :garmin, path: settings_garmin_path, icon: "activity" },
-      { key: :imports, path: settings_imports_path, icon: "upload" },
-      { key: :exports, path: settings_exports_path, icon: "download" },
-      { key: :ai, path: settings_ai_path, icon: "sparkles" }
-    ]
-  end
-
-  def active?(key)
-    @current_page == key
-  end
-
-  def item_classes(key)
-    base = "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors"
-    if active?(key)
-      "#{base} bg-slate-700 text-white"
-    else
-      "#{base} text-slate-400 hover:bg-slate-700/50 hover:text-white"
-    end
+  def call
+    render MenuComponent.new(
+             items: [
+               { key: :profile, path: settings_profile_path, icon: "user" },
+               { key: :weights, path: settings_weights_path, icon: "dumbbell" },
+               { key: :garmin, path: settings_garmin_path, icon: "activity" },
+               { key: :imports, path: settings_imports_path, icon: "upload" },
+               { key: :exports, path: settings_exports_path, icon: "download" },
+               { key: :ai, path: settings_ai_path, icon: "sparkles" }
+             ],
+             current_page: @current_page,
+             translation_namespace: "settings.menu"
+           )
   end
 end

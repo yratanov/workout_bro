@@ -3,51 +3,21 @@
 class AiWorkoutFeedbackService
   include AiWorkoutPromptHelpers
 
-  GENERATION_CONFIG = { temperature: 0.7 }.freeze
-
   def initialize(workout)
     @workout = workout
     @user = workout.user
-    @ai_trainer = @user.ai_trainer
   end
 
   def call
-    client = AiClient.for(@user)
+    prompt = [workout_data_section, instruction_section].join("\n\n")
 
-    if @ai_trainer&.configured?
-      conversation = AiConversationBuilder.new(@ai_trainer).build
-      messages =
-        conversation[:messages] + [{ role: "user", text: request_message }]
-      client.generate_chat(
-        messages,
-        system_instruction: conversation[:system_instruction],
-        generation_config: GENERATION_CONFIG,
-        log_context: {
-          user: @user,
-          action: "workout_feedback"
-        }
-      )
-    else
-      client.generate(
-        build_prompt,
-        generation_config: GENERATION_CONFIG,
-        log_context: {
-          user: @user,
-          action: "workout_feedback"
-        }
-      )
-    end
+    AiGenerator.new(user: @user, action: "workout_feedback").call(
+      prompt: prompt,
+      chat_message: prompt
+    )
   end
 
   private
-
-  def request_message
-    [workout_data_section, instruction_section].join("\n\n")
-  end
-
-  def build_prompt
-    [workout_data_section, instruction_section].join("\n\n")
-  end
 
   def workout_data_section
     <<~PROMPT.strip

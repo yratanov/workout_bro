@@ -4,8 +4,6 @@ module WorkoutImports
   module Parsers
     class FitnotesParser < BaseParser
       def parse
-        imported = 0
-        skipped = 0
         workouts_by_date = {}
 
         CSV.parse(csv_content, headers: true) do |row|
@@ -27,18 +25,7 @@ module WorkoutImports
           }
         end
 
-        workouts_by_date.each do |date, exercises|
-          exercises_data =
-            exercises.map { |name, reps_data| { name: name, reps: reps_data } }
-
-          if create_workout(date: date, exercises_data: exercises_data)
-            imported += 1
-          else
-            skipped += 1
-          end
-        end
-
-        { imported: imported, skipped: skipped }
+        import_workouts(workouts_by_date)
       end
 
       private

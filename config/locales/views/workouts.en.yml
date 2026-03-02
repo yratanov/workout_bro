@@ -1,5 +1,6 @@
 en:
   workouts:
+    muscles_worked: "Muscles Worked"
     index:
       title: "Workouts"
       continue_workout: "Continue workout"

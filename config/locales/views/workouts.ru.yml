@@ -1,5 +1,6 @@
 ru:
   workouts:
+    muscles_worked: "Проработанные мышцы"
     index:
       title: "Тренировки"
       continue_workout: "Продолжить тренировку"

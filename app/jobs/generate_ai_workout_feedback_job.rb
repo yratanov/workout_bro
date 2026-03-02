@@ -55,7 +55,7 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
     client.generate_chat_stream(
       messages,
       system_instruction: conversation[:system_instruction],
-      generation_config: AiWorkoutFeedbackService::GENERATION_CONFIG,
+      generation_config: AiGenerator::GENERATION_CONFIG,
       log_context: {
         user:,
         action: "workout_feedback"

@@ -36,19 +36,9 @@
       <% end %>
     </div>
     <!-- Muscles Worked -->
-    <% if @summary.muscles_worked.any? %>
-      <div class="bg-slate-800 rounded-lg p-4 mb-6">
-        <h3 class="text-slate-400 text-sm mb-3"><%= t(".muscles_worked") %></h3>
-        <div class="flex flex-wrap gap-3">
-          <% @summary.muscles_worked.each do |muscle| %>
-            <div class="flex items-center gap-2 bg-slate-700 rounded-full px-3 py-1.5">
-              <%= muscle_icon(muscle, size: "w-5 h-5") %>
-              <span class="text-white text-sm"><%= muscle.human_name %></span>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
+    <%= render "workouts/muscles_worked",
+    muscles: @summary.muscles_worked,
+    compact: false %>
     <!-- PRs Section -->
     <% if @summary.new_prs.any? %>
       <div class=" bg-slate-800 rounded-lg p-4 mb-6 border-2 border-yellow-500/50 ">

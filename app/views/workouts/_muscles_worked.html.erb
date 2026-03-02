@@ -1,0 +1,27 @@
+<% if muscles.any? %>
+  <% if compact %>
+    <div class="mb-4">
+      <div class="text-slate-400 text-xs mb-2"><%= t("workouts.muscles_worked") %></div>
+      <div class="flex flex-wrap gap-2">
+        <% muscles.each do |muscle| %>
+          <div class=" flex items-center gap-1.5 bg-slate-700 rounded-full px-2.5 py-1 ">
+            <%= muscle_icon(muscle, size: "w-4 h-4") %>
+            <span class="text-white text-sm"><%= muscle.human_name %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="bg-slate-800 rounded-lg p-4 mb-6">
+      <h3 class="text-slate-400 text-sm mb-3"><%= t("workouts.muscles_worked") %></h3>
+      <div class="flex flex-wrap gap-3">
+        <% muscles.each do |muscle| %>
+          <div class="flex items-center gap-2 bg-slate-700 rounded-full px-3 py-1.5">
+            <%= muscle_icon(muscle, size: "w-5 h-5") %>
+            <span class="text-white text-sm"><%= muscle.human_name %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

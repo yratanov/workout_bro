@@ -55,6 +55,8 @@ group :development, :test do
 
   # Mocking framework for Minitest
   gem "mocha"
+  
+  gem "flay"
 end
 
 group :development do

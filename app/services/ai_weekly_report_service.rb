@@ -3,51 +3,21 @@
 class AiWeeklyReportService
   include AiWorkoutPromptHelpers
 
-  GENERATION_CONFIG = { temperature: 0.7 }.freeze
-
   def initialize(user, week_start)
     @user = user
     @week_start = week_start
-    @ai_trainer = @user.ai_trainer
   end
 
   def call
-    client = AiClient.for(@user)
+    prompt = [week_data_section, instruction_section].join("\n\n")
 
-    if @ai_trainer&.configured?
-      conversation = AiConversationBuilder.new(@ai_trainer).build
-      messages =
-        conversation[:messages] + [{ role: "user", text: request_message }]
-      client.generate_chat(
-        messages,
-        system_instruction: conversation[:system_instruction],
-        generation_config: GENERATION_CONFIG,
-        log_context: {
-          user: @user,
-          action: "weekly_report"
-        }
-      )
-    else
-      client.generate(
-        build_prompt,
-        generation_config: GENERATION_CONFIG,
-        log_context: {
-          user: @user,
-          action: "weekly_report"
-        }
-      )
-    end
+    AiGenerator.new(user: @user, action: "weekly_report").call(
+      prompt: prompt,
+      chat_message: prompt
+    )
   end
 
   private
-
-  def request_message
-    [week_data_section, instruction_section].join("\n\n")
-  end
-
-  def build_prompt
-    [week_data_section, instruction_section].join("\n\n")
-  end
 
   def week_data_section
     <<~PROMPT.strip

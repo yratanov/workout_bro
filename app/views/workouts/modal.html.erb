@@ -20,19 +20,9 @@
             <% end %>
           </div>
           <!-- Muscles Worked -->
-          <% if @summary.muscles_worked.any? %>
-            <div class="mb-4">
-              <div class="text-slate-400 text-xs mb-2"><%= t(".muscles_worked") %></div>
-              <div class="flex flex-wrap gap-2">
-                <% @summary.muscles_worked.each do |muscle| %>
-                  <div class=" flex items-center gap-1.5 bg-slate-700 rounded-full px-2.5 py-1 ">
-                    <%= muscle_icon(muscle, size: "w-4 h-4") %>
-                    <span class="text-white text-sm"><%= muscle.human_name %></span>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
+          <%= render "workouts/muscles_worked",
+          muscles: @summary.muscles_worked,
+          compact: true %>
           <!-- Comparison (if available) -->
           <% if @summary.previous_workout && @summary.comparison %>
             <div class="bg-slate-700 rounded-lg p-3 mb-4">
@@ -59,15 +49,6 @@
 
           <% if @workout.workout_sets.empty? %>
             <p class="text-slate-400 text-center"><%= t(".no_exercises") %></p>
-          <% end %>
-          <!-- Workout Notes -->
-          <% if @workout.notes.present? %>
-            <div class="mb-4">
-              <div class="text-slate-400 text-xs mb-2"><%= t(".notes") %></div>
-              <div class="bg-slate-700/50 rounded-lg p-3">
-                <p class="text-slate-300 text-sm whitespace-pre-wrap"><%= @workout.notes %></p>
-              </div>
-            </div>
           <% end %>
           <!-- Set Notes -->
           <%= render partial: "workouts/set_notes",
@@ -137,15 +118,15 @@
               </div>
             </div>
           <% end %>
-          <!-- Workout Notes (Run) -->
-          <% if @workout.notes.present? %>
-            <div class="mb-4">
-              <div class="text-slate-400 text-xs mb-2"><%= t(".notes") %></div>
-              <div class="bg-slate-700/50 rounded-lg p-3">
-                <p class="text-slate-300 text-sm whitespace-pre-wrap"><%= @workout.notes %></p>
-              </div>
+        <% end %>
+        <!-- Workout Notes -->
+        <% if @workout.notes.present? %>
+          <div class="mb-4">
+            <div class="text-slate-400 text-xs mb-2"><%= t(".notes") %></div>
+            <div class="bg-slate-700/50 rounded-lg p-3">
+              <p class="text-slate-300 text-sm whitespace-pre-wrap"><%= @workout.notes %></p>
             </div>
-          <% end %>
+          </div>
         <% end %>
         <!-- AI Trainer Feedback -->
         <% activity = @workout.ai_trainer_activity %>
