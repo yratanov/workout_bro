@@ -3,7 +3,7 @@
 class AiWorkoutFeedbackService
   include AiWorkoutPromptHelpers
 
-  GENERATION_CONFIG = { temperature: 0.7, maxOutputTokens: 512 }.freeze
+  GENERATION_CONFIG = { temperature: 0.7 }.freeze
 
   def initialize(workout)
     @workout = workout

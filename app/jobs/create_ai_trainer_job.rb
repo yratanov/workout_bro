@@ -1,5 +1,5 @@
 class CreateAiTrainerJob < ApplicationJob
-  GENERATION_CONFIG = { temperature: 0.8, maxOutputTokens: 750 }.freeze
+  GENERATION_CONFIG = { temperature: 0.8 }.freeze
 
   queue_as :default
 
