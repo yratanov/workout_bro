@@ -9,6 +9,14 @@ A self-hosted workout tracking app for strength training and running. Own your f
 - View progress statistics
 - No cloud accounts or subscriptions required
 
+### AI-Powered Coaching (optional, bring your own Gemini API key)
+
+- **Workout Feedback** - automatic analysis after each session with progression insights and PR highlights
+- **Weekly Reports** - training summaries with trends and recommendations
+- **AI Trainer** - customizable coaching persona that learns your patterns from up to 6 months of history
+- **Routine Generator** - generate complete workout routines from simple inputs (split type, frequency, goals)
+- Bilingual support (English & Russian)
+
 ## Quick Start with Docker
 
 1. Create a `docker-compose.yml` file:

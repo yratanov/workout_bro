@@ -105,6 +105,57 @@
       line-height: 1.4;
     }
 
+    /* AI Features */
+    .ai-features {
+      padding: 64px 24px;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .ai-features h2 {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .ai-subtitle {
+      opacity: 0.7;
+      margin-bottom: 40px;
+      font-size: 0.95rem;
+    }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .ai-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: left;
+    }
+
+    .ai-card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+
+    .ai-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .ai-card p {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      opacity: 0.8;
+    }
+
     /* Install */
     .install {
       padding: 80px 24px;
@@ -237,6 +288,10 @@
         grid-template-columns: 1fr;
       }
 
+      .ai-grid {
+        grid-template-columns: 1fr;
+      }
+
       .code-block {
         padding: 16px;
         border-radius: 8px;
@@ -285,6 +340,33 @@
       <div class="feature">
         <div class="feature-icon">&#128230;</div>
         <div><h3>Easy Deploy</h3><p>One Docker command</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai-features">
+    <h2>AI-Powered Coaching</h2>
+    <p class="ai-subtitle">Bring your own Gemini API key. Your data stays on your server.</p>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="ai-card-icon">&#128172;</div>
+        <h3>Workout Feedback</h3>
+        <p>Get automatic analysis after each session. The AI reviews your performance, tracks progression, and highlights new personal records.</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-icon">&#128200;</div>
+        <h3>Weekly Reports</h3>
+        <p>Receive weekly training summaries with trend analysis and personalized recommendations for the week ahead.</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-icon">&#129351;</div>
+        <h3>AI Trainer</h3>
+        <p>Create a custom coaching persona that learns your patterns from up to 6 months of training history. Choose the coaching style that motivates you.</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-icon">&#128221;</div>
+        <h3>Routine Generator</h3>
+        <p>Generate complete workout routines from simple inputs &mdash; pick your split, frequency, and goals. The AI handles exercise selection and sequencing.</p>
       </div>
     </div>
   </section>
