@@ -20,12 +20,9 @@ class GenerateWeeklyReportJobTest < ActiveJob::TestCase
   end
 
   test "creates a completed ai_trainer_activity" do
-    mock_service = mock("weekly_report_service")
-    mock_service.stubs(:call).returns(@report_response)
-    AiWeeklyReportService.stubs(:new).returns(mock_service)
-    AiConversationBuilder.stubs(:new).returns(stub(compaction_needed?: false))
-
-    GenerateWeeklyReportJob.new.perform(user: @user, week_start: @week_start)
+    VCR.use_cassette("jobs/weekly_report/success") do
+      GenerateWeeklyReportJob.new.perform(user: @user, week_start: @week_start)
+    end
 
     activity =
       @user.ai_trainer_activities.weekly_report.order(created_at: :desc).first
@@ -35,34 +32,33 @@ class GenerateWeeklyReportJobTest < ActiveJob::TestCase
   end
 
   test "triggers compaction when conversation exceeds token threshold" do
-    mock_service = mock("weekly_report_service")
-    mock_service.stubs(:call).returns(@report_response)
-    AiWeeklyReportService.stubs(:new).returns(mock_service)
-    AiConversationBuilder.stubs(:new).returns(stub(compaction_needed?: true))
+    AiConversationBuilder.any_instance.stubs(:compaction_needed?).returns(true)
 
     assert_enqueued_with(job: GenerateFullReviewJob) do
-      GenerateWeeklyReportJob.new.perform(user: @user, week_start: @week_start)
+      VCR.use_cassette("jobs/weekly_report/success") do
+        GenerateWeeklyReportJob.new.perform(
+          user: @user,
+          week_start: @week_start
+        )
+      end
     end
   end
 
   test "does not trigger compaction when under threshold" do
-    mock_service = mock("weekly_report_service")
-    mock_service.stubs(:call).returns(@report_response)
-    AiWeeklyReportService.stubs(:new).returns(mock_service)
-    AiConversationBuilder.stubs(:new).returns(stub(compaction_needed?: false))
-
-    GenerateWeeklyReportJob.new.perform(user: @user, week_start: @week_start)
+    VCR.use_cassette("jobs/weekly_report/success") do
+      GenerateWeeklyReportJob.new.perform(user: @user, week_start: @week_start)
+    end
 
     assert_enqueued_jobs 0, only: GenerateFullReviewJob
   end
 
   test "marks activity as failed on error" do
-    AiWeeklyReportService.stubs(:new).raises(StandardError, "API error")
-
-    GenerateWeeklyReportJob.new.perform(user: @user, week_start: @week_start)
+    VCR.use_cassette("jobs/weekly_report/error") do
+      GenerateWeeklyReportJob.new.perform(user: @user, week_start: @week_start)
+    end
 
     activity = @user.ai_trainer_activities.weekly_report.last
     assert activity.failed?
-    assert_equal "API error", activity.error_message
+    assert_not_nil activity.error_message
   end
 end

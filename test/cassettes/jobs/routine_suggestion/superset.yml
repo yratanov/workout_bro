@@ -1,0 +1,25 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=<GEMINI_API_KEY>
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"candidates":[{"content":{"parts":[{"text":"{\"name\":\"Superset Routine\",\"days\":[{\"name\":\"Day
+        1\",\"exercises\":[{\"superset\":\"Chest/Back Superset\",\"exercises\":[{\"name\":\"Bench
+        Press\",\"muscle\":\"chest\"},{\"name\":\"Deadlift\",\"muscle\":\"back\"}]}]}]}"}]}}],"usageMetadata":{"promptTokenCount":10,"candidatesTokenCount":20,"totalTokenCount":30}}'
+  recorded_at: Wed, 04 Mar 2026 12:00:00 GMT
+recorded_with: VCR 6.3.1

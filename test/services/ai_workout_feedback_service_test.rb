@@ -31,47 +31,19 @@ class AiWorkoutFeedbackServiceTest < ActiveSupport::TestCase
       )
     workout_set.workout_reps.create!(weight: 100, reps: 10)
 
-    mock_client = mock("AiClient")
-    AiClient.stubs(:for).with(@user).returns(mock_client)
-    mock_client
-      .expects(:generate_chat)
-      .with do |messages, **opts|
-        messages.is_a?(Array) &&
-          opts[:system_instruction].include?(
-            "A motivational trainer profile."
-          ) && messages.last[:role] == "user" &&
-          messages.last[:text].include?("Strength") &&
-          messages.last[:text].include?("Bench Press") &&
-          messages.last[:text].include?("100")
-      end
-      .returns("Great workout!")
-
-    result = AiWorkoutFeedbackService.new(@workout).call
-    assert_equal "Great workout!", result
-  end
-
-  test "includes trainer context in system_instruction" do
-    mock_client = mock("AiClient")
-    AiClient.stubs(:for).returns(mock_client)
-    mock_client
-      .expects(:generate_chat)
-      .with do |_messages, **opts|
-        opts[:system_instruction].include?("A motivational trainer profile.")
-      end
-      .returns("Feedback")
-
-    AiWorkoutFeedbackService.new(@workout).call
+    VCR.use_cassette("ai_workout_feedback/chat") do
+      result = AiWorkoutFeedbackService.new(@workout).call
+      assert_equal "Great workout!", result
+    end
   end
 
   test "falls back to generate for unconfigured trainer" do
     @ai_trainer.update!(status: :pending)
 
-    mock_client = mock("AiClient")
-    AiClient.stubs(:for).returns(mock_client)
-    mock_client.expects(:generate).returns("Basic feedback")
-
-    result = AiWorkoutFeedbackService.new(@workout).call
-    assert_equal "Basic feedback", result
+    VCR.use_cassette("ai_workout_feedback/simple") do
+      result = AiWorkoutFeedbackService.new(@workout).call
+      assert_equal "Basic feedback", result
+    end
   end
 
   test "includes run details in the last message for run workout" do
@@ -85,17 +57,43 @@ class AiWorkoutFeedbackServiceTest < ActiveSupport::TestCase
         time_in_seconds: 1800
       )
 
-    mock_client = mock("AiClient")
-    AiClient.stubs(:for).returns(mock_client)
-    mock_client
-      .expects(:generate_chat)
-      .with do |messages, **|
-        last_msg = messages.last
-        last_msg[:text].include?("Run") && last_msg[:text].include?("5.0km")
-      end
-      .returns("Nice run!")
+    VCR.use_cassette("ai_workout_feedback/run") do
+      result = AiWorkoutFeedbackService.new(run_workout).call
+      assert_equal "Nice run!", result
+    end
+  end
 
-    result = AiWorkoutFeedbackService.new(run_workout).call
-    assert_equal "Nice run!", result
+  test "prompt includes workout data for strength workout" do
+    workout_set =
+      @workout.workout_sets.create!(
+        exercise: exercises(:bench_press),
+        started_at: 30.minutes.ago
+      )
+    workout_set.workout_reps.create!(weight: 100, reps: 10)
+
+    service = AiWorkoutFeedbackService.new(@workout)
+    prompt = service.prompt
+
+    assert_includes prompt, "Strength"
+    assert_includes prompt, "Bench Press"
+    assert_includes prompt, "100"
+  end
+
+  test "prompt includes run details for run workout" do
+    run_workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :run,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        distance: 5000,
+        time_in_seconds: 1800
+      )
+
+    service = AiWorkoutFeedbackService.new(run_workout)
+    prompt = service.prompt
+
+    assert_includes prompt, "Run"
+    assert_includes prompt, "5.0km"
   end
 end

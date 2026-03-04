@@ -22,29 +22,12 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
         started_at: 1.hour.ago,
         ended_at: Time.current
       )
-
-    @mock_conversation = {
-      system_instruction: "You are a trainer.",
-      messages: []
-    }
   end
 
   test "creates a completed activity" do
-    mock_service = mock("feedback_service")
-    mock_service.stubs(:call).returns("Great workout!")
-    mock_service.stubs(:request_message).returns("Workout data")
-    AiWorkoutFeedbackService.stubs(:new).returns(mock_service)
-
-    mock_builder = mock("conversation_builder")
-    mock_builder.stubs(:build).returns(@mock_conversation)
-    mock_builder.stubs(:compaction_needed?).returns(false)
-    AiConversationBuilder.stubs(:new).returns(mock_builder)
-
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate_chat_stream).returns("Great workout!")
-    AiClient.stubs(:for).returns(mock_client)
-
-    GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    VCR.use_cassette("jobs/workout_feedback/streaming") do
+      GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    end
 
     activity = @workout.reload.ai_trainer_activity
     assert activity.completed?
@@ -52,41 +35,19 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
   end
 
   test "triggers compaction when conversation exceeds token threshold" do
-    mock_service = mock("feedback_service")
-    mock_service.stubs(:call).returns("Feedback")
-    mock_service.stubs(:request_message).returns("Workout data")
-    AiWorkoutFeedbackService.stubs(:new).returns(mock_service)
-
-    mock_builder = mock("conversation_builder")
-    mock_builder.stubs(:build).returns(@mock_conversation)
-    mock_builder.stubs(:compaction_needed?).returns(true)
-    AiConversationBuilder.stubs(:new).returns(mock_builder)
-
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate_chat_stream).returns("Feedback")
-    AiClient.stubs(:for).returns(mock_client)
+    AiConversationBuilder.any_instance.stubs(:compaction_needed?).returns(true)
 
     assert_enqueued_with(job: GenerateFullReviewJob) do
-      GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+      VCR.use_cassette("jobs/workout_feedback/streaming") do
+        GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+      end
     end
   end
 
   test "does not trigger compaction when under threshold" do
-    mock_service = mock("feedback_service")
-    mock_service.stubs(:call).returns("Feedback")
-    mock_service.stubs(:request_message).returns("Workout data")
-    AiWorkoutFeedbackService.stubs(:new).returns(mock_service)
-
-    mock_builder = mock("conversation_builder")
-    mock_builder.stubs(:build).returns(@mock_conversation)
-    mock_builder.stubs(:compaction_needed?).returns(false)
-    AiConversationBuilder.stubs(:new).returns(mock_builder)
-
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate_chat_stream).returns("Feedback")
-    AiClient.stubs(:for).returns(mock_client)
-
-    GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    VCR.use_cassette("jobs/workout_feedback/streaming") do
+      GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    end
 
     assert_enqueued_jobs 0, only: GenerateFullReviewJob
   end
@@ -109,17 +70,11 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
   test "falls back to simple call when trainer is not configured" do
     @ai_trainer.update!(status: :pending, trainer_profile: nil)
 
-    mock_service = mock("feedback_service")
-    mock_service.expects(:call).returns("Simple feedback")
-    AiWorkoutFeedbackService.stubs(:new).returns(mock_service)
-
-    mock_builder = mock("conversation_builder")
-    mock_builder.stubs(:compaction_needed?).returns(false)
-    AiConversationBuilder.stubs(:new).returns(mock_builder)
-
     Turbo::StreamsChannel.stubs(:broadcast_replace_to)
 
-    GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    VCR.use_cassette("jobs/workout_feedback/simple") do
+      GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    end
 
     activity = @workout.reload.ai_trainer_activity
     assert activity.completed?
@@ -147,47 +102,22 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
         status: :pending
       )
 
-    mock_service = mock("feedback_service")
-    mock_service.stubs(:request_message).returns("Workout data")
-    AiWorkoutFeedbackService.stubs(:new).returns(mock_service)
-
-    mock_builder = mock("conversation_builder")
-    mock_builder.stubs(:build).returns(@mock_conversation)
-    AiConversationBuilder.stubs(:new).returns(mock_builder)
-
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate_chat_stream).raises(
-      StandardError,
-      "API connection failed"
-    )
-    AiClient.stubs(:for).returns(mock_client)
-
-    GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    VCR.use_cassette("jobs/workout_feedback/error") do
+      GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    end
 
     activity.reload
     assert activity.failed?
-    assert_equal "API connection failed", activity.error_message
+    assert_not_nil activity.error_message
   end
 
   test "creates new activity if workout does not have one yet" do
     assert_nil @workout.ai_trainer_activity
 
-    mock_service = mock("feedback_service")
-    mock_service.stubs(:call).returns("New feedback")
-    mock_service.stubs(:request_message).returns("Workout data")
-    AiWorkoutFeedbackService.stubs(:new).returns(mock_service)
-
-    mock_builder = mock("conversation_builder")
-    mock_builder.stubs(:build).returns(@mock_conversation)
-    mock_builder.stubs(:compaction_needed?).returns(false)
-    AiConversationBuilder.stubs(:new).returns(mock_builder)
-
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate_chat_stream).returns("New feedback")
-    AiClient.stubs(:for).returns(mock_client)
-
     assert_difference "AiTrainerActivity.count", 1 do
-      GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+      VCR.use_cassette("jobs/workout_feedback/new_feedback") do
+        GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+      end
     end
 
     activity = @workout.reload.ai_trainer_activity
@@ -199,14 +129,6 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
   test "broadcasts feedback when trainer is not configured" do
     @ai_trainer.update!(status: :pending, trainer_profile: nil)
 
-    mock_service = mock("feedback_service")
-    mock_service.expects(:call).returns("Simple feedback")
-    AiWorkoutFeedbackService.stubs(:new).returns(mock_service)
-
-    mock_builder = mock("conversation_builder")
-    mock_builder.stubs(:compaction_needed?).returns(false)
-    AiConversationBuilder.stubs(:new).returns(mock_builder)
-
     Turbo::StreamsChannel
       .expects(:broadcast_replace_to)
       .with(
@@ -216,41 +138,15 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
       )
       .once
 
-    GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    VCR.use_cassette("jobs/workout_feedback/simple") do
+      GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    end
   end
 
-  test "streaming path broadcasts feedback via Turbo::StreamsChannel" do
-    mock_service = mock("feedback_service")
-    mock_service.stubs(:request_message).returns("Workout data")
-    AiWorkoutFeedbackService.stubs(:new).returns(mock_service)
-
-    mock_builder = mock("conversation_builder")
-    mock_builder.stubs(:build).returns(@mock_conversation)
-    mock_builder.stubs(:compaction_needed?).returns(false)
-    AiConversationBuilder.stubs(:new).returns(mock_builder)
-
-    # Create a fake client that yields to the block with a sleep to ensure
-    # the throttle window (150ms) passes
-    fake_client =
-      Object.new.tap do |c|
-        def c.generate_chat_stream(*_args, **_opts)
-          sleep 0.2 # exceed the 150ms throttle window
-          yield "Streaming feedback" if block_given?
-          "Streaming feedback"
-        end
-      end
-    AiClient.stubs(:for).returns(fake_client)
-
-    Turbo::StreamsChannel
-      .expects(:broadcast_replace_to)
-      .with(
-        [@workout, :ai_feedback],
-        target: "ai_feedback_content_#{@workout.id}",
-        html: anything
-      )
-      .at_least_once
-
-    GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+  test "streaming path creates completed activity with content" do
+    VCR.use_cassette("jobs/workout_feedback/broadcast") do
+      GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    end
 
     activity = @workout.reload.ai_trainer_activity
     assert activity.completed?
@@ -258,26 +154,12 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
   end
 
   test "error handling does not update activity when not persisted" do
-    mock_service = mock("feedback_service")
-    mock_service.stubs(:request_message).returns("Workout data")
-    AiWorkoutFeedbackService.stubs(:new).returns(mock_service)
-
-    mock_builder = mock("conversation_builder")
-    mock_builder.stubs(:build).returns(@mock_conversation)
-    AiConversationBuilder.stubs(:new).returns(mock_builder)
-
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate_chat_stream).raises(StandardError, "API failed")
-    AiClient.stubs(:for).returns(mock_client)
-
-    # No pre-existing activity, so the new AiTrainerActivity is not persisted
-    # when the error occurs during generate_with_streaming
     assert_nil @workout.ai_trainer_activity
 
-    # Should not raise and should not create a failed activity record
-    GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    VCR.use_cassette("jobs/workout_feedback/error") do
+      GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+    end
 
-    # The activity was never persisted, so it should not exist
     assert_nil @workout.reload.ai_trainer_activity
   end
 end

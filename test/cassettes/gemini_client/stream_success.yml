@@ -1,0 +1,23 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse&key=<GEMINI_API_KEY>
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Type:
+      - text/event-stream
+    body:
+      encoding: UTF-8
+      string: "data: {\"candidates\":[{\"content\":{\"parts\":[{\"text\":\"Hello world!\"}]}}],\"usageMetadata\":{\"promptTokenCount\":5,\"candidatesTokenCount\":3,\"totalTokenCount\":8}}\n\n"
+  recorded_at: Wed, 04 Mar 2026 12:00:00 GMT
+recorded_with: VCR 6.3.1

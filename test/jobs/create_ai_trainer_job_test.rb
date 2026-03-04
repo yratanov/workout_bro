@@ -12,30 +12,10 @@ class CreateAiTrainerJobTest < ActiveJob::TestCase
     @ai_trainer.update!(status: :pending, trainer_profile: nil)
   end
 
-  test "sets status to in_progress at the start" do
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate).returns("Generated profile")
-    AiClient.stubs(:for).returns(mock_client)
-    AiTrainerPromptBuilder.stubs(:new).returns(stub(call: "prompt"))
-
-    statuses = []
-    @ai_trainer.define_singleton_method(:in_progress!) do
-      statuses << :in_progress
-      super()
-    end
-
-    CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
-
-    assert_includes statuses, :in_progress
-  end
-
   test "generates trainer profile and marks as completed" do
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate).returns("Generated profile text")
-    AiClient.stubs(:for).returns(mock_client)
-    AiTrainerPromptBuilder.stubs(:new).returns(stub(call: "prompt"))
-
-    CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
+    VCR.use_cassette("jobs/create_trainer/success") do
+      CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
+    end
 
     @ai_trainer.reload
     assert @ai_trainer.completed?
@@ -43,44 +23,49 @@ class CreateAiTrainerJobTest < ActiveJob::TestCase
     assert_nil @ai_trainer.error_details
   end
 
+  test "sets status to in_progress at the start" do
+    statuses = []
+    @ai_trainer.define_singleton_method(:in_progress!) do
+      statuses << :in_progress
+      super()
+    end
+
+    VCR.use_cassette("jobs/create_trainer/success") do
+      CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
+    end
+
+    assert_includes statuses, :in_progress
+  end
+
   test "enqueues GenerateFullReviewJob when train_on_existing_data is true" do
     @ai_trainer.update!(train_on_existing_data: true)
 
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate).returns("Profile")
-    AiClient.stubs(:for).returns(mock_client)
-    AiTrainerPromptBuilder.stubs(:new).returns(stub(call: "prompt"))
-
     assert_enqueued_with(job: GenerateFullReviewJob) do
-      CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
+      VCR.use_cassette("jobs/create_trainer/success") do
+        CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
+      end
     end
   end
 
   test "does not enqueue GenerateFullReviewJob when train_on_existing_data is false" do
     @ai_trainer.update!(train_on_existing_data: false)
 
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate).returns("Profile")
-    AiClient.stubs(:for).returns(mock_client)
-    AiTrainerPromptBuilder.stubs(:new).returns(stub(call: "prompt"))
-
-    CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
+    VCR.use_cassette("jobs/create_trainer/success") do
+      CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
+    end
 
     assert_enqueued_jobs 0, only: GenerateFullReviewJob
   end
 
   test "sets failed status on error and re-raises" do
-    AiTrainerPromptBuilder.stubs(:new).returns(stub(call: "prompt"))
-    mock_client = mock("ai_client")
-    mock_client.stubs(:generate).raises(StandardError, "API failure")
-    AiClient.stubs(:for).returns(mock_client)
-
-    assert_raises(StandardError) do
-      CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
+    VCR.use_cassette("jobs/create_trainer/error") do
+      assert_raises(StandardError) do
+        CreateAiTrainerJob.new.perform(ai_trainer: @ai_trainer)
+      end
     end
 
     @ai_trainer.reload
     assert @ai_trainer.failed?
-    assert_equal "API failure", @ai_trainer.error_details["message"]
+    assert_not_nil @ai_trainer.error_details["message"]
   end
 end

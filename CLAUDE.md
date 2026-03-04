@@ -49,6 +49,7 @@ bin/rails test test/models/user_test.rb:10        # Run a single test by line
 - `fixtures :all` is set globally - no need to declare in individual tests
 - Use descriptive fixture names (e.g., `users(:john)`, not `users(:one)`)
 - Use mocha for mocking: `X.stubs(:method).returns(value)`, `X.expects(:method)`
+- **Avoid mocking HTTP calls in AI/API tests.** Use VCR cassettes (`test/cassettes/`) instead of stubbing `Net::HTTP` or `AiClient`. VCR records real HTTP interactions and replays them, ensuring tests exercise the full code path. Use `VCR.use_cassette("name") do ... end` to wrap test code. Generate synthetic cassettes with `ruby test/cassettes/.generate_cassettes.rb`. Only use mocha stubs for non-HTTP concerns (e.g., Turbo broadcasts, `compaction_needed?`).
 
 ## Code Quality
 

@@ -9,12 +9,14 @@ class AiWorkoutFeedbackService
   end
 
   def call
-    prompt = [workout_data_section, instruction_section].join("\n\n")
-
     AiGenerator.new(user: @user, action: "workout_feedback").call(
       prompt: prompt,
       chat_message: prompt
     )
+  end
+
+  def prompt
+    [workout_data_section, instruction_section].join("\n\n")
   end
 
   private

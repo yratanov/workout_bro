@@ -1,0 +1,23 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse&key=<GEMINI_API_KEY>
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 401
+      message: ''
+    headers:
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: Unauthorized
+  recorded_at: Wed, 04 Mar 2026 12:00:00 GMT
+recorded_with: VCR 6.3.1

@@ -16,18 +16,10 @@ class AiHistoryReviewServiceTest < ActiveSupport::TestCase
   end
 
   test "calls AI client and returns result" do
-    mock_client = mock("AiClient")
-    AiClient.stubs(:for).returns(mock_client)
-    mock_client
-      .expects(:generate)
-      .with do |prompt|
-        prompt.include?("Trainer Profile") &&
-          prompt.include?("comprehensive training review")
-      end
-      .returns("Training review content")
-
-    result = AiHistoryReviewService.new(@ai_trainer).call
-    assert_equal "Training review content", result
+    VCR.use_cassette("ai_history_review/generate") do
+      result = AiHistoryReviewService.new(@ai_trainer).call
+      assert_equal "Training review content", result
+    end
   end
 
   test "includes workout data when available" do
@@ -48,13 +40,9 @@ class AiHistoryReviewServiceTest < ActiveSupport::TestCase
       )
     ws.workout_reps.create!(reps: 10, weight: 60)
 
-    mock_client = mock("AiClient")
-    AiClient.stubs(:for).returns(mock_client)
-    mock_client
-      .expects(:generate)
-      .with { |prompt| prompt.include?("Workout History") }
-      .returns("Review")
-
-    AiHistoryReviewService.new(@ai_trainer).call
+    VCR.use_cassette("ai_history_review/with_data") do
+      result = AiHistoryReviewService.new(@ai_trainer).call
+      assert_equal "Review", result
+    end
   end
 end

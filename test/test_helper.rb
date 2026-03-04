@@ -42,6 +42,10 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 require "mocha/minitest"
+require "webmock/minitest"
+
+# Allow localhost connections for system tests and dev server
+WebMock.disable_net_connect!(allow_localhost: true)
 
 # Require support files
 Rails.root.glob("test/support/**/*.rb").sort_by(&:to_s).each { |f| require f }

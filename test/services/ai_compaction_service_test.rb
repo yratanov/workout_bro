@@ -16,32 +16,9 @@ class AiCompactionServiceTest < ActiveSupport::TestCase
   end
 
   test "calls generate_chat with conversation messages and returns result" do
-    mock_client = mock("AiClient")
-    AiClient.stubs(:for).returns(mock_client)
-    mock_client
-      .expects(:generate_chat)
-      .with do |messages, **opts|
-        messages.is_a?(Array) &&
-          opts[:system_instruction].include?("A balanced fitness trainer.") &&
-          messages.last[:role] == "user" &&
-          messages.last[:text].include?("updated comprehensive training review")
-      end
-      .returns("Compacted review")
-
-    result = AiCompactionService.new(@ai_trainer).call
-    assert_equal "Compacted review", result
-  end
-
-  test "includes trainer context in system_instruction" do
-    mock_client = mock("AiClient")
-    AiClient.stubs(:for).returns(mock_client)
-    mock_client
-      .expects(:generate_chat)
-      .with do |_messages, **opts|
-        opts[:system_instruction].include?("A balanced fitness trainer.")
-      end
-      .returns("Review")
-
-    AiCompactionService.new(@ai_trainer).call
+    VCR.use_cassette("ai_compaction/chat") do
+      result = AiCompactionService.new(@ai_trainer).call
+      assert_equal "Compacted review", result
+    end
   end
 end

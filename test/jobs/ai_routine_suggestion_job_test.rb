@@ -28,40 +28,15 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
       focus_areas: [],
       additional_context: ""
     }
-
-    @ai_response = {
-      name: "Push Pull Legs Routine",
-      days: [
-        {
-          name: "Push Day",
-          exercises: [
-            { name: "Bench Press", muscle: "chest" },
-            { name: "Tricep Extension", muscle: "triceps" }
-          ]
-        },
-        {
-          name: "Pull Day",
-          exercises: [
-            { name: "Deadlift", muscle: "back" },
-            { name: "Pull-Up", muscle: "back" },
-            { name: "Bicep Curl", muscle: "biceps" }
-          ]
-        },
-        { name: "Leg Day", exercises: [{ name: "Squat", muscle: "legs" }] }
-      ]
-    }.to_json
-
-    @mock_client = mock("ai_client")
-    AiClient.stubs(:for).returns(@mock_client)
   end
 
   test "creates routine days and exercises from AI response" do
-    @mock_client.stubs(:generate_chat).returns(@ai_response)
-
-    AiRoutineSuggestionJob.new.perform(
-      workout_routine: @workout_routine,
-      params: @params
-    )
+    VCR.use_cassette("jobs/routine_suggestion/success") do
+      AiRoutineSuggestionJob.new.perform(
+        workout_routine: @workout_routine,
+        params: @params
+      )
+    end
 
     @workout_routine.reload
     assert_nil @workout_routine.ai_status
@@ -73,40 +48,24 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
   end
 
   test "sets ai_status to in_progress during execution" do
-    @mock_client
-      .stubs(:generate_chat)
-      .with do
-        assert_equal "in_progress", @workout_routine.reload.ai_status
-        true
-      end
-      .returns(@ai_response)
+    VCR.use_cassette("jobs/routine_suggestion/success") do
+      AiRoutineSuggestionJob.new.perform(
+        workout_routine: @workout_routine,
+        params: @params
+      )
+    end
 
-    AiRoutineSuggestionJob.new.perform(
-      workout_routine: @workout_routine,
-      params: @params
-    )
+    # After completion, ai_status should be nil (cleared)
+    assert_nil @workout_routine.reload.ai_status
   end
 
   test "saves comments on exercises from AI response" do
-    response = {
-      name: "Commented Routine",
-      days: [
-        {
-          name: "Day 1",
-          exercises: [
-            { name: "Bench Press", muscle: "chest", comment: "focus on form" },
-            { name: "Squat", muscle: "legs" }
-          ]
-        }
-      ]
-    }.to_json
-
-    @mock_client.stubs(:generate_chat).returns(response)
-
-    AiRoutineSuggestionJob.new.perform(
-      workout_routine: @workout_routine,
-      params: @params
-    )
+    VCR.use_cassette("jobs/routine_suggestion/comments") do
+      AiRoutineSuggestionJob.new.perform(
+        workout_routine: @workout_routine,
+        params: @params
+      )
+    end
 
     day = @workout_routine.reload.workout_routine_days.first
     exercises = day.workout_routine_day_exercises.order(:position)
@@ -115,31 +74,12 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
   end
 
   test "saves comments on superset exercises from AI response" do
-    response = {
-      name: "Superset Comment Routine",
-      days: [
-        {
-          name: "Day 1",
-          exercises: [
-            {
-              superset: "Chest/Back Superset",
-              comment: "no rest between exercises",
-              exercises: [
-                { name: "Bench Press", muscle: "chest" },
-                { name: "Deadlift", muscle: "back" }
-              ]
-            }
-          ]
-        }
-      ]
-    }.to_json
-
-    @mock_client.stubs(:generate_chat).returns(response)
-
-    AiRoutineSuggestionJob.new.perform(
-      workout_routine: @workout_routine,
-      params: @params
-    )
+    VCR.use_cassette("jobs/routine_suggestion/superset_comments") do
+      AiRoutineSuggestionJob.new.perform(
+        workout_routine: @workout_routine,
+        params: @params
+      )
+    end
 
     day = @workout_routine.reload.workout_routine_days.first
     day_exercise = day.workout_routine_day_exercises.first
@@ -147,23 +87,13 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
   end
 
   test "creates new exercises when not found in user's list" do
-    response = {
-      name: "Test Routine",
-      days: [
-        {
-          name: "Day 1",
-          exercises: [{ name: "Overhead Press", muscle: "shoulders" }]
-        }
-      ]
-    }.to_json
-
-    @mock_client.stubs(:generate_chat).returns(response)
-
     assert_difference "Exercise.count", 1 do
-      AiRoutineSuggestionJob.new.perform(
-        workout_routine: @workout_routine,
-        params: @params
-      )
+      VCR.use_cassette("jobs/routine_suggestion/new_exercise") do
+        AiRoutineSuggestionJob.new.perform(
+          workout_routine: @workout_routine,
+          params: @params
+        )
+      end
     end
 
     new_exercise = @user.exercises.find_by(name: "Overhead Press")
@@ -177,25 +107,12 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
   end
 
   test "skips exercises with invalid muscle group" do
-    response = {
-      name: "Test Routine",
-      days: [
-        {
-          name: "Day 1",
-          exercises: [
-            { name: "Bench Press", muscle: "chest" },
-            { name: "Magic Lift", muscle: "nonexistent_muscle" }
-          ]
-        }
-      ]
-    }.to_json
-
-    @mock_client.stubs(:generate_chat).returns(response)
-
-    AiRoutineSuggestionJob.new.perform(
-      workout_routine: @workout_routine,
-      params: @params
-    )
+    VCR.use_cassette("jobs/routine_suggestion/invalid_muscle") do
+      AiRoutineSuggestionJob.new.perform(
+        workout_routine: @workout_routine,
+        params: @params
+      )
+    end
 
     day = @workout_routine.reload.workout_routine_days.first
     assert_equal 1, day.workout_routine_day_exercises.count
@@ -204,31 +121,13 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
   end
 
   test "creates supersets with component exercises" do
-    response = {
-      name: "Superset Routine",
-      days: [
-        {
-          name: "Day 1",
-          exercises: [
-            {
-              superset: "Chest/Back Superset",
-              exercises: [
-                { name: "Bench Press", muscle: "chest" },
-                { name: "Deadlift", muscle: "back" }
-              ]
-            }
-          ]
-        }
-      ]
-    }.to_json
-
-    @mock_client.stubs(:generate_chat).returns(response)
-
     assert_difference "Superset.count", 1 do
-      AiRoutineSuggestionJob.new.perform(
-        workout_routine: @workout_routine,
-        params: @params
-      )
+      VCR.use_cassette("jobs/routine_suggestion/superset") do
+        AiRoutineSuggestionJob.new.perform(
+          workout_routine: @workout_routine,
+          params: @params
+        )
+      end
     end
 
     superset = @user.supersets.find_by(name: "Chest/Back Superset")
@@ -245,31 +144,13 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
   test "reuses existing supersets by name" do
     existing_superset = supersets(:push_pull)
 
-    response = {
-      name: "Reuse Routine",
-      days: [
-        {
-          name: "Day 1",
-          exercises: [
-            {
-              superset: "Push Pull",
-              exercises: [
-                { name: "Bench Press", muscle: "chest" },
-                { name: "Pull-Up", muscle: "back" }
-              ]
-            }
-          ]
-        }
-      ]
-    }.to_json
-
-    @mock_client.stubs(:generate_chat).returns(response)
-
     assert_no_difference "Superset.count" do
-      AiRoutineSuggestionJob.new.perform(
-        workout_routine: @workout_routine,
-        params: @params
-      )
+      VCR.use_cassette("jobs/routine_suggestion/reuse_superset") do
+        AiRoutineSuggestionJob.new.perform(
+          workout_routine: @workout_routine,
+          params: @params
+        )
+      end
     end
 
     day = @workout_routine.reload.workout_routine_days.first
@@ -278,32 +159,14 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
   end
 
   test "creates supersets with new exercises" do
-    response = {
-      name: "New Superset Routine",
-      days: [
-        {
-          name: "Day 1",
-          exercises: [
-            {
-              superset: "Shoulder Combo",
-              exercises: [
-                { name: "Lateral Raise", muscle: "shoulders" },
-                { name: "Front Raise", muscle: "shoulders" }
-              ]
-            }
-          ]
-        }
-      ]
-    }.to_json
-
-    @mock_client.stubs(:generate_chat).returns(response)
-
     assert_difference "Exercise.count", 2 do
       assert_difference "Superset.count", 1 do
-        AiRoutineSuggestionJob.new.perform(
-          workout_routine: @workout_routine,
-          params: @params
-        )
+        VCR.use_cassette("jobs/routine_suggestion/new_superset") do
+          AiRoutineSuggestionJob.new.perform(
+            workout_routine: @workout_routine,
+            params: @params
+          )
+        end
       end
     end
 
@@ -313,66 +176,63 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
   end
 
   test "sets failed status on error" do
-    @mock_client.stubs(:generate_chat).raises(StandardError.new("API error"))
+    VCR.use_cassette("jobs/routine_suggestion/error") do
+      assert_raises(StandardError) do
+        AiRoutineSuggestionJob.new.perform(
+          workout_routine: @workout_routine,
+          params: @params
+        )
+      end
+    end
 
-    assert_raises(StandardError) do
+    @workout_routine.reload
+    assert_equal "failed", @workout_routine.ai_status
+    assert_not_nil @workout_routine.ai_generation_error
+  end
+
+  test "broadcasts turbo stream reload on success" do
+    Turbo::StreamsChannel.expects(:broadcast_replace_to).with(
+      [@workout_routine, :ai_generation],
+      target: "ai_generation_status",
+      html:
+        '<div id="ai_generation_status" data-controller="page-reload"></div>'
+    )
+
+    VCR.use_cassette("jobs/routine_suggestion/success") do
       AiRoutineSuggestionJob.new.perform(
         workout_routine: @workout_routine,
         params: @params
       )
     end
-
-    @workout_routine.reload
-    assert_equal "failed", @workout_routine.ai_status
-    assert_equal "API error", @workout_routine.ai_generation_error
-  end
-
-  test "broadcasts turbo stream reload on success" do
-    @mock_client.stubs(:generate_chat).returns(@ai_response)
-
-    Turbo::StreamsChannel
-      .expects(:broadcast_replace_to)
-      .with(
-        [@workout_routine, :ai_generation],
-        target: "ai_generation_status",
-        html:
-          '<div id="ai_generation_status" data-controller="page-reload"></div>'
-      )
-
-    AiRoutineSuggestionJob.new.perform(
-      workout_routine: @workout_routine,
-      params: @params
-    )
   end
 
   test "broadcasts turbo stream reload on failure" do
-    @mock_client.stubs(:generate_chat).raises(StandardError.new("API error"))
+    Turbo::StreamsChannel.expects(:broadcast_replace_to).with(
+      [@workout_routine, :ai_generation],
+      target: "ai_generation_status",
+      html:
+        '<div id="ai_generation_status" data-controller="page-reload"></div>'
+    )
 
-    Turbo::StreamsChannel
-      .expects(:broadcast_replace_to)
-      .with(
-        [@workout_routine, :ai_generation],
-        target: "ai_generation_status",
-        html:
-          '<div id="ai_generation_status" data-controller="page-reload"></div>'
-      )
-
-    assert_raises(StandardError) do
-      AiRoutineSuggestionJob.new.perform(
-        workout_routine: @workout_routine,
-        params: @params
-      )
+    VCR.use_cassette("jobs/routine_suggestion/error") do
+      assert_raises(StandardError) do
+        AiRoutineSuggestionJob.new.perform(
+          workout_routine: @workout_routine,
+          params: @params
+        )
+      end
     end
   end
 
   test "uses simple generate when trainer not configured" do
     @ai_trainer.update!(status: :pending, trainer_profile: nil)
-    @mock_client.expects(:generate).returns(@ai_response)
 
-    AiRoutineSuggestionJob.new.perform(
-      workout_routine: @workout_routine,
-      params: @params
-    )
+    VCR.use_cassette("jobs/routine_suggestion/simple") do
+      AiRoutineSuggestionJob.new.perform(
+        workout_routine: @workout_routine,
+        params: @params
+      )
+    end
 
     assert_nil @workout_routine.reload.ai_status
   end

@@ -72,6 +72,9 @@ group :test do
   gem "selenium-webdriver"
 
   gem "simplecov", require: false
+
+  gem "vcr"
+  gem "webmock"
 end
 
 gem "tailwindcss-ruby", "~> 4.1"

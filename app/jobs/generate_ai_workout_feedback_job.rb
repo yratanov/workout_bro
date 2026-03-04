@@ -48,7 +48,7 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
     conversation = AiConversationBuilder.new(user.ai_trainer).build
     messages =
       conversation[:messages] +
-        [{ role: "user", text: service.send(:request_message) }]
+        [{ role: "user", text: service.prompt }]
 
     last_broadcast = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 

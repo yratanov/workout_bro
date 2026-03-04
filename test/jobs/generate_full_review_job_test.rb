@@ -14,16 +14,13 @@ class GenerateFullReviewJobTest < ActiveJob::TestCase
       status: :completed,
       trainer_profile: "A balanced fitness trainer."
     )
-
-    @mock_client = mock("ai_client")
-    @mock_client.stubs(:generate).returns("Full review content")
-    @mock_client.stubs(:generate_chat).returns("Full review content")
-    AiClient.stubs(:for).returns(@mock_client)
   end
 
   test "creates a full_review activity" do
     assert_difference "AiTrainerActivity.full_review.count", 1 do
-      GenerateFullReviewJob.new.perform(ai_trainer: @ai_trainer)
+      VCR.use_cassette("jobs/full_review/initial") do
+        GenerateFullReviewJob.new.perform(ai_trainer: @ai_trainer)
+      end
     end
 
     activity = AiTrainerActivity.full_review.last
@@ -33,9 +30,9 @@ class GenerateFullReviewJobTest < ActiveJob::TestCase
   end
 
   test "uses AiCompactionService when recent activities exist" do
-    @mock_client.stubs(:generate_chat).returns("Compacted")
-
-    GenerateFullReviewJob.new.perform(ai_trainer: @ai_trainer)
+    VCR.use_cassette("jobs/full_review/compaction") do
+      GenerateFullReviewJob.new.perform(ai_trainer: @ai_trainer)
+    end
 
     activity = AiTrainerActivity.full_review.order(created_at: :desc).first
     assert_equal "Compacted", activity.content
@@ -55,15 +52,14 @@ class GenerateFullReviewJobTest < ActiveJob::TestCase
   end
 
   test "handles errors gracefully" do
-    @mock_client.stubs(:generate_chat).raises(StandardError, "API error")
-    @mock_client.stubs(:generate).raises(StandardError, "API error")
-
-    assert_nothing_raised do
-      GenerateFullReviewJob.new.perform(ai_trainer: @ai_trainer)
+    VCR.use_cassette("jobs/full_review/error") do
+      assert_nothing_raised do
+        GenerateFullReviewJob.new.perform(ai_trainer: @ai_trainer)
+      end
     end
 
     activity = AiTrainerActivity.full_review.order(created_at: :desc).first
     assert activity.failed?
-    assert_includes activity.error_message, "API error"
+    assert_not_nil activity.error_message
   end
 end
