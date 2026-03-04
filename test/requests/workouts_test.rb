@@ -617,4 +617,41 @@ class WorkoutsTest < ActionDispatch::IntegrationTest
     activity.reload
     assert activity.viewed?
   end
+
+  test "PATCH /workouts/:id/mark_ai_viewed marks AI feedback as viewed" do
+    @user.update!(
+      ai_provider: "gemini",
+      ai_model: "gemini-2.0-flash",
+      ai_api_key: "test-key"
+    )
+    ai_trainer = @user.ai_trainer
+    ai_trainer.update!(status: :completed, trainer_profile: "Profile.")
+
+    workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+
+    activity =
+      AiTrainerActivity.create!(
+        user: @user,
+        ai_trainer: ai_trainer,
+        workout: workout,
+        activity_type: :workout_review,
+        status: :completed,
+        content: "Great workout!"
+      )
+
+    assert_nil activity.viewed_at
+
+    patch mark_ai_viewed_workout_path(workout)
+    assert_response :ok
+
+    activity.reload
+    assert activity.viewed?
+  end
 end

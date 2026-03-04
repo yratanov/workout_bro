@@ -136,7 +136,7 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
         target: "ai_feedback_content_#{@workout.id}",
         html: anything
       )
-      .once
+      .at_least_once
 
     VCR.use_cassette("jobs/workout_feedback/simple") do
       GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)

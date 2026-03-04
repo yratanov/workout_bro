@@ -11,6 +11,7 @@ class WorkoutsController < ApplicationController
                   resume
                   notes_modal
                   update_notes
+                  mark_ai_viewed
                 ]
 
   # GET /workouts or /workouts.json
@@ -194,6 +195,12 @@ class WorkoutsController < ApplicationController
         end
     end
     redirect_to @workout
+  end
+
+  # PATCH /workouts/1/mark_ai_viewed
+  def mark_ai_viewed
+    mark_ai_feedback_as_viewed
+    head :ok
   end
 
   # GET /workouts/1/notes_modal

@@ -29,6 +29,7 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
     end
 
     activity.update!(content: result, status: :completed)
+    broadcast_feedback(workout, result, mark_viewed: true)
 
     trigger_compaction_if_needed(ai_trainer)
   rescue => e
@@ -47,8 +48,7 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
     client = AiClient.for(user)
     conversation = AiConversationBuilder.new(user.ai_trainer).build
     messages =
-      conversation[:messages] +
-        [{ role: "user", text: service.prompt }]
+      conversation[:messages] + [{ role: "user", text: service.prompt }]
 
     last_broadcast = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
@@ -69,14 +69,26 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
     end
   end
 
-  def broadcast_feedback(workout, text)
+  def broadcast_feedback(workout, text, mark_viewed: false)
     target = "ai_feedback_content_#{workout.id}"
     html = ApplicationController.helpers.render_markdown(text)
+    extra_attrs =
+      if mark_viewed
+        url =
+          Rails.application.routes.url_helpers.mark_ai_viewed_workout_path(
+            workout
+          )
+        "data-controller=\"ai-feedback-viewed\" " \
+          "data-ai-feedback-viewed-url-value=\"#{url}\" "
+      else
+        ""
+      end
     Turbo::StreamsChannel.broadcast_replace_to(
       [workout, :ai_feedback],
       target:,
       html:
         "<div id=\"#{target}\" " \
+          "#{extra_attrs}" \
           'class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">' \
           "#{html}</div>"
     )

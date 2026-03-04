@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       post :resume
       get :notes_modal
       patch :update_notes
+      patch :mark_ai_viewed
     end
   end
 
