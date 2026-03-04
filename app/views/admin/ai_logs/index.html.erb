@@ -58,10 +58,10 @@
                       <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-400"><%= t(".show_prompt") %></summary>
                       <pre
                         class="
-                          mt-2 text-xs text-slate-500 max-w-full overflow-auto bg-slate-800 p-2 rounded
-                          max-h-48
+                          mt-2 text-xs text-slate-300 max-w-full overflow-auto bg-slate-800 p-3 rounded
+                          max-h-96 whitespace-pre-wrap break-words
                         "
-                      ><%= log.prompt %></pre>
+                      ><%= format_ai_log_text(log.prompt) %></pre>
                     </details>
                   <% end %>
 
@@ -70,10 +70,10 @@
                       <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-400"><%= t(".show_response") %></summary>
                       <pre
                         class="
-                          mt-2 text-xs text-slate-500 max-w-full overflow-auto bg-slate-800 p-2 rounded
-                          max-h-48
+                          mt-2 text-xs text-slate-300 max-w-full overflow-auto bg-slate-800 p-3 rounded
+                          max-h-96 whitespace-pre-wrap break-words
                         "
-                      ><%= log.response %></pre>
+                      ><%= format_ai_log_text(log.response) %></pre>
                     </details>
                   <% end %>
                 </div>
