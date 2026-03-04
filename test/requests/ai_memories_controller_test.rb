@@ -35,7 +35,7 @@ class AiMemoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "POST /ai/memories/generate enqueues bootstrap job" do
+  test "POST /ai/memories/generate enqueues bootstrap job and renders loading state" do
     sign_in(@user)
     @user.update!(
       ai_provider: "gemini",
@@ -46,9 +46,10 @@ class AiMemoriesControllerTest < ActionDispatch::IntegrationTest
     assert_enqueued_with(job: BootstrapAiMemoriesJob) do
       post generate_ai_memories_path
     end
-    assert_redirected_to ai_memories_path
-    assert_equal I18n.t("controllers.ai_memories.generate_started"),
-                 flash[:notice]
+    assert_response :success
+    assert_includes response.body, I18n.t("ai_memories.index.generating")
+    assert_includes response.body, "ai_memory_generation_status"
+    assert_includes response.body, "animate-spin"
   end
 
   test "POST /ai/memories/generate redirects with alert when AI not configured" do

@@ -47,4 +47,38 @@ class BootstrapAiMemoriesJobTest < ActiveJob::TestCase
 
     assert_nothing_raised { BootstrapAiMemoriesJob.perform_now(user: @user) }
   end
+
+  test "broadcasts page reload on completion" do
+    Turbo::StreamsChannel.expects(:broadcast_replace_to).with(
+      [@user, :ai_memory_generation],
+      target: "ai_memory_generation_status",
+      html:
+        '<div id="ai_memory_generation_status" data-controller="page-reload"></div>'
+    )
+
+    VCR.use_cassette("ai_memory_extraction/bootstrap") do
+      BootstrapAiMemoriesJob.perform_now(user: @user)
+    end
+  end
+
+  test "broadcasts page reload even on error" do
+    AiMemoryExtractionService
+      .any_instance
+      .stubs(:call)
+      .raises(StandardError, "API error")
+
+    WorkoutExporter
+      .any_instance
+      .stubs(:call)
+      .returns("date,exercise\n2026-01-01,Bench Press\n")
+
+    Turbo::StreamsChannel.expects(:broadcast_replace_to).with(
+      [@user, :ai_memory_generation],
+      target: "ai_memory_generation_status",
+      html:
+        '<div id="ai_memory_generation_status" data-controller="page-reload"></div>'
+    )
+
+    BootstrapAiMemoriesJob.perform_now(user: @user)
+  end
 end

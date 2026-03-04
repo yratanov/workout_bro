@@ -6,6 +6,8 @@ en:
       generate: "Generate"
       description: "These are observations your AI trainer has learned about you over time. They help personalize feedback and recommendations. You can delete any memory you'd like to remove."
       empty: "No memories yet. Your AI trainer will learn about you as you train."
+      generating: "Generating memories..."
+      generating_hint: "Your AI trainer is analyzing your workout history. This may take a minute."
       categories:
         schedule: "Schedule"
         equipment: "Equipment"

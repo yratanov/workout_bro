@@ -16,9 +16,20 @@ class BootstrapAiMemoriesJob < ApplicationJob
     Rails.logger.error(
       "AI memory bootstrap failed for user ##{user.id}: #{e.message}"
     )
+  ensure
+    broadcast_reload(user) if user
   end
 
   private
+
+  def broadcast_reload(user)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      [user, :ai_memory_generation],
+      target: "ai_memory_generation_status",
+      html:
+        '<div id="ai_memory_generation_status" data-controller="page-reload"></div>'
+    )
+  end
 
   def build_workout_summary(user)
     exporter = WorkoutExporter.new(user: user)

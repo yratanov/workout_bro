@@ -3,7 +3,7 @@
 <div class="w-full max-w-2xl">
   <%= page_header title: t(".title") do %>
     <div class="flex gap-2">
-      <% if current_user.ai_configured? %>
+      <% if current_user.ai_configured? && !@generating %>
         <%= button t(".generate"),
         type: "submit",
         style: "primary",
@@ -18,6 +18,39 @@
   <% end %>
 
   <p class="text-slate-400 text-sm mb-6"><%= t(".description") %></p>
+
+  <% if @generating %>
+    <%= turbo_stream_from current_user, :ai_memory_generation %>
+    <div
+      id="ai_memory_generation_status"
+      class="bg-slate-800 rounded-lg p-8 text-center mb-6"
+    >
+      <div class="flex flex-col items-center gap-3">
+        <svg
+          class="animate-spin h-8 w-8 text-blue-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          ></path>
+        </svg>
+        <p class="text-slate-300 font-medium"><%= t(".generating") %></p>
+        <p class="text-slate-500 text-sm"><%= t(".generating_hint") %></p>
+      </div>
+    </div>
+  <% end %>
 
   <% if @memories.any? %>
     <div class="space-y-6">
@@ -50,7 +83,7 @@
         </div>
       <% end %>
     </div>
-  <% else %>
+  <% elsif !@generating %>
     <%= empty_state icon: "sparkles", message: t(".empty") do %>
       <% if current_user.ai_configured? %>
         <%= button t(".generate"),

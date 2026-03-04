@@ -21,7 +21,8 @@ class AiMemoriesController < ApplicationController
     end
 
     BootstrapAiMemoriesJob.perform_later(user: current_user)
-    redirect_to ai_memories_path,
-                notice: I18n.t("controllers.ai_memories.generate_started")
+    @generating = true
+    @memories = current_user.ai_memories.for_prompt.group_by(&:category)
+    render :index
   end
 end
