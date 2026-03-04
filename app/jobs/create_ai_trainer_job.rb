@@ -23,6 +23,7 @@ class CreateAiTrainerJob < ApplicationJob
 
     if ai_trainer.train_on_existing_data
       GenerateFullReviewJob.perform_later(ai_trainer:)
+      BootstrapAiMemoriesJob.perform_later(user:)
     end
   rescue => e
     ai_trainer.update!(status: :failed, error_details: { message: e.message })

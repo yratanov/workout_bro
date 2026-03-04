@@ -23,6 +23,7 @@ class GenerateFullReviewJob < ApplicationJob
       end
 
     activity.update!(content: result, status: :completed)
+    ExtractAiMemoriesJob.perform_later(activity: activity)
   rescue => e
     activity&.update(status: :failed, error_message: e.message)
     Rails.logger.error(

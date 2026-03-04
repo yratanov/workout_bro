@@ -56,6 +56,7 @@ class User < ApplicationRecord
   has_one :ai_trainer, dependent: :destroy
 
   has_many :ai_trainer_activities, dependent: :destroy
+  has_many :ai_memories, dependent: :destroy
 
   AVAILABLE_LOCALES = %w[en ru].freeze
   WEIGHT_UNITS = %w[kg lbs].freeze

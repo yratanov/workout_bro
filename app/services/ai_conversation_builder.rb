@@ -30,6 +30,7 @@ class AiConversationBuilder
     sections = [
       static_instructions,
       trainer_profile_section,
+      memories_section,
       full_review_section
     ]
     sections.compact.join("\n\n")
@@ -50,6 +51,23 @@ class AiConversationBuilder
     <<~PROMPT.strip
       ## Your Trainer Profile
       #{@ai_trainer.trainer_profile}
+    PROMPT
+  end
+
+  def memories_section
+    user = @ai_trainer.user
+    memories = user.ai_memories.for_prompt.limit(25).to_a
+    return nil if memories.empty?
+
+    # Cap at 3 per category
+    by_category = memories.group_by(&:category)
+    capped = by_category.flat_map { |_, mems| mems.first(3) }
+
+    lines = capped.map { |m| "- [#{m.category.capitalize}] #{m.content}" }
+
+    <<~PROMPT.strip
+      ## What I Know About This User
+      #{lines.join("\n")}
     PROMPT
   end
 

@@ -20,6 +20,7 @@ class GenerateWeeklyReportJob < ApplicationJob
     response = AiWeeklyReportService.new(user, week_start).call
 
     activity.update!(content: response, status: :completed)
+    ExtractAiMemoriesJob.perform_later(activity: activity)
 
     trigger_compaction_if_needed(ai_trainer)
   rescue => e

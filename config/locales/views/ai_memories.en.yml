@@ -1,0 +1,16 @@
+en:
+  ai_memories:
+    index:
+      title: "AI Memories"
+      back: "Back"
+      generate: "Generate"
+      description: "These are observations your AI trainer has learned about you over time. They help personalize feedback and recommendations. You can delete any memory you'd like to remove."
+      empty: "No memories yet. Your AI trainer will learn about you as you train."
+      categories:
+        schedule: "Schedule"
+        equipment: "Equipment"
+        health: "Health"
+        preferences: "Preferences"
+        progress: "Progress"
+        behavior: "Behavior"
+        goals: "Goals"

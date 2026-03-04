@@ -6,6 +6,7 @@ en:
       weekly_report: "Weekly Report"
     index:
       title: "AI Trainer"
+      memories: "Memories"
       empty: "No AI activity yet. Complete workouts to get trainer feedback."
       strength: "Strength"
       run: "Run"

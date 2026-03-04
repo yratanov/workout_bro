@@ -1,7 +1,9 @@
 <% content_for :title, t(".title") %>
 
 <div class="w-full max-w-2xl">
-  <%= page_header title: t(".title") %>
+  <%= page_header title: t(".title") do %>
+    <%= button t(".memories"), type: "link", style: "outlined", route: ai_memories_path %>
+  <% end %>
 
   <% if @activities.any? %>
     <div class="relative">

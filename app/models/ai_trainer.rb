@@ -33,6 +33,7 @@
 class AiTrainer < ApplicationRecord
   belongs_to :user
   has_many :ai_trainer_activities, dependent: :nullify
+  has_many :ai_memories, dependent: :nullify
 
   enum :approach, { supportive: 0, tough_love: 1, balanced: 2 }
   enum :communication_style, { concise: 0, detailed: 1, motivational: 2 }

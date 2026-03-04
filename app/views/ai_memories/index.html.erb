@@ -1,0 +1,64 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-2xl">
+  <%= page_header title: t(".title") do %>
+    <div class="flex gap-2">
+      <% if current_user.ai_configured? %>
+        <%= button t(".generate"),
+        type: "submit",
+        style: "primary",
+        method: :post,
+        route: generate_ai_memories_path %>
+      <% end %>
+      <%= button t(".back"),
+      type: "link",
+      style: "outlined",
+      route: ai_trainer_activities_path %>
+    </div>
+  <% end %>
+
+  <p class="text-slate-400 text-sm mb-6"><%= t(".description") %></p>
+
+  <% if @memories.any? %>
+    <div class="space-y-6">
+      <% AiMemory.categories.keys.each do |category| %>
+        <% next unless @memories[category]&.any? %>
+
+        <div>
+          <%= section_header title: t(".categories.#{category}"),
+          icon: memory_category_icon(category) %>
+
+          <div class="space-y-2 mt-2">
+            <% @memories[category].each do |memory| %>
+              <div
+                class="
+                  bg-slate-800 rounded-lg p-3 border border-slate-700 flex items-start
+                  justify-between gap-3
+                "
+              >
+                <p class="text-slate-300 text-sm flex-1"><%= memory.content %></p>
+                <%= button t("shared.buttons.delete"),
+                style: "link_danger",
+                method: :delete,
+                route: ai_memory_path(memory),
+                data: {
+                  turbo_confirm: t("shared.confirmations.are_you_sure"),
+                } %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <%= empty_state icon: "sparkles", message: t(".empty") do %>
+      <% if current_user.ai_configured? %>
+        <%= button t(".generate"),
+        type: "submit",
+        style: "primary",
+        method: :post,
+        route: generate_ai_memories_path %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

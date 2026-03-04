@@ -1,0 +1,6 @@
+en:
+  controllers:
+    ai_memories:
+      destroyed: "Memory deleted."
+      generate_started: "Generating memories from your workout history. This may take a moment."
+      not_configured: "Please configure your AI settings first."

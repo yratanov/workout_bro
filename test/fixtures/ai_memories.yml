@@ -1,0 +1,59 @@
+# == Schema Information
+#
+# Table name: ai_memories
+# Database name: primary
+#
+#  id            :integer          not null, primary key
+#  category      :integer          not null
+#  content       :text             not null
+#  source        :string           default("auto"), not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  ai_trainer_id :integer
+#  user_id       :integer          not null
+#
+# Indexes
+#
+#  index_ai_memories_on_ai_trainer_id         (ai_trainer_id)
+#  index_ai_memories_on_user_id_and_category  (user_id,category)
+#
+# Foreign Keys
+#
+#  ai_trainer_id  (ai_trainer_id => ai_trainers.id)
+#  user_id        (user_id => users.id)
+#
+johns_schedule:
+  user: john
+  ai_trainer: johns_trainer
+  category: 0
+  content: "Typically trains 3-4 times per week"
+  source: "auto"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+johns_equipment:
+  user: john
+  ai_trainer: johns_trainer
+  category: 1
+  content: "Has access to a full gym with barbells and dumbbells"
+  source: "auto"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+johns_health:
+  user: john
+  ai_trainer: johns_trainer
+  category: 2
+  content: "No reported injuries or limitations"
+  source: "auto"
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
+johns_progress:
+  user: john
+  ai_trainer: johns_trainer
+  category: 4
+  content: "Bench press has been increasing steadily over the past month"
+  source: "auto"
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>

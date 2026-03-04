@@ -30,6 +30,7 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
 
     activity.update!(content: result, status: :completed)
     broadcast_feedback(workout, result, mark_viewed: true)
+    ExtractAiMemoriesJob.perform_later(activity: activity)
 
     trigger_compaction_if_needed(ai_trainer)
   rescue => e
