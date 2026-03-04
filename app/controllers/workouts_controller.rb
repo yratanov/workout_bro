@@ -53,6 +53,8 @@ class WorkoutsController < ApplicationController
 
     @summary =
       WorkoutSummaryCalculator.new(workout: @workout, new_prs: @new_prs).call
+
+    mark_ai_feedback_as_viewed
   end
 
   # GET /workouts/new
@@ -260,6 +262,13 @@ class WorkoutsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_workout
     @workout = current_user.workouts.find(params.expect(:id))
+  end
+
+  def mark_ai_feedback_as_viewed
+    activity = @workout.ai_trainer_activity
+    if activity&.completed? && !activity&.viewed?
+      activity&.update!(viewed_at: Time.current)
+    end
   end
 
   def enqueue_ai_feedback

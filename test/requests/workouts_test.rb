@@ -486,12 +486,7 @@ class WorkoutsTest < ActionDispatch::IntegrationTest
 
     Workout.any_instance.stubs(:update).returns(false)
 
-    patch workout_path(workout),
-          params: {
-            workout: {
-              notes: "test"
-            }
-          }
+    patch workout_path(workout), params: { workout: { notes: "test" } }
     assert_response :unprocessable_entity
   end
 
@@ -516,7 +511,7 @@ class WorkoutsTest < ActionDispatch::IntegrationTest
              workout: {
                workout_type: "run",
                started_at: Date.today,
-               distance: 10000,
+               distance: 10_000,
                time_in_seconds: "1:05:30"
              }
            }
@@ -524,7 +519,7 @@ class WorkoutsTest < ActionDispatch::IntegrationTest
 
     workout = Workout.last
     assert workout.run?
-    assert_equal 10000, workout.distance
+    assert_equal 10_000, workout.distance
     assert_equal 3930, workout.time_in_seconds
     assert_redirected_to workouts_path
   end
@@ -584,5 +579,42 @@ class WorkoutsTest < ActionDispatch::IntegrationTest
             "Accept" => "text/vnd.turbo-stream.html"
           }
     assert_equal "text/vnd.turbo-stream.html", response.media_type
+  end
+
+  test "GET /workouts/:id/summary marks AI feedback as viewed" do
+    @user.update!(
+      ai_provider: "gemini",
+      ai_model: "gemini-2.0-flash",
+      ai_api_key: "test-key"
+    )
+    ai_trainer = @user.ai_trainer
+    ai_trainer.update!(status: :completed, trainer_profile: "Profile.")
+
+    workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+
+    activity =
+      AiTrainerActivity.create!(
+        user: @user,
+        ai_trainer: ai_trainer,
+        workout: workout,
+        activity_type: :workout_review,
+        status: :completed,
+        content: "Great workout!"
+      )
+
+    assert_nil activity.viewed_at
+
+    get summary_workout_path(workout)
+    assert_response :success
+
+    activity.reload
+    assert activity.viewed?
   end
 end
