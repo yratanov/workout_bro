@@ -25,7 +25,7 @@ end
 
 def success_body(text, input_tokens: 10, output_tokens: 20, total_tokens: 30)
   {
-    "candidates" => [{"content" => {"parts" => [{"text" => text}]}}],
+    "candidates" => [{ "content" => { "parts" => [{ "text" => text }] } }],
     "usageMetadata" => {
       "promptTokenCount" => input_tokens,
       "candidatesTokenCount" => output_tokens,
@@ -35,12 +35,12 @@ def success_body(text, input_tokens: 10, output_tokens: 20, total_tokens: 30)
 end
 
 def success_body_no_usage(text)
-  {"candidates" => [{"content" => {"parts" => [{"text" => text}]}}]}.to_json
+  { "candidates" => [{ "content" => { "parts" => [{ "text" => text }] } }] }.to_json
 end
 
 def sse_body(text, input_tokens: 10, output_tokens: 20, total_tokens: 30)
   "data: " + {
-    "candidates" => [{"content" => {"parts" => [{"text" => text}]}}],
+    "candidates" => [{ "content" => { "parts" => [{ "text" => text }] } }],
     "usageMetadata" => {
       "promptTokenCount" => input_tokens,
       "candidatesTokenCount" => output_tokens,
@@ -54,13 +54,13 @@ def interaction(url:, status:, res_body:, content_type: "application/json")
     "request" => {
       "method" => "post",
       "uri" => url,
-      "body" => {"encoding" => "UTF-8", "string" => ""},
-      "headers" => {"Content-Type" => ["application/json"]}
+      "body" => { "encoding" => "UTF-8", "string" => "" },
+      "headers" => { "Content-Type" => ["application/json"] }
     },
     "response" => {
-      "status" => {"code" => status, "message" => ""},
-      "headers" => {"Content-Type" => [content_type]},
-      "body" => {"encoding" => "UTF-8", "string" => res_body}
+      "status" => { "code" => status, "message" => "" },
+      "headers" => { "Content-Type" => [content_type] },
+      "body" => { "encoding" => "UTF-8", "string" => res_body }
     },
     "recorded_at" => "Wed, 04 Mar 2026 12:00:00 GMT"
   }
@@ -68,7 +68,7 @@ end
 
 def write_cassette(name, interactions)
   path = "#{CASSETTE_DIR}/#{name}.yml"
-  data = {"http_interactions" => interactions, "recorded_with" => "VCR 6.3.1"}
+  data = { "http_interactions" => interactions, "recorded_with" => "VCR 6.3.1" }
   File.write(path, data.to_yaml)
   puts "  #{name}.yml"
 end
@@ -90,11 +90,11 @@ write_cassette("gemini_client/generate_429", [
   interaction(url: url25, status: 429, res_body: "Too many requests")
 ])
 write_cassette("gemini_client/generate_500", [interaction(url: url25, status: 500, res_body: "Internal Server Error")])
-write_cassette("gemini_client/generate_empty_candidates", [interaction(url: url25, status: 200, res_body: {"candidates" => []}.to_json)])
+write_cassette("gemini_client/generate_empty_candidates", [interaction(url: url25, status: 200, res_body: { "candidates" => [] }.to_json)])
 write_cassette("gemini_client/generate_with_tokens", [interaction(url: url25, status: 200, res_body: success_body("OK", input_tokens: 100, output_tokens: 50, total_tokens: 150))])
 write_cassette("gemini_client/generate_no_usage", [interaction(url: url25, status: 200, res_body: success_body_no_usage("OK"))])
 write_cassette("gemini_client/generate_ok", [interaction(url: url25, status: 200, res_body: success_body("OK"))])
-write_cassette("gemini_client/generate_404", [interaction(url: url25, status: 404, res_body: {"error" => {"message" => "Model not found"}}.to_json)])
+write_cassette("gemini_client/generate_404", [interaction(url: url25, status: 404, res_body: { "error" => { "message" => "Model not found" } }.to_json)])
 write_cassette("gemini_client/generate_chat_success", [interaction(url: url25, status: 200, res_body: success_body("I'm great!"))])
 write_cassette("gemini_client/generate_chat_response", [interaction(url: url25, status: 200, res_body: success_body("Response"))])
 write_cassette("gemini_client/generate_chat_ok", [interaction(url: url25, status: 200, res_body: success_body("OK"))])
@@ -104,7 +104,7 @@ write_cassette("gemini_client/stream_logged", [interaction(url: stream25, status
 write_cassette("gemini_client/stream_429", [interaction(url: stream25, status: 429, res_body: "Rate limited")])
 write_cassette("gemini_client/stream_429_logged", [interaction(url: stream25, status: 429, res_body: "Too many requests")])
 write_cassette("gemini_client/stream_401", [interaction(url: stream25, status: 401, res_body: "Unauthorized")])
-write_cassette("gemini_client/stream_empty", [interaction(url: stream25, status: 200, res_body: "data: #{{"candidates" => []}.to_json}\n\n", content_type: "text/event-stream")])
+write_cassette("gemini_client/stream_empty", [interaction(url: stream25, status: 200, res_body: "data: #{{ "candidates" => [] }.to_json}\n\n", content_type: "text/event-stream")])
 
 # === Service tests (gemini-2.0-flash) ===
 write_cassette("ai_workout_feedback/chat", [interaction(url: url20, status: 200, res_body: success_body("Great workout!"))])
@@ -129,24 +129,24 @@ write_cassette("jobs/workout_feedback/error", [interaction(url: stream20, status
 write_cassette("jobs/workout_feedback/new_feedback", [interaction(url: stream20, status: 200, res_body: sse_body("New feedback"), content_type: "text/event-stream")])
 write_cassette("jobs/workout_feedback/broadcast", [interaction(url: stream20, status: 200, res_body: sse_body("Streaming feedback"), content_type: "text/event-stream")])
 write_cassette("jobs/weekly_report/success", [interaction(url: url20, status: 200, res_body: success_body("Great progress this week!"))])
-write_cassette("jobs/weekly_report/error", [interaction(url: url20, status: 500, res_body: {"error" => {"message" => "API error"}}.to_json)])
+write_cassette("jobs/weekly_report/error", [interaction(url: url20, status: 500, res_body: { "error" => { "message" => "API error" } }.to_json)])
 write_cassette("jobs/full_review/compaction", [interaction(url: url20, status: 200, res_body: success_body("Compacted"))])
 write_cassette("jobs/full_review/initial", [interaction(url: url20, status: 200, res_body: success_body("Full review content"))])
-write_cassette("jobs/full_review/error", [interaction(url: url20, status: 500, res_body: {"error" => {"message" => "API error"}}.to_json)])
+write_cassette("jobs/full_review/error", [interaction(url: url20, status: 500, res_body: { "error" => { "message" => "API error" } }.to_json)])
 write_cassette("jobs/create_trainer/success", [interaction(url: url20, status: 200, res_body: success_body("Generated profile text"))])
-write_cassette("jobs/create_trainer/error", [interaction(url: url20, status: 500, res_body: {"error" => {"message" => "API failure"}}.to_json)])
+write_cassette("jobs/create_trainer/error", [interaction(url: url20, status: 500, res_body: { "error" => { "message" => "API failure" } }.to_json)])
 
 # Routine suggestion cassettes
-routine_json = {name: "Push Pull Legs Routine", days: [{name: "Push Day", exercises: [{name: "Bench Press", muscle: "chest"}, {name: "Tricep Extension", muscle: "triceps"}]}, {name: "Pull Day", exercises: [{name: "Deadlift", muscle: "back"}, {name: "Pull-Up", muscle: "back"}, {name: "Bicep Curl", muscle: "biceps"}]}, {name: "Leg Day", exercises: [{name: "Squat", muscle: "legs"}]}]}.to_json
+routine_json = { name: "Push Pull Legs Routine", days: [{ name: "Push Day", exercises: [{ name: "Bench Press", muscle: "chest" }, { name: "Tricep Extension", muscle: "triceps" }] }, { name: "Pull Day", exercises: [{ name: "Deadlift", muscle: "back" }, { name: "Pull-Up", muscle: "back" }, { name: "Bicep Curl", muscle: "biceps" }] }, { name: "Leg Day", exercises: [{ name: "Squat", muscle: "legs" }] }] }.to_json
 write_cassette("jobs/routine_suggestion/success", [interaction(url: url20, status: 200, res_body: success_body(routine_json))])
 write_cassette("jobs/routine_suggestion/simple", [interaction(url: url20, status: 200, res_body: success_body(routine_json))])
-write_cassette("jobs/routine_suggestion/comments", [interaction(url: url20, status: 200, res_body: success_body({name: "Commented Routine", days: [{name: "Day 1", exercises: [{name: "Bench Press", muscle: "chest", comment: "focus on form"}, {name: "Squat", muscle: "legs"}]}]}.to_json))])
-write_cassette("jobs/routine_suggestion/superset_comments", [interaction(url: url20, status: 200, res_body: success_body({name: "Superset Comment Routine", days: [{name: "Day 1", exercises: [{superset: "Chest/Back Superset", comment: "no rest between exercises", exercises: [{name: "Bench Press", muscle: "chest"}, {name: "Deadlift", muscle: "back"}]}]}]}.to_json))])
-write_cassette("jobs/routine_suggestion/new_exercise", [interaction(url: url20, status: 200, res_body: success_body({name: "Test Routine", days: [{name: "Day 1", exercises: [{name: "Overhead Press", muscle: "shoulders"}]}]}.to_json))])
-write_cassette("jobs/routine_suggestion/invalid_muscle", [interaction(url: url20, status: 200, res_body: success_body({name: "Test Routine", days: [{name: "Day 1", exercises: [{name: "Bench Press", muscle: "chest"}, {name: "Magic Lift", muscle: "nonexistent_muscle"}]}]}.to_json))])
-write_cassette("jobs/routine_suggestion/superset", [interaction(url: url20, status: 200, res_body: success_body({name: "Superset Routine", days: [{name: "Day 1", exercises: [{superset: "Chest/Back Superset", exercises: [{name: "Bench Press", muscle: "chest"}, {name: "Deadlift", muscle: "back"}]}]}]}.to_json))])
-write_cassette("jobs/routine_suggestion/reuse_superset", [interaction(url: url20, status: 200, res_body: success_body({name: "Reuse Routine", days: [{name: "Day 1", exercises: [{superset: "Push Pull", exercises: [{name: "Bench Press", muscle: "chest"}, {name: "Pull-Up", muscle: "back"}]}]}]}.to_json))])
-write_cassette("jobs/routine_suggestion/new_superset", [interaction(url: url20, status: 200, res_body: success_body({name: "New Superset Routine", days: [{name: "Day 1", exercises: [{superset: "Shoulder Combo", exercises: [{name: "Lateral Raise", muscle: "shoulders"}, {name: "Front Raise", muscle: "shoulders"}]}]}]}.to_json))])
-write_cassette("jobs/routine_suggestion/error", [interaction(url: url20, status: 500, res_body: {"error" => {"message" => "API error"}}.to_json)])
+write_cassette("jobs/routine_suggestion/comments", [interaction(url: url20, status: 200, res_body: success_body({ name: "Commented Routine", days: [{ name: "Day 1", exercises: [{ name: "Bench Press", muscle: "chest", comment: "focus on form" }, { name: "Squat", muscle: "legs" }] }] }.to_json))])
+write_cassette("jobs/routine_suggestion/superset_comments", [interaction(url: url20, status: 200, res_body: success_body({ name: "Superset Comment Routine", days: [{ name: "Day 1", exercises: [{ superset: "Chest/Back Superset", comment: "no rest between exercises", exercises: [{ name: "Bench Press", muscle: "chest" }, { name: "Deadlift", muscle: "back" }] }] }] }.to_json))])
+write_cassette("jobs/routine_suggestion/new_exercise", [interaction(url: url20, status: 200, res_body: success_body({ name: "Test Routine", days: [{ name: "Day 1", exercises: [{ name: "Overhead Press", muscle: "shoulders" }] }] }.to_json))])
+write_cassette("jobs/routine_suggestion/invalid_muscle", [interaction(url: url20, status: 200, res_body: success_body({ name: "Test Routine", days: [{ name: "Day 1", exercises: [{ name: "Bench Press", muscle: "chest" }, { name: "Magic Lift", muscle: "nonexistent_muscle" }] }] }.to_json))])
+write_cassette("jobs/routine_suggestion/superset", [interaction(url: url20, status: 200, res_body: success_body({ name: "Superset Routine", days: [{ name: "Day 1", exercises: [{ superset: "Chest/Back Superset", exercises: [{ name: "Bench Press", muscle: "chest" }, { name: "Deadlift", muscle: "back" }] }] }] }.to_json))])
+write_cassette("jobs/routine_suggestion/reuse_superset", [interaction(url: url20, status: 200, res_body: success_body({ name: "Reuse Routine", days: [{ name: "Day 1", exercises: [{ superset: "Push Pull", exercises: [{ name: "Bench Press", muscle: "chest" }, { name: "Pull-Up", muscle: "back" }] }] }] }.to_json))])
+write_cassette("jobs/routine_suggestion/new_superset", [interaction(url: url20, status: 200, res_body: success_body({ name: "New Superset Routine", days: [{ name: "Day 1", exercises: [{ superset: "Shoulder Combo", exercises: [{ name: "Lateral Raise", muscle: "shoulders" }, { name: "Front Raise", muscle: "shoulders" }] }] }] }.to_json))])
+write_cassette("jobs/routine_suggestion/error", [interaction(url: url20, status: 500, res_body: { "error" => { "message" => "API error" } }.to_json)])
 
 puts "\nDone! #{Dir.glob("#{CASSETTE_DIR}/**/*.yml").count} cassettes."
