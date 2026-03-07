@@ -76,7 +76,7 @@
             count: rde.reps,
           )
         end %>
-        <% if rde.min_rest.present? && rde.max_rest.present? %>
+        <% if rde.min_rest.present? && rde.max_rest.present? && rde.min_rest != rde.max_rest %>
           <% recommendation_parts << t(
             "workout_sets.workout_set.rest_range",
             min: rde.min_rest,

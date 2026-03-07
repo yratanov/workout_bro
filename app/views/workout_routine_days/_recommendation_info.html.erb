@@ -7,7 +7,7 @@
     <% if exercise.reps.present? %>
       <% parts << t("workout_routine_days.exercises.reps_info", count: exercise.reps) %>
     <% end %>
-    <% if exercise.min_rest.present? && exercise.max_rest.present? %>
+    <% if exercise.min_rest.present? && exercise.max_rest.present? && exercise.min_rest != exercise.max_rest %>
       <% parts << t(
         "workout_routine_days.exercises.rest_range",
         min: exercise.min_rest,
