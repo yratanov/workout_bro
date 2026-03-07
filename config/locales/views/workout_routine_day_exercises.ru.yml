@@ -3,5 +3,12 @@ ru:
     new_superset:
       select_superset: "Выберите суперсет..."
     comment_modal:
-      title: "Комментарий — %{exercise}"
+      title: "Детали — %{exercise}"
       placeholder: "Добавьте комментарий или совет к упражнению..."
+      sets_label: "Подходы"
+      sets_placeholder: "напр. 3-4"
+      reps_label: "Повторения"
+      reps_placeholder: "напр. 8-12"
+      min_rest_label: "Мин. отдых (сек)"
+      max_rest_label: "Макс. отдых (сек)"
+      rest_placeholder: "напр. 60"

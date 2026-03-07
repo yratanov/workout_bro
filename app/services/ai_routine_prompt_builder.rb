@@ -89,9 +89,10 @@ class AiRoutinePromptBuilder
         "days": [
           {
             "name": "Day name (e.g., Push Day, Upper Body A)",
+            "notes": "optional day-level notes or focus",
             "exercises": [
-              { "name": "Exercise Name", "muscle": "chest", "comment": "optional tip or note" },
-              { "superset": "Superset Name", "exercises": [
+              { "name": "Exercise Name", "muscle": "chest", "comment": "optional tip or note", "sets": "3-4", "reps": "8-12", "min_rest": 60, "max_rest": 90 },
+              { "superset": "Superset Name", "sets": "3", "reps": "10-12", "min_rest": 30, "max_rest": 60, "exercises": [
                 { "name": "Exercise A", "muscle": "biceps", "comment": "optional tip" },
                 { "name": "Exercise B", "muscle": "triceps" }
               ]}
@@ -110,7 +111,10 @@ class AiRoutinePromptBuilder
       - Give each day a descriptive name matching the split type
       - Order exercises logically (compound movements first, isolation last)
       - You may include a concise "comment" with tips or notes for each exercise (e.g., "focus on form", "use close grip")
-      - Respond in #{@user.locale == "ru" ? "Russian" : "English"} for the routine name and day names
+      - Include "sets" and "reps" as strings (e.g., "3-4", "8-12") for recommended set/rep ranges
+      - Include "min_rest" and "max_rest" as integers in seconds for recommended rest between sets
+      - You may include "notes" on each day with a brief focus or goal for the day
+      - Respond in #{@user.locale == "ru" ? "Russian" : "English"} for the routine name, day names, notes, and comments
     PROMPT
   end
 end

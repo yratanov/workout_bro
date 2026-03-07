@@ -15,6 +15,7 @@
     </div>
     <div class="flex items-center gap-3 text-base text-slate-300">
       <span><%= @workout.created_at.strftime("%d %b") %></span>
+
       <span class="text-slate-500">|</span>
       <%= render(
         TimerComponent.new(
@@ -34,6 +35,10 @@
       <% end %>
     </div>
   </div>
+
+  <% if @workout.workout_routine_day&.notes.present? %>
+    <div class="text-slate-400 text-sm italic mb-4"><%= @workout.workout_routine_day.notes %></div>
+  <% end %>
 
   <% if @workout.strength? %>
     <div class="relative">

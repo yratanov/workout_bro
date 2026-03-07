@@ -7,7 +7,11 @@ require "test_helper"
 #
 #  id                     :integer          not null, primary key
 #  comment                :text
+#  max_rest               :integer
+#  min_rest               :integer
 #  position               :integer
+#  reps                   :string
+#  sets                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  exercise_id            :integer
@@ -102,5 +106,72 @@ class WorkoutRoutineDayExerciseTest < ActiveSupport::TestCase
         superset: supersets(:push_pull)
       )
     assert_equal "Push Pull", wrde.display_name
+  end
+
+  test "is valid with min_rest and max_rest" do
+    wrde =
+      WorkoutRoutineDayExercise.new(
+        workout_routine_day: workout_routine_days(:push_day),
+        exercise: exercises(:squat),
+        min_rest: 60,
+        max_rest: 90
+      )
+    assert wrde.valid?
+  end
+
+  test "is valid with nil min_rest and max_rest" do
+    wrde =
+      WorkoutRoutineDayExercise.new(
+        workout_routine_day: workout_routine_days(:push_day),
+        exercise: exercises(:squat),
+        min_rest: nil,
+        max_rest: nil
+      )
+    assert wrde.valid?
+  end
+
+  test "is invalid with min_rest less than or equal to 0" do
+    wrde =
+      WorkoutRoutineDayExercise.new(
+        workout_routine_day: workout_routine_days(:push_day),
+        exercise: exercises(:squat),
+        min_rest: 0
+      )
+    assert_not wrde.valid?
+    assert wrde.errors[:min_rest].any?
+  end
+
+  test "is invalid with max_rest less than or equal to 0" do
+    wrde =
+      WorkoutRoutineDayExercise.new(
+        workout_routine_day: workout_routine_days(:push_day),
+        exercise: exercises(:squat),
+        max_rest: -1
+      )
+    assert_not wrde.valid?
+    assert wrde.errors[:max_rest].any?
+  end
+
+  test "is invalid when min_rest is greater than max_rest" do
+    wrde =
+      WorkoutRoutineDayExercise.new(
+        workout_routine_day: workout_routine_days(:push_day),
+        exercise: exercises(:squat),
+        min_rest: 120,
+        max_rest: 60
+      )
+    assert_not wrde.valid?
+    assert wrde.errors[:min_rest].any?
+  end
+
+  test "is valid when min_rest equals max_rest" do
+    wrde =
+      WorkoutRoutineDayExercise.new(
+        workout_routine_day: workout_routine_days(:push_day),
+        exercise: exercises(:squat),
+        min_rest: 60,
+        max_rest: 60
+      )
+    assert wrde.valid?
   end
 end

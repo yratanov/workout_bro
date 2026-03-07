@@ -11,6 +11,13 @@
       </div>
       <%= form.submit t("shared.buttons.save") %>
     </div>
+    <div class="mt-3">
+      <%= form.text_area :notes,
+                     rows: 2,
+                     placeholder: t("workout_routine_days.form.notes_placeholder"),
+                     class:
+                       "w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none" %>
+    </div>
   <% end %>
 </div>
 

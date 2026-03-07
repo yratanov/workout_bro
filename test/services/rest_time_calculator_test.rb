@@ -115,6 +115,45 @@ class RestTimeCalculatorTest < ActiveSupport::TestCase
     assert_equal 60, result
   end
 
+  test "returns max_rest from routine day exercise when set" do
+    @workout.update!(workout_routine_day: workout_routine_days(:push_day))
+    workout_set =
+      @workout.workout_sets.create!(
+        exercise: @bench_press,
+        started_at: 30.minutes.ago
+      )
+    workout_set.workout_reps.create!(weight: 50, reps: 10)
+
+    result =
+      RestTimeCalculator.new(
+        workout_set: workout_set,
+        user: @user
+      ).recommended_seconds
+    assert_equal 90, result
+  end
+
+  test "falls through to default calculation when routine has no max_rest" do
+    workout_routine_day_exercises(:push_day_bench).update!(
+      max_rest: nil,
+      min_rest: nil
+    )
+
+    @workout.update!(workout_routine_day: workout_routine_days(:push_day))
+    workout_set =
+      @workout.workout_sets.create!(
+        exercise: @bench_press,
+        started_at: 30.minutes.ago
+      )
+    workout_set.workout_reps.create!(weight: 10, reps: 10)
+
+    result =
+      RestTimeCalculator.new(
+        workout_set: workout_set,
+        user: @user
+      ).recommended_seconds
+    assert_equal 90, result # chest is a large muscle group
+  end
+
   test "returns base rest time for exercise without muscle" do
     exercise_without_muscle =
       Exercise.create!(

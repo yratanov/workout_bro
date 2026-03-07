@@ -5,7 +5,11 @@
 #
 #  id                     :integer          not null, primary key
 #  comment                :text
+#  max_rest               :integer
+#  min_rest               :integer
 #  position               :integer
+#  reps                   :string
+#  sets                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  exercise_id            :integer
@@ -30,7 +34,10 @@ class WorkoutRoutineDayExercise < ApplicationRecord
   belongs_to :exercise, optional: true
   belongs_to :superset, optional: true
 
+  validates :min_rest, numericality: { greater_than: 0 }, allow_nil: true
+  validates :max_rest, numericality: { greater_than: 0 }, allow_nil: true
   validate :exercise_or_superset_required
+  validate :min_rest_not_greater_than_max_rest
 
   def display_name
     superset? ? superset.display_name : exercise.name
@@ -41,6 +48,14 @@ class WorkoutRoutineDayExercise < ApplicationRecord
   end
 
   private
+
+  def min_rest_not_greater_than_max_rest
+    return unless min_rest.present? && max_rest.present?
+
+    if min_rest > max_rest
+      errors.add(:min_rest, :less_than_or_equal_to, count: max_rest)
+    end
+  end
 
   def exercise_or_superset_required
     if exercise_id.blank? && superset_id.blank?

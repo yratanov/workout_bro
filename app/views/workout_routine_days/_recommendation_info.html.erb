@@ -1,0 +1,29 @@
+<% if exercise.sets.present? || exercise.reps.present? || exercise.min_rest.present? || exercise.max_rest.present? %>
+  <div class="text-slate-400 text-xs mt-1">
+    <% parts = [] %>
+    <% if exercise.sets.present? %>
+      <% parts << t("workout_routine_days.exercises.sets_info", count: exercise.sets) %>
+    <% end %>
+    <% if exercise.reps.present? %>
+      <% parts << t("workout_routine_days.exercises.reps_info", count: exercise.reps) %>
+    <% end %>
+    <% if exercise.min_rest.present? && exercise.max_rest.present? %>
+      <% parts << t(
+        "workout_routine_days.exercises.rest_range",
+        min: exercise.min_rest,
+        max: exercise.max_rest,
+      ) %>
+    <% elsif exercise.max_rest.present? %>
+      <% parts << t(
+        "workout_routine_days.exercises.rest_info",
+        seconds: exercise.max_rest,
+      ) %>
+    <% elsif exercise.min_rest.present? %>
+      <% parts << t(
+        "workout_routine_days.exercises.rest_info",
+        seconds: exercise.min_rest,
+      ) %>
+    <% end %>
+    <%= parts.join(" · ") %>
+  </div>
+<% end %>

@@ -8,6 +8,7 @@ en:
       back_to_routine: "Back to routine"
     form:
       name_placeholder: "Day name (e.g., Push Day, Leg Day)"
+      notes_placeholder: "Day notes or focus (optional)"
       exercises_title: "Exercises"
       add_exercise: "Add exercise"
       add_superset: "Add superset"
@@ -15,3 +16,7 @@ en:
       select_exercise: "Select an exercise..."
     exercises:
       comment: "Comment"
+      sets_info: "%{count} sets"
+      reps_info: "%{count} reps"
+      rest_range: "%{min}-%{max}s rest"
+      rest_info: "%{seconds}s rest"

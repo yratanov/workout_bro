@@ -86,6 +86,49 @@ class AiRoutineSuggestionJobTest < ActiveJob::TestCase
     assert_equal "no rest between exercises", day_exercise.comment
   end
 
+  test "saves sets, reps, min_rest, max_rest, and day notes from AI response" do
+    VCR.use_cassette("jobs/routine_suggestion/recommendations") do
+      AiRoutineSuggestionJob.new.perform(
+        workout_routine: @workout_routine,
+        params: @params
+      )
+    end
+
+    day = @workout_routine.reload.workout_routine_days.first
+    assert_equal "Focus on chest and triceps", day.notes
+
+    exercises = day.workout_routine_day_exercises.order(:position)
+    bench = exercises.first
+    assert_equal "3-4", bench.sets
+    assert_equal "8-12", bench.reps
+    assert_equal 60, bench.min_rest
+    assert_equal 90, bench.max_rest
+    assert_equal "control the descent", bench.comment
+
+    squat = exercises.second
+    assert_equal "4", squat.sets
+    assert_equal "6-8", squat.reps
+    assert_equal 90, squat.min_rest
+    assert_equal 120, squat.max_rest
+  end
+
+  test "saves recommendations on superset exercises from AI response" do
+    VCR.use_cassette("jobs/routine_suggestion/superset_recommendations") do
+      AiRoutineSuggestionJob.new.perform(
+        workout_routine: @workout_routine,
+        params: @params
+      )
+    end
+
+    day = @workout_routine.reload.workout_routine_days.first
+    day_exercise = day.workout_routine_day_exercises.first
+    assert_equal "3", day_exercise.sets
+    assert_equal "10-12", day_exercise.reps
+    assert_equal 30, day_exercise.min_rest
+    assert_equal 60, day_exercise.max_rest
+    assert_equal "no rest between exercises", day_exercise.comment
+  end
+
   test "creates new exercises when not found in user's list" do
     assert_difference "Exercise.count", 1 do
       VCR.use_cassette("jobs/routine_suggestion/new_exercise") do

@@ -102,6 +102,32 @@ class WorkoutRoutineDayExercisesTest < ActionDispatch::IntegrationTest
     assert_equal "focus on form", @workout_routine_day_exercise.reload.comment
   end
 
+  test "PATCH update_comment saves sets, reps, min_rest, and max_rest" do
+    patch update_comment_workout_routine_workout_routine_day_workout_routine_day_exercise_path(
+            @workout_routine,
+            @workout_routine_day,
+            @workout_routine_day_exercise
+          ),
+          params: {
+            workout_routine_day_exercise: {
+              comment: "go heavy",
+              sets: "3-4",
+              reps: "8-12",
+              min_rest: 60,
+              max_rest: 90
+            }
+          },
+          as: :turbo_stream
+
+    assert_response :success
+    @workout_routine_day_exercise.reload
+    assert_equal "go heavy", @workout_routine_day_exercise.comment
+    assert_equal "3-4", @workout_routine_day_exercise.sets
+    assert_equal "8-12", @workout_routine_day_exercise.reps
+    assert_equal 60, @workout_routine_day_exercise.min_rest
+    assert_equal 90, @workout_routine_day_exercise.max_rest
+  end
+
   test "PATCH update_comment clears the comment when blank" do
     @workout_routine_day_exercise.update!(comment: "old comment")
 

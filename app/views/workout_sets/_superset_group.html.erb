@@ -62,8 +62,38 @@
             workout_rep: ws.workout_reps.new(ws.default_rep_values),
           } %>
         <% end %>
-        <% if (routine_comment = routine_comment_for_set(ws)) %>
-          <div class="text-blue-400 text-sm mt-2"><%= routine_comment %></div>
+        <% if (rde = routine_day_exercise_for_set(ws)) %>
+          <% recommendation_parts = [] %>
+          <% if rde.sets.present?
+            recommendation_parts << t(
+              "workout_sets.workout_set.sets_target",
+              count: rde.sets,
+            )
+          end %>
+          <% if rde.reps.present?
+            recommendation_parts << t(
+              "workout_sets.workout_set.reps_target",
+              count: rde.reps,
+            )
+          end %>
+          <% if rde.min_rest.present? && rde.max_rest.present? %>
+            <% recommendation_parts << t(
+              "workout_sets.workout_set.rest_range",
+              min: rde.min_rest,
+              max: rde.max_rest,
+            ) %>
+          <% elsif rde.max_rest.present? %>
+            <% recommendation_parts << t(
+              "workout_sets.workout_set.rest_target",
+              seconds: rde.max_rest,
+            ) %>
+          <% end %>
+          <% if recommendation_parts.any? %>
+            <div class="text-blue-400 text-sm mt-2"><%= recommendation_parts.join(" · ") %></div>
+          <% end %>
+          <% if rde.comment.present? %>
+            <div class="text-blue-400/70 text-sm mt-1 italic"><%= rde.comment %></div>
+          <% end %>
         <% end %>
         <%= render partial: "workout_sets/notes",
         locals: {

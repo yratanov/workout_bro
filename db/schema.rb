@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_04_162321) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_07_184815) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -294,7 +294,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_04_162321) do
     t.text "comment"
     t.datetime "created_at", null: false
     t.integer "exercise_id"
+    t.integer "max_rest"
+    t.integer "min_rest"
     t.integer "position"
+    t.string "reps"
+    t.string "sets"
     t.integer "superset_id"
     t.datetime "updated_at", null: false
     t.integer "workout_routine_day_id", null: false
@@ -306,6 +310,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_04_162321) do
   create_table "workout_routine_days", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
+    t.text "notes"
     t.datetime "updated_at", null: false
     t.integer "workout_routine_id", null: false
     t.index ["workout_routine_id"], name: "index_workout_routine_days_on_workout_routine_id"

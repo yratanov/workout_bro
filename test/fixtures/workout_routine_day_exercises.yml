@@ -5,7 +5,11 @@
 #
 #  id                     :integer          not null, primary key
 #  comment                :text
+#  max_rest               :integer
+#  min_rest               :integer
 #  position               :integer
+#  reps                   :string
+#  sets                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  exercise_id            :integer
@@ -28,11 +32,20 @@ push_day_bench:
   workout_routine_day: push_day
   exercise: bench_press
   position: 1
+  sets: "3-4"
+  reps: "8-12"
+  min_rest: 60
+  max_rest: 90
+  comment: "focus on chest contraction"
 
 leg_day_squat:
   workout_routine_day: leg_day
   exercise: squat
   position: 1
+  sets: "4"
+  reps: "6-8"
+  min_rest: 90
+  max_rest: 120
 
 pull_day_deadlift:
   workout_routine_day: pull_day

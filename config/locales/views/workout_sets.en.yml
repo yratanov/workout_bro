@@ -8,6 +8,10 @@ en:
       superset: "Superset"
     workout_set:
       complete_set: "Complete this set"
+      sets_target: "%{count} sets"
+      reps_target: "%{count} reps"
+      rest_range: "%{min}-%{max}s rest"
+      rest_target: "%{seconds}s rest"
     superset_group:
       complete_superset: "Complete superset"
     previous_history:

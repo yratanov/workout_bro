@@ -3,5 +3,12 @@ en:
     new_superset:
       select_superset: "Select superset..."
     comment_modal:
-      title: "Comment — %{exercise}"
+      title: "Details — %{exercise}"
       placeholder: "Add a comment or tip for this exercise..."
+      sets_label: "Sets"
+      sets_placeholder: "e.g. 3-4"
+      reps_label: "Reps"
+      reps_placeholder: "e.g. 8-12"
+      min_rest_label: "Min rest (sec)"
+      max_rest_label: "Max rest (sec)"
+      rest_placeholder: "e.g. 60"

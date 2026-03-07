@@ -43,6 +43,6 @@ class WorkoutRoutineDaysController < ApplicationController
   private
 
   def workout_routine_day_params
-    params.require(:workout_routine_day).permit(:name)
+    params.require(:workout_routine_day).permit(:name, :notes)
   end
 end

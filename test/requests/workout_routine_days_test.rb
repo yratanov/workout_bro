@@ -30,6 +30,19 @@ class WorkoutRoutineDaysTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "POST /workout_routines/:workout_routine_id/workout_routine_days saves notes" do
+    post workout_routine_workout_routine_days_path(@workout_routine),
+         params: {
+           workout_routine_day: {
+             name: "Day With Notes",
+             notes: "Focus on compound movements"
+           }
+         }
+    day = WorkoutRoutineDay.last
+    assert_equal "Day With Notes", day.name
+    assert_equal "Focus on compound movements", day.notes
+  end
+
   test "POST /workout_routines/:workout_routine_id/workout_routine_days redirects to edit page" do
     post workout_routine_workout_routine_days_path(@workout_routine),
          params: {
@@ -72,6 +85,20 @@ class WorkoutRoutineDaysTest < ActionDispatch::IntegrationTest
             }
           }
     assert_equal "Updated Day", @workout_routine_day.reload.name
+  end
+
+  test "PATCH /workout_routines/:workout_routine_id/workout_routine_days/:id updates notes" do
+    patch workout_routine_workout_routine_day_path(
+            @workout_routine,
+            @workout_routine_day
+          ),
+          params: {
+            workout_routine_day: {
+              name: @workout_routine_day.name,
+              notes: "Updated notes"
+            }
+          }
+    assert_equal "Updated notes", @workout_routine_day.reload.notes
   end
 
   test "PATCH /workout_routines/:workout_routine_id/workout_routine_days/:id redirects to workout routine" do

@@ -8,6 +8,7 @@ ru:
       back_to_routine: "К программе"
     form:
       name_placeholder: "Название дня (напр., День груди, День ног)"
+      notes_placeholder: "Заметки или фокус дня (необязательно)"
       exercises_title: "Упражнения"
       add_exercise: "Добавить упражнение"
       add_superset: "Добавить суперсет"
@@ -15,3 +16,7 @@ ru:
       select_exercise: "Выберите упражнение..."
     exercises:
       comment: "Комментарий"
+      sets_info: "%{count} подх."
+      reps_info: "%{count} повт."
+      rest_range: "%{min}-%{max}с отдых"
+      rest_info: "%{seconds}с отдых"

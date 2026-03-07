@@ -680,6 +680,80 @@ write_cassette(
   ]
 )
 write_cassette(
+  "jobs/routine_suggestion/recommendations",
+  [
+    interaction(
+      url: url20,
+      status: 200,
+      res_body:
+        success_body(
+          {
+            name: "Recommended Routine",
+            days: [
+              {
+                name: "Day 1",
+                notes: "Focus on chest and triceps",
+                exercises: [
+                  {
+                    name: "Bench Press",
+                    muscle: "chest",
+                    sets: "3-4",
+                    reps: "8-12",
+                    min_rest: 60,
+                    max_rest: 90,
+                    comment: "control the descent"
+                  },
+                  {
+                    name: "Squat",
+                    muscle: "legs",
+                    sets: "4",
+                    reps: "6-8",
+                    min_rest: 90,
+                    max_rest: 120
+                  }
+                ]
+              }
+            ]
+          }.to_json
+        )
+    )
+  ]
+)
+write_cassette(
+  "jobs/routine_suggestion/superset_recommendations",
+  [
+    interaction(
+      url: url20,
+      status: 200,
+      res_body:
+        success_body(
+          {
+            name: "Superset Rec Routine",
+            days: [
+              {
+                name: "Day 1",
+                exercises: [
+                  {
+                    superset: "Chest/Back Superset",
+                    sets: "3",
+                    reps: "10-12",
+                    min_rest: 30,
+                    max_rest: 60,
+                    comment: "no rest between exercises",
+                    exercises: [
+                      { name: "Bench Press", muscle: "chest" },
+                      { name: "Deadlift", muscle: "back" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }.to_json
+        )
+    )
+  ]
+)
+write_cassette(
   "jobs/routine_suggestion/error",
   [
     interaction(

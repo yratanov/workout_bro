@@ -31,6 +31,8 @@
             <% if workout_routine_day_exercise.comment.present? %>
               <div class="text-slate-500 text-xs mt-1 italic"><%= workout_routine_day_exercise.comment %></div>
             <% end %>
+            <%= render "workout_routine_days/recommendation_info",
+            exercise: workout_routine_day_exercise %>
           </div>
         <% else %>
           <% if workout_routine_day_exercise.exercise.muscle.present? %>
@@ -41,6 +43,8 @@
             <% if workout_routine_day_exercise.comment.present? %>
               <div class="text-slate-500 text-xs mt-1 italic"><%= workout_routine_day_exercise.comment %></div>
             <% end %>
+            <%= render "workout_routine_days/recommendation_info",
+            exercise: workout_routine_day_exercise %>
           </div>
           <% if workout_routine_day_exercise.exercise.muscle.present? %>
             <span class="text-slate-400 text-sm hidden sm:block"><%= workout_routine_day_exercise.exercise.muscle.human_name %></span>

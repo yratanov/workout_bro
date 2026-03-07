@@ -43,7 +43,13 @@ class WorkoutRoutineDayExercisesController < ApplicationController
     @workout_routine_day_exercise = WorkoutRoutineDayExercise.find(params[:id])
     @workout_routine_day = @workout_routine_day_exercise.workout_routine_day
     @workout_routine_day_exercise.update!(
-      comment: params[:workout_routine_day_exercise][:comment]
+      params.require(:workout_routine_day_exercise).permit(
+        :comment,
+        :sets,
+        :reps,
+        :min_rest,
+        :max_rest
+      )
     )
   end
 

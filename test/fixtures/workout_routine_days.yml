@@ -5,6 +5,7 @@
 #
 #  id                 :integer          not null, primary key
 #  name               :string           not null
+#  notes              :text
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  workout_routine_id :integer          not null

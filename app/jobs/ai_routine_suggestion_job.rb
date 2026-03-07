@@ -67,7 +67,11 @@ class AiRoutineSuggestionJob < ApplicationJob
     workout_routine.update!(name: data["name"]) if data["name"].present?
 
     data["days"]&.each do |day_data|
-      day = workout_routine.workout_routine_days.create!(name: day_data["name"])
+      day =
+        workout_routine.workout_routine_days.create!(
+          name: day_data["name"],
+          notes: day_data["notes"]
+        )
 
       day_data["exercises"]&.each_with_index do |item, position|
         if item.is_a?(Hash) && item["superset"].present?
@@ -86,7 +90,11 @@ class AiRoutineSuggestionJob < ApplicationJob
     day.workout_routine_day_exercises.create!(
       exercise:,
       position:,
-      comment: item["comment"]
+      comment: item["comment"],
+      sets: item["sets"],
+      reps: item["reps"],
+      min_rest: item["min_rest"],
+      max_rest: item["max_rest"]
     )
   end
 
@@ -97,7 +105,11 @@ class AiRoutineSuggestionJob < ApplicationJob
     day.workout_routine_day_exercises.create!(
       superset:,
       position:,
-      comment: item["comment"]
+      comment: item["comment"],
+      sets: item["sets"],
+      reps: item["reps"],
+      min_rest: item["min_rest"],
+      max_rest: item["max_rest"]
     )
   end
 
