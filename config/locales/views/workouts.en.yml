@@ -23,6 +23,8 @@ en:
       resume: "Resume"
       pause: "Pause"
       finish: "Finish"
+      cancel: "Cancel"
+      cancel_confirm: "Are you sure you want to cancel this workout? It will be deleted."
     form:
       workout_type: "Workout Type"
       run_details: "Run Details"
