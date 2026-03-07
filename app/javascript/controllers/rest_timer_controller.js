@@ -5,8 +5,6 @@ export default class extends Controller {
   static values = {
     duration: { type: Number, default: 60 },
     running: { type: Boolean, default: false },
-    startedAt: { type: String, default: "" },
-    totalPausedSeconds: { type: Number, default: 0 },
     notificationTitle: { type: String, default: "Rest Complete" },
     notificationBody: { type: String, default: "Time for your next set!" },
   };
@@ -16,13 +14,10 @@ export default class extends Controller {
     this.beepTimes = [10, 5, 4, 3, 2, 1];
     this.beepedAt = new Set();
     this.scheduledNotificationId = null;
-    this.workoutStartedAt = this.startedAtValue
-      ? new Date(this.startedAtValue)
-      : null;
+    this.totalDurationMs = this.durationValue * 1000;
     this.initAudio();
     this.requestWakeLock();
     this.initPushNotifications();
-    this.updateTotalTime();
     this.start();
   }
 
@@ -58,7 +53,6 @@ export default class extends Controller {
     }
 
     this.updateDisplay();
-    this.updateTotalTime();
     this.checkBeeps();
     this.timer = requestAnimationFrame(() => this.tick());
   }
@@ -66,8 +60,11 @@ export default class extends Controller {
   addTime(event) {
     const seconds = parseInt(event.params.seconds, 10);
     this.remainingMs += seconds * 1000;
+    this.totalDurationMs += seconds * 1000;
     if (this.remainingMs < 0) this.remainingMs = 0;
+    if (this.totalDurationMs < 0) this.totalDurationMs = 0;
     this.updateDisplay();
+    this.updateTotalTime();
     this.rescheduleServerPush();
   }
 
@@ -82,22 +79,12 @@ export default class extends Controller {
   }
 
   updateTotalTime() {
-    if (!this.workoutStartedAt || !this.hasTotalTimeTarget) return;
+    if (!this.hasTotalTimeTarget) return;
 
-    const elapsedSeconds = Math.floor(
-      (Date.now() - this.workoutStartedAt.getTime()) / 1000 -
-        this.totalPausedSecondsValue,
-    );
-    const hours = Math.floor(elapsedSeconds / 3600);
-    const mins = Math.floor((elapsedSeconds % 3600) / 60);
-    const secs = elapsedSeconds % 60;
-
-    const time =
-      hours > 0
-        ? `${hours}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
-        : `${mins}:${secs.toString().padStart(2, "0")}`;
-
-    this.totalTimeTarget.textContent = time;
+    const totalSeconds = Math.ceil(this.totalDurationMs / 1000);
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    this.totalTimeTarget.textContent = `${mins}:${secs.toString().padStart(2, "0")}`;
   }
 
   initAudio() {

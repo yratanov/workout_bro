@@ -3,4 +3,3 @@ en:
     rest_timer:
       notification_title: "Rest Complete"
       notification_body: "Time for your next set!"
-      total_time: "Total time"

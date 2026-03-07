@@ -3,4 +3,3 @@ ru:
     rest_timer:
       notification_title: "Отдых завершён"
       notification_body: "Время для следующего подхода!"
-      total_time: "Общее время"
