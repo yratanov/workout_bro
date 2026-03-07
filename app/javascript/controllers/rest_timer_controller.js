@@ -1,10 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["display", "progressBar"];
+  static targets = ["display", "progressBar", "totalTime"];
   static values = {
     duration: { type: Number, default: 60 },
     running: { type: Boolean, default: false },
+    startedAt: { type: String, default: "" },
+    totalPausedSeconds: { type: Number, default: 0 },
     notificationTitle: { type: String, default: "Rest Complete" },
     notificationBody: { type: String, default: "Time for your next set!" },
   };
@@ -14,9 +16,13 @@ export default class extends Controller {
     this.beepTimes = [10, 5, 4, 3, 2, 1];
     this.beepedAt = new Set();
     this.scheduledNotificationId = null;
+    this.workoutStartedAt = this.startedAtValue
+      ? new Date(this.startedAtValue)
+      : null;
     this.initAudio();
     this.requestWakeLock();
     this.initPushNotifications();
+    this.updateTotalTime();
     this.start();
   }
 
@@ -52,6 +58,7 @@ export default class extends Controller {
     }
 
     this.updateDisplay();
+    this.updateTotalTime();
     this.checkBeeps();
     this.timer = requestAnimationFrame(() => this.tick());
   }
@@ -72,6 +79,25 @@ export default class extends Controller {
 
     const progress = (this.remainingMs / (this.durationValue * 1000)) * 100;
     this.progressBarTarget.style.width = `${Math.max(0, progress)}%`;
+  }
+
+  updateTotalTime() {
+    if (!this.workoutStartedAt || !this.hasTotalTimeTarget) return;
+
+    const elapsedSeconds = Math.floor(
+      (Date.now() - this.workoutStartedAt.getTime()) / 1000 -
+        this.totalPausedSecondsValue,
+    );
+    const hours = Math.floor(elapsedSeconds / 3600);
+    const mins = Math.floor((elapsedSeconds % 3600) / 60);
+    const secs = elapsedSeconds % 60;
+
+    const time =
+      hours > 0
+        ? `${hours}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
+        : `${mins}:${secs.toString().padStart(2, "0")}`;
+
+    this.totalTimeTarget.textContent = time;
   }
 
   initAudio() {

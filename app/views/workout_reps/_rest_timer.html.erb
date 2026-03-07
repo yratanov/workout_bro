@@ -2,6 +2,8 @@
   id="rest-timer"
   data-controller="rest-timer"
   data-rest-timer-duration-value="<%= duration %>"
+  data-rest-timer-started-at-value="<%= workout.started_at.iso8601 %>"
+  data-rest-timer-total-paused-seconds-value="<%= workout.total_paused_seconds %>"
   data-rest-timer-notification-title-value="<%= t(".notification_title") %>"
   data-rest-timer-notification-body-value="<%= t(".notification_body") %>"
   class="
@@ -18,11 +20,16 @@
   </div>
 
   <div class="flex items-center justify-between">
-    <div
-      class="text-4xl font-mono font-bold text-white"
-      data-rest-timer-target="display"
-    >
-      <%= "#{duration / 60}:#{(duration % 60).to_s.rjust(2, "0")}" %>
+    <div>
+      <div
+        class="text-4xl font-mono font-bold text-white"
+        data-rest-timer-target="display"
+      >
+        <%= "#{duration / 60}:#{(duration % 60).to_s.rjust(2, "0")}" %>
+      </div>
+      <div class="text-sm font-mono text-zinc-500" data-rest-timer-target="totalTime">
+        <%= t(".total_time") %>
+      </div>
     </div>
 
     <div class="flex gap-2">
