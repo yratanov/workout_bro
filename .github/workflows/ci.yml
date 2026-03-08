@@ -132,5 +132,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/workout_bro:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/workout_bro:${{ github.sha }}
+          build-args: |
+            GIT_REVISION=${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
