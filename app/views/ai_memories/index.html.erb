@@ -82,7 +82,10 @@
                     title="<%= t(".importance") %>: <%= memory.importance %>/10"
                   >
                     <%= importance_bars(memory.importance) %>
-                    <span class="text-xs <%= importance_level(memory.importance)[:color] %>">
+                    <span
+                      class="text-xs"
+                      style="color: <%= importance_level(memory.importance)[:color] %>"
+                    >
                       <%= t(".importance_levels.#{importance_level(memory.importance)[:label_key]}") %>
                     </span>
                   </div>
