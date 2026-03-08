@@ -2,8 +2,15 @@
 
 <%= turbo_frame_tag "workout_modal" %>
 
-<div class="w-full max-w-4xl self-center">
-  <div class="flex justify-between items-center mb-5">
+<div
+  class="w-full max-w-4xl self-center"
+  data-controller="scroll-fab"
+  data-scroll-fab-threshold-value="200"
+>
+  <div
+    class="flex justify-between items-center mb-5"
+    data-scroll-fab-target="header"
+  >
     <h1 class="text-2xl"><%= t(".title") %></h1>
     <% if @active_workout %>
       <%= button style: "primary", type: "link", route: workout_path(@active_workout) do %>
@@ -40,4 +47,18 @@
       ),
     ) %>
   <% end %>
+
+  <%# Fixed FAB for mobile - appears when header scrolls out of view %>
+  <div
+    class="md:hidden"
+    data-scroll-fab-target="fab"
+    style="position: fixed; bottom: 24px; right: 24px; z-index: 50; transition: opacity 0.2s, transform 0.2s; opacity: 0; transform: scale(0.8); pointer-events: none;"
+  >
+    <a
+      href="<%= @active_workout ? workout_path(@active_workout) : new_workout_path %>"
+      style="display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: #2563eb; border-radius: 9999px; box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.5); color: white;"
+    >
+      <%= icon(@active_workout ? "play" : "plus", size: "w-6 h-6") %>
+    </a>
+  </div>
 </div>

@@ -1,5 +1,8 @@
 <% if mobile? %>
-  <div class="<%= day_classes %>">
+  <div
+    class="<%= day_classes %>"
+    <%= "data-calendar-scroll-target=\"today\"" if today? %>
+  >
     <div class="<%= day_number_classes %>">
       <%= formatted_date %>
     </div>

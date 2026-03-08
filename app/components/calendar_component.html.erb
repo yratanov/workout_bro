@@ -44,17 +44,34 @@
     </div>
   </div>
 
-  <%# Mobile: List view %>
-  <div class="md:hidden space-y-1">
-    <% days_in_month.each do |date| %>
-      <%= render(
-        CalendarDayComponent.new(
-          date: date,
-          current_month: @current_date,
-          workouts: @workouts_by_date[date] || [],
-          mobile: true,
-        ),
-      ) %>
+  <%# Mobile: Week-grouped list view %>
+  <div
+    class="md:hidden"
+    data-controller="calendar-scroll"
+    data-calendar-scroll-has-today-value="<%= current_month? %>"
+  >
+    <% mobile_weeks.each do |week_num, dates| %>
+      <div class="mb-4">
+        <div
+          class="
+            text-xs font-medium text-slate-400 uppercase tracking-wider mb-1 px-1
+          "
+        >
+          <%= week_label(dates) %>
+        </div>
+        <div class="space-y-1">
+          <% dates.each do |date| %>
+            <%= render(
+              CalendarDayComponent.new(
+                date: date,
+                current_month: @current_date,
+                workouts: @workouts_by_date[date] || [],
+                mobile: true,
+              ),
+            ) %>
+          <% end %>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>

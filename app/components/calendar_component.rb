@@ -27,6 +27,27 @@ class CalendarComponent < ViewComponent::Base
     (@current_date.beginning_of_month..@current_date.end_of_month).to_a
   end
 
+  def mobile_weeks
+    days_in_month.chunk { |d| d.cweek }.to_a
+  end
+
+  def week_label(dates)
+    first = dates.first
+    last = dates.last
+    if first == last
+      "#{first.day} #{first.strftime("%b")}"
+    elsif first.month == last.month
+      "#{first.day}–#{last.day} #{first.strftime("%b")}"
+    else
+      "#{first.strftime("%-d %b")} – #{last.strftime("%-d %b")}"
+    end
+  end
+
+  def current_month?
+    @current_date.month == Date.current.month &&
+      @current_date.year == Date.current.year
+  end
+
   def day_names_full
     %w[Mon Tue Wed Thu Fri Sat Sun]
   end
