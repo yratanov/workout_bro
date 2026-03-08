@@ -24,7 +24,7 @@ http_interactions:
   recorded_at: Wed, 04 Mar 2026 12:00:00 GMT
 - request:
     method: post
-    uri: https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=<GEMINI_API_KEY>
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=<GEMINI_API_KEY>
     body:
       encoding: UTF-8
       string: ''
@@ -44,7 +44,7 @@ http_interactions:
   recorded_at: Wed, 04 Mar 2026 12:00:00 GMT
 - request:
     method: post
-    uri: https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=<GEMINI_API_KEY>
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=<GEMINI_API_KEY>
     body:
       encoding: UTF-8
       string: ''

@@ -765,7 +765,7 @@ write_cassette(
 )
 
 # === AI Memory Extraction ===
-embed_url20 = gemini_url("text-embedding-004", "embedContent")
+embed_url20 = gemini_url("gemini-embedding-001", "embedContent")
 fake_embedding = Array.new(768) { |i| (Math.sin(i) * 0.1).round(6) }
 
 def embedding_body(values)

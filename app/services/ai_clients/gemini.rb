@@ -82,12 +82,20 @@ module AiClients
       raise
     end
 
+    EMBEDDING_MODEL = "gemini-embedding-001"
+    EMBEDDING_DIMENSIONS = 768
+
     def generate_embedding(text, log_context: nil)
       uri =
         URI(
-          "#{BASE_URL}/models/text-embedding-004:embedContent?key=#{@api_key}"
+          "#{BASE_URL}/models/#{EMBEDDING_MODEL}:embedContent?key=#{@api_key}"
         )
-      body = { content: { parts: [{ text: text }] } }
+      body = {
+        content: {
+          parts: [{ text: text }]
+        },
+        outputDimensionality: EMBEDDING_DIMENSIONS
+      }
 
       start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       response = post(uri, body)
