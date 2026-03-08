@@ -8,6 +8,14 @@ en:
       empty: "No memories yet. Your AI trainer will learn about you as you train."
       generating: "Generating memories..."
       generating_hint: "Your AI trainer is analyzing your workout history. This may take a minute."
+      importance: "Importance"
+      embedded: "embedded"
+      has_embedding: "This memory has a semantic embedding for relevance matching"
+      importance_levels:
+        low: "Low"
+        medium: "Medium"
+        high: "High"
+        critical: "Critical"
       categories:
         schedule: "Schedule"
         equipment: "Equipment"
