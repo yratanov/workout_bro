@@ -18,6 +18,6 @@ http_interactions:
       - application/json
     body:
       encoding: UTF-8
-      string: '{"candidates":[{"content":{"parts":[{"text":"[invalid_cat]|Some observation"}]}}],"usageMetadata":{"promptTokenCount":10,"candidatesTokenCount":20,"totalTokenCount":30}}'
+      string: '{"candidates":[{"content":{"parts":[{"text":"[invalid_cat]|5|Some observation"}]}}],"usageMetadata":{"promptTokenCount":10,"candidatesTokenCount":20,"totalTokenCount":30}}'
   recorded_at: Wed, 04 Mar 2026 12:00:00 GMT
 recorded_with: VCR 6.3.1

@@ -6,6 +6,8 @@
 #  id            :integer          not null, primary key
 #  category      :integer          not null
 #  content       :text             not null
+#  embedding     :text
+#  importance    :integer          default(5), not null
 #  source        :string           default("auto"), not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

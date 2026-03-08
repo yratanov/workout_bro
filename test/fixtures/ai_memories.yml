@@ -6,6 +6,8 @@
 #  id            :integer          not null, primary key
 #  category      :integer          not null
 #  content       :text             not null
+#  embedding     :text
+#  importance    :integer          default(5), not null
 #  source        :string           default("auto"), not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -27,6 +29,7 @@ johns_schedule:
   ai_trainer: johns_trainer
   category: 0
   content: "Typically trains 3-4 times per week"
+  importance: 6
   source: "auto"
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
@@ -36,6 +39,7 @@ johns_equipment:
   ai_trainer: johns_trainer
   category: 1
   content: "Has access to a full gym with barbells and dumbbells"
+  importance: 7
   source: "auto"
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
@@ -45,6 +49,7 @@ johns_health:
   ai_trainer: johns_trainer
   category: 2
   content: "No reported injuries or limitations"
+  importance: 9
   source: "auto"
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
@@ -54,6 +59,7 @@ johns_progress:
   ai_trainer: johns_trainer
   category: 4
   content: "Bench press has been increasing steadily over the past month"
+  importance: 4
   source: "auto"
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>

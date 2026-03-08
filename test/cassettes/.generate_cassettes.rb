@@ -765,6 +765,13 @@ write_cassette(
 )
 
 # === AI Memory Extraction ===
+embed_url20 = gemini_url("text-embedding-004", "embedContent")
+fake_embedding = Array.new(768) { |i| (Math.sin(i) * 0.1).round(6) }
+
+def embedding_body(values)
+  { "embedding" => { "values" => values } }.to_json
+end
+
 write_cassette(
   "ai_memory_extraction/success",
   [
@@ -773,8 +780,18 @@ write_cassette(
       status: 200,
       res_body:
         success_body(
-          "[schedule]|Trains mostly on weekday evenings\n[equipment]|Uses barbells and dumbbells regularly"
+          "[schedule]|6|Trains mostly on weekday evenings\n[equipment]|7|Uses barbells and dumbbells regularly"
         )
+    ),
+    interaction(
+      url: embed_url20,
+      status: 200,
+      res_body: embedding_body(fake_embedding)
+    ),
+    interaction(
+      url: embed_url20,
+      status: 200,
+      res_body: embedding_body(fake_embedding)
     )
   ]
 )
@@ -788,7 +805,7 @@ write_cassette(
     interaction(
       url: url20,
       status: 200,
-      res_body: success_body("[schedule]|Typically trains 3-4 times per week")
+      res_body: success_body("[schedule]|6|Typically trains 3-4 times per week")
     )
   ]
 )
@@ -800,8 +817,13 @@ write_cassette(
       status: 200,
       res_body:
         success_body(
-          "REPLACES: Typically trains 3-4 times per week|[schedule]|Trains 4-5 times per week now"
+          "REPLACES: Typically trains 3-4 times per week|[schedule]|6|Trains 4-5 times per week now"
         )
+    ),
+    interaction(
+      url: embed_url20,
+      status: 200,
+      res_body: embedding_body(fake_embedding)
     )
   ]
 )
@@ -811,7 +833,7 @@ write_cassette(
     interaction(
       url: url20,
       status: 200,
-      res_body: success_body("[invalid_cat]|Some observation")
+      res_body: success_body("[invalid_cat]|5|Some observation")
     )
   ]
 )
@@ -823,8 +845,30 @@ write_cassette(
       status: 200,
       res_body:
         success_body(
-          "[schedule]|Trains on Monday, Wednesday, and Friday evenings\n[preferences]|Prefers compound movements like bench press and squats"
+          "[schedule]|6|Trains on Monday, Wednesday, and Friday evenings\n[preferences]|5|Prefers compound movements like bench press and squats"
         )
+    ),
+    interaction(
+      url: embed_url20,
+      status: 200,
+      res_body: embedding_body(fake_embedding)
+    ),
+    interaction(
+      url: embed_url20,
+      status: 200,
+      res_body: embedding_body(fake_embedding)
+    )
+  ]
+)
+
+# === Embedding ===
+write_cassette(
+  "embedding/success",
+  [
+    interaction(
+      url: embed_url20,
+      status: 200,
+      res_body: embedding_body(fake_embedding)
     )
   ]
 )

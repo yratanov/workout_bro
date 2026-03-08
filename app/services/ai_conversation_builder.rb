@@ -56,14 +56,11 @@ class AiConversationBuilder
 
   def memories_section
     user = @ai_trainer.user
-    memories = user.ai_memories.for_prompt.limit(25).to_a
+    prompt = latest_user_message
+    memories = AiMemoryRetriever.new(user: user, prompt: prompt).call
     return nil if memories.empty?
 
-    # Cap at 3 per category
-    by_category = memories.group_by(&:category)
-    capped = by_category.flat_map { |_, mems| mems.first(3) }
-
-    lines = capped.map { |m| "- [#{m.category.capitalize}] #{m.content}" }
+    lines = memories.map { |m| "- [#{m.category.capitalize}] #{m.content}" }
 
     <<~PROMPT.strip
       ## What I Know About This User
@@ -152,6 +149,12 @@ class AiConversationBuilder
     lines << "Pace: #{format_pace(summary.pace)}" if summary.pace
     lines << "Notes: #{workout.notes}" if workout.notes.present?
     lines.join("\n")
+  end
+
+  def latest_user_message
+    turns = activity_turns
+    user_turns = turns.select { |t| t[:role] == "user" }
+    user_turns.last&.dig(:text)
   end
 
   def estimate_tokens(text)

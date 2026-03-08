@@ -82,6 +82,39 @@ module AiClients
       raise
     end
 
+    def generate_embedding(text, log_context: nil)
+      uri =
+        URI(
+          "#{BASE_URL}/models/text-embedding-004:embedContent?key=#{@api_key}"
+        )
+      body = { content: { parts: [{ text: text }] } }
+
+      start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      response = post(uri, body)
+
+      case response.code.to_i
+      when 200
+        data = JSON.parse(response.body)
+        values = data.dig("embedding", "values")
+        raise Error, "No embedding values in response" unless values
+
+        if log_context
+          log_request(
+            prompt: "embed: #{text.truncate(200)}",
+            response_text: "(embedding #{values.length} dims)",
+            duration_ms: elapsed_ms(start_time),
+            context: log_context
+          )
+        end
+        values
+      when 429
+        raise RateLimitError, "Embedding rate limit exceeded"
+      else
+        raise Error,
+              "Embedding request failed (#{response.code}): #{response.body}"
+      end
+    end
+
     private
 
     def chat_prompt_for_log(messages, system_instruction)

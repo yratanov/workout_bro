@@ -18,7 +18,7 @@ http_interactions:
       - application/json
     body:
       encoding: UTF-8
-      string: '{"candidates":[{"content":{"parts":[{"text":"[schedule]|Typically trains
-        3-4 times per week"}]}}],"usageMetadata":{"promptTokenCount":10,"candidatesTokenCount":20,"totalTokenCount":30}}'
+      string: '{"candidates":[{"content":{"parts":[{"text":"[schedule]|6|Typically
+        trains 3-4 times per week"}]}}],"usageMetadata":{"promptTokenCount":10,"candidatesTokenCount":20,"totalTokenCount":30}}'
   recorded_at: Wed, 04 Mar 2026 12:00:00 GMT
 recorded_with: VCR 6.3.1

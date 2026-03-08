@@ -8,6 +8,8 @@
 #  id            :integer          not null, primary key
 #  category      :integer          not null
 #  content       :text             not null
+#  embedding     :text
+#  importance    :integer          default(5), not null
 #  source        :string           default("auto"), not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -39,8 +41,33 @@ class AiMemory < ApplicationRecord
          goals: 6
        }
 
+  CATEGORY_IMPORTANCE = {
+    "health" => 9,
+    "goals" => 8,
+    "equipment" => 7,
+    "schedule" => 6,
+    "preferences" => 5,
+    "progress" => 4,
+    "behavior" => 3
+  }.freeze
+
   validates :content, presence: true, length: { maximum: 500 }
   validates :category, presence: true
+  validates :importance, numericality: { only_integer: true, in: 1..10 }
 
   scope :for_prompt, -> { order(category: :asc, created_at: :desc) }
+
+  def default_importance
+    CATEGORY_IMPORTANCE.fetch(category, 5)
+  end
+
+  def embedding_vector
+    return nil if embedding.blank?
+
+    JSON.parse(embedding)
+  end
+
+  def embedding_vector=(vector)
+    self.embedding = vector&.to_json
+  end
 end
