@@ -2,6 +2,7 @@
 set -e
 
 IMAGE_NAME="yratanov/workout_bro"
+GIT_REVISION=$(git rev-parse --short HEAD)
 
 # Parse arguments
 NO_CACHE=""
@@ -24,10 +25,10 @@ echo "Tailwind CSS built successfully"
 # Check if buildx is available and supports multi-platform builds
 if docker buildx version &>/dev/null && docker buildx inspect --bootstrap &>/dev/null 2>&1; then
     echo "Building Docker image for linux/amd64 using buildx..."
-    docker buildx build --platform linux/amd64 -t "$IMAGE_NAME:latest" $NO_CACHE --push .
+    docker buildx build --platform linux/amd64 -t "$IMAGE_NAME:latest" --build-arg GIT_REVISION="$GIT_REVISION" $NO_CACHE --push .
 else
     echo "Building Docker image..."
-    docker build -t "$IMAGE_NAME:latest" $NO_CACHE .
+    docker build -t "$IMAGE_NAME:latest" --build-arg GIT_REVISION="$GIT_REVISION" $NO_CACHE .
     echo "Pushing image..."
     docker push "$IMAGE_NAME:latest"
 fi

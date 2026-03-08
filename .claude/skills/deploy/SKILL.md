@@ -10,7 +10,7 @@ Commit all changes, push to remote, build and publish Docker image, then deploy 
 
 ## Environment Variables
 
-Read `DEPLOY_SERVER_IP` and `DEPLOY_REMOTE_PATH` from the `.env` file in the project root.
+Read `DEPLOY_SERVER_IP`, `DEPLOY_SERVER_PORT`, and `DEPLOY_REMOTE_PATH` from the `.env` file in the project root.
 
 ## Steps
 
@@ -20,7 +20,7 @@ Read `DEPLOY_SERVER_IP` and `DEPLOY_REMOTE_PATH` from the `.env` file in the pro
 source .env
 ```
 
-Use `$DEPLOY_SERVER_IP` and `$DEPLOY_REMOTE_PATH` throughout.
+Use `$DEPLOY_SERVER_IP`, `$DEPLOY_SERVER_PORT`, and `$DEPLOY_REMOTE_PATH` throughout.
 
 ### 2. Commit
 
@@ -48,7 +48,7 @@ This builds the image and pushes it to Docker Hub.
 ### 5. Deploy to server
 
 ```bash
-ssh $DEPLOY_SERVER_IP "cd $DEPLOY_REMOTE_PATH && docker compose pull && docker compose up -d"
+ssh -p $DEPLOY_SERVER_PORT $DEPLOY_SERVER_IP "cd $DEPLOY_REMOTE_PATH && docker compose pull && docker compose up -d"
 ```
 
 ### 6. Report

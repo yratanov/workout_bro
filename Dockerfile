@@ -44,6 +44,10 @@ RUN bundle config set force_ruby_platform false && \
 # Copy application code
 COPY . .
 
+# Write git revision for version display
+ARG GIT_REVISION
+RUN if [ -n "$GIT_REVISION" ]; then echo "$GIT_REVISION" > REVISION; fi
+
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 

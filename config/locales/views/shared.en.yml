@@ -27,6 +27,7 @@ en:
       previous: "Previous"
       next: "Next"
       aria_label: "Pagination"
+    version: "Version %{version}"
     ios_install_prompt:
       title: "Install Workout Bro"
       instructions_html: "Tap <strong>Share</strong> then <strong>Add to Home Screen</strong> for the best experience with push notifications."
