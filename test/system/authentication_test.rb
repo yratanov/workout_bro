@@ -4,7 +4,7 @@ class AuthenticationTest < ApplicationSystemTestCase
   test "allows a user to sign in with valid credentials" do
     visit new_session_path
 
-    fill_in "email_address", with: users(:john).email_address
+    fill_in "email", with: users(:john).email
     fill_in "password", with: "password"
     click_button "Sign in"
 

@@ -4,20 +4,12 @@ class SessionsTest < ActionDispatch::IntegrationTest
   setup { @user = users(:john) }
 
   test "POST /session with valid credentials redirects to root path" do
-    post session_path,
-         params: {
-           email_address: @user.email_address,
-           password: "password"
-         }
+    post session_path, params: { email: @user.email, password: "password" }
     assert_redirected_to root_path
   end
 
   test "POST /session with invalid credentials redirects to login with alert" do
-    post session_path,
-         params: {
-           email_address: @user.email_address,
-           password: "wrongpassword"
-         }
+    post session_path, params: { email: @user.email, password: "wrongpassword" }
     assert_redirected_to new_session_path
     assert_equal I18n.t("controllers.sessions.invalid_credentials"),
                  flash[:alert]
@@ -26,7 +18,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   test "POST /session with non-existent user redirects to login with alert" do
     post session_path,
          params: {
-           email_address: "nonexistent@example.com",
+           email: "nonexistent@example.com",
            password: "password"
          }
     assert_redirected_to new_session_path

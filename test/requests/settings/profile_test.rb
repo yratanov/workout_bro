@@ -13,18 +13,18 @@ class Settings::ProfileTest < ActionDispatch::IntegrationTest
 
   test "GET /settings/profile displays the current user email" do
     get settings_profile_path
-    assert_includes response.body, @user.email_address
+    assert_includes response.body, @user.email
   end
 
   test "PATCH /settings/profile updates the email address" do
     patch settings_profile_path,
           params: {
             user: {
-              email_address: "newemail@example.com"
+              email: "newemail@example.com"
             }
           }
     @user.reload
-    assert_equal "newemail@example.com", @user.email_address
+    assert_equal "newemail@example.com", @user.email
     assert_redirected_to settings_profile_path
     follow_redirect!
     assert_includes response.body, "Profile updated successfully"
@@ -34,11 +34,11 @@ class Settings::ProfileTest < ActionDispatch::IntegrationTest
     patch settings_profile_path,
           params: {
             user: {
-              email_address: "  UPPERCASE@EXAMPLE.COM  "
+              email: "  UPPERCASE@EXAMPLE.COM  "
             }
           }
     @user.reload
-    assert_equal "uppercase@example.com", @user.email_address
+    assert_equal "uppercase@example.com", @user.email
   end
 
   test "PATCH /settings/profile updates the name" do
@@ -55,10 +55,10 @@ class Settings::ProfileTest < ActionDispatch::IntegrationTest
   end
 
   test "PATCH /settings/profile does not update with blank email" do
-    original_email = @user.email_address
-    patch settings_profile_path, params: { user: { email_address: "" } }
+    original_email = @user.email
+    patch settings_profile_path, params: { user: { email: "" } }
     @user.reload
-    assert_equal original_email, @user.email_address
+    assert_equal original_email, @user.email
     assert_response :unprocessable_entity
   end
 

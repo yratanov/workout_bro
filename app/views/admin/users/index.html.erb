@@ -28,7 +28,7 @@
                 <% @users.each do |user| %>
                   <tr>
                     <td class="py-3 text-sm">
-                      <%= user.email_address %>
+                      <%= user.email %>
                     </td>
                     <td class="py-3 text-sm">
                       <% if user.admin? %>
@@ -50,7 +50,7 @@
                           <%= button_to admin_user_path(user),
                               method: :delete,
                               class: "text-red-400 hover:text-red-300 transition-colors",
-                              data: { turbo_confirm: t(".delete_confirm", email: user.email_address) } do %>
+                              data: { turbo_confirm: t(".delete_confirm", email: user.email) } do %>
                             <%= icon("trash", size: "w-5 h-5") %>
                           <% end %>
                         <% end %>

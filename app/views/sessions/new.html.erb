@@ -7,7 +7,7 @@
     </div>
 
     <%= app_form_with url: session_url, class: "space-y-6" do |form| %>
-      <%= form.input :email_address,
+      <%= form.input :email,
                  as: :email,
                  label: t(".email_label"),
                  margin: "",
@@ -16,7 +16,7 @@
                    autofocus: true,
                    autocomplete: "username",
                    placeholder: t(".email_placeholder"),
-                   value: params[:email_address],
+                   value: params[:email],
                  } %>
       <%= form.input :password,
                  as: :password,

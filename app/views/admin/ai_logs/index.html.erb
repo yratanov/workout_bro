@@ -42,7 +42,7 @@
                           <span class="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded"><%= t(".failed") %></span>
                         <% end %>
                       </div>
-                      <p class="text-sm text-slate-400"><%= log.user.email_address %></p>
+                      <p class="text-sm text-slate-400"><%= log.user.email %></p>
                     </div>
                     <span class="text-xs text-slate-500 whitespace-nowrap">
                       <%= l(log.created_at, format: :short) %>

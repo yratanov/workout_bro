@@ -12,14 +12,14 @@ class PasswordsTest < ActionDispatch::IntegrationTest
 
   test "POST /passwords with valid email sends reset email and redirects" do
     assert_enqueued_emails 1 do
-      post passwords_path, params: { email_address: @user.email_address }
+      post passwords_path, params: { email: @user.email }
     end
     assert_redirected_to new_session_path
   end
 
   test "POST /passwords with non-existent email redirects without sending email" do
     assert_no_enqueued_emails do
-      post passwords_path, params: { email_address: "nonexistent@example.com" }
+      post passwords_path, params: { email: "nonexistent@example.com" }
     end
     assert_redirected_to new_session_path
   end

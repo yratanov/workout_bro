@@ -93,7 +93,7 @@ class Admin::AiLogsTest < ActionDispatch::IntegrationTest
     )
 
     get admin_ai_logs_path
-    assert_includes response.body, @admin_user.email_address
+    assert_includes response.body, @admin_user.email
   end
 
   test "GET /admin/ai_logs displays expandable prompt section as admin" do

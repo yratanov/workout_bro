@@ -25,7 +25,7 @@ class SetupTest < ActionDispatch::IntegrationTest
             user: {
               first_name: "New",
               last_name: "User",
-              email_address: "new@example.com",
+              email: "new@example.com",
               password: "password123",
               password_confirmation: "password123"
             }
@@ -35,7 +35,7 @@ class SetupTest < ActionDispatch::IntegrationTest
     assert_equal 1, user_count_after - user_count_before
     assert_redirected_to setup_path
 
-    user = User.find_by(email_address: "new@example.com")
+    user = User.find_by(email: "new@example.com")
     assert_equal "admin", user.role
     assert_equal 1, user.wizard_step
   end
@@ -49,7 +49,7 @@ class SetupTest < ActionDispatch::IntegrationTest
             user: {
               first_name: "New",
               last_name: "User",
-              email_address: "",
+              email: "",
               password: "password123",
               password_confirmation: "password123"
             }
@@ -195,7 +195,7 @@ class SetupTest < ActionDispatch::IntegrationTest
             user: {
               first_name: "Changed",
               last_name: "Name",
-              email_address: @user.email_address,
+              email: @user.email,
               password: "",
               password_confirmation: ""
             }
@@ -217,7 +217,7 @@ class SetupTest < ActionDispatch::IntegrationTest
             user: {
               first_name: "Updated",
               last_name: "Name",
-              email_address: @user.email_address,
+              email: @user.email,
               password: "",
               password_confirmation: ""
             }

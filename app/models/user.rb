@@ -7,7 +7,7 @@
 #  ai_api_key      :string
 #  ai_model        :string
 #  ai_provider     :string
-#  email_address   :string           not null
+#  email           :string           not null
 #  first_name      :string
 #  last_name       :string
 #  locale          :string           default("en")
@@ -24,7 +24,7 @@
 #
 # Indexes
 #
-#  index_users_on_email_address  (email_address) UNIQUE
+#  index_users_on_email  (email) UNIQUE
 #
 
 class User < ApplicationRecord
@@ -61,7 +61,7 @@ class User < ApplicationRecord
   AVAILABLE_LOCALES = %w[en ru].freeze
   WEIGHT_UNITS = %w[kg lbs].freeze
 
-  validates :email_address, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true
   validates :password_digest, presence: true
   validates :locale, inclusion: { in: AVAILABLE_LOCALES }, allow_nil: true
   validates :weight_unit, inclusion: { in: WEIGHT_UNITS }
@@ -69,7 +69,7 @@ class User < ApplicationRecord
   validates :weight_max, numericality: { greater_than: :weight_min }
   validates :weight_step, numericality: { greater_than: 0 }
 
-  normalizes :email_address, with: ->(e) { e.strip.downcase }
+  normalizes :email, with: ->(e) { e.strip.downcase }
 
   def setup_completed?
     setup_completed

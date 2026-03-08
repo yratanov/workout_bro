@@ -132,7 +132,7 @@ class SetupController < ApplicationController
     params.require(:user).permit(
       :first_name,
       :last_name,
-      :email_address,
+      :email,
       :password,
       :password_confirmation
     )

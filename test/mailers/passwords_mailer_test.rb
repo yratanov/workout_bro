@@ -11,7 +11,7 @@ class PasswordsMailerTest < ActionMailer::TestCase
   end
 
   test "sends to the user's email" do
-    assert_equal [@user.email_address], @mail.to
+    assert_equal [@user.email], @mail.to
   end
 
   test "renders the sender email" do

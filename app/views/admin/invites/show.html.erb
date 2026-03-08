@@ -51,7 +51,7 @@
                     </td>
                     <td class="py-3 text-sm">
                       <% if invite.used_by_user %>
-                        <%= invite.used_by_user.email_address %>
+                        <%= invite.used_by_user.email %>
                       <% else %>
                         <span class="text-slate-500"><%= t(".not_used") %></span>
                       <% end %>

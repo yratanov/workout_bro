@@ -17,8 +17,8 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
   test "GET /admin/users displays all users as admin" do
     sign_in(@admin_user)
     get admin_users_path
-    assert_includes response.body, @admin_user.email_address
-    assert_includes response.body, @regular_user.email_address
+    assert_includes response.body, @admin_user.email
+    assert_includes response.body, @regular_user.email
   end
 
   test "GET /admin/users displays user roles as admin" do
@@ -51,7 +51,7 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
   test "GET /admin/users/:id/edit displays the edit form as admin" do
     sign_in(@admin_user)
     get edit_admin_user_path(@regular_user)
-    assert_includes response.body, @regular_user.email_address
+    assert_includes response.body, @regular_user.email
     assert_includes response.body, I18n.t("admin.users.edit.edit_user")
   end
 
@@ -60,10 +60,10 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     patch admin_user_path(@regular_user),
           params: {
             user: {
-              email_address: "newemail@example.com"
+              email: "newemail@example.com"
             }
           }
-    assert_equal "newemail@example.com", @regular_user.reload.email_address
+    assert_equal "newemail@example.com", @regular_user.reload.email
   end
 
   test "PATCH /admin/users/:id updates the user name as admin" do
@@ -85,7 +85,7 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     patch admin_user_path(@regular_user),
           params: {
             user: {
-              email_address: "newemail@example.com"
+              email: "newemail@example.com"
             }
           }
     assert_redirected_to admin_users_path
@@ -95,12 +95,7 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
 
   test "PATCH /admin/users/:id renders edit on validation error as admin" do
     sign_in(@admin_user)
-    patch admin_user_path(@regular_user),
-          params: {
-            user: {
-              email_address: ""
-            }
-          }
+    patch admin_user_path(@regular_user), params: { user: { email: "" } }
     assert_response :unprocessable_entity
   end
 
@@ -109,7 +104,7 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     patch admin_user_path(@regular_user),
           params: {
             user: {
-              email_address: @admin_user.email_address
+              email: @admin_user.email
             }
           }
     assert_response :unprocessable_entity
@@ -160,11 +155,11 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     patch admin_user_path(@admin_user),
           params: {
             user: {
-              email_address: "hack@example.com"
+              email: "hack@example.com"
             }
           }
     assert_redirected_to root_path
-    assert_equal "john@example.com", @admin_user.reload.email_address
+    assert_equal "john@example.com", @admin_user.reload.email
   end
 
   test "DELETE /admin/users/:id redirects as regular user" do

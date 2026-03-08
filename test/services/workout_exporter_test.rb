@@ -98,7 +98,7 @@ class WorkoutExporterTest < ActiveSupport::TestCase
   test "handles empty data gracefully" do
     new_user =
       User.create!(
-        email_address: "empty@example.com",
+        email: "empty@example.com",
         password: "password",
         setup_completed: true
       )

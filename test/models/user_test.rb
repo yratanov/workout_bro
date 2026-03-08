@@ -9,7 +9,7 @@ require "test_helper"
 #  ai_api_key      :string
 #  ai_model        :string
 #  ai_provider     :string
-#  email_address   :string           not null
+#  email           :string           not null
 #  first_name      :string
 #  last_name       :string
 #  locale          :string           default("en")
@@ -26,7 +26,7 @@ require "test_helper"
 #
 # Indexes
 #
-#  index_users_on_email_address  (email_address) UNIQUE
+#  index_users_on_email  (email) UNIQUE
 #
 
 class UserTest < ActiveSupport::TestCase
@@ -113,22 +113,22 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "has default weight_unit of kg" do
-    new_user = User.new(email_address: "test@example.com", password: "password")
+    new_user = User.new(email: "test@example.com", password: "password")
     assert_equal "kg", new_user.weight_unit
   end
 
   test "has default weight_min of 2.5" do
-    new_user = User.new(email_address: "test@example.com", password: "password")
+    new_user = User.new(email: "test@example.com", password: "password")
     assert_equal 2.5, new_user.weight_min
   end
 
   test "has default weight_max of 100" do
-    new_user = User.new(email_address: "test@example.com", password: "password")
+    new_user = User.new(email: "test@example.com", password: "password")
     assert_equal 100, new_user.weight_max
   end
 
   test "has default weight_step of 2.5" do
-    new_user = User.new(email_address: "test@example.com", password: "password")
+    new_user = User.new(email: "test@example.com", password: "password")
     assert_equal 2.5, new_user.weight_step
   end
 end

@@ -29,7 +29,7 @@ class SetupWizardTest < ApplicationSystemTestCase
     assert_text I18n.t("setup.account.title")
     assert_field "user_first_name"
     assert_field "user_last_name"
-    assert_field "user_email_address"
+    assert_field "user_email"
     assert_field "user_password"
   end
 
@@ -42,7 +42,7 @@ class SetupWizardTest < ApplicationSystemTestCase
     assert_text I18n.t("setup.account.title")
     fill_in "user_first_name", with: "Test"
     fill_in "user_last_name", with: "User"
-    fill_in "user_email_address", with: "test@example.com"
+    fill_in "user_email", with: "test@example.com"
     fill_in "user_password", with: "password123"
     fill_in "user_password_confirmation", with: "password123"
     click_button I18n.t("setup.account.next")
@@ -75,7 +75,7 @@ class SetupWizardTest < ApplicationSystemTestCase
     # Step 1: Create account
     fill_in "user_first_name", with: "Test"
     fill_in "user_last_name", with: "User"
-    fill_in "user_email_address", with: "test@example.com"
+    fill_in "user_email", with: "test@example.com"
     fill_in "user_password", with: "password123"
     fill_in "user_password_confirmation", with: "password123"
     click_button I18n.t("setup.account.next")
@@ -97,7 +97,7 @@ class SetupWizardTest < ApplicationSystemTestCase
 
     fill_in "user_first_name", with: "Test"
     fill_in "user_last_name", with: "User"
-    fill_in "user_email_address", with: "test@example.com"
+    fill_in "user_email", with: "test@example.com"
     fill_in "user_password", with: "password123"
     fill_in "user_password_confirmation", with: "different"
     click_button I18n.t("setup.account.next")
@@ -111,7 +111,7 @@ class SetupWizardTest < ApplicationSystemTestCase
   test "redirects incomplete setup users to wizard" do
     user =
       User.create!(
-        email_address: "test_resume@example.com",
+        email: "test_resume@example.com",
         password: "password",
         setup_completed: false,
         wizard_step: 2
@@ -126,7 +126,7 @@ class SetupWizardTest < ApplicationSystemTestCase
   test "allows completed users to access the app normally" do
     user =
       User.create!(
-        email_address: "test_complete@example.com",
+        email: "test_complete@example.com",
         password: "password",
         setup_completed: true,
         wizard_step: 4

@@ -9,7 +9,7 @@
 #  ai_api_key      :string
 #  ai_model        :string
 #  ai_provider     :string
-#  email_address   :string           not null
+#  email           :string           not null
 #  first_name      :string
 #  last_name       :string
 #  locale          :string           default("en")
@@ -26,12 +26,12 @@
 #
 # Indexes
 #
-#  index_users_on_email_address  (email_address) UNIQUE
+#  index_users_on_email  (email) UNIQUE
 #
 john:
   first_name: John
   last_name: Doe
-  email_address: john@example.com
+  email: john@example.com
   password_digest: <%= password_digest %>
   setup_completed: true
   wizard_step: 4
@@ -40,7 +40,7 @@ john:
 jane:
   first_name: Jane
   last_name: Smith
-  email_address: jane@example.com
+  email: jane@example.com
   password_digest: <%= password_digest %>
   setup_completed: true
   wizard_step: 4

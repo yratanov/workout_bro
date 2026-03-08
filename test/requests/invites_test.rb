@@ -43,7 +43,7 @@ class InvitesTest < ActionDispatch::IntegrationTest
     post use_invite_path(token: @invite.token), params: valid_user_params
     @invite.reload
     assert @invite.used?
-    assert_equal "newuser@example.com", @invite.used_by_user.email_address
+    assert_equal "newuser@example.com", @invite.used_by_user.email
     assert @invite.used_at.present?
   end
 
@@ -60,7 +60,7 @@ class InvitesTest < ActionDispatch::IntegrationTest
 
   test "POST /use-invite/:token sets wizard_step to 1" do
     post use_invite_path(token: @invite.token), params: valid_user_params
-    new_user = User.find_by(email_address: "newuser@example.com")
+    new_user = User.find_by(email: "newuser@example.com")
     assert_equal 1, new_user.wizard_step
   end
 
@@ -69,7 +69,7 @@ class InvitesTest < ActionDispatch::IntegrationTest
       post use_invite_path(token: @invite.token),
            params: {
              user: {
-               email_address: "",
+               email: "",
                password: "password123",
                password_confirmation: "password123"
              }
@@ -82,7 +82,7 @@ class InvitesTest < ActionDispatch::IntegrationTest
       post use_invite_path(token: @invite.token),
            params: {
              user: {
-               email_address: "test@example.com",
+               email: "test@example.com",
                password: "password123",
                password_confirmation: "different"
              }
@@ -94,7 +94,7 @@ class InvitesTest < ActionDispatch::IntegrationTest
     post use_invite_path(token: @invite.token),
          params: {
            user: {
-             email_address: "",
+             email: "",
              password: "password123",
              password_confirmation: "password123"
            }
@@ -121,7 +121,7 @@ class InvitesTest < ActionDispatch::IntegrationTest
       user: {
         first_name: "New",
         last_name: "User",
-        email_address: "newuser@example.com",
+        email: "newuser@example.com",
         password: "password123",
         password_confirmation: "password123"
       }
