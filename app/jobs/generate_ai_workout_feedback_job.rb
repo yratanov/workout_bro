@@ -28,8 +28,13 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
       broadcast_feedback(workout, result)
     end
 
-    activity.update!(content: result, status: :completed)
-    broadcast_feedback(workout, result, mark_viewed: true)
+    content, suggestions = extract_suggestions(result, workout)
+    activity.update!(
+      content: content,
+      suggestions: suggestions&.to_json,
+      status: :completed
+    )
+    broadcast_feedback(workout, content, mark_viewed: true)
     ExtractAiMemoriesJob.perform_later(activity: activity)
 
     trigger_compaction_if_needed(ai_trainer)
@@ -64,9 +69,43 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
     ) do |accumulated|
       now = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       if (now - last_broadcast) * 1000 >= BROADCAST_THROTTLE_MS
-        broadcast_feedback(workout, accumulated)
+        broadcast_feedback(workout, strip_suggestions_tag(accumulated))
         last_broadcast = now
       end
+    end
+  end
+
+  def strip_suggestions_tag(text)
+    text.sub(/<!--SUGGESTIONS:.*\z/m, "").strip
+  end
+
+  def extract_suggestions(result, workout)
+    match = result.match(/<!--SUGGESTIONS:(.+?)-->/)
+    return result, nil unless match
+
+    content = result.sub(/<!--SUGGESTIONS:.+?-->/m, "").strip
+    raw = JSON.parse(match[1])
+    suggestions = resolve_suggestion_exercise_ids(raw, workout)
+    [content, suggestions]
+  rescue JSON::ParserError
+    [result.sub(/<!--SUGGESTIONS:.+?-->/m, "").strip, nil]
+  end
+
+  def resolve_suggestion_exercise_ids(suggestions, workout)
+    routine_day = workout.workout_routine_day
+    return nil unless routine_day
+
+    routine_exercises =
+      routine_day.workout_routine_day_exercises.includes(:exercise, :superset)
+
+    suggestions.filter_map do |s|
+      rde =
+        routine_exercises.find do |re|
+          re.display_name.downcase == s["exercise"].to_s.downcase
+        end
+      next unless rde
+
+      s.merge("workout_routine_day_exercise_id" => rde.id)
     end
   end
 

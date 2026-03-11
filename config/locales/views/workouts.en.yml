@@ -96,6 +96,15 @@ en:
       slower: "slower"
       ai_feedback_title: "AI Trainer Feedback"
       ai_feedback_loading: "Your trainer is analyzing your workout..."
+      ai_suggestions_title: "Routine Suggestions"
+      suggestion_apply: "Apply"
+      suggestion_applied: "Applied"
+      suggestion_fields:
+        comment: "Comment"
+        sets: "Sets"
+        reps: "Reps"
+        min_rest: "Min Rest"
+        max_rest: "Max Rest"
       notes: "Notes"
       set_notes: "Set Notes"
       pr_types:

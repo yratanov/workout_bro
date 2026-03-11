@@ -4,13 +4,12 @@
 
 <div class="w-full max-w-xl">
   <div class="flex items-center justify-between mb-4">
-    <div class="flex items-center gap-2 text-xl">
+    <div class="flex flex-col">
       <% if @workout.workout_routine_day %>
-        <span class="font-semibold"><%= @workout.workout_routine_day.workout_routine.name %></span>
-        <span class="text-slate-400">·</span>
-        <span><%= @workout.workout_routine_day.name %></span>
+        <span class="text-sm text-slate-400"><%= @workout.workout_routine_day.workout_routine.name %></span>
+        <span class="text-xl font-semibold"><%= @workout.workout_routine_day.name %></span>
       <% else %>
-        <span class="font-semibold"><%= t(".title") %></span>
+        <span class="text-xl font-semibold"><%= t(".title") %></span>
       <% end %>
     </div>
     <div class="flex items-center gap-3 text-base text-slate-300">

@@ -10,6 +10,7 @@
 #  content       :text
 #  error_message :text
 #  status        :integer          default("pending"), not null
+#  suggestions   :text
 #  viewed_at     :datetime
 #  week_start    :date
 #  created_at    :datetime         not null
@@ -47,5 +48,17 @@ class AiTrainerActivity < ApplicationRecord
 
   def viewed?
     viewed_at.present?
+  end
+
+  def parsed_suggestions
+    return [] if suggestions.blank?
+
+    JSON.parse(suggestions)
+  rescue JSON::ParserError
+    []
+  end
+
+  def parsed_suggestions=(array)
+    self.suggestions = array&.to_json
   end
 end

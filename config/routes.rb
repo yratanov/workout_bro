@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get :notes_modal
       patch :update_notes
       patch :mark_ai_viewed
+      patch :apply_ai_suggestion
     end
   end
 

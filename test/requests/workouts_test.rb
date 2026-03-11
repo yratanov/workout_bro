@@ -654,4 +654,76 @@ class WorkoutsTest < ActionDispatch::IntegrationTest
     activity.reload
     assert activity.viewed?
   end
+
+  test "PATCH /workouts/:id/apply_ai_suggestion applies suggestion to routine exercise" do
+    @user.update!(
+      ai_provider: "gemini",
+      ai_model: "gemini-2.0-flash",
+      ai_api_key: "test-key"
+    )
+    ai_trainer = @user.ai_trainer
+    ai_trainer.update!(status: :completed, trainer_profile: "Profile.")
+
+    workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+
+    rde = workout_routine_day_exercises(:push_day_bench)
+    suggestions = [
+      {
+        "exercise" => "Bench Press",
+        "field" => "sets",
+        "value" => "4-5",
+        "reason" => "You completed all sets easily",
+        "workout_routine_day_exercise_id" => rde.id
+      }
+    ]
+
+    AiTrainerActivity.create!(
+      user: @user,
+      ai_trainer: ai_trainer,
+      workout: workout,
+      activity_type: :workout_review,
+      status: :completed,
+      content: "Good workout",
+      suggestions: suggestions.to_json
+    )
+
+    patch apply_ai_suggestion_workout_path(workout),
+          params: {
+            suggestion_index: 0
+          },
+          headers: {
+            "Accept" => "text/vnd.turbo-stream.html"
+          }
+
+    assert_response :success
+    rde.reload
+    assert_equal "4-5", rde.sets
+
+    activity = workout.ai_trainer_activity.reload
+    assert activity.parsed_suggestions[0]["applied"]
+  end
+
+  test "PATCH /workouts/:id/apply_ai_suggestion returns not_found for invalid index" do
+    workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current
+      )
+
+    patch apply_ai_suggestion_workout_path(workout),
+          params: {
+            suggestion_index: 99
+          }
+
+    assert_response :not_found
+  end
 end

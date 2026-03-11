@@ -153,6 +153,49 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
     assert_equal "Streaming feedback", activity.content
   end
 
+  test "extracts suggestions from AI response and stores them" do
+    @workout.update!(workout_routine_day: workout_routine_days(:push_day))
+    job = GenerateAiWorkoutFeedbackJob.new
+
+    result_with_suggestions =
+      "Good session overall.\n\n<!--SUGGESTIONS:[{\"exercise\":\"Bench Press\",\"field\":\"sets\",\"value\":\"4\",\"reason\":\"You completed all sets easily\"}]-->"
+
+    content, suggestions =
+      job.send(:extract_suggestions, result_with_suggestions, @workout)
+
+    assert_equal "Good session overall.", content
+    assert_equal 1, suggestions.length
+    assert_equal "Bench Press", suggestions[0]["exercise"]
+    assert_equal "sets", suggestions[0]["field"]
+    assert_equal "4", suggestions[0]["value"]
+    assert_equal workout_routine_day_exercises(:push_day_bench).id,
+                 suggestions[0]["workout_routine_day_exercise_id"]
+  end
+
+  test "returns content without suggestions when no tag present" do
+    job = GenerateAiWorkoutFeedbackJob.new
+
+    content, suggestions =
+      job.send(:extract_suggestions, "Just feedback.", @workout)
+
+    assert_equal "Just feedback.", content
+    assert_nil suggestions
+  end
+
+  test "handles malformed JSON in suggestions tag gracefully" do
+    job = GenerateAiWorkoutFeedbackJob.new
+
+    content, suggestions =
+      job.send(
+        :extract_suggestions,
+        "Good.\n\n<!--SUGGESTIONS:not json-->",
+        @workout
+      )
+
+    assert_equal "Good.", content
+    assert_nil suggestions
+  end
+
   test "error handling does not update activity when not persisted" do
     assert_nil @workout.ai_trainer_activity
 

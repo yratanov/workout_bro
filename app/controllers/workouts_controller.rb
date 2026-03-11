@@ -12,6 +12,7 @@ class WorkoutsController < ApplicationController
                   notes_modal
                   update_notes
                   mark_ai_viewed
+                  apply_ai_suggestion
                 ]
 
   # GET /workouts or /workouts.json
@@ -201,6 +202,47 @@ class WorkoutsController < ApplicationController
   def mark_ai_viewed
     mark_ai_feedback_as_viewed
     head :ok
+  end
+
+  # PATCH /workouts/1/apply_ai_suggestion
+  def apply_ai_suggestion
+    activity = @workout.ai_trainer_activity
+    suggestions = activity&.parsed_suggestions || []
+    index = params[:suggestion_index].to_i
+    suggestion = suggestions[index]
+
+    if suggestion.blank? || suggestion["workout_routine_day_exercise_id"].blank?
+      head :not_found
+      return
+    end
+
+    rde =
+      WorkoutRoutineDayExercise.find(
+        suggestion["workout_routine_day_exercise_id"]
+      )
+    field = suggestion["field"]
+    value = suggestion["value"]
+
+    unless %w[comment sets reps min_rest max_rest].include?(field)
+      head :unprocessable_entity
+      return
+    end
+
+    rde.update!(field => value)
+
+    suggestion["applied"] = true
+    activity.update!(suggestions: suggestions.to_json)
+
+    render turbo_stream:
+             turbo_stream.replace(
+               "ai_suggestion_#{index}",
+               partial: "workouts/ai_suggestion",
+               locals: {
+                 suggestion: suggestion,
+                 index: index,
+                 workout: @workout
+               }
+             )
   end
 
   # GET /workouts/1/notes_modal

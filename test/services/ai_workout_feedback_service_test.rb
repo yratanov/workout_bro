@@ -79,6 +79,42 @@ class AiWorkoutFeedbackServiceTest < ActiveSupport::TestCase
     assert_includes prompt, "100"
   end
 
+  test "prompt includes routine prescription when workout has routine day" do
+    service = AiWorkoutFeedbackService.new(@workout)
+    prompt = service.prompt
+
+    assert_includes prompt, "Routine Prescription"
+    assert_includes prompt, "Bench Press"
+    assert_includes prompt, "sets: 3-4"
+    assert_includes prompt, "reps: 8-12"
+    assert_includes prompt, "rest: 60-90s"
+    assert_includes prompt, "focus on chest contraction"
+  end
+
+  test "prompt omits routine prescription for custom workout" do
+    custom_workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current
+      )
+
+    service = AiWorkoutFeedbackService.new(custom_workout)
+    prompt = service.prompt
+
+    assert_not_includes prompt, "Routine Prescription"
+    assert_not_includes prompt, "SUGGESTIONS"
+  end
+
+  test "prompt includes suggestions instruction when routine day present" do
+    service = AiWorkoutFeedbackService.new(@workout)
+    prompt = service.prompt
+
+    assert_includes prompt, "SUGGESTIONS"
+    assert_includes prompt, "exercise"
+  end
+
   test "prompt includes run details for run workout" do
     run_workout =
       Workout.create!(

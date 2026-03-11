@@ -10,6 +10,7 @@ require "test_helper"
 #  content       :text
 #  error_message :text
 #  status        :integer          default("pending"), not null
+#  suggestions   :text
 #  viewed_at     :datetime
 #  week_start    :date
 #  created_at    :datetime         not null

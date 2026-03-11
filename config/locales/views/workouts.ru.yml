@@ -96,6 +96,15 @@ ru:
       slower: "медленнее"
       ai_feedback_title: "Отзыв ИИ тренера"
       ai_feedback_loading: "Ваш тренер анализирует тренировку..."
+      ai_suggestions_title: "Предложения по программе"
+      suggestion_apply: "Применить"
+      suggestion_applied: "Применено"
+      suggestion_fields:
+        comment: "Комментарий"
+        sets: "Подходы"
+        reps: "Повторения"
+        min_rest: "Мин. отдых"
+        max_rest: "Макс. отдых"
       notes: "Заметки"
       set_notes: "Заметки к подходам"
       pr_types:
