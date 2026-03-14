@@ -35,6 +35,7 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
       status: :completed
     )
     broadcast_feedback(workout, content, mark_viewed: true)
+    broadcast_suggestions(workout, suggestions) if suggestions&.any?
     ExtractAiMemoriesJob.perform_later(activity: activity)
 
     trigger_compaction_if_needed(ai_trainer)
@@ -107,6 +108,23 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
 
       s.merge("workout_routine_day_exercise_id" => rde.id)
     end
+  end
+
+  def broadcast_suggestions(workout, suggestions)
+    target = "ai_suggestions_#{workout.id}"
+    html =
+      ApplicationController.render(
+        partial: "workouts/ai_suggestions_section",
+        locals: {
+          suggestions: suggestions,
+          workout: workout
+        }
+      )
+    Turbo::StreamsChannel.broadcast_replace_to(
+      [workout, :ai_feedback],
+      target:,
+      html: "<div id=\"#{target}\">#{html}</div>"
+    )
   end
 
   def broadcast_feedback(workout, text, mark_viewed: false)

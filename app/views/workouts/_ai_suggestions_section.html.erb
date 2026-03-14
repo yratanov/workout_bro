@@ -1,0 +1,14 @@
+<div class="bg-slate-800 rounded-lg p-4 mb-6">
+  <div class="flex items-center gap-2 mb-3">
+    <%= icon "sparkles", size: "w-5 h-5", class: "text-purple-400" %>
+    <h3 class="text-purple-400 font-semibold"><%= t("workouts.summary.ai_suggestions_title") %></h3>
+  </div>
+  <div class="space-y-2">
+    <% suggestions.each_with_index do |suggestion, index| %>
+      <%= render "workouts/ai_suggestion",
+      suggestion: suggestion,
+      index: index,
+      workout: workout %>
+    <% end %>
+  </div>
+</div>
