@@ -1,0 +1,33 @@
+# == Schema Information
+#
+# Table name: ai_trainer_messages
+# Database name: primary
+#
+#  id                     :integer          not null, primary key
+#  content                :text             not null
+#  role                   :integer          not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  ai_trainer_activity_id :integer          not null
+#
+# Indexes
+#
+#  index_ai_trainer_messages_on_ai_trainer_activity_id  (ai_trainer_activity_id)
+#
+# Foreign Keys
+#
+#  ai_trainer_activity_id  (ai_trainer_activity_id => ai_trainer_activities.id)
+#
+johns_question:
+  ai_trainer_activity: johns_workout_review
+  role: 0
+  content: "Should I increase the weight next time?"
+  created_at: <%= 3.days.ago + 1.hour %>
+  updated_at: <%= 3.days.ago + 1.hour %>
+
+johns_answer:
+  ai_trainer_activity: johns_workout_review
+  role: 1
+  content: "Yes, based on your progression you should increase by 2.5kg."
+  created_at: <%= 3.days.ago + 1.hour + 30.seconds %>
+  updated_at: <%= 3.days.ago + 1.hour + 30.seconds %>

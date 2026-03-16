@@ -105,6 +105,7 @@ en:
         reps: "Reps"
         min_rest: "Min Rest"
         max_rest: "Max Rest"
+      ai_chat_placeholder: "Ask a follow-up question..."
       notes: "Notes"
       set_notes: "Set Notes"
       pr_types:

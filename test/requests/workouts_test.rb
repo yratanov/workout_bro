@@ -710,6 +710,92 @@ class WorkoutsTest < ActionDispatch::IntegrationTest
     assert activity.parsed_suggestions[0]["applied"]
   end
 
+  test "POST /workouts/:id/ask_ai enqueues followup job" do
+    @user.update!(
+      ai_provider: "gemini",
+      ai_model: "gemini-2.0-flash",
+      ai_api_key: "test-key"
+    )
+    ai_trainer = @user.ai_trainer
+    ai_trainer.update!(status: :completed, trainer_profile: "Profile.")
+
+    workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        workout_routine_day: workout_routine_days(:push_day)
+      )
+
+    activity =
+      AiTrainerActivity.create!(
+        user: @user,
+        ai_trainer: ai_trainer,
+        workout: workout,
+        activity_type: :workout_review,
+        status: :completed,
+        content: "Great workout!"
+      )
+
+    assert_enqueued_with(job: GenerateAiFollowupJob) do
+      post ask_ai_workout_path(workout),
+           params: {
+             question: "Should I increase weight?"
+           }
+    end
+
+    assert_response :ok
+  end
+
+  test "POST /workouts/:id/ask_ai returns 422 without completed activity" do
+    workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current
+      )
+
+    post ask_ai_workout_path(workout),
+         params: {
+           question: "Should I increase weight?"
+         }
+
+    assert_response :unprocessable_entity
+  end
+
+  test "POST /workouts/:id/ask_ai returns 422 with blank question" do
+    @user.update!(
+      ai_provider: "gemini",
+      ai_model: "gemini-2.0-flash",
+      ai_api_key: "test-key"
+    )
+    ai_trainer = @user.ai_trainer
+    ai_trainer.update!(status: :completed, trainer_profile: "Profile.")
+
+    workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :strength,
+        started_at: 1.hour.ago,
+        ended_at: Time.current
+      )
+
+    AiTrainerActivity.create!(
+      user: @user,
+      ai_trainer: ai_trainer,
+      workout: workout,
+      activity_type: :workout_review,
+      status: :completed,
+      content: "Great workout!"
+    )
+
+    post ask_ai_workout_path(workout), params: { question: "" }
+
+    assert_response :unprocessable_entity
+  end
+
   test "PATCH /workouts/:id/apply_ai_suggestion returns not_found for invalid index" do
     workout =
       Workout.create!(

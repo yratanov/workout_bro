@@ -764,6 +764,59 @@ write_cassette(
   ]
 )
 
+# === AI Followup Job ===
+write_cassette(
+  "jobs/followup/basic",
+  [
+    interaction(
+      url: stream20,
+      status: 200,
+      res_body:
+        sse_body(
+          "Yes, you should increase weight by 2.5kg next session.",
+          input_tokens: 50,
+          output_tokens: 15,
+          total_tokens: 65
+        ),
+      content_type: "text/event-stream"
+    )
+  ]
+)
+write_cassette(
+  "jobs/followup/with_history",
+  [
+    interaction(
+      url: stream20,
+      status: 200,
+      res_body:
+        sse_body(
+          "Based on our previous discussion, here's more detail.",
+          input_tokens: 80,
+          output_tokens: 20,
+          total_tokens: 100
+        ),
+      content_type: "text/event-stream"
+    )
+  ]
+)
+write_cassette(
+  "jobs/followup/broadcast",
+  [
+    interaction(
+      url: stream20,
+      status: 200,
+      res_body:
+        sse_body(
+          "Your form looked good overall.",
+          input_tokens: 50,
+          output_tokens: 10,
+          total_tokens: 60
+        ),
+      content_type: "text/event-stream"
+    )
+  ]
+)
+
 # === AI Memory Extraction ===
 embed_url20 = gemini_url("gemini-embedding-001", "embedContent")
 fake_embedding = Array.new(768) { |i| (Math.sin(i) * 0.1).round(6) }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_11_174431) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_16_225313) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -87,6 +87,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_11_174431) do
     t.index ["user_id", "activity_type"], name: "index_ai_trainer_activities_on_user_id_and_activity_type"
     t.index ["user_id", "created_at"], name: "index_ai_trainer_activities_on_user_id_and_created_at"
     t.index ["workout_id"], name: "index_ai_trainer_activities_on_workout_id", unique: true
+  end
+
+  create_table "ai_trainer_messages", force: :cascade do |t|
+    t.integer "ai_trainer_activity_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.integer "role", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ai_trainer_activity_id"], name: "index_ai_trainer_messages_on_ai_trainer_activity_id"
   end
 
   create_table "ai_trainers", force: :cascade do |t|
@@ -379,6 +388,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_11_174431) do
   add_foreign_key "ai_trainer_activities", "ai_trainers"
   add_foreign_key "ai_trainer_activities", "users"
   add_foreign_key "ai_trainer_activities", "workouts"
+  add_foreign_key "ai_trainer_messages", "ai_trainer_activities"
   add_foreign_key "ai_trainers", "users"
   add_foreign_key "exercises", "muscles"
   add_foreign_key "exercises", "users"

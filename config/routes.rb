@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       patch :update_notes
       patch :mark_ai_viewed
       patch :apply_ai_suggestion
+      post :ask_ai
     end
   end
 

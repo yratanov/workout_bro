@@ -105,6 +105,7 @@ ru:
         reps: "Повторения"
         min_rest: "Мин. отдых"
         max_rest: "Макс. отдых"
+      ai_chat_placeholder: "Задайте уточняющий вопрос..."
       notes: "Заметки"
       set_notes: "Заметки к подходам"
       pr_types:

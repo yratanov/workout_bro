@@ -37,6 +37,8 @@ class AiTrainerActivity < ApplicationRecord
   belongs_to :ai_trainer, optional: true
   belongs_to :workout, optional: true
 
+  has_many :ai_trainer_messages, dependent: :destroy
+
   enum :activity_type, { full_review: 0, workout_review: 1, weekly_report: 2 }
   enum :status, { pending: 0, completed: 1, failed: 2 }
 

@@ -13,6 +13,7 @@ class WorkoutsController < ApplicationController
                   update_notes
                   mark_ai_viewed
                   apply_ai_suggestion
+                  ask_ai
                 ]
 
   # GET /workouts or /workouts.json
@@ -243,6 +244,20 @@ class WorkoutsController < ApplicationController
                  workout: @workout
                }
              )
+  end
+
+  # POST /workouts/1/ask_ai
+  def ask_ai
+    activity = @workout.ai_trainer_activity
+    question = params[:question].to_s.strip
+
+    if activity.blank? || !activity.completed? || question.blank?
+      head :unprocessable_entity
+      return
+    end
+
+    GenerateAiFollowupJob.perform_later(activity:, question:)
+    head :ok
   end
 
   # GET /workouts/1/notes_modal
