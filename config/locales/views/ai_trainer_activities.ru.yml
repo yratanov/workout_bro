@@ -13,3 +13,4 @@ ru:
     show:
       failed: "Ошибка генерации."
       view_workout: "Перейти к тренировке"
+      ai_chat_placeholder: "Задайте уточняющий вопрос..."

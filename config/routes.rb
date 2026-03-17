@@ -70,7 +70,9 @@ Rails.application.routes.draw do
   resources :ai_memories, only: %i[index destroy], path: "ai/memories" do
     collection { post :generate }
   end
-  resources :ai_trainer_activities, only: %i[index show], path: "ai"
+  resources :ai_trainer_activities, only: %i[index show], path: "ai" do
+    member { post :ask_ai }
+  end
   get "stats", to: "stats#index", as: :stats
   get "personal_records", to: "personal_records#index", as: :personal_records
 

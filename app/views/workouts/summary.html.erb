@@ -259,6 +259,7 @@
       <% end %>
       <!-- Follow-up Chat -->
       <% if ai_completed %>
+        <%= turbo_stream_from activity, :ai_chat %>
         <div
           data-controller="ai-chat"
           data-ai-chat-url-value="<%= ask_ai_workout_path(@workout) %>"
@@ -288,7 +289,7 @@
               class="space-y-3 mb-3 max-h-96 overflow-y-auto"
             ></div>
           <% end %>
-          <div id="ai_chat_response_<%= @workout.id %>" data-ai-chat-target="response"></div>
+          <div id="ai_chat_response_<%= activity.id %>" data-ai-chat-target="response"></div>
           <form
             data-ai-chat-target="form"
             data-action="submit->ai-chat#submit"

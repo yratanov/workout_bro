@@ -13,3 +13,4 @@ en:
     show:
       failed: "Generation failed."
       view_workout: "View Workout"
+      ai_chat_placeholder: "Ask a follow-up question..."

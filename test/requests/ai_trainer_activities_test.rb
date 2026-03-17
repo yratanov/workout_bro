@@ -70,4 +70,56 @@ class AiTrainerActivitiesTest < ActionDispatch::IntegrationTest
     get ai_trainer_activity_path(activity)
     assert_response :success
   end
+
+  test "GET /ai/:id shows chat form for completed activities" do
+    sign_in(@user)
+    activity = ai_trainer_activities(:johns_workout_review)
+    get ai_trainer_activity_path(activity)
+    assert_response :success
+    assert_includes response.body, "ai_chat_response_#{activity.id}"
+    assert_includes response.body, "ask_ai"
+  end
+
+  test "POST /ai/:id/ask_ai enqueues followup job" do
+    sign_in(@user)
+    @user.update!(
+      ai_provider: "gemini",
+      ai_model: "gemini-2.0-flash",
+      ai_api_key: "test-key"
+    )
+    @user.ai_trainer.update!(status: :completed, trainer_profile: "Profile.")
+
+    activity = ai_trainer_activities(:johns_workout_review)
+
+    assert_enqueued_with(job: GenerateAiFollowupJob) do
+      post ask_ai_ai_trainer_activity_path(activity),
+           params: {
+             question: "Can you explain more?"
+           }
+    end
+
+    assert_response :ok
+  end
+
+  test "POST /ai/:id/ask_ai returns 422 with blank question" do
+    sign_in(@user)
+    activity = ai_trainer_activities(:johns_workout_review)
+
+    post ask_ai_ai_trainer_activity_path(activity), params: { question: "" }
+
+    assert_response :unprocessable_entity
+  end
+
+  test "POST /ai/:id/ask_ai returns 422 for non-completed activity" do
+    sign_in(@user)
+    activity = ai_trainer_activities(:johns_workout_review)
+    activity.update!(status: :pending)
+
+    post ask_ai_ai_trainer_activity_path(activity),
+         params: {
+           question: "Tell me more"
+         }
+
+    assert_response :unprocessable_entity
+  end
 end

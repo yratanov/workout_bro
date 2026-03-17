@@ -47,6 +47,66 @@
     </div>
   <% end %>
 
+  <% if @activity.completed? && @activity.content.present? %>
+    <%= turbo_stream_from @activity, :ai_chat %>
+    <div
+      data-controller="ai-chat"
+      data-ai-chat-url-value="<%= ask_ai_ai_trainer_activity_path(@activity) %>"
+      class="mt-4 bg-slate-800 rounded-lg p-4 border border-slate-700"
+    >
+      <% messages = @activity.ai_trainer_messages.order(:created_at) %>
+      <% if messages.any? %>
+        <div
+          data-ai-chat-target="messages"
+          class="space-y-3 mb-3 max-h-96 overflow-y-auto"
+        >
+          <% messages.each do |msg| %>
+            <% if msg.user? %>
+              <div class="bg-slate-700 rounded-lg px-3 py-2 text-sm text-white ml-8">
+                <%= msg.content %>
+              </div>
+            <% else %>
+              <div class="text-slate-300 text-sm prose prose-invert prose-sm max-w-none">
+                <%= render_markdown(msg.content) %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div
+          data-ai-chat-target="messages"
+          class="space-y-3 mb-3 max-h-96 overflow-y-auto"
+        ></div>
+      <% end %>
+      <div id="ai_chat_response_<%= @activity.id %>" data-ai-chat-target="response"></div>
+      <form
+        data-ai-chat-target="form"
+        data-action="submit->ai-chat#submit"
+        class="flex gap-2"
+      >
+        <input
+          data-ai-chat-target="input"
+          type="text"
+          placeholder="<%= t(".ai_chat_placeholder") %>"
+          class="
+            flex-1 bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-sm
+            text-white placeholder-slate-400 focus:outline-none focus:border-purple-400
+          "
+        />
+        <button
+          data-ai-chat-target="submit"
+          type="submit"
+          class="
+            bg-purple-500 hover:bg-purple-600 text-white rounded-lg px-3 py-2 text-sm
+            font-medium transition-colors
+          "
+        >
+          <%= icon "send", size: "w-4 h-4" %>
+        </button>
+      </form>
+    </div>
+  <% end %>
+
   <div class="mt-4 flex items-center gap-3">
     <%= button t("shared.buttons.back"),
     type: "link",

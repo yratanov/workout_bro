@@ -10,4 +10,18 @@ class AiTrainerActivitiesController < ApplicationController
     @activity = current_user.ai_trainer_activities.find(params[:id])
     @activity.update!(viewed_at: Time.current) unless @activity.viewed?
   end
+
+  # POST /ai/:id/ask_ai
+  def ask_ai
+    @activity = current_user.ai_trainer_activities.find(params[:id])
+    question = params[:question].to_s.strip
+
+    if !@activity.completed? || question.blank?
+      head :unprocessable_entity
+      return
+    end
+
+    GenerateAiFollowupJob.perform_later(activity: @activity, question:)
+    head :ok
+  end
 end
