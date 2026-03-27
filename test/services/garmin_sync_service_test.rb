@@ -54,7 +54,7 @@ class GarminSyncServiceTest < ActiveSupport::TestCase
     stub_python_script(activities_json)
 
     Open3
-      .expects(:capture2)
+      .expects(:capture3)
       .with(
         "python3",
         GarminSyncService::PYTHON_SCRIPT_PATH,
@@ -62,7 +62,7 @@ class GarminSyncServiceTest < ActiveSupport::TestCase
         @password,
         "7"
       )
-      .returns([activities_json, stub(success?: true, exitstatus: 0)])
+      .returns([activities_json, "", stub(success?: true, exitstatus: 0)])
 
     @service.call
   end
@@ -121,15 +121,17 @@ class GarminSyncServiceTest < ActiveSupport::TestCase
   end
 
   test "raises error when Python script fails" do
-    Open3.stubs(:capture2).returns(["", stub(success?: false, exitstatus: 1)])
+    Open3.stubs(:capture3).returns(
+      ["", "some error", stub(success?: false, exitstatus: 1)]
+    )
 
     assert_raises(GarminSyncService::Error) { @service.call }
   end
 
   test "raises error with message when Python returns error" do
     error_json = { error: "Invalid credentials" }.to_json
-    Open3.stubs(:capture2).returns(
-      [error_json, stub(success?: true, exitstatus: 0)]
+    Open3.stubs(:capture3).returns(
+      [error_json, "", stub(success?: true, exitstatus: 0)]
     )
 
     error = assert_raises(GarminSyncService::Error) { @service.call }
@@ -168,7 +170,7 @@ class GarminSyncServiceTest < ActiveSupport::TestCase
     empty_json = { activities: [] }.to_json
 
     Open3
-      .expects(:capture2)
+      .expects(:capture3)
       .with(
         "python3",
         GarminSyncService::PYTHON_SCRIPT_PATH,
@@ -176,7 +178,7 @@ class GarminSyncServiceTest < ActiveSupport::TestCase
         @password,
         "14"
       )
-      .returns([empty_json, stub(success?: true, exitstatus: 0)])
+      .returns([empty_json, "", stub(success?: true, exitstatus: 0)])
 
     service.call
   end
@@ -201,8 +203,8 @@ class GarminSyncServiceTest < ActiveSupport::TestCase
   end
 
   def stub_python_script(json_output)
-    Open3.stubs(:capture2).returns(
-      [json_output, stub(success?: true, exitstatus: 0)]
+    Open3.stubs(:capture3).returns(
+      [json_output, "", stub(success?: true, exitstatus: 0)]
     )
   end
 end

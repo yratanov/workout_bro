@@ -2,28 +2,58 @@
 """
 Fetch running activities from Garmin Connect and output as JSON.
 Credentials are passed as command-line arguments.
+Uses garth token persistence to avoid repeated logins and rate limits.
 """
 
 import json
+import os
 import sys
 from datetime import datetime, timedelta
 
+import garth
 from garminconnect import Garmin
+
+TOKEN_DIR = os.path.join(os.path.dirname(__file__), "..", "storage", "garmin_tokens")
+
+
+def login_garmin(username, password, force_login=False):
+    """Login to Garmin, reusing saved tokens when possible."""
+    garmin = Garmin(username, password)
+
+    if not force_login and os.path.exists(TOKEN_DIR):
+        try:
+            garmin.garth.load(TOKEN_DIR)
+            garmin.display_name = garmin.garth.profile["displayName"]
+            return garmin
+        except Exception:
+            pass
+
+    garmin.login()
+    os.makedirs(TOKEN_DIR, exist_ok=True)
+    garmin.garth.dump(TOKEN_DIR)
+    return garmin
 
 
 def fetch_garmin_activities(username, password, days=7):
     """Fetch running activities from Garmin Connect."""
-    garmin = Garmin(username, password)
-    garmin.login()
+    garmin = login_garmin(username, password)
 
     end_date = datetime.now()
     start_date = end_date - timedelta(days=days)
 
-    activities = garmin.get_activities_by_date(
-        start_date.strftime("%Y-%m-%d"),
-        end_date.strftime("%Y-%m-%d"),
-        activitytype="running"
-    )
+    try:
+        activities = garmin.get_activities_by_date(
+            start_date.strftime("%Y-%m-%d"),
+            end_date.strftime("%Y-%m-%d"),
+            activitytype="running"
+        )
+    except Exception:
+        garmin = login_garmin(username, password, force_login=True)
+        activities = garmin.get_activities_by_date(
+            start_date.strftime("%Y-%m-%d"),
+            end_date.strftime("%Y-%m-%d"),
+            activitytype="running"
+        )
 
     result = []
     for activity in activities:

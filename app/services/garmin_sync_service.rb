@@ -32,8 +32,8 @@ class GarminSyncService
   end
 
   def fetch_activities
-    output, status =
-      Open3.capture2(
+    output, stderr, status =
+      Open3.capture3(
         "python3",
         PYTHON_SCRIPT_PATH,
         @credential.username,
@@ -42,7 +42,9 @@ class GarminSyncService
       )
 
     unless status.success?
-      raise Error, "Python script failed with status #{status.exitstatus}"
+      detail = stderr.present? ? stderr.lines.last(3).join : output
+      raise Error,
+            "Python script failed (exit #{status.exitstatus}): #{detail.truncate(500)}"
     end
 
     result = JSON.parse(output)
