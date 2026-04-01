@@ -1,9 +1,13 @@
 class GarminSyncService
   PYTHON_SCRIPT_PATH = Rails.root.join("python/sync_garmin.py").to_s
 
+  RATE_LIMIT_COOLDOWN = 24.hours
+
   class Error < StandardError
   end
   class MissingCredentialsError < Error
+  end
+  class RateLimitedError < Error
   end
 
   def initialize(user:, days: 7)
@@ -14,6 +18,7 @@ class GarminSyncService
 
   def call
     validate_credentials!
+    check_rate_limit_cooldown!
     activities = fetch_activities
     result = import_activities(activities)
     log_success(result)
@@ -29,6 +34,23 @@ class GarminSyncService
     if @credential.username.blank? || @credential.encrypted_password.blank?
       raise MissingCredentialsError, "Garmin credentials not configured"
     end
+  end
+
+  def check_rate_limit_cooldown!
+    last_rate_limit =
+      @user
+        .sync_logs
+        .where(log_type: :garmin, status: :failure)
+        .where("message LIKE ?", "%429%")
+        .order(created_at: :desc)
+        .first
+
+    return unless last_rate_limit
+    return if last_rate_limit.created_at < RATE_LIMIT_COOLDOWN.ago
+
+    retry_after = last_rate_limit.created_at + RATE_LIMIT_COOLDOWN
+    raise RateLimitedError,
+          "Garmin account is rate-limited. Next sync allowed after #{retry_after.strftime("%Y-%m-%d %H:%M %Z")}"
   end
 
   def fetch_activities

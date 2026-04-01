@@ -165,6 +165,30 @@ class GarminSyncServiceTest < ActiveSupport::TestCase
     end
   end
 
+  test "raises RateLimitedError when recent 429 failure exists" do
+    @user.sync_logs.create!(
+      log_type: :garmin,
+      status: :failure,
+      message: "Error in request: 429 Client Error: Too Many Requests"
+    )
+
+    error = assert_raises(GarminSyncService::RateLimitedError) { @service.call }
+    assert_includes error.message, "rate-limited"
+  end
+
+  test "allows sync when 429 failure is older than cooldown period" do
+    @user.sync_logs.create!(
+      log_type: :garmin,
+      status: :failure,
+      message: "Error in request: 429 Client Error: Too Many Requests",
+      created_at: 25.hours.ago
+    )
+    stub_python_script({ activities: [] }.to_json)
+
+    result = @service.call
+    assert_equal({ imported: 0, skipped: 0 }, result)
+  end
+
   test "passes custom days to Python script" do
     service = GarminSyncService.new(user: @user, days: 14)
     empty_json = { activities: [] }.to_json

@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 
 import garth
 from garminconnect import Garmin
+from garth.exc import GarthHTTPError
 
 TOKEN_DIR = os.path.join(os.path.dirname(__file__), "..", "storage", "garmin_tokens")
 
@@ -42,6 +43,16 @@ def fetch_garmin_activities(username, password, days=7):
     start_date = end_date - timedelta(days=days)
 
     try:
+        activities = garmin.get_activities_by_date(
+            start_date.strftime("%Y-%m-%d"),
+            end_date.strftime("%Y-%m-%d"),
+            activitytype="running"
+        )
+    except GarthHTTPError as e:
+        if "429" in str(e):
+            raise  # Don't retry on rate limit — retrying makes it worse
+        # Only re-login on auth errors (401/403), not on all failures
+        garmin = login_garmin(username, password, force_login=True)
         activities = garmin.get_activities_by_date(
             start_date.strftime("%Y-%m-%d"),
             end_date.strftime("%Y-%m-%d"),
