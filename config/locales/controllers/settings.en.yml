@@ -10,6 +10,13 @@ en:
         sync_success: "Sync complete: %{imported} imported, %{skipped} skipped"
         sync_failed: "Sync failed: %{error}"
         missing_credentials: "Please configure your Garmin username and password first"
+      strava:
+        connected: "Strava account connected successfully"
+        disconnected: "Strava account disconnected"
+        sync_success: "Sync complete: %{imported} imported, %{skipped} skipped"
+        sync_failed: "Sync failed: %{error}"
+        missing_credentials: "Please connect your Strava account first"
+        oauth_error: "Failed to connect Strava: %{error}"
       ai:
         updated: "AI settings updated successfully"
         trainer_created: "AI trainer creation started. This may take a minute."

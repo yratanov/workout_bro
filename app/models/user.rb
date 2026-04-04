@@ -82,4 +82,8 @@ class User < ApplicationRecord
   def garmin_credential
     third_party_credentials.find_or_initialize_by(provider: "garmin")
   end
+
+  def strava_credential
+    third_party_credentials.find_or_initialize_by(provider: "strava")
+  end
 end

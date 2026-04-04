@@ -1,0 +1,105 @@
+<% content_for :title, t(".title") %>
+
+<div class="w-full max-w-4xl">
+  <h1 class="font-bold text-2xl mb-4 sm:mb-6"><%= t("settings.profile.show.title") %></h1>
+
+  <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
+    <%= render SettingsMenuComponent.new(current_page: :strava) %>
+
+    <div class="flex-1 min-w-0">
+      <div class="bg-slate-800 rounded-lg p-4 sm:p-6">
+        <h2 class="font-semibold text-lg mb-4"><%= t(".strava_sync") %></h2>
+        <p class="text-slate-400 text-sm mb-6"><%= t(".description") %></p>
+
+        <% if @credential.oauth_configured? %>
+          <div class="flex items-center gap-3 mb-6">
+            <span
+              class="
+                inline-flex items-center gap-1.5 text-sm font-medium text-emerald-400
+              "
+            >
+              <span class="w-2 h-2 bg-emerald-400 rounded-full"></span>
+              <%= t(".connected_status") %>
+            </span>
+          </div>
+
+          <%= button t(".disconnect_button"),
+          type: "link",
+          style: "link_danger",
+          route: disconnect_settings_strava_path,
+          method: :delete,
+          data: {
+            turbo_confirm: t(".disconnect_confirm"),
+          } %>
+        <% else %>
+          <div class="flex items-center gap-3 mb-6">
+            <span
+              class="
+                inline-flex items-center gap-1.5 text-sm font-medium text-slate-400
+              "
+            >
+              <span class="w-2 h-2 bg-slate-500 rounded-full"></span>
+              <%= t(".not_connected") %>
+            </span>
+          </div>
+
+          <%= button t(".connect_button"),
+          type: "link",
+          style: "primary",
+          route: connect_settings_strava_path %>
+        <% end %>
+
+        <% if @credential.oauth_configured? %>
+          <div class="mt-6 pt-6 border-t border-slate-700">
+            <h3 class="font-semibold text-lg mb-2"><%= t(".sync_section") %></h3>
+            <p class="text-slate-400 text-sm mb-4"><%= t(".sync_description") %></p>
+            <%= button_to sync_settings_strava_path, method: :post, class: "inline-flex" do %>
+              <span
+                class="
+                  bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg px-6
+                  py-2.5 transition shadow-lg hover:shadow-emerald-500/25
+                "
+              >
+                <%= t(".sync_button") %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @sync_logs.any? %>
+        <div class="bg-slate-800 rounded-lg p-4 sm:p-6 mt-6">
+          <h2 class="font-semibold text-lg mb-4"><%= t(".sync_history") %></h2>
+          <p class="text-slate-400 text-sm mb-6"><%= t(".sync_history_description") %></p>
+
+          <div class="space-y-3">
+            <% @sync_logs.each do |log| %>
+              <div class="bg-slate-700/50 rounded-lg p-3 sm:p-4">
+                <div
+                  class="
+                    flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4
+                  "
+                >
+                  <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                      <span class="font-medium text-slate-200"><%= t(".log_types.#{log.log_type}") %></span>
+                      <% if log.success? %>
+                        <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded"><%= t(".statuses.success") %></span>
+                      <% else %>
+                        <span class="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded"><%= t(".statuses.failure") %></span>
+                      <% end %>
+                    </div>
+                    <p class="text-sm text-slate-400 break-words"><%= log.message %></p>
+                  </div>
+                  <span class="text-xs text-slate-500 whitespace-nowrap">
+                    <%= l(log.created_at, format: :short) %>
+                  </span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

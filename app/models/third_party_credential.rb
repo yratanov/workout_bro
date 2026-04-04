@@ -4,8 +4,11 @@
 # Database name: primary
 #
 #  id                 :integer          not null, primary key
+#  access_token       :string
 #  encrypted_password :string
 #  provider           :string           not null
+#  refresh_token      :string
+#  token_expires_at   :datetime
 #  username           :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
@@ -21,7 +24,7 @@
 #
 
 class ThirdPartyCredential < ApplicationRecord
-  PROVIDERS = %w[garmin].freeze
+  PROVIDERS = %w[garmin strava].freeze
 
   belongs_to :user
 
@@ -29,6 +32,8 @@ class ThirdPartyCredential < ApplicationRecord
   validates :provider, uniqueness: { scope: :user_id }
 
   encrypts :encrypted_password
+  encrypts :access_token
+  encrypts :refresh_token
 
   scope :for_provider, ->(provider) { where(provider: provider) }
 
@@ -38,5 +43,15 @@ class ThirdPartyCredential < ApplicationRecord
 
   def password
     nil
+  end
+
+  def oauth_configured?
+    access_token.present? && refresh_token.present?
+  end
+
+  def token_expired?
+    return true if token_expires_at.blank?
+
+    token_expires_at < 5.minutes.from_now
   end
 end

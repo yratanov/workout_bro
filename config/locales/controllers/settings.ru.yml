@@ -10,6 +10,13 @@ ru:
         sync_success: "Синхронизация завершена: %{imported} импортировано, %{skipped} пропущено"
         sync_failed: "Ошибка синхронизации: %{error}"
         missing_credentials: "Сначала настройте имя пользователя и пароль Garmin"
+      strava:
+        connected: "Аккаунт Strava успешно подключён"
+        disconnected: "Аккаунт Strava отключён"
+        sync_success: "Синхронизация завершена: %{imported} импортировано, %{skipped} пропущено"
+        sync_failed: "Ошибка синхронизации: %{error}"
+        missing_credentials: "Сначала подключите ваш аккаунт Strava"
+        oauth_error: "Не удалось подключить Strava: %{error}"
       ai:
         updated: "Настройки ИИ успешно обновлены"
         trainer_created: "Создание ИИ тренера запущено. Это может занять минуту."

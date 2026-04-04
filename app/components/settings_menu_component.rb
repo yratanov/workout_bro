@@ -13,6 +13,7 @@ class SettingsMenuComponent < ViewComponent::Base
                { key: :profile, path: settings_profile_path, icon: "user" },
                { key: :weights, path: settings_weights_path, icon: "dumbbell" },
                { key: :garmin, path: settings_garmin_path, icon: "activity" },
+               { key: :strava, path: settings_strava_path, icon: "activity" },
                { key: :imports, path: settings_imports_path, icon: "upload" },
                { key: :exports, path: settings_exports_path, icon: "download" },
                { key: :ai, path: settings_ai_path, icon: "sparkles" }

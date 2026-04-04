@@ -26,7 +26,7 @@
 class SyncLog < ApplicationRecord
   belongs_to :user
 
-  enum :log_type, { garmin: 0 }
+  enum :log_type, { garmin: 0, strava: 1 }
   enum :status, { success: 0, failure: 1 }
 
   validates :log_type, presence: true

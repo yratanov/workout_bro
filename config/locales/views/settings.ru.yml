@@ -4,6 +4,7 @@ ru:
       profile: "Профиль"
       weights: "Веса"
       garmin: "Garmin"
+      strava: "Strava"
       imports: "Импорт"
       exports: "Экспорт"
       ai: "ИИ"
@@ -49,6 +50,26 @@ ru:
         sync_history_description: "Просмотр истории операций синхронизации."
         log_types:
           garmin: "Синхронизация Garmin"
+        statuses:
+          success: "Успешно"
+          failure: "Ошибка"
+    strava:
+      show:
+        title: "Настройки Strava"
+        strava_sync: "Strava"
+        description: "Подключите ваш аккаунт Strava для автоматической синхронизации беговых активностей."
+        connect_button: "Подключить Strava"
+        disconnect_button: "Отключить"
+        disconnect_confirm: "Вы уверены, что хотите отключить Strava?"
+        connected_status: "Подключено"
+        not_connected: "Не подключено"
+        sync_section: "Синхронизация активностей"
+        sync_description: "Вручную синхронизировать беговые активности из Strava."
+        sync_button: "Синхронизировать"
+        sync_history: "История синхронизации"
+        sync_history_description: "Просмотр истории операций синхронизации."
+        log_types:
+          strava: "Синхронизация Strava"
         statuses:
           success: "Успешно"
           failure: "Ошибка"

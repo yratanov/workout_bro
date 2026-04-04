@@ -4,6 +4,7 @@ en:
       profile: "Profile"
       weights: "Weights"
       garmin: "Garmin"
+      strava: "Strava"
       imports: "Import"
       exports: "Export"
       ai: "AI"
@@ -49,6 +50,26 @@ en:
         sync_history_description: "View the history of your sync operations."
         log_types:
           garmin: "Garmin Sync"
+        statuses:
+          success: "Success"
+          failure: "Failed"
+    strava:
+      show:
+        title: "Strava Settings"
+        strava_sync: "Strava"
+        description: "Connect your Strava account to automatically sync your running activities."
+        connect_button: "Connect with Strava"
+        disconnect_button: "Disconnect"
+        disconnect_confirm: "Are you sure you want to disconnect Strava?"
+        connected_status: "Connected"
+        not_connected: "Not connected"
+        sync_section: "Sync Activities"
+        sync_description: "Manually sync your running activities from Strava."
+        sync_button: "Sync Now"
+        sync_history: "Sync History"
+        sync_history_description: "View the history of your sync operations."
+        log_types:
+          strava: "Strava Sync"
         statuses:
           success: "Success"
           failure: "Failed"
