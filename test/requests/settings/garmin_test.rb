@@ -144,6 +144,41 @@ class Settings::GarminTest < ActionDispatch::IntegrationTest
     assert_equal "other_user", other_credential.reload.username
   end
 
+  test "PATCH /settings/garmin/toggle_sync enables sync when disabled" do
+    @user.garmin_credential.update!(
+      username: "garmin_user",
+      password: "secret123",
+      sync_enabled: false
+    )
+
+    patch toggle_sync_settings_garmin_path
+    assert_redirected_to settings_garmin_path
+
+    assert @user.garmin_credential.reload.sync_enabled?
+  end
+
+  test "PATCH /settings/garmin/toggle_sync disables sync when enabled" do
+    @user.garmin_credential.update!(
+      username: "garmin_user",
+      password: "secret123"
+    )
+    assert @user.garmin_credential.sync_enabled?
+
+    patch toggle_sync_settings_garmin_path
+    assert_redirected_to settings_garmin_path
+
+    assert_not @user.garmin_credential.reload.sync_enabled?
+  end
+
+  test "GET /settings/garmin shows auto-sync toggle when credentials configured" do
+    @user.garmin_credential.update!(
+      username: "garmin_user",
+      password: "secret123"
+    )
+    get settings_garmin_path
+    assert_includes response.body, "Daily Auto-Sync"
+  end
+
   test "GET /settings/garmin redirects to login when not authenticated" do
     delete session_path
     get settings_garmin_path
@@ -155,8 +190,8 @@ class Settings::GarminTest < ActionDispatch::IntegrationTest
       username: "garmin_user",
       password: "secret123"
     )
-    Open3.stubs(:capture2).returns(
-      [{ activities: [] }.to_json, stub(success?: true, exitstatus: 0)]
+    Open3.stubs(:capture3).returns(
+      [{ activities: [] }.to_json, "", stub(success?: true, exitstatus: 0)]
     )
 
     post sync_settings_garmin_path
@@ -179,8 +214,8 @@ class Settings::GarminTest < ActionDispatch::IntegrationTest
         }
       ]
     }.to_json
-    Open3.stubs(:capture2).returns(
-      [activities_json, stub(success?: true, exitstatus: 0)]
+    Open3.stubs(:capture3).returns(
+      [activities_json, "", stub(success?: true, exitstatus: 0)]
     )
 
     post sync_settings_garmin_path
@@ -195,9 +230,10 @@ class Settings::GarminTest < ActionDispatch::IntegrationTest
       username: "garmin_user",
       password: "secret123"
     )
-    Open3.stubs(:capture2).returns(
+    Open3.stubs(:capture3).returns(
       [
         { error: "Invalid credentials" }.to_json,
+        "",
         stub(success?: true, exitstatus: 0)
       ]
     )

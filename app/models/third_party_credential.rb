@@ -8,6 +8,7 @@
 #  encrypted_password :string
 #  provider           :string           not null
 #  refresh_token      :string
+#  sync_enabled       :boolean          default(TRUE), not null
 #  token_expires_at   :datetime
 #  username           :string
 #  created_at         :datetime         not null

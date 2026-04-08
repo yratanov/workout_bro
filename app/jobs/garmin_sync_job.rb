@@ -4,7 +4,7 @@ class GarminSyncJob < ApplicationJob
   def perform
     User.find_each do |user|
       credential = user.garmin_credential
-      next if credential.username.blank? || credential.encrypted_password.blank?
+      next if credential.username.blank? || credential.encrypted_password.blank? || !credential.sync_enabled?
 
       Rails.logger.info "Syncing Garmin activities for #{user.email}..."
 

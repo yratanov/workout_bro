@@ -89,6 +89,32 @@ class Settings::StravaTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "connect your Strava account"
   end
 
+  test "PATCH /settings/strava/toggle_sync enables sync when disabled" do
+    connect_strava
+    @user.strava_credential.update!(sync_enabled: false)
+
+    patch toggle_sync_settings_strava_path
+    assert_redirected_to settings_strava_path
+
+    assert @user.strava_credential.reload.sync_enabled?
+  end
+
+  test "PATCH /settings/strava/toggle_sync disables sync when enabled" do
+    connect_strava
+    assert @user.strava_credential.sync_enabled?
+
+    patch toggle_sync_settings_strava_path
+    assert_redirected_to settings_strava_path
+
+    assert_not @user.strava_credential.reload.sync_enabled?
+  end
+
+  test "GET /settings/strava shows auto-sync toggle when connected" do
+    connect_strava
+    get settings_strava_path
+    assert_includes response.body, "Daily Auto-Sync"
+  end
+
   test "GET /settings/strava redirects to login when not authenticated" do
     delete session_path
     get settings_strava_path

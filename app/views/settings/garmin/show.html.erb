@@ -40,6 +40,43 @@
 
         <% if @credential.persisted? && @credential.username.present? && @credential.encrypted_password.present? %>
           <div class="mt-6 pt-6 border-t border-slate-700">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-semibold text-lg"><%= t(".auto_sync") %></h3>
+                <p class="text-slate-400 text-sm"><%= t(".auto_sync_description") %></p>
+              </div>
+              <%= button_to toggle_sync_settings_garmin_path, method: :patch, class: "inline-flex" do %>
+                <% if @credential.sync_enabled? %>
+                  <span
+                    class="
+                      relative inline-flex h-6 w-11 items-center rounded-full bg-emerald-600
+                      transition
+                    "
+                  >
+                    <span
+                      class="
+                        inline-block h-4 w-4 transform rounded-full bg-white transition translate-x-6
+                      "
+                    ></span>
+                  </span>
+                <% else %>
+                  <span
+                    class="
+                      relative inline-flex h-6 w-11 items-center rounded-full bg-slate-600 transition
+                    "
+                  >
+                    <span
+                      class="
+                        inline-block h-4 w-4 transform rounded-full bg-white transition translate-x-1
+                      "
+                    ></span>
+                  </span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-6 border-t border-slate-700">
             <h3 class="font-semibold text-lg mb-2"><%= t(".sync_section") %></h3>
             <p class="text-slate-400 text-sm mb-4"><%= t(".sync_description") %></p>
             <%= button_to sync_settings_garmin_path, method: :post, class: "inline-flex" do %>

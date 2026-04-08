@@ -5,12 +5,18 @@ en:
         updated: "Profile updated successfully"
       weights:
         updated: "Weight settings updated successfully"
+      shared:
+        sync_status:
+          enabled: "enabled"
+          disabled: "disabled"
       garmin:
         updated: "Garmin credentials updated successfully"
+        sync_toggled: "Daily auto-sync %{status}"
         sync_success: "Sync complete: %{imported} imported, %{skipped} skipped"
         sync_failed: "Sync failed: %{error}"
         missing_credentials: "Please configure your Garmin username and password first"
       strava:
+        sync_toggled: "Daily auto-sync %{status}"
         connected: "Strava account connected successfully"
         disconnected: "Strava account disconnected"
         sync_success: "Sync complete: %{imported} imported, %{skipped} skipped"

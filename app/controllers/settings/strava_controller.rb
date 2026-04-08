@@ -51,6 +51,21 @@ module Settings
                   notice: I18n.t("controllers.settings.strava.disconnected")
     end
 
+    def toggle_sync
+      credential = current_user.strava_credential
+      credential.update!(sync_enabled: !credential.sync_enabled?)
+
+      redirect_to settings_strava_path,
+                  notice:
+                    I18n.t(
+                      "controllers.settings.strava.sync_toggled",
+                      status:
+                        I18n.t(
+                          "controllers.settings.shared.sync_status.#{credential.sync_enabled? ? "enabled" : "disabled"}"
+                        )
+                    )
+    end
+
     def sync
       service = StravaSyncService.new(user: current_user)
       result = service.call

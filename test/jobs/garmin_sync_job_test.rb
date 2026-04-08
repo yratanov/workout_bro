@@ -24,6 +24,18 @@ class GarminSyncJobTest < ActiveJob::TestCase
     GarminSyncJob.perform_now
   end
 
+  test "skips user with sync_enabled false" do
+    john.garmin_credential.update!(
+      username: "garmin_user",
+      password: "secret123",
+      sync_enabled: false
+    )
+
+    GarminSyncService.expects(:new).never
+
+    GarminSyncJob.perform_now
+  end
+
   test "skips user with blank username" do
     john.garmin_credential.update!(username: "", password: "secret123")
 

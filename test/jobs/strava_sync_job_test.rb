@@ -25,6 +25,19 @@ class StravaSyncJobTest < ActiveJob::TestCase
     StravaSyncJob.perform_now
   end
 
+  test "skips user with sync_enabled false" do
+    john.strava_credential.update!(
+      access_token: "token",
+      refresh_token: "refresh",
+      token_expires_at: 1.hour.from_now,
+      sync_enabled: false
+    )
+
+    StravaSyncService.expects(:new).never
+
+    StravaSyncJob.perform_now
+  end
+
   test "skips user without oauth tokens" do
     StravaSyncService.expects(:new).never
 

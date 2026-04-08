@@ -4,7 +4,7 @@ class StravaSyncJob < ApplicationJob
   def perform
     User.find_each do |user|
       credential = user.strava_credential
-      next unless credential.oauth_configured?
+      next unless credential.oauth_configured? && credential.sync_enabled?
 
       Rails.logger.info "Syncing Strava activities for #{user.email}..."
 

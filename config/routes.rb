@@ -93,12 +93,14 @@ Rails.application.routes.draw do
     resource :weights, only: %i[show update], controller: "weights"
     resource :garmin, only: %i[show update], controller: "garmin" do
       post :sync
+      patch :toggle_sync
     end
     resource :strava, only: %i[show], controller: "strava" do
       get :connect
       get :callback
       delete :disconnect
       post :sync
+      patch :toggle_sync
     end
     resource :imports, only: %i[show create], controller: "imports" do
       get ":id/status", action: :status, as: :status, on: :collection

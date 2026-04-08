@@ -19,6 +19,21 @@ module Settings
       end
     end
 
+    def toggle_sync
+      credential = current_user.garmin_credential
+      credential.update!(sync_enabled: !credential.sync_enabled?)
+
+      redirect_to settings_garmin_path,
+                  notice:
+                    I18n.t(
+                      "controllers.settings.garmin.sync_toggled",
+                      status:
+                        I18n.t(
+                          "controllers.settings.shared.sync_status.#{credential.sync_enabled? ? "enabled" : "disabled"}"
+                        )
+                    )
+    end
+
     def sync
       service = GarminSyncService.new(user: current_user)
       result = service.call
