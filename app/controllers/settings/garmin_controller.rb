@@ -4,7 +4,8 @@ module Settings
   class GarminController < ApplicationController
     def show
       @credential = current_user.garmin_credential
-      @sync_logs = current_user.sync_logs.recent.limit(50)
+      @sync_logs =
+        current_user.sync_logs.where(log_type: :garmin).recent.limit(50)
     end
 
     def update
