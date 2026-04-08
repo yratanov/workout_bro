@@ -134,9 +134,11 @@ class WorkoutsTest < ApplicationSystemTestCase
     click_button "Start Workout"
 
     click_button "Pause"
+    assert_no_button "Pause"
     assert_button "Resume"
 
     click_button "Resume"
+    assert_no_button "Resume"
     assert_button "Pause"
   end
 
