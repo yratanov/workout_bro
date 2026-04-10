@@ -81,6 +81,125 @@
       <% end %>
     </div>
 
+    <% if @chart_data[:labels]&.size.to_i > 1 %>
+      <h2 class="text-lg font-semibold mb-4"><%= t(".progression") %></h2>
+      <div class="grid gap-4 mb-6">
+        <% if @exercise.with_weights %>
+          <div class="bg-slate-800 rounded-lg p-4">
+            <h3 class="text-sm font-medium text-slate-400 mb-2"><%= t(".max_weight_chart") %></h3>
+            <div class="h-48">
+              <canvas
+                data-controller="chart"
+                data-chart-type-value="line"
+                data-chart-labels-value="<%= @chart_data[:labels].to_json %>"
+                data-chart-datasets-value="<%= [{
+                  label: t(".weight_kg"),
+                  data: @chart_data[:max_weight],
+                  borderColor: 'rgb(59, 130, 246)',
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                  fill: true,
+                  tension: 0.3,
+                  pointRadius: 3,
+                  pointBackgroundColor: 'rgb(59, 130, 246)'
+                }].to_json %>"
+                data-chart-options-value="<%= {
+                  scales: {
+                    y: {
+                      beginAtZero: false,
+                      title: { display: true, text: t(".weight_kg"), color: '#94a3b8' },
+                      ticks: { color: '#94a3b8' },
+                      grid: { color: '#334155' }
+                    },
+                    x: {
+                      ticks: { color: '#94a3b8', maxRotation: 45 },
+                      grid: { color: '#334155' }
+                    }
+                  },
+                  plugins: {
+                    legend: { display: false }
+                  }
+                }.to_json %>"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 rounded-lg p-4">
+            <h3 class="text-sm font-medium text-slate-400 mb-2"><%= t(".volume_chart") %></h3>
+            <div class="h-48">
+              <canvas
+                data-controller="chart"
+                data-chart-type-value="bar"
+                data-chart-labels-value="<%= @chart_data[:labels].to_json %>"
+                data-chart-datasets-value="<%= [{
+                  label: t(".volume_kg"),
+                  data: @chart_data[:volume],
+                  backgroundColor: 'rgba(34, 197, 94, 0.7)',
+                  borderColor: 'rgb(34, 197, 94)',
+                  borderWidth: 1,
+                  borderRadius: 4
+                }].to_json %>"
+                data-chart-options-value="<%= {
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      title: { display: true, text: t(".volume_kg"), color: '#94a3b8' },
+                      ticks: { color: '#94a3b8' },
+                      grid: { color: '#334155' }
+                    },
+                    x: {
+                      ticks: { color: '#94a3b8', maxRotation: 45 },
+                      grid: { color: '#334155' }
+                    }
+                  },
+                  plugins: {
+                    legend: { display: false }
+                  }
+                }.to_json %>"
+              ></canvas>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="bg-slate-800 rounded-lg p-4">
+          <h3 class="text-sm font-medium text-slate-400 mb-2"><%= t(".best_reps_chart") %></h3>
+          <div class="h-48">
+            <canvas
+              data-controller="chart"
+              data-chart-type-value="line"
+              data-chart-labels-value="<%= @chart_data[:labels].to_json %>"
+              data-chart-datasets-value="<%= [{
+                label: t(".reps"),
+                data: @chart_data[:best_reps],
+                borderColor: 'rgb(168, 85, 247)',
+                backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 3,
+                pointBackgroundColor: 'rgb(168, 85, 247)'
+              }].to_json %>"
+              data-chart-options-value="<%= {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: { display: true, text: t(".reps"), color: '#94a3b8' },
+                    ticks: { color: '#94a3b8', stepSize: 1 },
+                    grid: { color: '#334155' }
+                  },
+                  x: {
+                    ticks: { color: '#94a3b8', maxRotation: 45 },
+                    grid: { color: '#334155' }
+                  }
+                },
+                plugins: {
+                  legend: { display: false }
+                }
+              }.to_json %>"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <h2 class="text-lg font-semibold mb-4"><%= t(".previous_results") %></h2>
 
     <div class="space-y-3">

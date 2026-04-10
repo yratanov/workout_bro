@@ -16,7 +16,9 @@ class ExercisesController < ApplicationController
         .where(exercise: @exercise)
         .where.not(ended_at: nil)
         .order(created_at: :desc)
-        .limit(50)
+
+    @chart_data = build_chart_data(@workout_sets, @exercise)
+    @workout_sets = @workout_sets.limit(50)
   end
 
   # GET /exercises/new
@@ -83,6 +85,36 @@ class ExercisesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_exercise
     @exercise = Current.user.exercises.find(params.expect(:id))
+  end
+
+  def build_chart_data(workout_sets, exercise)
+    grouped = workout_sets.group_by { |ws| ws.created_at.to_date }
+    dates = grouped.keys.sort
+    return {} if dates.empty?
+
+    max_weight_data = []
+    volume_data = []
+    best_reps_data = []
+    labels = dates.map { |d| I18n.l(d, format: :short) }
+
+    dates.each do |date|
+      all_reps = grouped[date].flat_map(&:workout_reps)
+
+      if exercise.with_weights
+        weights = all_reps.filter_map(&:weight)
+        max_weight_data << (weights.max || 0)
+        volume_data << all_reps.sum { |r| (r.weight || 0) * r.reps }
+      end
+
+      best_reps_data << (all_reps.map(&:reps).max || 0)
+    end
+
+    data = { labels: labels, best_reps: best_reps_data }
+    if exercise.with_weights
+      data[:max_weight] = max_weight_data
+      data[:volume] = volume_data
+    end
+    data
   end
 
   # Only allow a list of trusted parameters through.
