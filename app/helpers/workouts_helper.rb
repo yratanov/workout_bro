@@ -11,7 +11,7 @@ module WorkoutsHelper
   def run_pace(workout)
     return unless workout.run?
 
-    pace_seconds = workout.pace_per_km
+    pace_seconds = workout.pace
     return unless pace_seconds
 
     minutes = (pace_seconds / 60).floor

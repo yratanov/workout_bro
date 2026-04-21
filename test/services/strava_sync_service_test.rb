@@ -48,7 +48,7 @@ class StravaSyncServiceTest < ActiveSupport::TestCase
     assert_equal @user, workout.user
     assert_equal "run", workout.workout_type
     assert_equal 5000, workout.distance
-    assert_equal 1850, workout.time_in_seconds # elapsed_time, recalculated by model callback
+    assert_equal 1800, workout.time_in_seconds # moving_time (excludes pauses)
     assert_equal 156, workout.avg_heart_rate
     assert_equal 178, workout.max_heart_rate
     assert_equal 170, workout.avg_cadence # Strava cadence doubled

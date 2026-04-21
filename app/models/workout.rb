@@ -94,6 +94,8 @@ class Workout < ApplicationRecord
   end
 
   def fill_in_time_in_seconds
+    return if time_in_seconds.present?
+
     if started_at.present? && ended_at.present?
       elapsed = (ended_at - started_at).to_i
       self.time_in_seconds = elapsed - (total_paused_seconds || 0)
