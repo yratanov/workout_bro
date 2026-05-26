@@ -23,7 +23,13 @@ module Settings
     end
 
     def profile_params
-      params.require(:user).permit(:first_name, :last_name, :email, :locale)
+      params.require(:user).permit(
+        :first_name,
+        :last_name,
+        :email,
+        :locale,
+        :max_heart_rate
+      )
     end
   end
 end

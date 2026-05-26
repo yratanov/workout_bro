@@ -62,6 +62,27 @@ class Settings::ProfileTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "PATCH /settings/profile updates max heart rate" do
+    patch settings_profile_path, params: { user: { max_heart_rate: "185" } }
+    @user.reload
+    assert_equal 185, @user.max_heart_rate
+    assert_redirected_to settings_profile_path
+  end
+
+  test "PATCH /settings/profile clears max heart rate when blank" do
+    @user.update!(max_heart_rate: 180)
+    patch settings_profile_path, params: { user: { max_heart_rate: "" } }
+    @user.reload
+    assert_nil @user.max_heart_rate
+  end
+
+  test "PATCH /settings/profile rejects implausible max heart rate" do
+    patch settings_profile_path, params: { user: { max_heart_rate: "300" } }
+    @user.reload
+    assert_nil @user.max_heart_rate
+    assert_response :unprocessable_entity
+  end
+
   test "GET /settings/profile redirects to login when not authenticated" do
     delete session_path
     get settings_profile_path

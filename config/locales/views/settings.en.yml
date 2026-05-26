@@ -21,6 +21,10 @@ en:
         save: "Save Changes"
         language_section: "Language"
         language_label: "Select Language"
+        heart_rate_section: "Heart Rate"
+        max_heart_rate_label: "Max Heart Rate (bpm)"
+        max_heart_rate_placeholder: "e.g. 185"
+        max_heart_rate_hint: "Your maximum heart rate is used to estimate training zones (Zone 2 ≈ 60-70% of max). Leave blank to fall back to your highest observed peak across runs."
     weights:
       show:
         title: "Weight Settings"

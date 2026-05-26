@@ -34,6 +34,10 @@ class AiWorkoutFeedbackService
   end
 
   def instruction_section
+    @workout.run? ? run_instruction_section : strength_instruction_section
+  end
+
+  def strength_instruction_section
     has_routine = @workout.workout_routine_day.present?
 
     <<~PROMPT.strip
@@ -48,6 +52,22 @@ class AiWorkoutFeedbackService
       Keep your feedback under 200 words. Use markdown formatting. Do not use headers.
 
       #{suggestions_instruction if has_routine}
+      Respond in #{@user.locale == "ru" ? "Russian" : "English"}.
+    PROMPT
+  end
+
+  def run_instruction_section
+    <<~PROMPT.strip
+      ## Task
+      Analyze this run and provide actionable insights. Focus on:
+      - Intensity assessment: infer the training zone from HR (use "Avg HR % of max" if present: <60% Z1, 60-70% Z2 easy aerobic, 70-80% Z3, 80-90% Z4 threshold, 90%+ Z5) or from pace. Was this an easy aerobic run, tempo, threshold, or intervals?
+      - Whether the intensity fits a sensible training week. If recent runs have all been in Z3+ without easy Z2 days, flag the lack of aerobic base work and explain why Z2 matters (mitochondrial density, fat oxidation, cardiac stroke volume).
+      - Pace, HR drift, cadence, and elevation observations the user might not spot.
+      - What to consider for the next run.
+
+      Do not restate the raw numbers. Provide analysis the user can't easily see themselves.
+      Keep your feedback under 200 words. Use markdown formatting. Do not use headers.
+
       Respond in #{@user.locale == "ru" ? "Russian" : "English"}.
     PROMPT
   end

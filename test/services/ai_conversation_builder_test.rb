@@ -31,6 +31,15 @@ class AiConversationBuilderTest < ActiveSupport::TestCase
     assert_match(/A balanced fitness trainer\./, result[:system_instruction])
   end
 
+  test "system_instruction teaches heart-rate zones including Zone 2" do
+    result = AiConversationBuilder.new(@ai_trainer).build
+    instruction = result[:system_instruction]
+
+    assert_match(/Zone 2/, instruction)
+    assert_match(/HRmax/, instruction)
+    assert_match(/aerobic base/i, instruction)
+  end
+
   test "includes latest full review in system_instruction" do
     result = AiConversationBuilder.new(@ai_trainer).build
     assert_match(/Latest Training Review/, result[:system_instruction])

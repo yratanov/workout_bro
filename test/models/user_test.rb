@@ -13,6 +13,7 @@ require "test_helper"
 #  first_name      :string
 #  last_name       :string
 #  locale          :string           default("en")
+#  max_heart_rate  :integer
 #  password_digest :string           not null
 #  role            :integer          default("user"), not null
 #  setup_completed :boolean          default(FALSE), not null

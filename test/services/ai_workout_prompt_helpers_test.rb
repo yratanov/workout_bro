@@ -112,6 +112,51 @@ class AiWorkoutPromptHelpersTest < ActiveSupport::TestCase
     assert_includes result, "Notes: Felt great today"
   end
 
+  test "format_run_summary uses user-set max HR when available" do
+    workout = workouts(:run_workout)
+    workout.update!(avg_heart_rate: 130, max_heart_rate: 175)
+    workout.user.update!(max_heart_rate: 200)
+
+    result = @helper.format_run_summary(workout)
+
+    assert_includes result, "Avg HR % of max: 65% (user-set max HR: 200 bpm)"
+  end
+
+  test "format_run_summary falls back to observed peak when user max HR not set" do
+    workout = workouts(:run_workout)
+    workout.update!(avg_heart_rate: 140, max_heart_rate: 165)
+    workout.user.update!(max_heart_rate: nil)
+
+    Workout.create!(
+      user: workout.user,
+      workout_type: :run,
+      started_at: 5.days.ago,
+      ended_at: 5.days.ago + 40.minutes,
+      distance: 8000,
+      time_in_seconds: 2400,
+      max_heart_rate: 200
+    )
+
+    result = @helper.format_run_summary(workout)
+
+    assert_includes result,
+                    "Avg HR % of max: 70% (lifetime observed peak: 200 bpm, lower bound)"
+  end
+
+  test "format_run_summary omits HR % of max when no max HR is known anywhere" do
+    workout = workouts(:run_workout)
+    workout.update!(avg_heart_rate: 140, max_heart_rate: nil)
+    workout.user.update!(max_heart_rate: nil)
+    Workout
+      .where(user: workout.user, workout_type: :run)
+      .where.not(id: workout.id)
+      .destroy_all
+
+    result = @helper.format_run_summary(workout)
+
+    refute_includes result, "Avg HR % of max"
+  end
+
   # format_workout_exercises tests
 
   test "format_workout_exercises formats exercise data with reps and weight" do

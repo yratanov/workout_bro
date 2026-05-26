@@ -132,4 +132,21 @@ class AiWorkoutFeedbackServiceTest < ActiveSupport::TestCase
     assert_includes prompt, "Run"
     assert_includes prompt, "5.0km"
   end
+
+  test "run workout prompt asks AI to assess intensity / training zone" do
+    run_workout =
+      Workout.create!(
+        user: @user,
+        workout_type: :run,
+        started_at: 1.hour.ago,
+        ended_at: Time.current,
+        distance: 5000,
+        time_in_seconds: 1800
+      )
+
+    prompt = AiWorkoutFeedbackService.new(run_workout).prompt
+
+    assert_includes prompt, "Intensity assessment"
+    assert_match(/Z2/, prompt)
+  end
 end

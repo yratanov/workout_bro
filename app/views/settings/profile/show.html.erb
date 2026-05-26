@@ -41,6 +41,29 @@
       </div>
 
       <div class="bg-slate-800 rounded-lg p-4 sm:p-6 mt-4">
+        <h2 class="font-semibold text-lg mb-4"><%= t(".heart_rate_section") %></h2>
+
+        <p class="text-sm text-slate-400 mb-4">
+          <%= t(".max_heart_rate_hint") %>
+        </p>
+
+        <%= app_form_with model: @user, url: settings_profile_path, method: :patch, class: "space-y-6" do |form| %>
+          <%= form.input :max_heart_rate,
+                     as: :integer,
+                     label: t(".max_heart_rate_label"),
+                     margin: "",
+                     input_html: {
+                       min: 1,
+                       max: 250,
+                       placeholder: t(".max_heart_rate_placeholder"),
+                     } %>
+          <div class="pt-2">
+            <%= button text: t(".save"), type: "submit", style: "primary" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="bg-slate-800 rounded-lg p-4 sm:p-6 mt-4">
         <h2 class="font-semibold text-lg mb-4"><%= t(".language_section") %></h2>
 
         <%= app_form_with model: @user, url: settings_profile_path, method: :patch, class: "space-y-6" do |form| %>

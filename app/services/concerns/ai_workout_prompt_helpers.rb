@@ -138,6 +138,19 @@ module AiWorkoutPromptHelpers
     if workout.max_heart_rate
       lines << "Max Heart Rate: #{workout.max_heart_rate} bpm"
     end
+
+    max_hr_info = user_max_heart_rate_for_zones(workout)
+    if max_hr_info && workout.avg_heart_rate
+      pct = (workout.avg_heart_rate.to_f / max_hr_info[:value] * 100).round
+      source =
+        if max_hr_info[:source] == :user_set
+          "user-set max HR: #{max_hr_info[:value]} bpm"
+        else
+          "lifetime observed peak: #{max_hr_info[:value]} bpm, lower bound"
+        end
+      lines << "Avg HR % of max: #{pct}% (#{source})"
+    end
+
     lines << "Avg Cadence: #{workout.avg_cadence} spm" if workout.avg_cadence
     if workout.elevation_gain
       lines << "Elevation Gain: #{workout.elevation_gain.round(1)}m"
@@ -150,5 +163,17 @@ module AiWorkoutPromptHelpers
     end
 
     lines.join("\n")
+  end
+
+  def user_max_heart_rate_for_zones(workout)
+    user = workout.user
+    return nil unless user
+
+    if user.max_heart_rate.present?
+      { value: user.max_heart_rate, source: :user_set }
+    else
+      peak = user.workouts.where(workout_type: :run).maximum(:max_heart_rate)
+      peak ? { value: peak, source: :observed_peak } : nil
+    end
   end
 end

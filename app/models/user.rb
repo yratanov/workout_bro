@@ -11,6 +11,7 @@
 #  first_name      :string
 #  last_name       :string
 #  locale          :string           default("en")
+#  max_heart_rate  :integer
 #  password_digest :string           not null
 #  role            :integer          default("user"), not null
 #  setup_completed :boolean          default(FALSE), not null
@@ -68,6 +69,13 @@ class User < ApplicationRecord
   validates :weight_min, numericality: { greater_than_or_equal_to: 0 }
   validates :weight_max, numericality: { greater_than: :weight_min }
   validates :weight_step, numericality: { greater_than: 0 }
+  validates :max_heart_rate,
+            numericality: {
+              only_integer: true,
+              greater_than: 0,
+              less_than_or_equal_to: 250
+            },
+            allow_nil: true
 
   normalizes :email, with: ->(e) { e.strip.downcase }
 
