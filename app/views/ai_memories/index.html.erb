@@ -3,7 +3,7 @@
 <div class="w-full max-w-2xl">
   <%= page_header title: t(".title") do %>
     <div class="flex gap-2">
-      <% if current_user.ai_configured? && !@generating %>
+      <% if current_user.ai_assistance_active? && !@generating %>
         <%= button t(".generate"),
         type: "submit",
         style: "primary",
@@ -108,7 +108,7 @@
     </div>
   <% elsif !@generating %>
     <%= empty_state icon: "sparkles", message: t(".empty") do %>
-      <% if current_user.ai_configured? %>
+      <% if current_user.ai_assistance_active? %>
         <%= button t(".generate"),
         type: "submit",
         style: "primary",

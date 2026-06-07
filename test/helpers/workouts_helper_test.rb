@@ -31,15 +31,10 @@ class WorkoutsHelperTest < ActionView::TestCase
   # run_pace tests
 
   test "run_pace calculates pace correctly for a run workout" do
-    started_at = Time.zone.parse("2024-01-15 08:00:00")
-    ended_at = Time.zone.parse("2024-01-15 08:30:00")
+    # pace is derived from moving time (time_in_seconds), which excludes
+    # pauses. 1800s over 5km => 360s/km => 6:00 min/km.
     workout =
-      Workout.new(
-        workout_type: :run,
-        started_at: started_at,
-        ended_at: ended_at,
-        distance: 5000
-      )
+      Workout.new(workout_type: :run, time_in_seconds: 1800, distance: 5000)
     assert_equal "6:00 min/km", run_pace(workout)
   end
 

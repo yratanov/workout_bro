@@ -7,6 +7,7 @@
 #
 #  id              :integer          not null, primary key
 #  ai_api_key      :string
+#  ai_enabled      :boolean          default(TRUE), not null
 #  ai_model        :string
 #  ai_provider     :string
 #  email           :string           not null

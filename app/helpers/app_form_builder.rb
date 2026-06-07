@@ -23,7 +23,7 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
     super(method, collection, options, html_options)
   end
 
-  def toggle(method, label_text = nil, color: :blue)
+  def toggle(method, label_text = nil, color: :blue, **options)
     color_classes = {
       blue: "peer-checked:bg-blue-600 peer-focus:ring-blue-500",
       purple: "peer-checked:bg-purple-600 peer-focus:ring-purple-500",
@@ -33,7 +33,7 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
     tag.label class: "flex items-center gap-3 cursor-pointer" do
       safe_join(
         [
-          check_box(method, class: "sr-only peer"),
+          check_box(method, { class: "sr-only peer" }.merge(options)),
           tag.span(
             class:
               "w-10 h-6 bg-slate-700 rounded-full peer #{color_classes[color]} peer-focus:ring-2 " \

@@ -223,7 +223,7 @@
     } %>
   <% end %>
   <!-- AI Trainer Feedback -->
-  <% if current_user.ai_trainer&.configured? %>
+  <% if current_user.ai_trainer&.active? %>
     <% activity = @workout.ai_trainer_activity %>
     <% ai_completed = activity&.completed? && activity.content.present? %>
     <%= turbo_stream_from @workout, :ai_feedback unless ai_completed %>

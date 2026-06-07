@@ -219,6 +219,62 @@ class Settings::AiTest < ActionDispatch::IntegrationTest
     assert_redirected_to settings_ai_path
   end
 
+  test "GET /settings/ai shows the AI assistance toggle" do
+    get settings_ai_path
+    assert_includes response.body, "AI Assistance"
+    assert_includes response.body, "user[ai_enabled]"
+  end
+
+  test "PATCH /settings/ai can disable ai assistance" do
+    @user.update!(ai_enabled: true)
+    patch settings_ai_path, params: { user: { ai_enabled: "0" } }
+    assert_not @user.reload.ai_enabled?
+    assert_redirected_to settings_ai_path
+  end
+
+  test "PATCH /settings/ai can re-enable ai assistance" do
+    @user.update!(ai_enabled: false)
+    patch settings_ai_path, params: { user: { ai_enabled: "1" } }
+    assert @user.reload.ai_enabled?
+  end
+
+  test "disabling ai preserves saved provider, model and api key" do
+    @user.update!(
+      ai_provider: "gemini",
+      ai_model: "gemini-2.5-flash",
+      ai_api_key: "secret-key"
+    )
+    patch settings_ai_path, params: { user: { ai_enabled: "0" } }
+    @user.reload
+    assert_equal "gemini", @user.ai_provider
+    assert_equal "gemini-2.5-flash", @user.ai_model
+    assert_equal "secret-key", @user.ai_api_key
+  end
+
+  test "GET /settings/ai shows disabled hint when ai is off" do
+    @user.update!(ai_enabled: false)
+    get settings_ai_path
+    assert_includes response.body, "AI assistance is off"
+  end
+
+  test "POST /settings/ai/create_trainer is blocked when ai is disabled" do
+    @user.update!(
+      ai_enabled: false,
+      ai_provider: "gemini",
+      ai_model: "gemini-2.5-flash",
+      ai_api_key: "key"
+    )
+    assert_no_enqueued_jobs only: CreateAiTrainerJob do
+      post create_trainer_settings_ai_path,
+           params: {
+             ai_trainer: {
+               approach: "balanced"
+             }
+           }
+    end
+    assert_redirected_to settings_ai_path
+  end
+
   test "GET /settings/ai redirects to login when not authenticated" do
     delete session_path
     get settings_ai_path

@@ -150,7 +150,7 @@ class WorkoutsController < ApplicationController
       if @workout.update(ended_at: Time.current)
         @new_prs = PersonalRecordDetector.new(workout: @workout).call
         session[:workout_summary_prs] = @new_prs.map(&:id)
-        enqueue_ai_feedback if current_user.ai_trainer&.configured?
+        enqueue_ai_feedback if current_user.ai_trainer&.active?
         format.html { redirect_to summary_workout_path(@workout) }
         format.json { render :show, status: :created, location: @workout }
       else
@@ -251,7 +251,8 @@ class WorkoutsController < ApplicationController
     activity = @workout.ai_trainer_activity
     question = params[:question].to_s.strip
 
-    if activity.blank? || !activity.completed? || question.blank?
+    if activity.blank? || !activity.completed? || question.blank? ||
+         !current_user.ai_trainer&.active?
       head :unprocessable_entity
       return
     end

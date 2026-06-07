@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_23_073457) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_07_173603) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -265,6 +265,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_23_073457) do
 
   create_table "users", force: :cascade do |t|
     t.string "ai_api_key"
+    t.boolean "ai_enabled", default: true, null: false
     t.string "ai_model"
     t.string "ai_provider"
     t.datetime "created_at", null: false

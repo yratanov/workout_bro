@@ -8,7 +8,7 @@ class GenerateAiFollowupJob < ApplicationJob
   def perform(activity:, question:)
     user = activity.user
     ai_trainer = user.ai_trainer
-    return unless ai_trainer&.configured?
+    return unless ai_trainer&.active?
 
     activity.ai_trainer_messages.create!(role: :user, content: question)
 

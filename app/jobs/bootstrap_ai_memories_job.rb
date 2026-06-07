@@ -6,7 +6,7 @@ class BootstrapAiMemoriesJob < ApplicationJob
   queue_as :default
 
   def perform(user:)
-    return unless user.ai_configured?
+    return unless user.ai_assistance_active?
 
     summary = build_workout_summary(user)
     return if summary.blank?

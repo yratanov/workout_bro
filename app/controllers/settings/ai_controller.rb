@@ -26,6 +26,12 @@ module Settings
     end
 
     def create_trainer
+      unless @user.ai_enabled?
+        redirect_to settings_ai_path,
+                    alert: I18n.t("controllers.settings.ai.disabled")
+        return
+      end
+
       @ai_trainer = @user.ai_trainer || @user.build_ai_trainer
       @ai_trainer.assign_attributes(ai_trainer_params)
       @ai_trainer.status = :pending
@@ -83,7 +89,12 @@ module Settings
 
     def ai_params
       permitted =
-        params.require(:user).permit(:ai_provider, :ai_model, :ai_api_key)
+        params.require(:user).permit(
+          :ai_provider,
+          :ai_model,
+          :ai_api_key,
+          :ai_enabled
+        )
       permitted.delete(:ai_api_key) if permitted[:ai_api_key].blank?
       permitted
     end

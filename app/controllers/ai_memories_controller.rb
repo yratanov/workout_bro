@@ -13,7 +13,8 @@ class AiMemoriesController < ApplicationController
   end
 
   def generate
-    unless current_user.ai_configured? && current_user.ai_trainer&.configured?
+    unless current_user.ai_assistance_active? &&
+             current_user.ai_trainer&.configured?
       return (
         redirect_to ai_memories_path,
                     alert: I18n.t("controllers.ai_memories.not_configured")

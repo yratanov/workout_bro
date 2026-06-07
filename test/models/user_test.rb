@@ -7,6 +7,7 @@ require "test_helper"
 #
 #  id              :integer          not null, primary key
 #  ai_api_key      :string
+#  ai_enabled      :boolean          default(TRUE), not null
 #  ai_model        :string
 #  ai_provider     :string
 #  email           :string           not null
@@ -131,5 +132,38 @@ class UserTest < ActiveSupport::TestCase
   test "has default weight_step of 2.5" do
     new_user = User.new(email: "test@example.com", password: "password")
     assert_equal 2.5, new_user.weight_step
+  end
+
+  test "ai_enabled defaults to true" do
+    new_user = User.new(email: "test@example.com", password: "password")
+    assert new_user.ai_enabled?
+  end
+
+  test "ai_assistance_active? is true when enabled and configured" do
+    user = users(:john)
+    user.update!(
+      ai_enabled: true,
+      ai_provider: "gemini",
+      ai_model: "gemini-2.5-flash",
+      ai_api_key: "key"
+    )
+    assert user.ai_assistance_active?
+  end
+
+  test "ai_assistance_active? is false when disabled even if configured" do
+    user = users(:john)
+    user.update!(
+      ai_enabled: false,
+      ai_provider: "gemini",
+      ai_model: "gemini-2.5-flash",
+      ai_api_key: "key"
+    )
+    refute user.ai_assistance_active?
+  end
+
+  test "ai_assistance_active? is false when enabled but not configured" do
+    user = users(:john)
+    user.update!(ai_enabled: true, ai_provider: nil, ai_model: nil)
+    refute user.ai_assistance_active?
   end
 end

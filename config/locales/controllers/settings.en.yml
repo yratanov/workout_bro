@@ -29,6 +29,7 @@ en:
         trainer_failed: "Failed to start AI trainer creation. Please try again."
         trainer_updated: "Trainer profile updated successfully"
         trainer_update_failed: "Failed to update trainer profile"
+        disabled: "AI assistance is turned off. Enable it to create a trainer."
       imports:
         started: "Import started. Your workouts will be imported in the background."
         reverted:

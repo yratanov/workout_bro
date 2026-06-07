@@ -35,7 +35,7 @@ class WorkoutRoutinesController < ApplicationController
   end
 
   def ai_new
-    unless current_user.ai_trainer&.configured?
+    unless current_user.ai_trainer&.active?
       redirect_to workout_routines_path,
                   alert:
                     I18n.t("controllers.workout_routines.ai_not_configured")
@@ -46,7 +46,7 @@ class WorkoutRoutinesController < ApplicationController
   end
 
   def ai_create
-    unless current_user.ai_trainer&.configured?
+    unless current_user.ai_trainer&.active?
       redirect_to workout_routines_path,
                   alert:
                     I18n.t("controllers.workout_routines.ai_not_configured")

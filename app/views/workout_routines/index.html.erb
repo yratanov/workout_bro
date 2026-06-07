@@ -3,7 +3,7 @@
 <div class="w-full max-w-3xl">
   <%= page_header title: t(".title") do %>
     <div class="flex gap-2">
-      <% if current_user.ai_trainer&.configured? %>
+      <% if current_user.ai_trainer&.active? %>
         <%= button t(".create_with_ai"),
         route: ai_new_workout_routines_path,
         style: "outlined",

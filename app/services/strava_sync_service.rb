@@ -175,7 +175,7 @@ class StravaSyncService
   end
 
   def enqueue_ai_feedback(workouts)
-    return unless @user.ai_configured? && @user.ai_trainer
+    return unless @user.ai_assistance_active? && @user.ai_trainer
 
     workouts.each do |workout|
       GenerateAiWorkoutFeedbackJob.perform_later(workout: workout)

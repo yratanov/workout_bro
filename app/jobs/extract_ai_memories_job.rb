@@ -7,7 +7,7 @@ class ExtractAiMemoriesJob < ApplicationJob
     return unless activity.completed? && activity.content.present?
 
     user = activity.user
-    return unless user.ai_configured?
+    return unless user.ai_assistance_active?
 
     AiMemoryExtractionService.new(
       user: user,

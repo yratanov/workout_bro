@@ -116,6 +116,9 @@ en:
     ai:
       show:
         title: "AI Settings"
+        assistance_title: "AI Assistance"
+        assistance_description: "Turn AI coaching on or off. Disabling keeps all your saved settings, trainer profile, and memories so you can re-enable anytime."
+        assistance_disabled_hint: "AI assistance is off. No feedback, reviews, or memories will be generated until you turn it back on. Your saved data is preserved."
         ai_configuration: "AI Configuration"
         provider_label: "AI Provider"
         select_provider: "Select a provider..."

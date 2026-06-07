@@ -34,6 +34,14 @@ class GenerateAiWorkoutFeedbackJobTest < ActiveJob::TestCase
     assert_equal "Great workout!", activity.content
   end
 
+  test "does nothing when ai assistance is disabled" do
+    @user.update!(ai_enabled: false)
+
+    GenerateAiWorkoutFeedbackJob.new.perform(workout: @workout)
+
+    assert_nil @workout.reload.ai_trainer_activity
+  end
+
   test "triggers compaction when conversation exceeds token threshold" do
     AiConversationBuilder.any_instance.stubs(:compaction_needed?).returns(true)
 

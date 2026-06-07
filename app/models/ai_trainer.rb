@@ -57,6 +57,13 @@ class AiTrainer < ApplicationRecord
     completed? && trainer_profile.present?
   end
 
+  # Whether the trainer should actually run AI features. Distinct from
+  # +configured?+ (which only reflects training state) so the settings page
+  # can keep showing the saved trainer profile while AI assistance is off.
+  def active?
+    configured? && user.ai_enabled?
+  end
+
   def goals
     GOALS.select { |g| send(g) }
   end

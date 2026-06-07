@@ -11,6 +11,7 @@ class GenerateAiWorkoutFeedbackJob < ApplicationJob
     user = workout.user
     ai_trainer = user.ai_trainer
     return unless ai_trainer
+    return unless user.ai_assistance_active?
 
     activity =
       workout.ai_trainer_activity ||

@@ -5,6 +5,7 @@
 #
 #  id              :integer          not null, primary key
 #  ai_api_key      :string
+#  ai_enabled      :boolean          default(TRUE), not null
 #  ai_model        :string
 #  ai_provider     :string
 #  email           :string           not null
@@ -85,6 +86,13 @@ class User < ApplicationRecord
 
   def ai_configured?
     ai_provider.present? && ai_model.present? && ai_api_key.present?
+  end
+
+  # Master switch for AI features: credentials are present AND the user has
+  # not turned AI assistance off. Disabling AI never removes saved data
+  # (credentials, trainer profile, memories) so it can be re-enabled anytime.
+  def ai_assistance_active?
+    ai_enabled? && ai_configured?
   end
 
   def garmin_credential

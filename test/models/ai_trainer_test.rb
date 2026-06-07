@@ -115,4 +115,23 @@ class AiTrainerTest < ActiveSupport::TestCase
     AiTrainer::GOALS.each { |g| trainer.send(:"#{g}=", false) }
     assert_empty trainer.goals
   end
+
+  test "active? is true when configured and user has ai enabled" do
+    trainer = ai_trainers(:johns_trainer)
+    trainer.user.update!(ai_enabled: true)
+    assert trainer.active?
+  end
+
+  test "active? is false when user has ai disabled" do
+    trainer = ai_trainers(:johns_trainer)
+    trainer.user.update!(ai_enabled: false)
+    refute trainer.active?
+  end
+
+  test "active? is false when not configured" do
+    trainer = ai_trainers(:johns_trainer)
+    trainer.user.update!(ai_enabled: true)
+    trainer.status = :pending
+    refute trainer.active?
+  end
 end

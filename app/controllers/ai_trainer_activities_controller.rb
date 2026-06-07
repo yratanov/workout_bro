@@ -16,7 +16,8 @@ class AiTrainerActivitiesController < ApplicationController
     @activity = current_user.ai_trainer_activities.find(params[:id])
     question = params[:question].to_s.strip
 
-    if !@activity.completed? || question.blank?
+    if !@activity.completed? || question.blank? ||
+         !current_user.ai_trainer&.active?
       head :unprocessable_entity
       return
     end

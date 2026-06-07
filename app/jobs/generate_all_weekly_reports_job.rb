@@ -7,7 +7,7 @@ class GenerateAllWeeklyReportsJob < ApplicationJob
     week_start = Date.current.beginning_of_week(:monday) - 7.days
 
     User.find_each do |user|
-      next unless user.ai_configured?
+      next unless user.ai_assistance_active?
       next unless user.ai_trainer&.completed?
       unless user
                .workouts
