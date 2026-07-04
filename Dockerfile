@@ -69,7 +69,7 @@ COPY --from=build /rails /rails
 # Install Python and dependencies for Garmin sync
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y python3 python3-pip && \
-    pip install --no-cache-dir --break-system-packages garminconnect python-dotenv && \
+    pip install --no-cache-dir --break-system-packages garminconnect garth python-dotenv && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Run and own only the runtime files as a non-root user for security
